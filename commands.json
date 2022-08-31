@@ -1,20 +1,20 @@
 {
-    "state": true,
-    "trivia": true,
-    "dig": true,
-    "fish": true,
-    "hunt": true,
-    "pm": true,
-    "hl": true,
+    "state": false,
+    "trivia": false,
+    "dig": false,
+    "fish": false,
+    "hunt": false,
+    "pm": false,
+    "hl": false,
     "search": false,
-    "beg": true,
-    "dep_all": true,
-    "stream": true,
+    "beg": false,
+    "dep_all": false,
+    "stream": false,
     "work": false,
     "use_pizza": false,
     "bj": {
-        "multi": "500",
+        "multi": "0",
         "state": false,
-        "bj_amount": 1421
+        "bj_amount": 0
     }
 }
