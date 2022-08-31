@@ -1,7 +1,6 @@
-import asyncio
-import threading
 import json
 import re
+import threading
 
 from discord.ext import commands
 
