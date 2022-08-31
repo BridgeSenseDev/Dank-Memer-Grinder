@@ -1,9 +1,9 @@
 {
     "lifesavers": {
-        "state": true,
-        "amount": 5
+        "state": false,
+        "amount": 0
     },
-    "fishing": true,
-    "shovel": true,
-    "rifle": true
+    "fishing": false,
+    "shovel": false,
+    "rifle": false
 }
