@@ -1,0 +1,20 @@
+{
+    "state": true,
+    "trivia": true,
+    "dig": true,
+    "fish": true,
+    "hunt": true,
+    "pm": true,
+    "hl": true,
+    "search": false,
+    "beg": true,
+    "dep_all": true,
+    "stream": true,
+    "work": false,
+    "use_pizza": false,
+    "bj": {
+        "multi": "500",
+        "state": false,
+        "bj_amount": 1421
+    }
+}
