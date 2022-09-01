@@ -132,14 +132,14 @@ class Blackjack(commands.Cog):
                 try:
                     if multi <= int(config_dict["commands"]["bj"]["multi"]):
                         self.bot.window.ui.output.append(
-                            f"Not blackjacking because multipliers is lower than {int(config_dict["commands"]['bj']['multi'])}")
+                            f"Not blackjacking because multipliers is lower than {int(config_dict['commands']['bj']['multi'])}")
                         return
                 except:
                     self.bot.window.ui.output.append(
-                        f"Not blackjacking because multipliers required ({config_dict["commands"]['bj']['multi']}) is not a number")
+                        f"Not blackjacking because multipliers required ({config_dict['commands']['bj']['multi']}) is not a number")
                     return
                 await asyncio.sleep(random.randint(0, 3))
-                await self.bot.channel.send(f"pls bj {config_dict["commands"]['-bj-']['-bjamount-']}")
+                await self.bot.channel.send(f"pls bj {config_dict['commands']['-bj-']['-bjamount-']}")
         except:
             pass
 

@@ -65,7 +65,7 @@ class MainWindow(QMainWindow):
         self.ui.output.setVerticalScrollBar(self.ui.output_scrollbar)
         config_dict["commands"].update({"state": False})
         with open("config.json", "w") as file:
-            json.dump(config_dict["commands"], file, ensure_ascii=False, indent=4)
+            json.dump(config_dict, file, ensure_ascii=False, indent=4)
 
         # Initialize buttons and settings
         for i in config_dict["commands"]:
@@ -134,7 +134,7 @@ class MainWindow(QMainWindow):
         if config_dict["commands"]["state"] is False:
             config_dict["commands"].update({"state": True})
             with open("config.json", "w") as file:
-                json.dump(config_dict["commands"], file, ensure_ascii=False, indent=4)
+                json.dump(config_dict, file, ensure_ascii=False, indent=4)
             self.ui.toggle.setStyleSheet("background-color : #2d7d46")
             self.ui.toggle.setText("Bot On")
             self.ui.output.append("Started bot")
@@ -143,7 +143,7 @@ class MainWindow(QMainWindow):
         else:
             config_dict["commands"].update({"state": False})
             with open("config.json", "w") as file:
-                json.dump(config_dict["commands"], file, ensure_ascii=False, indent=4)
+                json.dump(config_dict, file, ensure_ascii=False, indent=4)
             self.ui.toggle.setStyleSheet("background-color : #d83c3e")
             self.ui.toggle.setText("Bot Off")
             self.ui.output.append("Stopped bot")
@@ -152,24 +152,24 @@ class MainWindow(QMainWindow):
     async def toggle_command(self, command, state):
         config_dict["commands"].update({command: state})
         with open("config.json", "w") as file:
-            json.dump(config_dict["commands"], file, ensure_ascii=False, indent=4)
+            json.dump(config_dict, file, ensure_ascii=False, indent=4)
 
     @asyncSlot()
     async def blackjack(self, command, state):
         config_dict["commands"]["bj"].update({command: state})
         with open("config.json", "w") as file:
-            json.dump(config_dict["commands"], file, ensure_ascii=False, indent=4)
+            json.dump(config_dict, file, ensure_ascii=False, indent=4)
 
     @asyncSlot()
     async def autobuy(self, item, state, command=None):
         if item == "lifesavers":
             config_dict["autobuy"][item].update({command: state})
             with open("config.json", "w") as file:
-                json.dump(config_dict["autobuy"], file, ensure_ascii=False, indent=4)
+                json.dump(config_dict, file, ensure_ascii=False, indent=4)
         else:
             config_dict["autobuy"][item] = state
             with open("config.json", "w") as file:
-                json.dump(config_dict["autobuy"], file, ensure_ascii=False, indent=4)
+                json.dump(config_dict, file, ensure_ascii=False, indent=4)
 
     @asyncSlot()
     async def settings(self, command, state):
