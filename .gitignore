@@ -1,4 +1,5 @@
 config.json
+config.json.example
 .idea
 build
 dist
