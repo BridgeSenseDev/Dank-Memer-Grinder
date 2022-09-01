@@ -6,16 +6,10 @@ from discord.ext import commands
 
 
 def update():
-    global commands_dict
     global config_dict
-    global autobuy_dict
     threading.Timer(10, update).start()
     with open("config.json", "r") as config_file:
         config_dict = json.load(config_file)
-    with open("commands.json", "r") as commands_file:
-        commands_dict = json.load(commands_file)
-    with open("autobuy.json", "r") as autobuy_file:
-        autobuy_dict = json.load(autobuy_file)
 
 
 update()
@@ -27,14 +21,14 @@ class Autobuy(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.guild is None and message.author.id == 270904126974590976 and commands_dict["state"] is True:
+        if message.guild is None and message.author.id == 270904126974590976 and config_dict["commands"]["state"] is True:
             for embed in message.embeds:
                 print(embed.to_dict())
                 # Buy lifesavers
                 try:
-                    if embed.to_dict()["title"] == "Your lifesaver protected you" and autobuy_dict["lifesavers"]["state"] is True:
+                    if embed.to_dict()["title"] == "Your lifesaver protected you" and config_dict["autobuy"]["lifesavers"]["state"] is True:
                         remaining = int(re.search("have (.*?) left", embed.to_dict()["description"]).group(1))
-                        required = int(autobuy_dict["lifesavers"]["amount"])
+                        required = int(config_dict["autobuy"]["lifesavers"]["amount"])
                         if remaining < required:
                             channel = await message.author.create_dm()
                             async for cmd in channel.slash_commands(command_ids=[1011560370864930854]):
@@ -46,12 +40,12 @@ class Autobuy(commands.Cog):
 
                 # Confirm purchase
                 try:
-                    if embed.to_dict()["title"] == "Pending Confirmation" and autobuy_dict["lifesavers"]["state"] is True:
+                    if embed.to_dict()["title"] == "Pending Confirmation" and config_dict["autobuy"]["lifesavers"]["state"] is True:
                         await message.components[0].children[1].click()
                 except:
                     pass
 
-        if message.channel.id != self.bot.channel_id or commands_dict["state"] is False:
+        if message.channel.id != self.bot.channel_id or config_dict["commands"]["state"] is False:
             return
 
         for embed in message.embeds:

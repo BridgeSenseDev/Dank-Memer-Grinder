@@ -21,16 +21,10 @@ except:
 
 
 def update():
-    global commands_dict
     global config_dict
-    global autobuy_dict
     threading.Timer(10, update).start()
     with open("config.json", "r") as config_file:
         config_dict = json.load(config_file)
-    with open("commands.json", "r") as commands_file:
-        commands_dict = json.load(commands_file)
-    with open("autobuy.json", "r") as autobuy_file:
-        autobuy_dict = json.load(autobuy_file)
 
 
 update()
@@ -62,7 +56,6 @@ class MyClient(commands.Bot):
 class MainWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
-        self.setWindowTitle("Dank Memer Grinder")
         self.setWindowIcon(QIcon("icon.png"))
         QFontDatabase.addApplicationFont("Segoe.ttf")
         self.ui = Ui_MainWindow()
@@ -70,27 +63,27 @@ class MainWindow(QMainWindow):
         self.bot = MyClient()
         self.show()
         self.ui.output.setVerticalScrollBar(self.ui.output_scrollbar)
-        commands_dict.update({"state": False})
-        with open("commands.json", "w") as file:
-            json.dump(commands_dict, file, ensure_ascii=False, indent=4)
+        config_dict["commands"].update({"state": False})
+        with open("config.json", "w") as file:
+            json.dump(config_dict["commands"], file, ensure_ascii=False, indent=4)
 
         # Initialize buttons and settings
-        for i in commands_dict:
+        for i in config_dict["commands"]:
             try:
-                getattr(self.ui, i).setChecked(commands_dict[i])
+                getattr(self.ui, i).setChecked(config_dict["commands"][i])
             except:
                 pass
-        self.ui.blackjack_btn.setChecked(commands_dict["bj"]["state"])
-        self.ui.multi.setText(str(commands_dict["bj"]["multi"]))
-        self.ui.bj_amount.setText(str(commands_dict["bj"]["bj_amount"]))
+        self.ui.blackjack_btn.setChecked(config_dict["commands"]["bj"]["state"])
+        self.ui.multi.setText(str(config_dict["commands"]["bj"]["multi"]))
+        self.ui.bj_amount.setText(str(config_dict["commands"]["bj"]["bj_amount"]))
 
-        for i in autobuy_dict:
+        for i in config_dict["autobuy"]:
             try:
-                getattr(self.ui, i).setChecked(autobuy_dict[i])
+                getattr(self.ui, i).setChecked(config_dict["autobuy"][i])
             except:
                 pass
-        self.ui.lifesavers.setChecked(autobuy_dict["lifesavers"]["state"])
-        self.ui.lifesavers_amount.setValue(autobuy_dict["lifesavers"]["amount"])
+        self.ui.lifesavers.setChecked(config_dict["autobuy"]["lifesavers"]["state"])
+        self.ui.lifesavers_amount.setValue(config_dict["autobuy"]["lifesavers"]["amount"])
 
         self.ui.token.setText(config_dict["discord_token"])
         self.ui.channel.setText(str(config_dict["channel_id"]))
@@ -138,45 +131,45 @@ class MainWindow(QMainWindow):
 
     @asyncSlot()
     async def check(self):
-        if commands_dict["state"] is False:
-            commands_dict.update({"state": True})
-            with open("commands.json", "w") as file:
-                json.dump(commands_dict, file, ensure_ascii=False, indent=4)
+        if config_dict["commands"]["state"] is False:
+            config_dict["commands"].update({"state": True})
+            with open("config.json", "w") as file:
+                json.dump(config_dict["commands"], file, ensure_ascii=False, indent=4)
             self.ui.toggle.setStyleSheet("background-color : #2d7d46")
             self.ui.toggle.setText("Bot On")
             self.ui.output.append("Started bot")
             if self.bot.user is None:
                 await self.bot.start(config_dict["discord_token"])
         else:
-            commands_dict.update({"state": False})
-            with open("commands.json", "w") as file:
-                json.dump(commands_dict, file, ensure_ascii=False, indent=4)
+            config_dict["commands"].update({"state": False})
+            with open("config.json", "w") as file:
+                json.dump(config_dict["commands"], file, ensure_ascii=False, indent=4)
             self.ui.toggle.setStyleSheet("background-color : #d83c3e")
             self.ui.toggle.setText("Bot Off")
             self.ui.output.append("Stopped bot")
 
     @asyncSlot()
     async def toggle_command(self, command, state):
-        commands_dict.update({command: state})
-        with open("commands.json", "w") as file:
-            json.dump(commands_dict, file, ensure_ascii=False, indent=4)
+        config_dict["commands"].update({command: state})
+        with open("config.json", "w") as file:
+            json.dump(config_dict["commands"], file, ensure_ascii=False, indent=4)
 
     @asyncSlot()
     async def blackjack(self, command, state):
-        commands_dict["bj"].update({command: state})
-        with open("commands.json", "w") as file:
-            json.dump(commands_dict, file, ensure_ascii=False, indent=4)
+        config_dict["commands"]["bj"].update({command: state})
+        with open("config.json", "w") as file:
+            json.dump(config_dict["commands"], file, ensure_ascii=False, indent=4)
 
     @asyncSlot()
     async def autobuy(self, item, state, command=None):
         if item == "lifesavers":
-            autobuy_dict[item].update({command: state})
-            with open("autobuy.json", "w") as file:
-                json.dump(autobuy_dict, file, ensure_ascii=False, indent=4)
+            config_dict["autobuy"][item].update({command: state})
+            with open("config.json", "w") as file:
+                json.dump(config_dict["autobuy"], file, ensure_ascii=False, indent=4)
         else:
-            autobuy_dict[item] = state
-            with open("autobuy.json", "w") as file:
-                json.dump(autobuy_dict, file, ensure_ascii=False, indent=4)
+            config_dict["autobuy"][item] = state
+            with open("config.json", "w") as file:
+                json.dump(config_dict["autobuy"], file, ensure_ascii=False, indent=4)
 
     @asyncSlot()
     async def settings(self, command, state):

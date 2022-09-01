@@ -8,17 +8,13 @@ from discord.ext import commands, tasks
 
 
 def update():
-    global commands_dict
     global config_dict
     threading.Timer(10, update).start()
     with open("config.json", "r") as config_file:
         config_dict = json.load(config_file)
-    with open("commands.json", "r") as commands_file:
-        commands_dict = json.load(commands_file)
 
 
 update()
-
 
 def bj_formula(embed):
     player_sum = []
@@ -132,18 +128,18 @@ class Blackjack(commands.Cog):
     @tasks.loop(seconds=20)
     async def bj(self):
         try:
-            if commands_dict["bj"]["state"] is True and commands_dict["state"] is True:
+            if config_dict["commands"]["bj"]["state"] is True and config_dict["commands"]["state"] is True:
                 try:
-                    if multi <= int(commands_dict["bj"]["multi"]):
+                    if multi <= int(config_dict["commands"]["bj"]["multi"]):
                         self.bot.window.ui.output.append(
-                            f"Not blackjacking because multipliers is lower than {int(commands_dict['bj']['multi'])}")
+                            f"Not blackjacking because multipliers is lower than {int(config_dict["commands"]['bj']['multi'])}")
                         return
                 except:
                     self.bot.window.ui.output.append(
-                        f"Not blackjacking because multipliers required ({commands_dict['bj']['multi']}) is not a number")
+                        f"Not blackjacking because multipliers required ({config_dict["commands"]['bj']['multi']}) is not a number")
                     return
                 await asyncio.sleep(random.randint(0, 3))
-                await self.bot.channel.send(f"pls bj {commands_dict['-bj-']['-bjamount-']}")
+                await self.bot.channel.send(f"pls bj {config_dict["commands"]['-bj-']['-bjamount-']}")
         except:
             pass
 
@@ -153,7 +149,7 @@ class Blackjack(commands.Cog):
 
     @tasks.loop(minutes=3)
     async def multipliers(self):
-        if commands_dict["bj"]["state"] is True and commands_dict["state"] is True:
+        if config_dict["commands"]["bj"]["state"] is True and config_dict["commands"]["state"] is True:
             async for cmd in self.bot.channel.slash_commands(command_ids=[1011560371171102766]):
                 await cmd()
                 break
@@ -161,7 +157,7 @@ class Blackjack(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         global multi
-        if message.channel.id != self.bot.channel_id or commands_dict["state"] is False:
+        if message.channel.id != self.bot.channel_id or config_dict["commands"]["state"] is False:
             return
 
         for embed in message.embeds:
@@ -171,7 +167,7 @@ class Blackjack(commands.Cog):
             except:
                 pass
             try:
-                if "blackjack game" in embed.to_dict()["author"]["name"] and commands_dict["bj"]["state"] is True:
+                if "blackjack game" in embed.to_dict()["author"]["name"] and config_dict["commands"]["bj"]["state"] is True:
                     await message.components[0].children[bj_formula(embed)].click()
             except:
                 pass
@@ -183,7 +179,7 @@ class Blackjack(commands.Cog):
         embeds = after.embeds
         for embed in embeds:
             try:
-                if "blackjack game" in embed.to_dict()["author"]["name"] and commands_dict["bj"]["state"] is True:
+                if "blackjack game" in embed.to_dict()["author"]["name"] and config_dict["commands"]["bj"]["state"] is True:
                     if "description" not in embed.to_dict():
                         await after.components[0].children[bj_formula(embed)].click()
                     elif any(i in embed.to_dict()["description"] for i in ["Tied.", "Lost.", "Won"]):

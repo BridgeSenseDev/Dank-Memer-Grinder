@@ -8,13 +8,10 @@ from discord.ext import commands, tasks
 
 
 def update():
-    global commands_dict
     global config_dict
     threading.Timer(10, update).start()
     with open("config.json", "r") as config_file:
         config_dict = json.load(config_file)
-    with open("commands.json", "r") as commands_file:
-        commands_dict = json.load(commands_file)
 
 
 update()
@@ -33,7 +30,7 @@ class Trivia(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.channel.id != self.bot.channel_id or commands_dict["state"] is False or commands_dict["trivia"] is False:
+        if message.channel.id != self.bot.channel_id or config_dict["commands"]["state"] is False or config_dict["commands"]["trivia"] is False:
             return
 
         for embed in message.embeds:
@@ -65,7 +62,7 @@ class Trivia(commands.Cog):
 
     @tasks.loop(seconds=15)
     async def trivia(self):
-        if commands_dict["trivia"] is True and commands_dict["state"] is True:
+        if config_dict["commands"]["trivia"] is True and config_dict["commands"]["state"] is True:
             await asyncio.sleep(random.randint(0, 3))
             async for cmd in self.bot.channel.slash_commands(command_ids=[1011560371309510698]):
                 await cmd()

@@ -6,13 +6,10 @@ from discord.ext import commands
 
 
 def update():
-    global commands_dict
     global config_dict
     threading.Timer(10, update).start()
     with open("config.json", "r") as config_file:
         config_dict = json.load(config_file)
-    with open("commands.json", "r") as commands_file:
-        commands_dict = json.load(commands_file)
 
 
 update()
