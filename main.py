@@ -6,7 +6,7 @@ import threading
 
 from PyQt6.QtGui import QIcon, QFontDatabase
 from PyQt6.QtWidgets import QApplication, QMainWindow
-from discord.ext import commands
+from discord.ext import commands, tasks
 from qasync import QEventLoop, asyncSlot
 
 # noinspection PyUnresolvedReferences
