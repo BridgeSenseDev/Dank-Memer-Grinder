@@ -15,9 +15,6 @@ def update():
 
 update()
 
-with open("trivia.json") as file:
-    trivia_dict = json.load(file)
-
 
 class Commands(commands.Cog):
     def __init__(self, bot):

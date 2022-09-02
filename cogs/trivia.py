@@ -1,5 +1,7 @@
 import asyncio
 import json
+import sys
+import os
 import random
 import re
 import threading
@@ -16,7 +18,13 @@ def update():
 
 update()
 
-with open("trivia.json") as file:
+
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
+
+with open(resource_path("trivia.json")) as file:
     trivia_dict = json.load(file)
 
 
