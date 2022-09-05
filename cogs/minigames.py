@@ -146,11 +146,15 @@ class Minigames(commands.Cog):
             try:
                 if "Dunk the ball!" in embed.to_dict()["description"]:
                     await asyncio.sleep(2)
+                    print(embed.to_dict()["description"])
                     if "<:emptyspace:827651824739156030><:emptyspace:827651824739156030>:basketball:" == embed.to_dict()["description"].splitlines()[2]:
+                        print("2")
                         await message.components[0].children[2].click()
                     elif "<:emptyspace:827651824739156030>:basketball:" == embed.to_dict()["description"].splitlines()[2]:
+                        print("1")
                         await message.components[0].children[1].click()
                     elif ":basketball:" == embed.to_dict()["description"].splitlines()[2]:
+                        print("0")
                         await message.components[0].children[0].click()
                     return
             except:

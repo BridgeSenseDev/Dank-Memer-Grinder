@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'interface.ui'
+# Form implementation generated from reading ui file '.\interface.ui'
 #
 # Created by: PyQt6 UI code generator 6.3.1
 #
@@ -9,11 +9,11 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1014, 749)
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
+class Ui_DankMemerGrinder(object):
+    def setupUi(self, DankMemerGrinder):
+        DankMemerGrinder.setObjectName("DankMemerGrinder")
+        DankMemerGrinder.resize(1014, 749)
+        self.centralwidget = QtWidgets.QWidget(DankMemerGrinder)
         self.centralwidget.setStyleSheet("*{\n"
 "    border: none;\n"
 "    background-color: transparent;\n"
@@ -27,7 +27,7 @@ class Ui_MainWindow(object):
 "    border-radius: 20px;\n"
 "}\n"
 "QPushButton{\n"
-"    background-color: #5865f2;\n"
+"    background-color: #42464d;;\n"
 "    border-radius: 15px;\n"
 "}\n"
 "#main_menu{\n"
@@ -114,6 +114,7 @@ class Ui_MainWindow(object):
         font.setFamily("Impact")
         font.setPointSize(30)
         font.setBold(False)
+        font.setWeight(50)
         font.setStyleStrategy(QtGui.QFont.StyleStrategy.PreferDefault)
         self.title.setFont(font)
         self.title.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.ArrowCursor))
@@ -158,9 +159,10 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(12)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.home_btn.setFont(font)
         self.home_btn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
+        self.home_btn.setStyleSheet("background-color: #5865f2;")
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/icons/icons/home.svg"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.home_btn.setIcon(icon)
@@ -174,9 +176,10 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(12)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.settings_btn.setFont(font)
         self.settings_btn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
+        self.settings_btn.setStyleSheet("")
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(":/icons/icons/settings.svg"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.settings_btn.setIcon(icon1)
@@ -190,9 +193,10 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(12)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.commands_btn.setFont(font)
         self.commands_btn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
+        self.commands_btn.setStyleSheet("")
         icon2 = QtGui.QIcon()
         icon2.addPixmap(QtGui.QPixmap(":/icons/icons/toggle-right.svg"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.commands_btn.setIcon(icon2)
@@ -206,6 +210,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(12)
         font.setBold(True)
+        font.setWeight(75)
         self.auto_buy_btn.setFont(font)
         self.auto_buy_btn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         icon3 = QtGui.QIcon()
@@ -221,7 +226,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(12)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.gambling_btn.setFont(font)
         self.gambling_btn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         icon4 = QtGui.QIcon()
@@ -269,7 +274,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(25)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.home_title.setFont(font)
         self.home_title.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.home_title.setObjectName("home_title")
@@ -317,7 +322,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(25)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.settings_title.setFont(font)
         self.settings_title.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.settings_title.setObjectName("settings_title")
@@ -361,7 +366,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.token_label.setFont(font)
         self.token_label.setObjectName("token_label")
         self.horizontalLayout_19.addWidget(self.token_label)
@@ -408,7 +413,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.channel_label.setFont(font)
         self.channel_label.setObjectName("channel_label")
         self.horizontalLayout_21.addWidget(self.channel_label)
@@ -455,7 +460,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.trivia_label.setFont(font)
         self.trivia_label.setObjectName("trivia_label")
         self.horizontalLayout_24.addWidget(self.trivia_label)
@@ -472,6 +477,7 @@ class Ui_MainWindow(object):
         self.trivia_chance.setWrapping(False)
         self.trivia_chance.setFrame(True)
         self.trivia_chance.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.trivia_chance.setMinimum(25)
         self.trivia_chance.setMaximum(100)
         self.trivia_chance.setObjectName("trivia_chance")
         self.horizontalLayout_24.addWidget(self.trivia_chance)
@@ -491,7 +497,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(25)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.commands_title.setFont(font)
         self.commands_title.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.commands_title.setObjectName("commands_title")
@@ -529,7 +535,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.trivia.setFont(font)
         self.trivia.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.trivia.setObjectName("trivia")
@@ -539,7 +545,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.dig.setFont(font)
         self.dig.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.dig.setObjectName("dig")
@@ -549,7 +555,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.fish.setFont(font)
         self.fish.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.fish.setObjectName("fish")
@@ -559,7 +565,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.hunt.setFont(font)
         self.hunt.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.hunt.setObjectName("hunt")
@@ -569,7 +575,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.pm.setFont(font)
         self.pm.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.pm.setObjectName("pm")
@@ -579,7 +585,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.beg.setFont(font)
         self.beg.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.beg.setObjectName("beg")
@@ -596,7 +602,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.hl.setFont(font)
         self.hl.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.hl.setObjectName("hl")
@@ -606,7 +612,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.search.setFont(font)
         self.search.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.search.setObjectName("search")
@@ -616,7 +622,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.dep_all.setFont(font)
         self.dep_all.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.dep_all.setObjectName("dep_all")
@@ -626,7 +632,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.stream.setFont(font)
         self.stream.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.stream.setObjectName("stream")
@@ -636,7 +642,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.work.setFont(font)
         self.work.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.work.setObjectName("work")
@@ -646,7 +652,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.use_pizza.setFont(font)
         self.use_pizza.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.use_pizza.setObjectName("use_pizza")
@@ -659,6 +665,45 @@ class Ui_MainWindow(object):
         self.frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.frame.setObjectName("frame")
+        self.horizontalLayout_26 = QtWidgets.QHBoxLayout(self.frame)
+        self.horizontalLayout_26.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_26.setSpacing(0)
+        self.horizontalLayout_26.setObjectName("horizontalLayout_26")
+        self.frame_7 = QtWidgets.QFrame(self.frame)
+        self.frame_7.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.frame_7.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
+        self.frame_7.setObjectName("frame_7")
+        self.horizontalLayout_27 = QtWidgets.QHBoxLayout(self.frame_7)
+        self.horizontalLayout_27.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_27.setSpacing(10)
+        self.horizontalLayout_27.setObjectName("horizontalLayout_27")
+        self.start = QtWidgets.QPushButton(self.frame_7)
+        self.start.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.start.sizePolicy().hasHeightForWidth())
+        self.start.setSizePolicy(sizePolicy)
+        self.start.setMinimumSize(QtCore.QSize(140, 45))
+        self.start.setMaximumSize(QtCore.QSize(50, 45))
+        self.start.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
+        self.start.setStyleSheet("background-color : #2d7d46")
+        self.start.setObjectName("start")
+        self.horizontalLayout_27.addWidget(self.start)
+        self.stop = QtWidgets.QPushButton(self.frame_7)
+        self.stop.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.stop.sizePolicy().hasHeightForWidth())
+        self.stop.setSizePolicy(sizePolicy)
+        self.stop.setMinimumSize(QtCore.QSize(140, 45))
+        self.stop.setMaximumSize(QtCore.QSize(100, 45))
+        self.stop.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
+        self.stop.setStyleSheet("background-color : #d83c3e")
+        self.stop.setObjectName("stop")
+        self.horizontalLayout_27.addWidget(self.stop)
+        self.horizontalLayout_26.addWidget(self.frame_7, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
         self.verticalLayout_12.addWidget(self.frame, 0, QtCore.Qt.AlignmentFlag.AlignBottom)
         self.verticalLayout_8.addWidget(self.commands_frame)
         self.stackedWidget.addWidget(self.commands)
@@ -673,7 +718,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(25)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.auto_buy_title.setFont(font)
         self.auto_buy_title.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.auto_buy_title.setObjectName("auto_buy_title")
@@ -711,7 +756,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.lifesavers.setFont(font)
         self.lifesavers.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.lifesavers.setStyleSheet("")
@@ -757,7 +802,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.fishing.setFont(font)
         self.fishing.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.fishing.setStyleSheet("")
@@ -787,7 +832,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.shovel.setFont(font)
         self.shovel.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.shovel.setStyleSheet("")
@@ -817,7 +862,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.rifle.setFont(font)
         self.rifle.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.rifle.setStyleSheet("")
@@ -838,7 +883,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(25)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.gambling_title.setFont(font)
         self.gambling_title.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.gambling_title.setObjectName("gambling_title")
@@ -867,6 +912,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(20)
         font.setBold(False)
+        font.setWeight(50)
         self.label.setFont(font)
         self.label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.label.setObjectName("label")
@@ -887,7 +933,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.blackjack_btn.setFont(font)
         self.blackjack_btn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.blackjack_btn.setLayoutDirection(QtCore.Qt.LayoutDirection.LeftToRight)
@@ -911,7 +957,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.label_4.setFont(font)
         self.label_4.setObjectName("label_4")
         self.horizontalLayout_7.addWidget(self.label_4)
@@ -943,7 +989,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        
+        font.setWeight(75)
         self.label_5.setFont(font)
         self.label_5.setObjectName("label_5")
         self.horizontalLayout_8.addWidget(self.label_5)
@@ -973,6 +1019,7 @@ class Ui_MainWindow(object):
         font.setFamily("Segoe UI")
         font.setPointSize(20)
         font.setBold(False)
+        font.setWeight(50)
         self.label_2.setFont(font)
         self.label_2.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.label_2.setObjectName("label_2")
@@ -1003,64 +1050,66 @@ class Ui_MainWindow(object):
         self.verticalLayout_4.addWidget(self.stackedWidget)
         self.horizontalLayout.addWidget(self.main_menu)
         self.verticalLayout.addWidget(self.main)
-        MainWindow.setCentralWidget(self.centralwidget)
+        DankMemerGrinder.setCentralWidget(self.centralwidget)
 
-        self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(1)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.retranslateUi(DankMemerGrinder)
+        self.stackedWidget.setCurrentIndex(0)
+        QtCore.QMetaObject.connectSlotsByName(DankMemerGrinder)
 
-    def retranslateUi(self, MainWindow):
+    def retranslateUi(self, DankMemerGrinder):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.title.setText(_translate("MainWindow", "Dank Memer Grinder"))
-        self.home_btn.setText(_translate("MainWindow", "Home"))
-        self.settings_btn.setText(_translate("MainWindow", "Settings"))
-        self.commands_btn.setText(_translate("MainWindow", "Commands"))
-        self.auto_buy_btn.setText(_translate("MainWindow", "Auto Buy"))
-        self.gambling_btn.setText(_translate("MainWindow", "Gambling"))
-        self.toggle.setText(_translate("MainWindow", "Bot Off"))
-        self.home_title.setText(_translate("MainWindow", "Home"))
-        self.output.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        DankMemerGrinder.setWindowTitle(_translate("DankMemerGrinder", "Dank Memer Grinder"))
+        self.title.setText(_translate("DankMemerGrinder", "Dank Memer Grinder"))
+        self.home_btn.setText(_translate("DankMemerGrinder", "Home"))
+        self.settings_btn.setText(_translate("DankMemerGrinder", "Settings"))
+        self.commands_btn.setText(_translate("DankMemerGrinder", "Commands"))
+        self.auto_buy_btn.setText(_translate("DankMemerGrinder", "Auto Buy"))
+        self.gambling_btn.setText(_translate("DankMemerGrinder", "Gambling"))
+        self.toggle.setText(_translate("DankMemerGrinder", "Bot Off"))
+        self.home_title.setText(_translate("DankMemerGrinder", "Home"))
+        self.output.setHtml(_translate("DankMemerGrinder", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Segoe UI\'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
-        self.settings_title.setText(_translate("MainWindow", "Settings"))
-        self.token_label.setText(_translate("MainWindow", "Discord Token"))
-        self.channel_label.setText(_translate("MainWindow", "Channel ID"))
-        self.trivia_label.setText(_translate("MainWindow", "Correct Trivia Chance"))
-        self.commands_title.setText(_translate("MainWindow", "Commands"))
-        self.trivia.setText(_translate("MainWindow", "Trivia"))
-        self.dig.setText(_translate("MainWindow", "Dig"))
-        self.fish.setText(_translate("MainWindow", "Fish"))
-        self.hunt.setText(_translate("MainWindow", "Hunt"))
-        self.pm.setText(_translate("MainWindow", "Post Memes"))
-        self.beg.setText(_translate("MainWindow", "Beg"))
-        self.hl.setText(_translate("MainWindow", "High Low"))
-        self.search.setText(_translate("MainWindow", "Search"))
-        self.dep_all.setText(_translate("MainWindow", "Deposit All"))
-        self.stream.setText(_translate("MainWindow", "Stream"))
-        self.work.setText(_translate("MainWindow", "Work"))
-        self.use_pizza.setText(_translate("MainWindow", "Use Pizza"))
-        self.auto_buy_title.setText(_translate("MainWindow", "Auto Buy"))
-        self.lifesavers.setText(_translate("MainWindow", "Life Savers"))
-        self.fishing.setText(_translate("MainWindow", "Fishing Pole"))
-        self.shovel.setText(_translate("MainWindow", "Shovel"))
-        self.rifle.setText(_translate("MainWindow", "Hunting Rifle"))
-        self.gambling_title.setText(_translate("MainWindow", "Gambling"))
-        self.label.setText(_translate("MainWindow", "Blackjack"))
-        self.blackjack_btn.setText(_translate("MainWindow", "Blackjack"))
-        self.label_4.setText(_translate("MainWindow", "Multiplier Required"))
-        self.label_5.setText(_translate("MainWindow", "Blackjack Amount"))
-        self.label_2.setText(_translate("MainWindow", "Gamble"))
-        self.label_3.setText(_translate("MainWindow", "Coming Soon"))
+        self.settings_title.setText(_translate("DankMemerGrinder", "Settings"))
+        self.token_label.setText(_translate("DankMemerGrinder", "Discord Token"))
+        self.channel_label.setText(_translate("DankMemerGrinder", "Channel ID"))
+        self.trivia_label.setText(_translate("DankMemerGrinder", "Correct Trivia Chance"))
+        self.commands_title.setText(_translate("DankMemerGrinder", "Commands"))
+        self.trivia.setText(_translate("DankMemerGrinder", "Trivia"))
+        self.dig.setText(_translate("DankMemerGrinder", "Dig"))
+        self.fish.setText(_translate("DankMemerGrinder", "Fish"))
+        self.hunt.setText(_translate("DankMemerGrinder", "Hunt"))
+        self.pm.setText(_translate("DankMemerGrinder", "Post Memes"))
+        self.beg.setText(_translate("DankMemerGrinder", "Beg"))
+        self.hl.setText(_translate("DankMemerGrinder", "High Low"))
+        self.search.setText(_translate("DankMemerGrinder", "Search"))
+        self.dep_all.setText(_translate("DankMemerGrinder", "Deposit All"))
+        self.stream.setText(_translate("DankMemerGrinder", "Stream"))
+        self.work.setText(_translate("DankMemerGrinder", "Work"))
+        self.use_pizza.setText(_translate("DankMemerGrinder", "Use Pizza"))
+        self.start.setText(_translate("DankMemerGrinder", "Start All"))
+        self.stop.setText(_translate("DankMemerGrinder", "Stop All"))
+        self.auto_buy_title.setText(_translate("DankMemerGrinder", "Auto Buy"))
+        self.lifesavers.setText(_translate("DankMemerGrinder", "Life Savers"))
+        self.fishing.setText(_translate("DankMemerGrinder", "Fishing Pole"))
+        self.shovel.setText(_translate("DankMemerGrinder", "Shovel"))
+        self.rifle.setText(_translate("DankMemerGrinder", "Hunting Rifle"))
+        self.gambling_title.setText(_translate("DankMemerGrinder", "Gambling"))
+        self.label.setText(_translate("DankMemerGrinder", "Blackjack"))
+        self.blackjack_btn.setText(_translate("DankMemerGrinder", "Blackjack"))
+        self.label_4.setText(_translate("DankMemerGrinder", "Multiplier Required"))
+        self.label_5.setText(_translate("DankMemerGrinder", "Blackjack Amount"))
+        self.label_2.setText(_translate("DankMemerGrinder", "Gamble"))
+        self.label_3.setText(_translate("DankMemerGrinder", "Coming Soon"))
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
+    DankMemerGrinder = QtWidgets.QMainWindow()
+    ui = Ui_DankMemerGrinder()
+    ui.setupUi(DankMemerGrinder)
+    DankMemerGrinder.show()
     sys.exit(app.exec())

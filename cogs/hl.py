@@ -26,7 +26,7 @@ class hl(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.channel.id != self.bot.channel_id or config_dict["commands"]["state"] is False or config_dict["commands"]["hl"] is False:
+        if message.channel.id != self.bot.channel_id or config_dict["state"] is False or config_dict["commands"]["hl"] is False:
             return
 
         for embed in message.embeds:
@@ -42,7 +42,7 @@ class hl(commands.Cog):
 
     @tasks.loop(seconds=42)
     async def hl(self):
-        if config_dict["commands"]["hl"] is True and config_dict["commands"]["state"] is True:
+        if config_dict["commands"]["hl"] is True and config_dict["state"] is True:
             await asyncio.sleep(random.randint(0, 3))
             async for cmd in self.bot.channel.slash_commands(command_ids=[1011560370911072258]):
                 await cmd()

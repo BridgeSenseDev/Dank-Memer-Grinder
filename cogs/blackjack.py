@@ -128,7 +128,7 @@ class Blackjack(commands.Cog):
     @tasks.loop(seconds=20)
     async def bj(self):
         try:
-            if config_dict["commands"]["bj"]["state"] is True and config_dict["commands"]["state"] is True:
+            if config_dict["commands"]["bj"]["state"] is True and config_dict["state"] is True:
                 try:
                     if multi <= int(config_dict["commands"]["bj"]["multi"]):
                         self.bot.window.ui.output.append(
@@ -149,7 +149,7 @@ class Blackjack(commands.Cog):
 
     @tasks.loop(minutes=3)
     async def multipliers(self):
-        if config_dict["commands"]["bj"]["state"] is True and config_dict["commands"]["state"] is True:
+        if config_dict["commands"]["bj"]["state"] is True and config_dict["state"] is True:
             async for cmd in self.bot.channel.slash_commands(command_ids=[1011560371171102766]):
                 await cmd()
                 break
@@ -157,7 +157,7 @@ class Blackjack(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         global multi
-        if message.channel.id != self.bot.channel_id or config_dict["commands"]["state"] is False:
+        if message.channel.id != self.bot.channel_id or config_dict["state"] is False:
             return
 
         for embed in message.embeds:

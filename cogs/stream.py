@@ -31,7 +31,7 @@ class Stream(commands.Cog):
 
     @tasks.loop(minutes=11)
     async def pls_stream(self):
-        if config_dict["commands"]["stream"] is True and config_dict["commands"]["state"] is True:
+        if config_dict["commands"]["stream"] is True and config_dict["state"] is True:
             await asyncio.sleep(random.randint(0, 180))
             async for cmd in self.bot.channel.slash_commands(command_ids=[1011560371267579938]):
                 await cmd()
@@ -39,7 +39,7 @@ class Stream(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.channel.id != self.bot.channel_id or config_dict["commands"]["state"] is False or config_dict["commands"]["stream"] is False:
+        if message.channel.id != self.bot.channel_id or config_dict["state"] is False or config_dict["commands"]["stream"] is False:
             return
 
         for embed in message.embeds:

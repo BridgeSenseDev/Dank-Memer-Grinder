@@ -58,12 +58,12 @@ class MainWindow(QMainWindow):
         QMainWindow.__init__(self)
         self.setWindowIcon(QIcon("icon.png"))
         QFontDatabase.addApplicationFont("Segoe.ttf")
-        self.ui = Ui_MainWindow()
+        self.ui = Ui_DankMemerGrinder()
         self.ui.setupUi(self)
         self.bot = MyClient()
         self.show()
         self.ui.output.setVerticalScrollBar(self.ui.output_scrollbar)
-        config_dict["commands"].update({"state": False})
+        config_dict.update({"state": False})
         with open("config.json", "w") as file:
             json.dump(config_dict, file, ensure_ascii=False, indent=4)
 
@@ -90,11 +90,11 @@ class MainWindow(QMainWindow):
         self.ui.trivia_chance.setValue(int(config_dict["trivia_correct_chance"] * 100))
 
         # Sidebar buttons
-        self.ui.home_btn.clicked.connect(lambda: self.ui.stackedWidget.setCurrentWidget(self.ui.home))
-        self.ui.settings_btn.clicked.connect(lambda: self.ui.stackedWidget.setCurrentWidget(self.ui.settings))
-        self.ui.commands_btn.clicked.connect(lambda: self.ui.stackedWidget.setCurrentWidget(self.ui.commands))
-        self.ui.auto_buy_btn.clicked.connect(lambda: self.ui.stackedWidget.setCurrentWidget(self.ui.auto_buy))
-        self.ui.gambling_btn.clicked.connect(lambda: self.ui.stackedWidget.setCurrentWidget(self.ui.gambling))
+        self.ui.home_btn.clicked.connect(lambda: self.sidebar(self.ui.home_btn, self.ui.home))
+        self.ui.settings_btn.clicked.connect(lambda: self.sidebar(self.ui.settings_btn, self.ui.settings))
+        self.ui.commands_btn.clicked.connect(lambda: self.sidebar(self.ui.commands_btn, self.ui.commands))
+        self.ui.auto_buy_btn.clicked.connect(lambda: self.sidebar(self.ui.auto_buy_btn, self.ui.auto_buy))
+        self.ui.gambling_btn.clicked.connect(lambda: self.sidebar(self.ui.gambling_btn, self.ui.gambling))
         self.ui.toggle.clicked.connect(lambda: self.check())
 
         # Command buttons
@@ -110,6 +110,8 @@ class MainWindow(QMainWindow):
         self.ui.stream.clicked.connect(lambda: self.toggle_command("stream", self.ui.stream.isChecked()))
         self.ui.work.clicked.connect(lambda: self.toggle_command("work", self.ui.work.isChecked()))
         self.ui.use_pizza.clicked.connect(lambda: self.toggle_command("use_pizza", self.ui.use_pizza.isChecked()))
+        self.ui.start.clicked.connect(lambda: self.toggle_all(True))
+        self.ui.stop.clicked.connect(lambda: self.toggle_all(False))
 
         # Blackjack buttons
         self.ui.blackjack_btn.clicked.connect(lambda: self.blackjack("state", self.ui.blackjack_btn.isChecked()))
@@ -127,12 +129,13 @@ class MainWindow(QMainWindow):
         # Settings buttons
         self.ui.token.textChanged.connect(lambda: self.settings("token", self.ui.token.text()))
         self.ui.channel.textChanged.connect(lambda: self.settings("channel", self.ui.channel.text()))
-        self.ui.trivia_chance.valueChanged.connect(lambda: self.settings("trivia_chance", self.ui.trivia_chance.value()))
+        self.ui.trivia_chance.valueChanged.connect(
+            lambda: self.settings("trivia_chance", self.ui.trivia_chance.value()))
 
     @asyncSlot()
     async def check(self):
-        if config_dict["commands"]["state"] is False:
-            config_dict["commands"].update({"state": True})
+        if config_dict["state"] is False:
+            config_dict.update({"state": True})
             with open("config.json", "w") as file:
                 json.dump(config_dict, file, ensure_ascii=False, indent=4)
             self.ui.toggle.setStyleSheet("background-color : #2d7d46")
@@ -141,7 +144,7 @@ class MainWindow(QMainWindow):
             if self.bot.user is None:
                 await self.bot.start(config_dict["discord_token"])
         else:
-            config_dict["commands"].update({"state": False})
+            config_dict.update({"state": False})
             with open("config.json", "w") as file:
                 json.dump(config_dict, file, ensure_ascii=False, indent=4)
             self.ui.toggle.setStyleSheet("background-color : #d83c3e")
@@ -149,10 +152,30 @@ class MainWindow(QMainWindow):
             self.ui.output.append("Stopped bot")
 
     @asyncSlot()
+    async def sidebar(self, button, widget):
+        buttons = [self.ui.home_btn, self.ui.settings_btn, self.ui.commands_btn, self.ui.auto_buy_btn,
+                   self.ui.gambling_btn]
+        for i in buttons:
+            if i == button:
+                button.setStyleSheet("background-color: #5865f2")
+            else:
+                i.setStyleSheet("background-color: #42464d")
+        self.ui.stackedWidget.setCurrentWidget(widget)
+
+    @asyncSlot()
     async def toggle_command(self, command, state):
         config_dict["commands"].update({command: state})
         with open("config.json", "w") as file:
             json.dump(config_dict, file, ensure_ascii=False, indent=4)
+
+    @asyncSlot()
+    async def toggle_all(self, state):
+        for i in config_dict["commands"]:
+            if i != "bj":
+                getattr(self.ui, i).setChecked(state)
+                config_dict["commands"].update({i: state})
+                with open("config.json", "w") as file:
+                    json.dump(config_dict, file, ensure_ascii=False, indent=4)
 
     @asyncSlot()
     async def blackjack(self, command, state):
@@ -185,7 +208,6 @@ class MainWindow(QMainWindow):
             config_dict.update({"trivia_correct_chance": int(state) / 100})
             with open("config.json", "w") as file:
                 json.dump(config_dict, file, ensure_ascii=False, indent=4)
-
 
 
 if __name__ == "__main__":

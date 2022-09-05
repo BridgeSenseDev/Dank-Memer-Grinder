@@ -21,7 +21,7 @@ class Autobuy(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.guild is None and message.author.id == 270904126974590976 and config_dict["commands"]["state"] is True:
+        if message.guild is None and message.author.id == 270904126974590976 and config_dict["state"] is True:
             for embed in message.embeds:
                 print(embed.to_dict())
                 # Buy lifesavers
@@ -45,7 +45,7 @@ class Autobuy(commands.Cog):
                 except:
                     pass
 
-        if message.channel.id != self.bot.channel_id or config_dict["commands"]["state"] is False:
+        if message.channel.id != self.bot.channel_id or config_dict["state"] is False:
             return
 
         for embed in message.embeds:
