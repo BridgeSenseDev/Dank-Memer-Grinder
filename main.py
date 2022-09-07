@@ -65,6 +65,7 @@ class MainWindow(QMainWindow):
         QMainWindow.__init__(self)
         self.setWindowIcon(QIcon(resource_path("icon.png")))
         QFontDatabase.addApplicationFont("Segoe.ttf")
+        QFontDatabase.addApplicationFont("Impact.ttf")
         self.ui = Ui_DankMemerGrinder()
         self.ui.setupUi(self)
         self.bot = MyClient()
