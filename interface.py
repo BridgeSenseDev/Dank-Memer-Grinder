@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file '.\interface.ui'
+# Form implementation generated from reading ui file 'interface.ui'
 #
 # Created by: PyQt6 UI code generator 6.3.1
 #
@@ -12,79 +12,79 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_DankMemerGrinder(object):
     def setupUi(self, DankMemerGrinder):
         DankMemerGrinder.setObjectName("DankMemerGrinder")
-        DankMemerGrinder.resize(1014, 749)
+        DankMemerGrinder.resize(856, 494)
         self.centralwidget = QtWidgets.QWidget(DankMemerGrinder)
         self.centralwidget.setStyleSheet("*{\n"
-"    border: none;\n"
-"    background-color: transparent;\n"
-"    color: #e8e6e3;\n"
-"}\n"
-"#centralwidget{\n"
-"    background-color: #36393f;\n"
-"}\n"
-"#side_menu{\n"
-"    background-color: #202225;\n"
-"    border-radius: 20px;\n"
-"}\n"
-"QPushButton{\n"
-"    background-color: #42464d;;\n"
-"    border-radius: 15px;\n"
-"}\n"
-"#main_menu{\n"
-"    background-color: #2f3136;\n"
-"    border-radius: 20px;\n"
-"}\n"
-"#title{\n"
-"    color: #5b8c40;\n"
-"}\n"
-"#output_frame{\n"
-"    background-color: #40444b;\n"
-"    border-radius: 20px;\n"
-"}\n"
-"QScrollBar:vertical {\n"
-"    width:10px;\n"
-"    margin: 0px 0px 0px 0px;\n"
-"}\n"
-"QScrollBar::handle:vertical {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"    stop: 0 rgb(32, 34, 37), stop: 0.5 rgb(32, 34, 37), stop:1 rgb(32, 34, 37));\n"
-"    min-height: 0px;\n"
-"}\n"
-"QScrollBar::add-line:vertical {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"    stop: 0 rgb(32, 34, 37), stop: 0.5 rgb(32, 34, 37),  stop:1 rgb(32, 34, 37));\n"
-"    height: 0px;\n"
-"    subcontrol-position: bottom;\n"
-"    subcontrol-origin: margin;\n"
-"}\n"
-"QScrollBar::sub-line:vertical {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"    stop: 0  rgb(32, 34, 37), stop: 0.5 rgb(32, 34, 37),  stop:1 rgb(32, 34, 37));\n"
-"    height: 0 px;\n"
-"    subcontrol-position: top;\n"
-"    subcontrol-origin: margin;\n"
-"}\n"
-"QCheckBox::indicator:unchecked{\n"
-"    image: url(\":/icons/icons/off-button.png\");\n"
-"    width: \"40px\";\n"
-"    height: \"40px\";\n"
-"}\n"
-"QCheckBox::indicator:checked{\n"
-"    image: url(\":/icons/icons/on-button.png\");\n"
-"    width: \"40px\";\n"
-"    height: \"40px\";\n"
-"}\n"
-"\n"
-"QSpinBox{\n"
-"    background-color: #42464d;\n"
-"    border-radius: 10px;\n"
-"}\n"
-"QSpinBox::up-button{\n"
-"    width: 20px;\n"
-"}\n"
-"QSpinBox::down-button{\n"
-"    width: 20px;\n"
-"}")
+                                         "    border: none;\n"
+                                         "    background-color: transparent;\n"
+                                         "    color: #e8e6e3;\n"
+                                         "}\n"
+                                         "#centralwidget{\n"
+                                         "    background-color: #36393f;\n"
+                                         "}\n"
+                                         "#side_menu{\n"
+                                         "    background-color: #202225;\n"
+                                         "    border-radius: 20px;\n"
+                                         "}\n"
+                                         "QPushButton{\n"
+                                         "    background-color: #42464d;;\n"
+                                         "    border-radius: 15px;\n"
+                                         "}\n"
+                                         "#main_menu{\n"
+                                         "    background-color: #2f3136;\n"
+                                         "    border-radius: 20px;\n"
+                                         "}\n"
+                                         "#title{\n"
+                                         "    color: #5b8c40;\n"
+                                         "}\n"
+                                         "#output_frame{\n"
+                                         "    background-color: #40444b;\n"
+                                         "    border-radius: 20px;\n"
+                                         "}\n"
+                                         "QScrollBar:vertical {\n"
+                                         "    width:10px;\n"
+                                         "    margin: 0px 0px 0px 0px;\n"
+                                         "}\n"
+                                         "QScrollBar::handle:vertical {\n"
+                                         "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+                                         "    stop: 0 rgb(32, 34, 37), stop: 0.5 rgb(32, 34, 37), stop:1 rgb(32, 34, 37));\n"
+                                         "    min-height: 0px;\n"
+                                         "}\n"
+                                         "QScrollBar::add-line:vertical {\n"
+                                         "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+                                         "    stop: 0 rgb(32, 34, 37), stop: 0.5 rgb(32, 34, 37),  stop:1 rgb(32, 34, 37));\n"
+                                         "    height: 0px;\n"
+                                         "    subcontrol-position: bottom;\n"
+                                         "    subcontrol-origin: margin;\n"
+                                         "}\n"
+                                         "QScrollBar::sub-line:vertical {\n"
+                                         "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+                                         "    stop: 0  rgb(32, 34, 37), stop: 0.5 rgb(32, 34, 37),  stop:1 rgb(32, 34, 37));\n"
+                                         "    height: 0 px;\n"
+                                         "    subcontrol-position: top;\n"
+                                         "    subcontrol-origin: margin;\n"
+                                         "}\n"
+                                         "QCheckBox::indicator:unchecked{\n"
+                                         "    image: url(\":/icons/icons/off-button.png\");\n"
+                                         "    width: \"40px\";\n"
+                                         "    height: \"40px\";\n"
+                                         "}\n"
+                                         "QCheckBox::indicator:checked{\n"
+                                         "    image: url(\":/icons/icons/on-button.png\");\n"
+                                         "    width: \"40px\";\n"
+                                         "    height: \"40px\";\n"
+                                         "}\n"
+                                         "\n"
+                                         "QSpinBox{\n"
+                                         "    background-color: #42464d;\n"
+                                         "    border-radius: 10px;\n"
+                                         "}\n"
+                                         "QSpinBox::up-button{\n"
+                                         "    width: 20px;\n"
+                                         "}\n"
+                                         "QSpinBox::down-button{\n"
+                                         "    width: 20px;\n"
+                                         "}")
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -114,7 +114,7 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Impact")
         font.setPointSize(30)
         font.setBold(False)
-        font.setWeight(50)
+
         font.setStyleStrategy(QtGui.QFont.StyleStrategy.PreferDefault)
         self.title.setFont(font)
         self.title.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.ArrowCursor))
@@ -124,7 +124,8 @@ class Ui_DankMemerGrinder(object):
         self.verticalLayout_5.addWidget(self.header_2)
         self.verticalLayout.addWidget(self.header, 0, QtCore.Qt.AlignmentFlag.AlignTop)
         self.main = QtWidgets.QFrame(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred,
+                                           QtWidgets.QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.main.sizePolicy().hasHeightForWidth())
@@ -159,7 +160,7 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(12)
         font.setBold(True)
-        font.setWeight(75)
+
         self.home_btn.setFont(font)
         self.home_btn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.home_btn.setStyleSheet("background-color: #5865f2;")
@@ -176,7 +177,7 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(12)
         font.setBold(True)
-        font.setWeight(75)
+
         self.settings_btn.setFont(font)
         self.settings_btn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.settings_btn.setStyleSheet("")
@@ -193,7 +194,7 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(12)
         font.setBold(True)
-        font.setWeight(75)
+
         self.commands_btn.setFont(font)
         self.commands_btn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.commands_btn.setStyleSheet("")
@@ -210,11 +211,12 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(12)
         font.setBold(True)
-        font.setWeight(75)
+
         self.auto_buy_btn.setFont(font)
         self.auto_buy_btn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap(":/icons/icons/shopping-cart.svg"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon3.addPixmap(QtGui.QPixmap(":/icons/icons/shopping-cart.svg"), QtGui.QIcon.Mode.Normal,
+                        QtGui.QIcon.State.Off)
         self.auto_buy_btn.setIcon(icon3)
         self.auto_buy_btn.setIconSize(QtCore.QSize(20, 20))
         self.auto_buy_btn.setObjectName("auto_buy_btn")
@@ -226,7 +228,7 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(12)
         font.setBold(True)
-        font.setWeight(75)
+
         self.gambling_btn.setFont(font)
         self.gambling_btn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         icon4 = QtGui.QIcon()
@@ -251,7 +253,8 @@ class Ui_DankMemerGrinder(object):
         self.verticalLayout_2.addWidget(self.toggle)
         self.horizontalLayout.addWidget(self.side_menu)
         self.main_menu = QtWidgets.QFrame(self.main)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding,
+                                           QtWidgets.QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.main_menu.sizePolicy().hasHeightForWidth())
@@ -274,13 +277,14 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(25)
         font.setBold(True)
-        font.setWeight(75)
+
         self.home_title.setFont(font)
         self.home_title.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.home_title.setObjectName("home_title")
         self.verticalLayout_6.addWidget(self.home_title, 0, QtCore.Qt.AlignmentFlag.AlignTop)
         self.home_frame = QtWidgets.QFrame(self.home)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred,
+                                           QtWidgets.QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.home_frame.sizePolicy().hasHeightForWidth())
@@ -322,13 +326,14 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(25)
         font.setBold(True)
-        font.setWeight(75)
+
         self.settings_title.setFont(font)
         self.settings_title.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.settings_title.setObjectName("settings_title")
         self.verticalLayout_7.addWidget(self.settings_title, 0, QtCore.Qt.AlignmentFlag.AlignTop)
         self.settings_frame = QtWidgets.QFrame(self.settings)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred,
+                                           QtWidgets.QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.settings_frame.sizePolicy().hasHeightForWidth())
@@ -366,12 +371,13 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        font.setWeight(75)
+
         self.token_label.setFont(font)
         self.token_label.setObjectName("token_label")
         self.horizontalLayout_19.addWidget(self.token_label)
         self.token = QtWidgets.QLineEdit(self.token_frame_3)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred,
+                                           QtWidgets.QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.token.sizePolicy().hasHeightForWidth())
@@ -382,7 +388,8 @@ class Ui_DankMemerGrinder(object):
         self.token.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.token.setObjectName("token")
         self.horizontalLayout_19.addWidget(self.token)
-        self.horizontalLayout_18.addWidget(self.token_frame_3, 0, QtCore.Qt.AlignmentFlag.AlignHCenter|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.horizontalLayout_18.addWidget(self.token_frame_3, 0,
+                                           QtCore.Qt.AlignmentFlag.AlignHCenter | QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.horizontalLayout_17.addWidget(self.token_frame_2)
         self.verticalLayout_19.addWidget(self.token_frame)
         self.channel_frame = QtWidgets.QFrame(self.settings_frame)
@@ -413,12 +420,13 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        font.setWeight(75)
+
         self.channel_label.setFont(font)
         self.channel_label.setObjectName("channel_label")
         self.horizontalLayout_21.addWidget(self.channel_label)
         self.channel = QtWidgets.QLineEdit(self.channel_frame_3)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred,
+                                           QtWidgets.QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.channel.sizePolicy().hasHeightForWidth())
@@ -429,7 +437,8 @@ class Ui_DankMemerGrinder(object):
         self.channel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.channel.setObjectName("channel")
         self.horizontalLayout_21.addWidget(self.channel)
-        self.horizontalLayout_20.addWidget(self.channel_frame_3, 0, QtCore.Qt.AlignmentFlag.AlignHCenter|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.horizontalLayout_20.addWidget(self.channel_frame_3, 0,
+                                           QtCore.Qt.AlignmentFlag.AlignHCenter | QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.horizontalLayout_22.addWidget(self.channel_frame_2)
         self.verticalLayout_19.addWidget(self.channel_frame)
         self.trivia_frame = QtWidgets.QFrame(self.settings_frame)
@@ -460,7 +469,7 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        font.setWeight(75)
+
         self.trivia_label.setFont(font)
         self.trivia_label.setObjectName("trivia_label")
         self.horizontalLayout_24.addWidget(self.trivia_label)
@@ -481,7 +490,8 @@ class Ui_DankMemerGrinder(object):
         self.trivia_chance.setMaximum(100)
         self.trivia_chance.setObjectName("trivia_chance")
         self.horizontalLayout_24.addWidget(self.trivia_chance)
-        self.horizontalLayout_23.addWidget(self.trivia_frame_3, 0, QtCore.Qt.AlignmentFlag.AlignHCenter|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.horizontalLayout_23.addWidget(self.trivia_frame_3, 0,
+                                           QtCore.Qt.AlignmentFlag.AlignHCenter | QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.horizontalLayout_25.addWidget(self.trivia_frame_2)
         self.verticalLayout_19.addWidget(self.trivia_frame)
         self.verticalLayout_7.addWidget(self.settings_frame)
@@ -497,13 +507,14 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(25)
         font.setBold(True)
-        font.setWeight(75)
+
         self.commands_title.setFont(font)
         self.commands_title.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.commands_title.setObjectName("commands_title")
         self.verticalLayout_8.addWidget(self.commands_title)
         self.commands_frame = QtWidgets.QFrame(self.commands)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred,
+                                           QtWidgets.QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.commands_frame.sizePolicy().hasHeightForWidth())
@@ -514,7 +525,8 @@ class Ui_DankMemerGrinder(object):
         self.verticalLayout_12 = QtWidgets.QVBoxLayout(self.commands_frame)
         self.verticalLayout_12.setObjectName("verticalLayout_12")
         self.frame_2 = QtWidgets.QFrame(self.commands_frame)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred,
+                                           QtWidgets.QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frame_2.sizePolicy().hasHeightForWidth())
@@ -535,7 +547,7 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        font.setWeight(75)
+
         self.trivia.setFont(font)
         self.trivia.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.trivia.setObjectName("trivia")
@@ -545,7 +557,7 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        font.setWeight(75)
+
         self.dig.setFont(font)
         self.dig.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.dig.setObjectName("dig")
@@ -555,7 +567,7 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        font.setWeight(75)
+
         self.fish.setFont(font)
         self.fish.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.fish.setObjectName("fish")
@@ -565,7 +577,7 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        font.setWeight(75)
+
         self.hunt.setFont(font)
         self.hunt.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.hunt.setObjectName("hunt")
@@ -575,7 +587,7 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        font.setWeight(75)
+
         self.pm.setFont(font)
         self.pm.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.pm.setObjectName("pm")
@@ -585,12 +597,13 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        font.setWeight(75)
+
         self.beg.setFont(font)
         self.beg.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.beg.setObjectName("beg")
         self.verticalLayout_13.addWidget(self.beg)
-        self.horizontalLayout_4.addWidget(self.frame_3, 0, QtCore.Qt.AlignmentFlag.AlignHCenter|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.horizontalLayout_4.addWidget(self.frame_3, 0,
+                                          QtCore.Qt.AlignmentFlag.AlignHCenter | QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.frame_4 = QtWidgets.QFrame(self.frame_2)
         self.frame_4.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
         self.frame_4.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
@@ -602,7 +615,7 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        font.setWeight(75)
+
         self.hl.setFont(font)
         self.hl.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.hl.setObjectName("hl")
@@ -612,7 +625,7 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        font.setWeight(75)
+
         self.search.setFont(font)
         self.search.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.search.setObjectName("search")
@@ -622,7 +635,7 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        font.setWeight(75)
+
         self.dep_all.setFont(font)
         self.dep_all.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.dep_all.setObjectName("dep_all")
@@ -632,7 +645,7 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        font.setWeight(75)
+
         self.stream.setFont(font)
         self.stream.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.stream.setObjectName("stream")
@@ -642,22 +655,23 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        font.setWeight(75)
+
         self.work.setFont(font)
         self.work.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.work.setObjectName("work")
         self.verticalLayout_14.addWidget(self.work)
-        self.use_pizza = QtWidgets.QCheckBox(self.frame_4)
+        self.daily = QtWidgets.QCheckBox(self.frame_4)
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        font.setWeight(75)
-        self.use_pizza.setFont(font)
-        self.use_pizza.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
-        self.use_pizza.setObjectName("use_pizza")
-        self.verticalLayout_14.addWidget(self.use_pizza)
-        self.horizontalLayout_4.addWidget(self.frame_4, 0, QtCore.Qt.AlignmentFlag.AlignHCenter|QtCore.Qt.AlignmentFlag.AlignVCenter)
+
+        self.daily.setFont(font)
+        self.daily.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
+        self.daily.setObjectName("daily")
+        self.verticalLayout_14.addWidget(self.daily)
+        self.horizontalLayout_4.addWidget(self.frame_4, 0,
+                                          QtCore.Qt.AlignmentFlag.AlignHCenter | QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.verticalLayout_12.addWidget(self.frame_2)
         self.frame = QtWidgets.QFrame(self.commands_frame)
         self.frame.setMinimumSize(QtCore.QSize(0, 50))
@@ -718,13 +732,14 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(25)
         font.setBold(True)
-        font.setWeight(75)
+
         self.auto_buy_title.setFont(font)
         self.auto_buy_title.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.auto_buy_title.setObjectName("auto_buy_title")
         self.verticalLayout_9.addWidget(self.auto_buy_title)
         self.auto_buy_frame = QtWidgets.QFrame(self.auto_buy)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred,
+                                           QtWidgets.QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.auto_buy_frame.sizePolicy().hasHeightForWidth())
@@ -756,7 +771,7 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        font.setWeight(75)
+
         self.lifesavers.setFont(font)
         self.lifesavers.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.lifesavers.setStyleSheet("")
@@ -802,7 +817,7 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        font.setWeight(75)
+
         self.fishing.setFont(font)
         self.fishing.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.fishing.setStyleSheet("")
@@ -832,7 +847,7 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        font.setWeight(75)
+
         self.shovel.setFont(font)
         self.shovel.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.shovel.setStyleSheet("")
@@ -862,7 +877,7 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        font.setWeight(75)
+
         self.rifle.setFont(font)
         self.rifle.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.rifle.setStyleSheet("")
@@ -883,13 +898,14 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(25)
         font.setBold(True)
-        font.setWeight(75)
+
         self.gambling_title.setFont(font)
         self.gambling_title.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.gambling_title.setObjectName("gambling_title")
         self.verticalLayout_10.addWidget(self.gambling_title)
         self.gambling_frame = QtWidgets.QFrame(self.gambling)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred,
+                                           QtWidgets.QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.gambling_frame.sizePolicy().hasHeightForWidth())
@@ -912,13 +928,14 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(20)
         font.setBold(False)
-        font.setWeight(50)
+
         self.label.setFont(font)
         self.label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.label.setObjectName("label")
         self.verticalLayout_15.addWidget(self.label, 0, QtCore.Qt.AlignmentFlag.AlignTop)
         self.bj_frame = QtWidgets.QFrame(self.blackjack)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred,
+                                           QtWidgets.QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.bj_frame.sizePolicy().hasHeightForWidth())
@@ -933,7 +950,7 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        font.setWeight(75)
+
         self.blackjack_btn.setFont(font)
         self.blackjack_btn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
         self.blackjack_btn.setLayoutDirection(QtCore.Qt.LayoutDirection.LeftToRight)
@@ -957,12 +974,13 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        font.setWeight(75)
+
         self.label_4.setFont(font)
         self.label_4.setObjectName("label_4")
         self.horizontalLayout_7.addWidget(self.label_4)
         self.multi = QtWidgets.QLineEdit(self.frame_5)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred,
+                                           QtWidgets.QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.multi.sizePolicy().hasHeightForWidth())
@@ -989,12 +1007,13 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(15)
         font.setBold(True)
-        font.setWeight(75)
+
         self.label_5.setFont(font)
         self.label_5.setObjectName("label_5")
         self.horizontalLayout_8.addWidget(self.label_5)
         self.bj_amount = QtWidgets.QLineEdit(self.frame_6)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred,
+                                           QtWidgets.QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.bj_amount.sizePolicy().hasHeightForWidth())
@@ -1019,13 +1038,14 @@ class Ui_DankMemerGrinder(object):
         font.setFamily("Segoe UI")
         font.setPointSize(20)
         font.setBold(False)
-        font.setWeight(50)
+
         self.label_2.setFont(font)
         self.label_2.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.label_2.setObjectName("label_2")
         self.verticalLayout_16.addWidget(self.label_2, 0, QtCore.Qt.AlignmentFlag.AlignTop)
         self.gamble_frame = QtWidgets.QFrame(self.gamble)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred,
+                                           QtWidgets.QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.gamble_frame.sizePolicy().hasHeightForWidth())
@@ -1067,11 +1087,12 @@ class Ui_DankMemerGrinder(object):
         self.gambling_btn.setText(_translate("DankMemerGrinder", "Gambling"))
         self.toggle.setText(_translate("DankMemerGrinder", "Bot Off"))
         self.home_title.setText(_translate("DankMemerGrinder", "Home"))
-        self.output.setHtml(_translate("DankMemerGrinder", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Segoe UI\'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
+        self.output.setHtml(_translate("DankMemerGrinder",
+                                       "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+                                       "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+                                       "p, li { white-space: pre-wrap; }\n"
+                                       "</style></head><body style=\" font-family:\'Segoe UI\'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+                                       "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
         self.settings_title.setText(_translate("DankMemerGrinder", "Settings"))
         self.token_label.setText(_translate("DankMemerGrinder", "Discord Token"))
         self.channel_label.setText(_translate("DankMemerGrinder", "Channel ID"))
@@ -1088,7 +1109,7 @@ class Ui_DankMemerGrinder(object):
         self.dep_all.setText(_translate("DankMemerGrinder", "Deposit All"))
         self.stream.setText(_translate("DankMemerGrinder", "Stream"))
         self.work.setText(_translate("DankMemerGrinder", "Work"))
-        self.use_pizza.setText(_translate("DankMemerGrinder", "Use Pizza"))
+        self.daily.setText(_translate("DankMemerGrinder", "Daily"))
         self.start.setText(_translate("DankMemerGrinder", "Start All"))
         self.stop.setText(_translate("DankMemerGrinder", "Stop All"))
         self.auto_buy_title.setText(_translate("DankMemerGrinder", "Auto Buy"))
@@ -1107,6 +1128,7 @@ class Ui_DankMemerGrinder(object):
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     DankMemerGrinder = QtWidgets.QMainWindow()
     ui = Ui_DankMemerGrinder()

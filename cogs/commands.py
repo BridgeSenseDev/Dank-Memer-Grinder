@@ -28,6 +28,7 @@ class Commands(commands.Cog):
         self.beg.start()
         self.dep_all.start()
         self.work.start()
+        self.daily.start()
 
     @tasks.loop(seconds=52)
     async def dig(self):
@@ -74,6 +75,14 @@ class Commands(commands.Cog):
         if config_dict["commands"]["work"] is True and config_dict["state"] is True:
             await asyncio.sleep(random.randint(0, 780))
             async for cmd in self.bot.channel.slash_commands(command_ids=[1011560371267579942]):
+                await cmd.shift()
+                break
+
+    @tasks.loop(hours=24)
+    async def daily(self):
+        if config_dict["commands"]["daily"] is True and config_dict["state"] is True:
+            await asyncio.sleep(random.randint(500, 1000))
+            async for cmd in self.bot.channel.slash_commands(command_ids=[1011560370864930856]):
                 await cmd.shift()
                 break
 

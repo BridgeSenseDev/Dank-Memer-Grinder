@@ -1,6 +1,7 @@
 import asyncio
 import ctypes
 import sys
+import os
 import json
 import threading
 
@@ -30,6 +31,12 @@ def update():
 update()
 
 
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
+
+
 class MyClient(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix='-', self_bot=True)
@@ -56,7 +63,7 @@ class MyClient(commands.Bot):
 class MainWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
-        self.setWindowIcon(QIcon("icon.png"))
+        self.setWindowIcon(QIcon(resource_path("icon.png")))
         QFontDatabase.addApplicationFont("Segoe.ttf")
         self.ui = Ui_DankMemerGrinder()
         self.ui.setupUi(self)
@@ -109,7 +116,7 @@ class MainWindow(QMainWindow):
         self.ui.dep_all.clicked.connect(lambda: self.toggle_command("dep_all", self.ui.dep_all.isChecked()))
         self.ui.stream.clicked.connect(lambda: self.toggle_command("stream", self.ui.stream.isChecked()))
         self.ui.work.clicked.connect(lambda: self.toggle_command("work", self.ui.work.isChecked()))
-        self.ui.use_pizza.clicked.connect(lambda: self.toggle_command("use_pizza", self.ui.use_pizza.isChecked()))
+        self.ui.daily.clicked.connect(lambda: self.toggle_command("daily", self.ui.daily.isChecked()))
         self.ui.start.clicked.connect(lambda: self.toggle_all(True))
         self.ui.stop.clicked.connect(lambda: self.toggle_all(False))
 
@@ -217,3 +224,4 @@ if __name__ == "__main__":
     loop = QEventLoop(app)
     asyncio.set_event_loop(loop)
     loop.run_forever()
+    sys.exit(os._exit(0))
