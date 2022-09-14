@@ -38,3 +38,15 @@
 * Uses very little system resources
 
 ## Installation
+1. Download the latest release for your operating system [here](https://github.com/BridgeSenseMC/Dank-Memer-Grinder/releases/latest) (darwin is for macOS), or [build from source](#building-from-source). If you build from source you can delete everything besides the compiled binaries and config.yml.
+2. Extract the zip file
+3. Get your Discord Token ([How?](https://www.youtube.com/watch?v=YEgFvgg7ZPI)) and Channel ID ([How?](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-#:~:text=On%20Android%20press%20and%20hold,name%20and%20select%20Copy%20ID.)) 
+4. Run the binary  
+   * **Windows**:  
+      Double click Dank Memer Grinder.exe
+   * **Linux**:  
+      Open a terminal in the same location as the binary and run it:  
+         `$ ./Dank\ Memer\ Grinder`
+   * **macOS**:  
+      Run by double clicking the Dank Memer Grinder binary
+5. Go to the Settings window and input your Discord Token and Channel ID
