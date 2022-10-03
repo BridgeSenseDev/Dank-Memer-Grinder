@@ -5,8 +5,8 @@ import os
 import json
 import threading
 
-from PyQt6.QtGui import QIcon, QFontDatabase
-from PyQt6.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtGui import QIcon, QFontDatabase
+from PyQt5.QtWidgets import QApplication, QMainWindow
 from discord.ext import commands, tasks
 from qasync import QEventLoop, asyncSlot
 
