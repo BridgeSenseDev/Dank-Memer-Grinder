@@ -25,7 +25,11 @@ class Pm(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.channel.id != self.bot.channel_id or config_dict["commands"]["pm"] is False or config_dict["state"] is False:
+        if (
+            message.channel.id != self.bot.channel_id
+            or config_dict["commands"]["pm"] is False
+            or config_dict["state"] is False
+        ):
             return
 
         for embed in message.embeds:
@@ -39,7 +43,9 @@ class Pm(commands.Cog):
     async def pm(self):
         if config_dict["commands"]["pm"] is True and config_dict["state"] is True:
             await asyncio.sleep(random.randint(0, 3))
-            async for cmd in self.bot.channel.slash_commands(command_ids=[1011560370911072263]):
+            async for cmd in self.bot.channel.slash_commands(
+                command_ids=[1011560370911072263]
+            ):
                 await cmd()
                 return
 

@@ -31,11 +31,16 @@ class Minigames(commands.Cog):
 
         # Dragon
         if "Dodge the Fireball" in message.content:
-            "Caught Dragon"
             await asyncio.sleep(2)
-            if "              <:FireBall:883714770748964864>" == message.content.splitlines()[2]:
+            if (
+                "              <:FireBall:883714770748964864>"
+                == message.content.splitlines()[2]
+            ):
                 await message.components[0].children[1].click()
-            elif "       <:FireBall:883714770748964864>" == message.content.splitlines()[2]:
+            elif (
+                "       <:FireBall:883714770748964864>"
+                == message.content.splitlines()[2]
+            ):
                 await message.components[0].children[0].click()
             elif "<:FireBall:883714770748964864>" == message.content.splitlines()[2]:
                 await message.components[0].children[2].click()
@@ -44,33 +49,51 @@ class Minigames(commands.Cog):
         # Catch the fish
         if "Catch the fish!" in message.content:
             await asyncio.sleep(2)
-            if "              <:legendaryfish:714981071548186684>" == message.content.splitlines()[1]:
-                await message.components[0].children[2].click()
-            elif "       <:legendaryfish:714981071548186684>" == message.content.splitlines()[1]:
+            if (
+                "              <:legendaryfish:714981071548186684>"
+                == message.content.splitlines()[1]
+            ):
+                await message.componenRts[0].children[2].click()
+            elif (
+                "       <:legendaryfish:714981071548186684>"
+                == message.content.splitlines()[1]
+            ):
                 await message.components[0].children[1].click()
-            elif "<:legendaryfish:714981071548186684>" == message.content.splitlines()[1]:
+            elif (
+                "<:legendaryfish:714981071548186684>" == message.content.splitlines()[1]
+            ):
                 await message.components[0].children[0].click()
             await asyncio.sleep(2)
-            if "              <:Kraken:860228238956429313>" == message.content.splitlines()[1]:
+            if (
+                "              <:Kraken:860228238956429313>"
+                == message.content.splitlines()[1]
+            ):
                 await message.components[0].children[2].click()
-            elif "       <:Kraken:860228238956429313>" == message.content.splitlines()[1]:
+            elif (
+                "       <:Kraken:860228238956429313>" == message.content.splitlines()[1]
+            ):
                 await message.components[0].children[1].click()
             elif "<:Kraken:860228238956429313>" == message.content.splitlines()[1]:
                 await message.components[0].children[0].click()
             return
 
         for embed in message.embeds:
-            print(embed.to_dict())
             # Football
             try:
                 if "Hit the ball!" in embed.to_dict()["description"]:
                     await asyncio.sleep(2)
-                    print(embed.to_dict()["description"])
                     if ":levitate:" == embed.to_dict()["description"].splitlines()[2]:
                         await message.components[0].children[2].click()
-                    elif "<:emptyspace:827651824739156030>:levitate:" == embed.to_dict()["description"].splitlines()[2]:
+                    elif (
+                        "<:emptyspace:827651824739156030>:levitate:"
+                        == embed.to_dict()["description"].splitlines()[2]
+                    ):
                         await message.components[0].children[0].click()
-                    if "<:emptyspace:827651824739156030><:emptyspace:827651824739156030>:levitate:" == embed.to_dict()["description"].splitlines()[2]:
+                    if (
+                        "<:emptyspace:827651824739156030>"
+                        "<:emptyspace:827651824739156030>:levitate:"
+                        == embed.to_dict()["description"].splitlines()[2]
+                    ):
                         await message.components[0].children[1].click()
                     return
             except KeyError:
@@ -78,13 +101,45 @@ class Minigames(commands.Cog):
 
             # Color match
             try:
-                if "Look at each color next to the words closely!" in embed.to_dict()["description"]:
-                    options = {str(re.search("`(.*?)`", embed.to_dict()["description"].splitlines()[1]).group(1)): str(
-                        re.search(":(.*?):",embed.to_dict()["description"].splitlines()[1]).group(1)),
-                        str(re.search("`(.*?)`", embed.to_dict()["description"].splitlines()[2]).group(1)): str(
-                            re.search(":(.*?):", embed.to_dict()["description"].splitlines()[2]).group(1)),
-                        str(re.search("`(.*?)`", embed.to_dict()["description"].splitlines()[3]).group(1)): str(
-                            re.search(":(.*?):", embed.to_dict()["description"].splitlines()[3]).group(1))}
+                if (
+                    "Look at each color next to the words closely!"
+                    in embed.to_dict()["description"]
+                ):
+                    options = {
+                        str(
+                            re.search(
+                                "`(.*?)`",
+                                embed.to_dict()["description"].splitlines()[1],
+                            ).group(1)
+                        ): str(
+                            re.search(
+                                ":(.*?):",
+                                embed.to_dict()["description"].splitlines()[1],
+                            ).group(1)
+                        ),
+                        str(
+                            re.search(
+                                "`(.*?)`",
+                                embed.to_dict()["description"].splitlines()[2],
+                            ).group(1)
+                        ): str(
+                            re.search(
+                                ":(.*?):",
+                                embed.to_dict()["description"].splitlines()[2],
+                            ).group(1)
+                        ),
+                        str(
+                            re.search(
+                                "`(.*?)`",
+                                embed.to_dict()["description"].splitlines()[3],
+                            ).group(1)
+                        ): str(
+                            re.search(
+                                ":(.*?):",
+                                embed.to_dict()["description"].splitlines()[3],
+                            ).group(1)
+                        ),
+                    }
                     await asyncio.sleep(6)
                     word = re.search("`(.*?)`", embed.to_dict()["description"]).group(1)
                     color = options[word]
@@ -92,7 +147,7 @@ class Minigames(commands.Cog):
                     for i in message.components[0].children:
                         print(i.label)
                     return
-            except:
+            except KeyError:
                 pass
 
             # Emoji
@@ -100,31 +155,42 @@ class Minigames(commands.Cog):
                 if "Look at the emoji closely!" in embed.to_dict()["description"]:
                     emoji = str(embed.to_dict()["description"].splitlines()[1])
                     await asyncio.sleep(4)
-                    for i in message.components[0].children + message.components[1].children:
+                    for i in (
+                        message.components[0].children + message.components[1].children
+                    ):
                         if str(i.emoji) == emoji:
                             await i.click()
                     return
-            except:
+            except KeyError:
                 pass
 
             # Repeat order
             try:
-                if any(i in embed.to_dict()["description"] for i in ["Repeat Order", "word order.", "words order"]):
-                    order = [str(embed.to_dict()["description"].splitlines()[1])[1:-1], str(embed.to_dict()["description"].splitlines()[2])[1:-1],
-                             str(embed.to_dict()["description"].splitlines()[3])[1:-1], str(embed.to_dict()["description"].splitlines()[4])[1:-1],
-                             str(embed.to_dict()["description"].splitlines()[5])[1:-1]]
+                if any(
+                    i in embed.to_dict()["description"]
+                    for i in ["Repeat Order", "word order.", "words order"]
+                ):
+                    order = [
+                        str(embed.to_dict()["description"].splitlines()[1])[1:-1],
+                        str(embed.to_dict()["description"].splitlines()[2])[1:-1],
+                        str(embed.to_dict()["description"].splitlines()[3])[1:-1],
+                        str(embed.to_dict()["description"].splitlines()[4])[1:-1],
+                        str(embed.to_dict()["description"].splitlines()[5])[1:-1],
+                    ]
                     await asyncio.sleep(6)
                     print(order)
-                    answers = {str(message.components[0].children[0].label): 0,
-                               str(message.components[0].children[1].label): 1,
-                               str(message.components[0].children[2].label): 2,
-                               str(message.components[0].children[3].label): 3,
-                               str(message.components[0].children[4].label): 4}
+                    answers = {
+                        str(message.components[0].children[0].label): 0,
+                        str(message.components[0].children[1].label): 1,
+                        str(message.components[0].children[2].label): 2,
+                        str(message.components[0].children[3].label): 3,
+                        str(message.components[0].children[4].label): 4,
+                    }
                     for i in order:
                         await message.components[0].children[int(answers[i])].click()
                         await asyncio.sleep(0.7)
                     return
-            except:
+            except KeyError:
                 pass
 
             # Attack boss
@@ -137,9 +203,9 @@ class Minigames(commands.Cog):
                             await asyncio.sleep(0.5)
                             x -= 1
                         return
-                    except:
+                    except KeyError:
                         return
-            except:
+            except KeyError:
                 pass
 
             # Basketball
@@ -147,17 +213,26 @@ class Minigames(commands.Cog):
                 if "Dunk the ball!" in embed.to_dict()["description"]:
                     await asyncio.sleep(2)
                     print(embed.to_dict()["description"])
-                    if "<:emptyspace:827651824739156030><:emptyspace:827651824739156030>:basketball:" == embed.to_dict()["description"].splitlines()[2]:
+                    if (
+                        "<:emptyspace:827651824739156030>"
+                        "<:emptyspace:827651824739156030>:basketball:"
+                        == embed.to_dict()["description"].splitlines()[2]
+                    ):
                         print("2")
                         await message.components[0].children[2].click()
-                    elif "<:emptyspace:827651824739156030>:basketball:" == embed.to_dict()["description"].splitlines()[2]:
+                    elif (
+                        "<:emptyspace:827651824739156030>:basketball:"
+                        == embed.to_dict()["description"].splitlines()[2]
+                    ):
                         print("1")
                         await message.components[0].children[1].click()
-                    elif ":basketball:" == embed.to_dict()["description"].splitlines()[2]:
+                    elif (
+                        ":basketball:" == embed.to_dict()["description"].splitlines()[2]
+                    ):
                         print("0")
                         await message.components[0].children[0].click()
                     return
-            except:
+            except KeyError:
                 pass
 
 

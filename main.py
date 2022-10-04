@@ -11,11 +11,11 @@ from discord.ext import commands, tasks
 from qasync import QEventLoop, asyncSlot
 
 # noinspection PyUnresolvedReferences
-import icons
-from interface import *
+import resources.icons
+from resources.interface import *
 
 try:
-    myappid = 'dankmemergrinder'
+    myappid = "dankmemergrinder"
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 except:
     pass
@@ -32,14 +32,14 @@ update()
 
 
 def resource_path(relative_path):
-    if hasattr(sys, '_MEIPASS'):
+    if hasattr(sys, "_MEIPASS"):
         return os.path.join(sys._MEIPASS, relative_path)
     return os.path.join(os.path.abspath("."), relative_path)
 
 
 class MyClient(commands.Bot):
     def __init__(self):
-        super().__init__(command_prefix='-', self_bot=True)
+        super().__init__(command_prefix="-", self_bot=True)
         self.channel = None
         self.channel_id = None
         self.window = None
@@ -63,9 +63,9 @@ class MyClient(commands.Bot):
 class MainWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
-        self.setWindowIcon(QIcon(resource_path("icon.png")))
-        QFontDatabase.addApplicationFont(resource_path("Segoe.ttf"))
-        QFontDatabase.addApplicationFont(resource_path("Impact.ttf"))
+        self.setWindowIcon(QIcon(resource_path("resources/icon.ico")))
+        QFontDatabase.addApplicationFont(resource_path("fonts/Segoe.ttf"))
+        QFontDatabase.addApplicationFont(resource_path("fonts/Impact.ttf"))
         self.ui = Ui_DankMemerGrinder()
         self.ui.setupUi(self)
         self.bot = MyClient()
@@ -91,54 +91,112 @@ class MainWindow(QMainWindow):
             except:
                 pass
         self.ui.lifesavers.setChecked(config_dict["autobuy"]["lifesavers"]["state"])
-        self.ui.lifesavers_amount.setValue(config_dict["autobuy"]["lifesavers"]["amount"])
+        self.ui.lifesavers_amount.setValue(
+            config_dict["autobuy"]["lifesavers"]["amount"]
+        )
 
         self.ui.token.setText(config_dict["discord_token"])
         self.ui.channel.setText(str(config_dict["channel_id"]))
         self.ui.trivia_chance.setValue(int(config_dict["trivia_correct_chance"] * 100))
 
         # Sidebar buttons
-        self.ui.home_btn.clicked.connect(lambda: self.sidebar(self.ui.home_btn, self.ui.home))
-        self.ui.settings_btn.clicked.connect(lambda: self.sidebar(self.ui.settings_btn, self.ui.settings))
-        self.ui.commands_btn.clicked.connect(lambda: self.sidebar(self.ui.commands_btn, self.ui.commands))
-        self.ui.auto_buy_btn.clicked.connect(lambda: self.sidebar(self.ui.auto_buy_btn, self.ui.auto_buy))
-        self.ui.gambling_btn.clicked.connect(lambda: self.sidebar(self.ui.gambling_btn, self.ui.gambling))
+        self.ui.home_btn.clicked.connect(
+            lambda: self.sidebar(self.ui.home_btn, self.ui.home)
+        )
+        self.ui.settings_btn.clicked.connect(
+            lambda: self.sidebar(self.ui.settings_btn, self.ui.settings)
+        )
+        self.ui.commands_btn.clicked.connect(
+            lambda: self.sidebar(self.ui.commands_btn, self.ui.commands)
+        )
+        self.ui.auto_buy_btn.clicked.connect(
+            lambda: self.sidebar(self.ui.auto_buy_btn, self.ui.auto_buy)
+        )
+        self.ui.gambling_btn.clicked.connect(
+            lambda: self.sidebar(self.ui.gambling_btn, self.ui.gambling)
+        )
         self.ui.toggle.clicked.connect(lambda: self.check())
 
         # Command buttons
-        self.ui.trivia.clicked.connect(lambda: self.toggle_command("trivia", self.ui.trivia.isChecked()))
-        self.ui.dig.clicked.connect(lambda: self.toggle_command("dig", self.ui.dig.isChecked()))
-        self.ui.fish.clicked.connect(lambda: self.toggle_command("fish", self.ui.fish.isChecked()))
-        self.ui.hunt.clicked.connect(lambda: self.toggle_command("hunt", self.ui.hunt.isChecked()))
-        self.ui.pm.clicked.connect(lambda: self.toggle_command("pm", self.ui.pm.isChecked()))
-        self.ui.beg.clicked.connect(lambda: self.toggle_command("beg", self.ui.beg.isChecked()))
-        self.ui.hl.clicked.connect(lambda: self.toggle_command("hl", self.ui.hl.isChecked()))
-        self.ui.search.clicked.connect(lambda: self.toggle_command("search", self.ui.search.isChecked()))
-        self.ui.dep_all.clicked.connect(lambda: self.toggle_command("dep_all", self.ui.dep_all.isChecked()))
-        self.ui.stream.clicked.connect(lambda: self.toggle_command("stream", self.ui.stream.isChecked()))
-        self.ui.work.clicked.connect(lambda: self.toggle_command("work", self.ui.work.isChecked()))
-        self.ui.daily.clicked.connect(lambda: self.toggle_command("daily", self.ui.daily.isChecked()))
+        self.ui.trivia.clicked.connect(
+            lambda: self.toggle_command("trivia", self.ui.trivia.isChecked())
+        )
+        self.ui.dig.clicked.connect(
+            lambda: self.toggle_command("dig", self.ui.dig.isChecked())
+        )
+        self.ui.fish.clicked.connect(
+            lambda: self.toggle_command("fish", self.ui.fish.isChecked())
+        )
+        self.ui.hunt.clicked.connect(
+            lambda: self.toggle_command("hunt", self.ui.hunt.isChecked())
+        )
+        self.ui.pm.clicked.connect(
+            lambda: self.toggle_command("pm", self.ui.pm.isChecked())
+        )
+        self.ui.beg.clicked.connect(
+            lambda: self.toggle_command("beg", self.ui.beg.isChecked())
+        )
+        self.ui.hl.clicked.connect(
+            lambda: self.toggle_command("hl", self.ui.hl.isChecked())
+        )
+        self.ui.search.clicked.connect(
+            lambda: self.toggle_command("search", self.ui.search.isChecked())
+        )
+        self.ui.dep_all.clicked.connect(
+            lambda: self.toggle_command("dep_all", self.ui.dep_all.isChecked())
+        )
+        self.ui.stream.clicked.connect(
+            lambda: self.toggle_command("stream", self.ui.stream.isChecked())
+        )
+        self.ui.work.clicked.connect(
+            lambda: self.toggle_command("work", self.ui.work.isChecked())
+        )
+        self.ui.daily.clicked.connect(
+            lambda: self.toggle_command("daily", self.ui.daily.isChecked())
+        )
         self.ui.start.clicked.connect(lambda: self.toggle_all(True))
         self.ui.stop.clicked.connect(lambda: self.toggle_all(False))
 
         # Blackjack buttons
-        self.ui.blackjack_btn.clicked.connect(lambda: self.blackjack("state", self.ui.blackjack_btn.isChecked()))
-        self.ui.multi.textChanged.connect(lambda: self.blackjack("multi", self.ui.multi.text()))
-        self.ui.bj_amount.textChanged.connect(lambda: self.blackjack("bj_amount", self.ui.bj_amount.text()))
+        self.ui.blackjack_btn.clicked.connect(
+            lambda: self.blackjack("state", self.ui.blackjack_btn.isChecked())
+        )
+        self.ui.multi.textChanged.connect(
+            lambda: self.blackjack("multi", self.ui.multi.text())
+        )
+        self.ui.bj_amount.textChanged.connect(
+            lambda: self.blackjack("bj_amount", self.ui.bj_amount.text())
+        )
 
         # Autobuy buttons
-        self.ui.lifesavers.clicked.connect(lambda: self.autobuy("lifesavers", self.ui.lifesavers.isChecked(), "state"))
+        self.ui.lifesavers.clicked.connect(
+            lambda: self.autobuy("lifesavers", self.ui.lifesavers.isChecked(), "state")
+        )
         self.ui.lifesavers_amount.valueChanged.connect(
-            lambda: self.autobuy("lifesavers", self.ui.lifesavers_amount.value(), "amount"))
-        self.ui.fishing.clicked.connect(lambda: self.autobuy("fishing", self.ui.fishing.isChecked()))
-        self.ui.shovel.clicked.connect(lambda: self.autobuy("shovel", self.ui.shovel.isChecked()))
-        self.ui.rifle.clicked.connect(lambda: self.autobuy("rifle", self.ui.rifle.isChecked()))
+            lambda: self.autobuy(
+                "lifesavers", self.ui.lifesavers_amount.value(), "amount"
+            )
+        )
+        self.ui.fishing.clicked.connect(
+            lambda: self.autobuy("fishing", self.ui.fishing.isChecked())
+        )
+        self.ui.shovel.clicked.connect(
+            lambda: self.autobuy("shovel", self.ui.shovel.isChecked())
+        )
+        self.ui.rifle.clicked.connect(
+            lambda: self.autobuy("rifle", self.ui.rifle.isChecked())
+        )
 
         # Settings buttons
-        self.ui.token.textChanged.connect(lambda: self.settings("token", self.ui.token.text()))
-        self.ui.channel.textChanged.connect(lambda: self.settings("channel", self.ui.channel.text()))
+        self.ui.token.textChanged.connect(
+            lambda: self.settings("token", self.ui.token.text())
+        )
+        self.ui.channel.textChanged.connect(
+            lambda: self.settings("channel", self.ui.channel.text())
+        )
         self.ui.trivia_chance.valueChanged.connect(
-            lambda: self.settings("trivia_chance", self.ui.trivia_chance.value()))
+            lambda: self.settings("trivia_chance", self.ui.trivia_chance.value())
+        )
 
     @asyncSlot()
     async def check(self):
@@ -161,8 +219,13 @@ class MainWindow(QMainWindow):
 
     @asyncSlot()
     async def sidebar(self, button, widget):
-        buttons = [self.ui.home_btn, self.ui.settings_btn, self.ui.commands_btn, self.ui.auto_buy_btn,
-                   self.ui.gambling_btn]
+        buttons = [
+            self.ui.home_btn,
+            self.ui.settings_btn,
+            self.ui.commands_btn,
+            self.ui.auto_buy_btn,
+            self.ui.gambling_btn,
+        ]
         for i in buttons:
             if i == button:
                 button.setStyleSheet("background-color: #5865f2")

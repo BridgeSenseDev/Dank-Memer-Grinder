@@ -5,8 +5,16 @@ import asyncio
 
 from discord.ext import commands, tasks
 
-search_priority = ["phoenix pits", "aeradella's home", "soul's chamber", "god's own place", "dog", "grass", "air",
-                   "kitchen"]
+search_priority = [
+    "phoenix pits",
+    "aeradella's home",
+    "soul's chamber",
+    "god's own place",
+    "dog",
+    "grass",
+    "air",
+    "kitchen",
+]
 second_search_priority = ["who asked", "fridge"]
 search_avoid = ["area51", "bank"]
 
@@ -32,13 +40,19 @@ class Search(commands.Cog):
     async def search(self):
         if config_dict["commands"]["search"] is True and config_dict["state"] is True:
             await asyncio.sleep(random.randint(0, 3))
-            async for cmd in self.bot.channel.slash_commands(command_ids=[1011560371267579935]):
+            async for cmd in self.bot.channel.slash_commands(
+                command_ids=[1011560371267579935]
+            ):
                 await cmd()
                 return
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.channel.id != self.bot.channel_id or config_dict["state"] is False or config_dict["commands"]["search"] is False:
+        if (
+            message.channel.id != self.bot.channel_id
+            or config_dict["state"] is False
+            or config_dict["commands"]["search"] is False
+        ):
             return
 
         for embed in message.embeds:

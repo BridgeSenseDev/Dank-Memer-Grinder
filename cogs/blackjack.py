@@ -16,6 +16,7 @@ def update():
 
 update()
 
+
 def bj_formula(embed):
     player_sum = []
     dealer_sum = []
@@ -128,19 +129,28 @@ class Blackjack(commands.Cog):
     @tasks.loop(seconds=20)
     async def bj(self):
         try:
-            if config_dict["commands"]["bj"]["state"] is True and config_dict["state"] is True:
+            if (
+                config_dict["commands"]["bj"]["state"] is True
+                and config_dict["state"] is True
+            ):
                 try:
                     if multi <= int(config_dict["commands"]["bj"]["multi"]):
                         self.bot.window.ui.output.append(
-                            f"Not blackjacking because multipliers is lower than {int(config_dict['commands']['bj']['multi'])}")
+                            "Not blackjacking because multipliers is lower than"
+                            f" {int(config_dict['commands']['bj']['multi'])}"
+                        )
                         return
                 except:
                     self.bot.window.ui.output.append(
-                        f"Not blackjacking because multipliers required ({config_dict['commands']['bj']['multi']}) is not a number")
+                        "Not blackjacking because multipliers required"
+                        f" ({config_dict['commands']['bj']['multi']}) is not a number"
+                    )
                     return
                 await asyncio.sleep(random.randint(0, 3))
-                await self.bot.channel.send(f"pls bj {config_dict['commands']['-bj-']['-bjamount-']}")
-        except:
+                await self.bot.channel.send(
+                    f"pls bj {config_dict['commands']['-bj-']['-bjamount-']}"
+                )
+        except KeyError:
             pass
 
     @bj.before_loop
@@ -149,8 +159,13 @@ class Blackjack(commands.Cog):
 
     @tasks.loop(minutes=3)
     async def multipliers(self):
-        if config_dict["commands"]["bj"]["state"] is True and config_dict["state"] is True:
-            async for cmd in self.bot.channel.slash_commands(command_ids=[1011560371171102766]):
+        if (
+            config_dict["commands"]["bj"]["state"] is True
+            and config_dict["state"] is True
+        ):
+            async for cmd in self.bot.channel.slash_commands(
+                command_ids=[1011560371171102766]
+            ):
                 await cmd()
                 break
 
@@ -163,13 +178,20 @@ class Blackjack(commands.Cog):
         for embed in message.embeds:
             try:
                 if "Your Multipliers" in embed.to_dict()["title"]:
-                    multi = int((re.search("Total: `(.*?)%`", embed.to_dict()["description"])).group(1))
-            except:
+                    multi = int(
+                        (
+                            re.search("Total: `(.*?)%`", embed.to_dict()["description"])
+                        ).group(1)
+                    )
+            except KeyError:
                 pass
             try:
-                if "blackjack game" in embed.to_dict()["author"]["name"] and config_dict["commands"]["bj"]["state"] is True:
+                if (
+                    "blackjack game" in embed.to_dict()["author"]["name"]
+                    and config_dict["commands"]["bj"]["state"] is True
+                ):
                     await message.components[0].children[bj_formula(embed)].click()
-            except:
+            except KeyError:
                 pass
 
     @commands.Cog.listener()
@@ -179,12 +201,18 @@ class Blackjack(commands.Cog):
         embeds = after.embeds
         for embed in embeds:
             try:
-                if "blackjack game" in embed.to_dict()["author"]["name"] and config_dict["commands"]["bj"]["state"] is True:
+                if (
+                    "blackjack game" in embed.to_dict()["author"]["name"]
+                    and config_dict["commands"]["bj"]["state"] is True
+                ):
                     if "description" not in embed.to_dict():
                         await after.components[0].children[bj_formula(embed)].click()
-                    elif any(i in embed.to_dict()["description"] for i in ["Tied.", "Lost.", "Won"]):
+                    elif any(
+                        i in embed.to_dict()["description"]
+                        for i in ["Tied.", "Lost.", "Won"]
+                    ):
                         await after.components[0].children[2].click()
-            except:
+            except KeyError:
                 pass
 
 
