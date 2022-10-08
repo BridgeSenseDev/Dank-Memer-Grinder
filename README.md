@@ -28,10 +28,10 @@
 
 ## Screenshots:
 <p float="left">
-   <img src=".github/assets/img/settings.png" width="500" height="auto" />
-   <img src=".github/assets/img/commands.png" width="500" height="auto" />
-   <img src=".github/assets/img/autobuy.png" width="500" height="auto" />
-   <img src=".github/assets/img/gambling.png" width="500" height="auto" />
+   <img src=".github/assets/img/settings.png" width="400" height="auto" />
+   <img src=".github/assets/img/commands.png" width="400" height="auto" />
+   <img src=".github/assets/img/autobuy.png" width="400" height="auto" />
+   <img src=".github/assets/img/gambling.png" width="400" height="auto" />
 </p>
 
 ## Features:
