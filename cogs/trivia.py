@@ -1,4 +1,3 @@
-import asyncio
 import json
 import sys
 import os
@@ -6,12 +5,12 @@ import random
 import re
 import threading
 
-from discord.ext import commands, tasks
+from discord.ext import commands
 
 
 def update():
     global config_dict
-    threading.Timer(10, update).start()
+    threading.Timer(1, update).start()
     with open("config.json", "r") as config_file:
         config_dict = json.load(config_file)
 
@@ -21,6 +20,7 @@ update()
 
 def resource_path(relative_path):
     if hasattr(sys, "_MEIPASS"):
+        # noinspection PyProtectedMember
         return os.path.join(sys._MEIPASS, relative_path)
     return os.path.join(os.path.abspath("."), relative_path)
 
@@ -32,17 +32,14 @@ with open(resource_path("resources/trivia.json")) as file:
 class Trivia(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.chance = config_dict["trivia_correct_chance"]
-
-    async def cog_load(self):
-        self.trivia.start()
+        self.chance = config_dict[self.bot.account_id]["trivia_correct_chance"]
 
     @commands.Cog.listener()
     async def on_message(self, message):
         if (
             message.channel.id != self.bot.channel_id
-            or config_dict["state"] is False
-            or config_dict["commands"]["trivia"] is False
+            or config_dict[self.bot.account_id]["state"] is False
+            or config_dict[self.bot.account_id]["commands"]["trivia"] is False
         ):
             return
 
@@ -56,34 +53,24 @@ class Trivia(commands.Cog):
                     try:
                         answer = trivia_dict[category][question]
                     except:
-                        await message.components[0].children[0].click()
+                        await self.bot.click(message, 0, 0)
                         return
                     if random.random() <= self.chance:
                         if message.components[0].children[0].label == answer:
-                            await message.components[0].children[0].click()
+                            await self.bot.click(message, 0, 0)
                         elif message.components[0].children[1].label == answer:
-                            await message.components[0].children[1].click()
+                            await self.bot.click(message, 0, 1)
                         elif message.components[0].children[2].label == answer:
-                            await message.components[0].children[2].click()
+                            await self.bot.click(message, 0, 2)
                         elif message.components[0].children[3].label == answer:
-                            await message.components[0].children[3].click()
+                            await self.bot.click(message, 0, 3)
                     else:
                         if message.components[0].children[0].label != answer:
-                            await message.components[0].children[0].click()
+                            await self.bot.click(message, 0, 0)
                         else:
-                            await message.components[0].children[1].click()
+                            await self.bot.click(message, 0, 1)
             except KeyError:
                 pass
-
-    @tasks.loop(seconds=15)
-    async def trivia(self):
-        if config_dict["commands"]["trivia"] is True and config_dict["state"] is True:
-            await asyncio.sleep(random.randint(0, 3))
-            async for cmd in self.bot.channel.slash_commands(
-                command_ids=[1011560371309510698]
-            ):
-                await cmd()
-                return
 
 
 async def setup(bot):

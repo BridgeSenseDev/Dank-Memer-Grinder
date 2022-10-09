@@ -9,7 +9,7 @@ from discord.ext import commands, tasks
 
 def update():
     global config_dict
-    threading.Timer(10, update).start()
+    threading.Timer(1, update).start()
     with open("config.json", "r") as config_file:
         config_dict = json.load(config_file)
 
@@ -130,18 +130,24 @@ class Blackjack(commands.Cog):
     async def bj(self):
         try:
             if (
-                config_dict["commands"]["bj"]["state"] is True
-                and config_dict["state"] is True
+                config_dict[self.bot.account_id]["commands"]["bj"]["state"] is True
+                and config_dict[self.bot.account_id]["state"] is True
             ):
                 try:
-                    if multi <= int(config_dict["commands"]["bj"]["multi"]):
-                        self.bot.window.ui.output.append(
+                    if multi <= int(
+                        config_dict[self.bot.account_id]["commands"]["bj"]["multi"]
+                    ):
+                        getattr(
+                            self.bot.window.ui, f"output_text_{self.bot.account_id}"
+                        ).append(
                             "Not blackjacking because multipliers is lower than"
                             f" {int(config_dict['commands']['bj']['multi'])}"
                         )
                         return
                 except:
-                    self.bot.window.ui.output.append(
+                    getattr(
+                        self.bot.window.ui, f"output_text_{self.bot.account_id}"
+                    ).append(
                         "Not blackjacking because multipliers required"
                         f" ({config_dict['commands']['bj']['multi']}) is not a number"
                     )
@@ -160,19 +166,18 @@ class Blackjack(commands.Cog):
     @tasks.loop(minutes=3)
     async def multipliers(self):
         if (
-            config_dict["commands"]["bj"]["state"] is True
-            and config_dict["state"] is True
+            config_dict[self.bot.account_id]["commands"]["bj"]["state"] is True
+            and config_dict[self.bot.account_id]["state"] is True
         ):
-            async for cmd in self.bot.channel.slash_commands(
-                command_ids=[1011560371171102766]
-            ):
-                await cmd()
-                break
+            await self.bot.send("multipliers")
 
     @commands.Cog.listener()
     async def on_message(self, message):
         global multi
-        if message.channel.id != self.bot.channel_id or config_dict["state"] is False:
+        if (
+            message.channel.id != self.bot.channel_id
+            or config_dict[self.bot.account_id]["state"] is False
+        ):
             return
 
         for embed in message.embeds:
@@ -188,9 +193,10 @@ class Blackjack(commands.Cog):
             try:
                 if (
                     "blackjack game" in embed.to_dict()["author"]["name"]
-                    and config_dict["commands"]["bj"]["state"] is True
+                    and config_dict[self.bot.account_id]["commands"]["bj"]["state"]
+                    is True
                 ):
-                    await message.components[0].children[bj_formula(embed)].click()
+                    await self.bot.click(message, 0, bj_formula(embed))
             except KeyError:
                 pass
 
@@ -203,7 +209,8 @@ class Blackjack(commands.Cog):
             try:
                 if (
                     "blackjack game" in embed.to_dict()["author"]["name"]
-                    and config_dict["commands"]["bj"]["state"] is True
+                    and config_dict[self.bot.account_id]["commands"]["bj"]["state"]
+                    is True
                 ):
                     if "description" not in embed.to_dict():
                         await after.components[0].children[bj_formula(embed)].click()

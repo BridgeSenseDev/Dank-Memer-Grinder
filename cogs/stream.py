@@ -1,43 +1,41 @@
 import asyncio
-import random
 import threading
 import json
 import re
-from discord.ext import commands, tasks
+from discord.ext import commands
 
 Games = {
-    "Apex Legends": 0,
-    "COD Warzone": 1,
-    "CS GO": 2,
-    "Dead by Daylight": 3,
-    "Destiny 2": 4,
-    "Dota 2": 5,
-    "Elden Ring": 6,
-    "Escape from Tarkov": 7,
-    "FIFA 22": 8,
-    "Fortnite": 9,
-    "Grand Theft Auto V": 10,
-    "Hearthstone": 11,
-    "Just Chatting": 12,
-    "League of Legends": 13,
-    "Lost Ark": 14,
-    "Minecraft": 15,
-    "Music": 16,
-    "PUBG Battlegrounds": 17,
-    "Rainbow Six Siege": 18,
-    "Rocket League": 19,
-    "Rust": 20,
-    "Teamfight Tactics": 21,
-    "Valorant": 22,
-    "World of Tanks": 23,
-    "World of Warcraft": 24,
-    "World Of Warcraft": 24,
+    "apex legends": 0,
+    "cod warzone": 1,
+    "cs go": 2,
+    "dead by daylight": 3,
+    "destiny 2": 4,
+    "dota 2": 5,
+    "elden ring": 6,
+    "escape from tarkov": 7,
+    "fifa 22": 8,
+    "fortnite": 9,
+    "grand theft auto v": 10,
+    "hearthstone": 11,
+    "just chatting": 12,
+    "league of legends": 13,
+    "lost ark": 14,
+    "minecraft": 15,
+    "music": 16,
+    "pubg battlegrounds": 17,
+    "rainbow six siege": 18,
+    "rocket league": 19,
+    "rust": 20,
+    "teamfight Tactics": 21,
+    "valorant": 22,
+    "world of tanks": 23,
+    "world of warcraft": 24,
 }
 
 
 def update():
     global config_dict
-    threading.Timer(10, update).start()
+    threading.Timer(1, update).start()
     with open("config.json", "r") as config_file:
         config_dict = json.load(config_file)
 
@@ -49,25 +47,12 @@ class Stream(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    async def cog_load(self):
-        self.pls_stream.start()
-
-    @tasks.loop(minutes=11)
-    async def pls_stream(self):
-        if config_dict["commands"]["stream"] is True and config_dict["state"] is True:
-            await asyncio.sleep(random.randint(0, 180))
-            async for cmd in self.bot.channel.slash_commands(
-                command_ids=[1011560371267579938]
-            ):
-                await cmd()
-                return
-
     @commands.Cog.listener()
     async def on_message(self, message):
         if (
             message.channel.id != self.bot.channel_id
-            or config_dict["state"] is False
-            or config_dict["commands"]["stream"] is False
+            or config_dict[self.bot.account_id]["state"] is False
+            or config_dict[self.bot.account_id]["commands"]["stream"] is False
         ):
             return
 
@@ -81,15 +66,17 @@ class Stream(commands.Cog):
                             re.search(
                                 "\*\*(.*?)\*\*", embed.to_dict()["description"]
                             ).group(1)
-                        ).title()
+                        )
+                        .title()
+                        .lower()
                     ]
-            except:
+            except KeyError:
                 pass
 
             # Go live
             try:
                 if embed.to_dict()["fields"][1]["name"] == "Last Live":
-                    await message.components[0].children[0].click()
+                    await self.bot.click(message, 0, 0)
 
                     # Get trending game
                     async for cmd in self.bot.channel.slash_commands(
@@ -104,17 +91,17 @@ class Stream(commands.Cog):
                         message.components[0].children[0].options[game]
                     )
                     await asyncio.sleep(0.7)
-                    await message.components[1].children[0].click()
+                    await self.bot.click(message, 1, 0)
                     await asyncio.sleep(0.7)
-                    await message.components[0].children[1].click()
-            except:
+                    await self.bot.click(message, 0, 1)
+            except (KeyError, IndexError):
                 pass
 
             # Read chat
             try:
                 if embed.to_dict()["fields"][1]["name"] == "Live Since":
-                    await message.components[0].children[1].click()
-            except:
+                    await self.bot.click(message, 0, 1)
+            except (KeyError, IndexError):
                 pass
 
 

@@ -7,7 +7,7 @@ from discord.ext import commands
 
 def update():
     global config_dict
-    threading.Timer(10, update).start()
+    threading.Timer(1, update).start()
     with open("config.json", "r") as config_file:
         config_dict = json.load(config_file)
 
@@ -26,7 +26,7 @@ class Minigames(commands.Cog):
 
         # F in the chat
         if message.content == "F" and message.author.id == 270904126974590976:
-            await message.components[0].children[0].click()
+            await self.bot.click(message, 0, 0)
             return
 
         # Dragon
@@ -36,14 +36,14 @@ class Minigames(commands.Cog):
                 "              <:FireBall:883714770748964864>"
                 == message.content.splitlines()[2]
             ):
-                await message.components[0].children[1].click()
+                await self.bot.click(message, 0, 1)
             elif (
                 "       <:FireBall:883714770748964864>"
                 == message.content.splitlines()[2]
             ):
-                await message.components[0].children[0].click()
+                await self.bot.click(message, 0, 0)
             elif "<:FireBall:883714770748964864>" == message.content.splitlines()[2]:
-                await message.components[0].children[2].click()
+                await self.bot.click(message, 0, 2)
             return
 
         # Catch the fish
@@ -53,28 +53,28 @@ class Minigames(commands.Cog):
                 "              <:legendaryfish:714981071548186684>"
                 == message.content.splitlines()[1]
             ):
-                await message.componenRts[0].children[2].click()
+                await self.bot.click(message, 0, 2)
             elif (
                 "       <:legendaryfish:714981071548186684>"
                 == message.content.splitlines()[1]
             ):
-                await message.components[0].children[1].click()
+                await self.bot.click(message, 0, 1)
             elif (
                 "<:legendaryfish:714981071548186684>" == message.content.splitlines()[1]
             ):
-                await message.components[0].children[0].click()
+                await self.bot.click(message, 0, 0)
             await asyncio.sleep(2)
             if (
                 "              <:Kraken:860228238956429313>"
                 == message.content.splitlines()[1]
             ):
-                await message.components[0].children[2].click()
+                await self.bot.click(message, 0, 2)
             elif (
                 "       <:Kraken:860228238956429313>" == message.content.splitlines()[1]
             ):
-                await message.components[0].children[1].click()
+                await self.bot.click(message, 0, 1)
             elif "<:Kraken:860228238956429313>" == message.content.splitlines()[1]:
-                await message.components[0].children[0].click()
+                await self.bot.click(message, 0, 0)
             return
 
         for embed in message.embeds:
@@ -83,18 +83,18 @@ class Minigames(commands.Cog):
                 if "Hit the ball!" in embed.to_dict()["description"]:
                     await asyncio.sleep(2)
                     if ":levitate:" == embed.to_dict()["description"].splitlines()[2]:
-                        await message.components[0].children[2].click()
+                        await self.bot.click(message, 0, 2)
                     elif (
                         "<:emptyspace:827651824739156030>:levitate:"
                         == embed.to_dict()["description"].splitlines()[2]
                     ):
-                        await message.components[0].children[0].click()
+                        await self.bot.click(message, 0, 0)
                     if (
                         "<:emptyspace:827651824739156030>"
                         "<:emptyspace:827651824739156030>:levitate:"
                         == embed.to_dict()["description"].splitlines()[2]
                     ):
-                        await message.components[0].children[1].click()
+                        await self.bot.click(message, 0, 1)
                     return
             except KeyError:
                 pass
@@ -187,7 +187,7 @@ class Minigames(commands.Cog):
                         str(message.components[0].children[4].label): 4,
                     }
                     for i in order:
-                        await message.components[0].children[int(answers[i])].click()
+                        await self.bot.click(message, 0, answers[i])
                         await asyncio.sleep(0.7)
                     return
             except KeyError:
@@ -199,7 +199,7 @@ class Minigames(commands.Cog):
                     x = 16
                     try:
                         while x >= 0:
-                            await message.components[0].children[0].click()
+                            await self.bot.click(message, 0, 0)
                             await asyncio.sleep(0.5)
                             x -= 1
                         return
@@ -219,18 +219,18 @@ class Minigames(commands.Cog):
                         == embed.to_dict()["description"].splitlines()[2]
                     ):
                         print("2")
-                        await message.components[0].children[2].click()
+                        await self.bot.click(message, 0, 2)
                     elif (
                         "<:emptyspace:827651824739156030>:basketball:"
                         == embed.to_dict()["description"].splitlines()[2]
                     ):
                         print("1")
-                        await message.components[0].children[1].click()
+                        await self.bot.click(message, 0, 1)
                     elif (
                         ":basketball:" == embed.to_dict()["description"].splitlines()[2]
                     ):
                         print("0")
-                        await message.components[0].children[0].click()
+                        await self.bot.click(message, 0, 0)
                     return
             except KeyError:
                 pass
