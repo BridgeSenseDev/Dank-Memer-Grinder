@@ -86,6 +86,8 @@ async def start_bot(token, account_id):
                 self.last_ran[command] = 0
 
         async def send(self, command_name, **kwargs):
+            self.channel_id = int(config_dict[account_id]["channel_id"])
+            self.channel = self.get_channel(self.channel_id)
             async for cmd in self.channel.slash_commands(
                 query=command_name, limit=None
             ):
@@ -114,8 +116,6 @@ async def start_bot(token, account_id):
         async def on_ready(self):
             if getattr(window.ui, f"account_btn_{account_id}").text() != "Logging In":
                 return
-            self.channel_id = int(config_dict[account_id]["channel_id"])
-            self.channel = self.get_channel(self.channel_id)
             getattr(window.ui, f"output_text_{self.account_id}").append(
                 f"Logged in as {self.user}"
             )
@@ -153,7 +153,6 @@ async def start_bot(token, account_id):
             await self.load_extension("cogs.stream")
             await self.load_extension("cogs.minigames")
             await self.load_extension("cogs.autobuy")
-            await asyncio.sleep(2)
             await self.load_extension("cogs.blackjack")
             await self.load_extension("cogs.commands")
 
