@@ -24,11 +24,6 @@ class Minigames(commands.Cog):
         if message.channel.id != self.bot.channel_id:
             return
 
-        # F in the chat
-        if message.content == "F" and message.author.id == 270904126974590976:
-            await self.bot.click(message, 0, 0)
-            return
-
         # Dragon
         if "Dodge the Fireball" in message.content:
             await asyncio.sleep(2)
@@ -140,12 +135,15 @@ class Minigames(commands.Cog):
                             ).group(1)
                         ),
                     }
-                    await asyncio.sleep(6)
+                    await asyncio.sleep(8)
                     word = re.search("`(.*?)`", embed.to_dict()["description"]).group(1)
+                    print(options)
+                    print(word)
                     color = options[word]
-                    print(color)
-                    for i in message.components[0].children:
-                        print(i.label)
+                    for count, i in enumerate(message.components[0].children):
+                        if i.label == color:
+                            print(color)
+                            await self.bot.click(message, 0, count)
                     return
             except KeyError:
                 pass
@@ -178,7 +176,6 @@ class Minigames(commands.Cog):
                         str(embed.to_dict()["description"].splitlines()[5])[1:-1],
                     ]
                     await asyncio.sleep(6)
-                    print(order)
                     answers = {
                         str(message.components[0].children[0].label): 0,
                         str(message.components[0].children[1].label): 1,
@@ -212,28 +209,32 @@ class Minigames(commands.Cog):
             try:
                 if "Dunk the ball!" in embed.to_dict()["description"]:
                     await asyncio.sleep(2)
-                    print(embed.to_dict()["description"])
                     if (
                         "<:emptyspace:827651824739156030>"
                         "<:emptyspace:827651824739156030>:basketball:"
                         == embed.to_dict()["description"].splitlines()[2]
                     ):
-                        print("2")
                         await self.bot.click(message, 0, 2)
                     elif (
                         "<:emptyspace:827651824739156030>:basketball:"
                         == embed.to_dict()["description"].splitlines()[2]
                     ):
-                        print("1")
                         await self.bot.click(message, 0, 1)
                     elif (
                         ":basketball:" == embed.to_dict()["description"].splitlines()[2]
                     ):
-                        print("0")
                         await self.bot.click(message, 0, 0)
                     return
             except KeyError:
                 pass
+
+            # F in the chat
+            try:
+                if embed.to_dict()["description"] == "F":
+                    await self.bot.click(message, 0, 0)
+            except KeyError:
+                pass
+
 
 
 async def setup(bot):

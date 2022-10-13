@@ -91,7 +91,7 @@ class Autobuy(commands.Cog):
                     in embed.to_dict()["description"]
                 ):
                     await self.bot.send("withdraw", amount="25k")
-                    await self.bot.send(item="Shovel", quantity="1")
+                    await self.bot.send("buy", item="Shovel", quantity="1")
             except KeyError:
                 pass
 

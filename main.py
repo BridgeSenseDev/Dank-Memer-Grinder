@@ -86,13 +86,17 @@ async def start_bot(token, account_id):
                 self.last_ran[command] = 0
 
         async def send(self, command_name, **kwargs):
-            self.channel_id = int(config_dict[account_id]["channel_id"])
-            self.channel = self.get_channel(self.channel_id)
+            if self.channel is None:
+                self.channel_id = int(config_dict[account_id]["channel_id"])
+                self.channel = self.get_channel(self.channel_id)
             async for cmd in self.channel.slash_commands(
                 query=command_name, limit=None
             ):
                 if cmd.application.id == 270904126974590976:
-                    await cmd(**kwargs)
+                    try:
+                        await cmd(**kwargs)
+                    except Exception as e:
+                        print(e)
                     return
 
         async def sub_send(self, command_name, sub_command_name, **kwargs):
