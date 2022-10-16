@@ -7,7 +7,7 @@ from discord.ext import commands
 
 def update():
     global config_dict
-    threading.Timer(1, update).start()
+    threading.Timer(5, update).start()
     with open("config.json", "r") as config_file:
         config_dict = json.load(config_file)
 
@@ -24,70 +24,24 @@ class Minigames(commands.Cog):
         if message.channel.id != self.bot.channel_id:
             return
 
-        # Dragon
-        if "Dodge the Fireball" in message.content:
-            await asyncio.sleep(2)
-            if (
-                "              <:FireBall:883714770748964864>"
-                == message.content.splitlines()[2]
-            ):
-                await self.bot.click(message, 0, 1)
-            elif (
-                "       <:FireBall:883714770748964864>"
-                == message.content.splitlines()[2]
-            ):
-                await self.bot.click(message, 0, 0)
-            elif "<:FireBall:883714770748964864>" == message.content.splitlines()[2]:
-                await self.bot.click(message, 0, 2)
-            return
-
-        # Catch the fish
-        if "Catch the fish!" in message.content:
-            await asyncio.sleep(2)
-            if (
-                "              <:legendaryfish:714981071548186684>"
-                == message.content.splitlines()[1]
-            ):
-                await self.bot.click(message, 0, 2)
-            elif (
-                "       <:legendaryfish:714981071548186684>"
-                == message.content.splitlines()[1]
-            ):
-                await self.bot.click(message, 0, 1)
-            elif (
-                "<:legendaryfish:714981071548186684>" == message.content.splitlines()[1]
-            ):
-                await self.bot.click(message, 0, 0)
-            await asyncio.sleep(2)
-            if (
-                "              <:Kraken:860228238956429313>"
-                == message.content.splitlines()[1]
-            ):
-                await self.bot.click(message, 0, 2)
-            elif (
-                "       <:Kraken:860228238956429313>" == message.content.splitlines()[1]
-            ):
-                await self.bot.click(message, 0, 1)
-            elif "<:Kraken:860228238956429313>" == message.content.splitlines()[1]:
-                await self.bot.click(message, 0, 0)
-            return
-
         for embed in message.embeds:
+            embed = embed.to_dict()
             # Football
             try:
-                if "Hit the ball!" in embed.to_dict()["description"]:
+                if "Hit the ball!" in embed["description"]:
                     await asyncio.sleep(2)
-                    if ":levitate:" == embed.to_dict()["description"].splitlines()[2]:
+                    embed = message.embeds[0].to_dict()
+                    if ":levitate:" == embed["description"].splitlines()[2]:
                         await self.bot.click(message, 0, 2)
                     elif (
                         "<:emptyspace:827651824739156030>:levitate:"
-                        == embed.to_dict()["description"].splitlines()[2]
+                        == embed["description"].splitlines()[2]
                     ):
                         await self.bot.click(message, 0, 0)
                     if (
                         "<:emptyspace:827651824739156030>"
                         "<:emptyspace:827651824739156030>:levitate:"
-                        == embed.to_dict()["description"].splitlines()[2]
+                        == embed["description"].splitlines()[2]
                     ):
                         await self.bot.click(message, 0, 1)
                     return
@@ -98,51 +52,49 @@ class Minigames(commands.Cog):
             try:
                 if (
                     "Look at each color next to the words closely!"
-                    in embed.to_dict()["description"]
+                    in embed["description"]
                 ):
                     options = {
                         str(
                             re.search(
                                 "`(.*?)`",
-                                embed.to_dict()["description"].splitlines()[1],
+                                embed["description"].splitlines()[1],
                             ).group(1)
                         ): str(
                             re.search(
                                 ":(.*?):",
-                                embed.to_dict()["description"].splitlines()[1],
+                                embed["description"].splitlines()[1],
                             ).group(1)
                         ),
                         str(
                             re.search(
                                 "`(.*?)`",
-                                embed.to_dict()["description"].splitlines()[2],
+                                embed["description"].splitlines()[2],
                             ).group(1)
                         ): str(
                             re.search(
                                 ":(.*?):",
-                                embed.to_dict()["description"].splitlines()[2],
+                                embed["description"].splitlines()[2],
                             ).group(1)
                         ),
                         str(
                             re.search(
                                 "`(.*?)`",
-                                embed.to_dict()["description"].splitlines()[3],
+                                embed["description"].splitlines()[3],
                             ).group(1)
                         ): str(
                             re.search(
                                 ":(.*?):",
-                                embed.to_dict()["description"].splitlines()[3],
+                                embed["description"].splitlines()[3],
                             ).group(1)
                         ),
                     }
-                    await asyncio.sleep(8)
-                    word = re.search("`(.*?)`", embed.to_dict()["description"]).group(1)
-                    print(options)
-                    print(word)
+                    await asyncio.sleep(6)
+                    embed = message.embeds[0].to_dict()
+                    word = re.search("`(.*?)`", embed["description"]).group(1)
                     color = options[word]
                     for count, i in enumerate(message.components[0].children):
                         if i.label == color:
-                            print(color)
                             await self.bot.click(message, 0, count)
                     return
             except KeyError:
@@ -150,30 +102,32 @@ class Minigames(commands.Cog):
 
             # Emoji
             try:
-                if "Look at the emoji closely!" in embed.to_dict()["description"]:
-                    emoji = str(embed.to_dict()["description"].splitlines()[1])
+                if "Look at the emoji closely!" in embed["description"]:
+                    emoji = str(embed["description"].splitlines()[1])
                     await asyncio.sleep(4)
-                    for i in (
-                        message.components[0].children + message.components[1].children
-                    ):
+                    for count, i in enumerate(message.components[0].children):
                         if str(i.emoji) == emoji:
-                            await i.click()
-                    return
+                            await self.bot.click(message, 0, count)
+                            return
+                    for count, i in enumerate(message.components[1].children):
+                        if str(i.emoji) == emoji:
+                            await self.bot.click(message, 1, count)
+                        return
             except KeyError:
                 pass
 
             # Repeat order
             try:
                 if any(
-                    i in embed.to_dict()["description"]
+                    i in embed["description"]
                     for i in ["Repeat Order", "word order.", "words order"]
                 ):
                     order = [
-                        str(embed.to_dict()["description"].splitlines()[1])[1:-1],
-                        str(embed.to_dict()["description"].splitlines()[2])[1:-1],
-                        str(embed.to_dict()["description"].splitlines()[3])[1:-1],
-                        str(embed.to_dict()["description"].splitlines()[4])[1:-1],
-                        str(embed.to_dict()["description"].splitlines()[5])[1:-1],
+                        str(embed["description"].splitlines()[1])[1:-1],
+                        str(embed["description"].splitlines()[2])[1:-1],
+                        str(embed["description"].splitlines()[3])[1:-1],
+                        str(embed["description"].splitlines()[4])[1:-1],
+                        str(embed["description"].splitlines()[5])[1:-1],
                     ]
                     await asyncio.sleep(6)
                     answers = {
@@ -192,7 +146,7 @@ class Minigames(commands.Cog):
 
             # Attack boss
             try:
-                if "Attack the boss by clicking" in embed.to_dict()["description"]:
+                if "Attack the boss by clicking" in embed["description"]:
                     x = 16
                     try:
                         while x >= 0:
@@ -207,21 +161,22 @@ class Minigames(commands.Cog):
 
             # Basketball
             try:
-                if "Dunk the ball!" in embed.to_dict()["description"]:
+                if "Dunk the ball!" in embed["description"]:
                     await asyncio.sleep(2)
+                    embed = message.embeds[0].to_dict()
                     if (
                         "<:emptyspace:827651824739156030>"
                         "<:emptyspace:827651824739156030>:basketball:"
-                        == embed.to_dict()["description"].splitlines()[2]
+                        == embed["description"].splitlines()[2]
                     ):
                         await self.bot.click(message, 0, 2)
                     elif (
                         "<:emptyspace:827651824739156030>:basketball:"
-                        == embed.to_dict()["description"].splitlines()[2]
+                        == embed["description"].splitlines()[2]
                     ):
                         await self.bot.click(message, 0, 1)
                     elif (
-                        ":basketball:" == embed.to_dict()["description"].splitlines()[2]
+                        ":basketball:" == embed["description"].splitlines()[2]
                     ):
                         await self.bot.click(message, 0, 0)
                     return
@@ -230,11 +185,77 @@ class Minigames(commands.Cog):
 
             # F in the chat
             try:
-                if embed.to_dict()["description"] == "F":
+                if embed["description"] == "F":
                     await self.bot.click(message, 0, 0)
             except KeyError:
                 pass
 
+            # Dragon
+            try:
+                if "Dodge the Fireball" in embed["Description"]:
+                    print("dragon")
+                    print(embed["description"])
+                    await asyncio.sleep(2)
+                    embed = message.embeds[0].to_dict()
+                    if (
+                        "              <:FireBall:883714770748964864>"
+                        == embed["description"].splitlines()[2]
+                    ):
+                        await self.bot.click(message, 0, 1)
+                    elif (
+                        "       <:FireBall:883714770748964864>"
+                        == embed["description"].splitlines()[2]
+                    ):
+                        await self.bot.click(message, 0, 0)
+                    elif (
+                        "<:FireBall:883714770748964864>"
+                        == embed["description"].splitlines()[2]
+                    ):
+                        await self.bot.click(message, 0, 2)
+            except KeyError:
+                pass
+
+            # Catch the fish
+            try:
+                if "Catch the fish!" in embed["description"]:
+                    print("fish")
+                    print(embed["description"])
+                    await asyncio.sleep(2)
+                    embed = message.embeds[0].to_dict()
+                    if (
+                        "              <a:LegendaryFish:971430841211322408>"
+                        == embed["description"].splitlines()[1]
+                    ):
+                        await self.bot.click(message, 0, 2)
+                    elif (
+                        "       <a:LegendaryFish:971430841211322408>"
+                        == embed["description"].splitlines()[1]
+                    ):
+                        await self.bot.click(message, 0, 1)
+                    elif (
+                        "<a:LegendaryFish:971430841211322408>"
+                        == embed["description"].splitlines()[1]
+                    ):
+                        await self.bot.click(message, 0, 0)
+                    await asyncio.sleep(2)
+                    embed = message.embeds[0].to_dict()
+                    if (
+                        "              <:Kraken:860228238956429313>"
+                        == embed["description"].splitlines()[1]
+                    ):
+                        await self.bot.click(message, 0, 2)
+                    elif (
+                        "       <:Kraken:860228238956429313>"
+                        == embed["description"].splitlines()[1]
+                    ):
+                        await self.bot.click(message, 0, 1)
+                    elif (
+                        "<:Kraken:860228238956429313>"
+                        == embed["description"].splitlines()[1]
+                    ):
+                        await self.bot.click(message, 0, 0)
+            except KeyError:
+                pass
 
 
 async def setup(bot):
