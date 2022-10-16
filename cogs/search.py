@@ -19,7 +19,7 @@ search_avoid = ["area51", "bank"]
 
 def update():
     global config_dict
-    threading.Timer(1, update).start()
+    threading.Timer(5, update).start()
     with open("config.json", "r") as config_file:
         config_dict = json.load(config_file)
 

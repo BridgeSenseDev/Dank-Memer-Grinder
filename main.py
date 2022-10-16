@@ -26,7 +26,7 @@ except:
 
 def update():
     global config_dict
-    threading.Timer(1, update).start()
+    threading.Timer(5, update).start()
     with open("config.json", "r") as config_file:
         config_dict = json.load(config_file)
 
@@ -95,11 +95,14 @@ async def start_bot(token, account_id):
                 if cmd.application.id == 270904126974590976:
                     try:
                         await cmd(**kwargs)
-                    except Exception as e:
-                        print(e)
+                    except:
+                        pass
                     return
 
         async def sub_send(self, command_name, sub_command_name, **kwargs):
+            if self.channel is None:
+                self.channel_id = int(config_dict[account_id]["channel_id"])
+                self.channel = self.get_channel(self.channel_id)
             async for cmd in self.channel.slash_commands(
                 query=command_name, limit=None
             ):
