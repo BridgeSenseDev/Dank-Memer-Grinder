@@ -1,7 +1,7 @@
 {
     "1": {
         "trivia_correct_chance": 0.7,
-        "channel_id": ,
+        "channel_id": "",
         "discord_token": "",
         "state": false,
         "autobuy": {
@@ -35,7 +35,7 @@
     },
     "2": {
         "trivia_correct_chance": 0.7,
-        "channel_id": ,
+        "channel_id": "",
         "discord_token": "",
         "state": false,
         "autobuy": {
@@ -69,7 +69,7 @@
     },
     "3": {
         "trivia_correct_chance": 0.75,
-        "channel_id": ,
+        "channel_id": "",
         "discord_token": "",
         "state": false,
         "autobuy": {
@@ -103,7 +103,7 @@
     },
     "4": {
         "trivia_correct_chance": 0.75,
-        "channel_id": ,
+        "channel_id": "",
         "discord_token": "",
         "state": false,
         "autobuy": {
@@ -137,7 +137,7 @@
     },
     "5": {
         "trivia_correct_chance": 0.75,
-        "channel_id": ,
+        "channel_id": "",
         "discord_token": "",
         "state": false,
         "autobuy": {
