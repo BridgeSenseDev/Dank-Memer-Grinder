@@ -11,7 +11,7 @@ import numpy as np
 from PIL import Image, ImageDraw
 from PyQt5.QtGui import QIcon, QFontDatabase
 from PyQt5.QtWidgets import QApplication, QMainWindow
-from discord.ext import commands
+from discord.ext import commands, tasks
 from qasync import QEventLoop, asyncSlot
 
 # noinspection PyUnresolvedReferences
