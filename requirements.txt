@@ -3,7 +3,7 @@ aiosignal==1.2.0
 async-timeout==4.0.2
 attrs==22.1.0
 cffi==1.15.1
-charset-normalizer==2.1.1
+charset-normalizer==3.0.0
 discord.py-self @ git+https://github.com/dolfies/discord.py-self@1b7d6c8790aac356a4cbaa3ffa7beea376b5e4b2
 frozenlist==1.3.1
 idna==3.4
