@@ -5,7 +5,7 @@ attrs==22.1.0
 cffi==1.15.1
 charset-normalizer==2.1.1
 discord.py-self @ git+https://github.com/dolfies/discord.py-self@1b7d6c8790aac356a4cbaa3ffa7beea376b5e4b2
-frozenlist==1.3.1
+frozenlist==1.3.3
 idna==3.4
 multidict==6.0.2
 numpy==1.23.4
