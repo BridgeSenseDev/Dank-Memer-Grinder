@@ -58,10 +58,10 @@
       Double click `Dank Memer Grinder.exe`
 
       #### Linux
-      Open a terminal window in the folder the files were extracted to and run `./Dank\ Memer\ Grinder`
+      Open a terminal window and navigate to the folder the files were extracted to and run `./Dank\ Memer\ Grinder`
 
       #### Mac 
-      Double click the Dank Memer Grinder binary
+      Open a terminal window and navigate to the folder the files were extracted to and run `./Dank\ Memer\ Grinder`
    ### Getting Started
    1. Go to the settings tab and enter your discord auth token [(how)](https://www.youtube.com/watch?v=YEgFvgg7ZPI) and channel id [(how)](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-#:~:text=On%20Android%20press%20and%20hold,name%20and%20select%20Copy%20ID.)
    2. Go to the autobuy tab and turn everything on (recommended). Make sure to set lifesavers to at least 4 (recommended)
