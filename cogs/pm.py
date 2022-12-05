@@ -10,9 +10,9 @@ class Pm(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         if (
-                message.channel.id != self.bot.channel_id
-                or self.bot.config_dict[self.bot.account_id]["commands"]["pm"] is False
-                or self.bot.config_dict[self.bot.account_id]["state"] is False
+            message.channel.id != self.bot.channel_id
+            or self.bot.config_dict[self.bot.account_id]["commands"]["pm"] is False
+            or self.bot.config_dict[self.bot.account_id]["state"] is False
         ):
             return
 

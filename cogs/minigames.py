@@ -22,14 +22,14 @@ class Minigames(commands.Cog):
                     if ":levitate:" == embed["description"].splitlines()[2]:
                         await self.bot.click(message, 0, 2)
                     elif (
-                            "<:emptyspace:827651824739156030>:levitate:"
-                            == embed["description"].splitlines()[2]
+                        "<:emptyspace:827651824739156030>:levitate:"
+                        == embed["description"].splitlines()[2]
                     ):
                         await self.bot.click(message, 0, 0)
                     if (
-                            "<:emptyspace:827651824739156030>"
-                            "<:emptyspace:827651824739156030>:levitate:"
-                            == embed["description"].splitlines()[2]
+                        "<:emptyspace:827651824739156030>"
+                        "<:emptyspace:827651824739156030>:levitate:"
+                        == embed["description"].splitlines()[2]
                     ):
                         await self.bot.click(message, 0, 1)
                     return
@@ -39,8 +39,8 @@ class Minigames(commands.Cog):
             # Color match
             try:
                 if (
-                        "Look at each color next to the words closely!"
-                        in embed["description"]
+                    "Look at each color next to the words closely!"
+                    in embed["description"]
                 ):
                     options = {
                         str(
@@ -107,8 +107,8 @@ class Minigames(commands.Cog):
             # Repeat order
             try:
                 if any(
-                        i in embed["description"]
-                        for i in ["Repeat Order", "word order.", "words order"]
+                    i in embed["description"]
+                    for i in ["Repeat Order", "word order.", "words order"]
                 ):
                     order = [
                         str(embed["description"].splitlines()[1])[1:-1],
@@ -153,14 +153,14 @@ class Minigames(commands.Cog):
                     await asyncio.sleep(2)
                     embed = message.embeds[0].to_dict()
                     if (
-                            "<:emptyspace:827651824739156030>"
-                            "<:emptyspace:827651824739156030>:basketball:"
-                            == embed["description"].splitlines()[2]
+                        "<:emptyspace:827651824739156030>"
+                        "<:emptyspace:827651824739156030>:basketball:"
+                        == embed["description"].splitlines()[2]
                     ):
                         await self.bot.click(message, 0, 2)
                     elif (
-                            "<:emptyspace:827651824739156030>:basketball:"
-                            == embed["description"].splitlines()[2]
+                        "<:emptyspace:827651824739156030>:basketball:"
+                        == embed["description"].splitlines()[2]
                     ):
                         await self.bot.click(message, 0, 1)
                     elif ":basketball:" == embed["description"].splitlines()[2]:
@@ -184,18 +184,18 @@ class Minigames(commands.Cog):
                     await asyncio.sleep(2)
                     embed = message.embeds[0].to_dict()
                     if (
-                            "              <:FireBall:883714770748964864>"
-                            == embed["description"].splitlines()[2]
+                        "              <:FireBall:883714770748964864>"
+                        == embed["description"].splitlines()[2]
                     ):
                         await self.bot.click(message, 0, 1)
                     elif (
-                            "       <:FireBall:883714770748964864>"
-                            == embed["description"].splitlines()[2]
+                        "       <:FireBall:883714770748964864>"
+                        == embed["description"].splitlines()[2]
                     ):
                         await self.bot.click(message, 0, 0)
                     elif (
-                            "<:FireBall:883714770748964864>"
-                            == embed["description"].splitlines()[2]
+                        "<:FireBall:883714770748964864>"
+                        == embed["description"].splitlines()[2]
                     ):
                         await self.bot.click(message, 0, 2)
             except KeyError:
@@ -209,35 +209,35 @@ class Minigames(commands.Cog):
                     await asyncio.sleep(2)
                     embed = message.embeds[0].to_dict()
                     if (
-                            "              <a:LegendaryFish:971430841211322408>"
-                            == embed["description"].splitlines()[1]
+                        "              <a:LegendaryFish:971430841211322408>"
+                        == embed["description"].splitlines()[1]
                     ):
                         await self.bot.click(message, 0, 2)
                     elif (
-                            "       <a:LegendaryFish:971430841211322408>"
-                            == embed["description"].splitlines()[1]
+                        "       <a:LegendaryFish:971430841211322408>"
+                        == embed["description"].splitlines()[1]
                     ):
                         await self.bot.click(message, 0, 1)
                     elif (
-                            "<a:LegendaryFish:971430841211322408>"
-                            == embed["description"].splitlines()[1]
+                        "<a:LegendaryFish:971430841211322408>"
+                        == embed["description"].splitlines()[1]
                     ):
                         await self.bot.click(message, 0, 0)
                     await asyncio.sleep(2)
                     embed = message.embeds[0].to_dict()
                     if (
-                            "              <:Kraken:860228238956429313>"
-                            == embed["description"].splitlines()[1]
+                        "              <:Kraken:860228238956429313>"
+                        == embed["description"].splitlines()[1]
                     ):
                         await self.bot.click(message, 0, 2)
                     elif (
-                            "       <:Kraken:860228238956429313>"
-                            == embed["description"].splitlines()[1]
+                        "       <:Kraken:860228238956429313>"
+                        == embed["description"].splitlines()[1]
                     ):
                         await self.bot.click(message, 0, 1)
                     elif (
-                            "<:Kraken:860228238956429313>"
-                            == embed["description"].splitlines()[1]
+                        "<:Kraken:860228238956429313>"
+                        == embed["description"].splitlines()[1]
                     ):
                         await self.bot.click(message, 0, 0)
             except KeyError:

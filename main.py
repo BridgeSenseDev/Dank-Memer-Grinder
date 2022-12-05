@@ -480,10 +480,10 @@ class MainWindow(QMainWindow):
                 )
                 icon = QtGui.QIcon()
                 icon.addPixmap(
-    QtGui.QPixmap(":/icons/icons/user.svg"),
-    QtGui.QIcon.Mode.Normal,
-    QtGui.QIcon.State.Off,
-)
+                    QtGui.QPixmap(":/icons/icons/user.svg"),
+                    QtGui.QIcon.Mode.Normal,
+                    QtGui.QIcon.State.Off,
+                )
                 getattr(window.ui, f"account_btn_{self.account_id}").setIcon(icon)
         elif command == "trivia_chance":
             config_dict[self.account_id].update(
@@ -497,10 +497,10 @@ def between_callback(token, account_id):
     getattr(window.ui, f"account_btn_{account_id}").setText("Logging In")
     icon = QtGui.QIcon()
     icon.addPixmap(
-    QtGui.QPixmap(":/icons/icons/loader.svg"),
-    QtGui.QIcon.Mode.Normal,
-    QtGui.QIcon.State.Off,
-)
+        QtGui.QPixmap(":/icons/icons/loader.svg"),
+        QtGui.QIcon.Mode.Normal,
+        QtGui.QIcon.State.Off,
+    )
     getattr(window.ui, f"account_btn_{account_id}").setIcon(icon)
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
@@ -510,10 +510,10 @@ def between_callback(token, account_id):
         getattr(window.ui, f"account_btn_{account_id}").setText("Invalid Token")
         icon = QtGui.QIcon()
         icon.addPixmap(
-    QtGui.QPixmap(":/icons/icons/alert-triangle.svg"),
-    QtGui.QIcon.Mode.Normal,
-    QtGui.QIcon.State.Off,
-)
+            QtGui.QPixmap(":/icons/icons/alert-triangle.svg"),
+            QtGui.QIcon.Mode.Normal,
+            QtGui.QIcon.State.Off,
+        )
         getattr(window.ui, f"account_btn_{account_id}").setIcon(icon)
         getattr(window.ui, f"account_btn_{account_id}")
     loop.close()
@@ -535,10 +535,10 @@ if __name__ == "__main__":
             )
             icon = QtGui.QIcon()
             icon.addPixmap(
-    QtGui.QPixmap(":/icons/icons/user.svg"),
-    QtGui.QIcon.Mode.Normal,
-    QtGui.QIcon.State.Off,
-)
+                QtGui.QPixmap(":/icons/icons/user.svg"),
+                QtGui.QIcon.Mode.Normal,
+                QtGui.QIcon.State.Off,
+            )
             getattr(window.ui, f"account_btn_{account_id}").setIcon(icon)
     loop = QEventLoop(app)
     asyncio.set_event_loop(loop)

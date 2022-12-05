@@ -118,12 +118,15 @@ class Blackjack(commands.Cog):
     async def bj(self):
         try:
             if (
-                self.bot.config_dict[self.bot.account_id]["commands"]["bj"]["state"] is True
+                self.bot.config_dict[self.bot.account_id]["commands"]["bj"]["state"]
+                is True
                 and self.bot.config_dict[self.bot.account_id]["state"] is True
             ):
                 try:
                     if multi <= int(
-                        self.bot.config_dict[self.bot.account_id]["commands"]["bj"]["multi"]
+                        self.bot.config_dict[self.bot.account_id]["commands"]["bj"][
+                            "multi"
+                        ]
                     ):
                         getattr(
                             self.bot.window.ui, f"output_text_{self.bot.account_id}"
@@ -137,7 +140,8 @@ class Blackjack(commands.Cog):
                         self.bot.window.ui, f"output_text_{self.bot.account_id}"
                     ).append(
                         "Not blackjacking because multipliers required"
-                        f" ({self.bot.config_dict['commands']['bj']['multi']}) is not a number"
+                        f" ({self.bot.config_dict['commands']['bj']['multi']}) is not a"
+                        " number"
                     )
                     return
                 await asyncio.sleep(random.randint(0, 3))
@@ -181,7 +185,9 @@ class Blackjack(commands.Cog):
             try:
                 if (
                     "blackjack game" in embed.to_dict()["author"]["name"]
-                    and self.bot.config_dict[self.bot.account_id]["commands"]["bj"]["state"]
+                    and self.bot.config_dict[self.bot.account_id]["commands"]["bj"][
+                        "state"
+                    ]
                     is True
                 ):
                     await self.bot.click(message, 0, bj_formula(embed))
@@ -197,7 +203,9 @@ class Blackjack(commands.Cog):
             try:
                 if (
                     "blackjack game" in embed.to_dict()["author"]["name"]
-                    and self.bot.config_dict[self.bot.account_id]["commands"]["bj"]["state"]
+                    and self.bot.config_dict[self.bot.account_id]["commands"]["bj"][
+                        "state"
+                    ]
                     is True
                 ):
                     if "description" not in embed.to_dict():

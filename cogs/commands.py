@@ -22,9 +22,10 @@ class Commands(commands.Cog):
                 if command == "bj":
                     continue
                 if (
-                        time.time() - self.bot.last_ran[command]
-                        < self.bot.commands_delay[command]
-                        or self.bot.config_dict[self.bot.account_id]["commands"][command] is False
+                    time.time() - self.bot.last_ran[command]
+                    < self.bot.commands_delay[command]
+                    or self.bot.config_dict[self.bot.account_id]["commands"][command]
+                    is False
                 ):
                     await asyncio.sleep(0.5)
                     continue
