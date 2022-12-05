@@ -175,9 +175,7 @@ class Minigames(commands.Cog):
                         == embed["description"].splitlines()[2]
                     ):
                         await self.bot.click(message, 0, 1)
-                    elif (
-                        ":basketball:" == embed["description"].splitlines()[2]
-                    ):
+                    elif ":basketball:" == embed["description"].splitlines()[2]:
                         await self.bot.click(message, 0, 0)
                     return
             except KeyError:
