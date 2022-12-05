@@ -1,19 +1,6 @@
-import json
 import re
-import threading
 
 from discord.ext import commands
-
-
-def update():
-    global config_dict
-    threading.Timer(5, update).start()
-    with open("config.json", "r") as config_file:
-        config_dict = json.load(config_file)
-
-
-update()
-
 
 class Autobuy(commands.Cog):
     def __init__(self, bot):
@@ -24,14 +11,14 @@ class Autobuy(commands.Cog):
         if (
             message.guild is None
             and message.author.id == 270904126974590976
-            and config_dict[self.bot.account_id]["state"] is True
+            and self.bot.config_dict[self.bot.account_id]["state"] is True
         ):
             for embed in message.embeds:
                 # Buy lifesavers
                 try:
                     if (
                         embed.to_dict()["title"] == "Your lifesaver protected you!"
-                        and config_dict[self.bot.account_id]["autobuy"]["lifesavers"][
+                        and self.bot.config_dict[self.bot.account_id]["autobuy"]["lifesavers"][
                             "state"
                         ]
                         is True
@@ -43,7 +30,7 @@ class Autobuy(commands.Cog):
                             ).group(1)
                         )
                         required = int(
-                            config_dict[self.bot.account_id]["autobuy"]["lifesavers"][
+                            self.bot.config_dict[self.bot.account_id]["autobuy"]["lifesavers"][
                                 "amount"
                             ]
                         )
@@ -68,7 +55,7 @@ class Autobuy(commands.Cog):
                 try:
                     if (
                         embed.to_dict()["title"] == "Pending Confirmation"
-                        and config_dict[self.bot.account_id]["autobuy"]["lifesavers"][
+                        and self.bot.config_dict[self.bot.account_id]["autobuy"]["lifesavers"][
                             "state"
                         ]
                         is True
@@ -79,7 +66,7 @@ class Autobuy(commands.Cog):
 
         if (
             message.channel.id != self.bot.channel_id
-            or config_dict[self.bot.account_id]["state"] is False
+            or self.bot.config_dict[self.bot.account_id]["state"] is False
         ):
             return
 

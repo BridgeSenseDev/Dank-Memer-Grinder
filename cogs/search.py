@@ -1,6 +1,3 @@
-import threading
-import json
-
 from discord.ext import commands
 
 search_priority = [
@@ -17,16 +14,6 @@ second_search_priority = ["who asked", "fridge"]
 search_avoid = ["area51", "bank"]
 
 
-def update():
-    global config_dict
-    threading.Timer(5, update).start()
-    with open("config.json", "r") as config_file:
-        config_dict = json.load(config_file)
-
-
-update()
-
-
 class Search(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -34,9 +21,9 @@ class Search(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         if (
-            message.channel.id != self.bot.channel_id
-            or config_dict[self.bot.account_id]["state"] is False
-            or config_dict[self.bot.account_id]["commands"]["search"] is False
+                message.channel.id != self.bot.channel_id
+                or self.bot.config_dict[self.bot.account_id]["state"] is False
+                or self.bot.config_dict[self.bot.account_id]["commands"]["search"] is False
         ):
             return
 

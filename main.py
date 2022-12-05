@@ -13,7 +13,7 @@ import requests
 from PIL import Image, ImageDraw
 from PyQt5.QtGui import QIcon, QFontDatabase
 from PyQt5.QtWidgets import QApplication, QMainWindow
-from discord.ext import commands
+from discord.ext import commands, tasks
 from qasync import QEventLoop, asyncSlot
 
 # noinspection PyUnresolvedReferences
@@ -55,6 +55,7 @@ async def start_bot(token, account_id):
     class MyClient(commands.Bot):
         def __init__(self):
             super().__init__(command_prefix="-", self_bot=True)
+            self.config_dict = None
             self.window = window
             self.account_id = account_id
             self.channel_id = ""
@@ -95,9 +96,14 @@ async def start_bot(token, account_id):
             for command in self.commands_list:
                 self.last_ran[command] = 0
 
+        @tasks.loop(seconds=5)
+        async def update(self):
+            with open("config.json", "r") as config_file:
+                self.config_dict = json.load(config_file)
+
         async def send(self, command_name, **kwargs):
             if self.channel is None:
-                self.channel_id = int(config_dict[account_id]["channel_id"])
+                self.channel_id = int(self.config_dict[account_id]["channel_id"])
                 self.channel = self.get_channel(self.channel_id)
             async for cmd in self.channel.slash_commands(
                 query=command_name, limit=None
@@ -111,7 +117,7 @@ async def start_bot(token, account_id):
 
         async def sub_send(self, command_name, sub_command_name, **kwargs):
             if self.channel is None:
-                self.channel_id = int(config_dict[account_id]["channel_id"])
+                self.channel_id = int(self.config_dict[account_id]["channel_id"])
                 self.channel = self.get_channel(self.channel_id)
             async for cmd in self.channel.slash_commands(
                 query=command_name, limit=None
@@ -131,6 +137,7 @@ async def start_bot(token, account_id):
                 pass
 
         async def on_ready(self):
+            self.update.start()
             if getattr(window.ui, f"account_btn_{account_id}").text() != "Logging In":
                 return
             getattr(window.ui, f"output_text_{self.account_id}").append(

@@ -1,18 +1,6 @@
-import json
 import re
-import threading
 
 from discord.ext import commands
-
-
-def update():
-    global config_dict
-    threading.Timer(5, update).start()
-    with open("config.json", "r") as config_file:
-        config_dict = json.load(config_file)
-
-
-update()
 
 
 class Hl(commands.Cog):
@@ -22,9 +10,9 @@ class Hl(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         if (
-            message.channel.id != self.bot.channel_id
-            or config_dict[self.bot.account_id]["state"] is False
-            or config_dict[self.bot.account_id]["commands"]["hl"] is False
+                message.channel.id != self.bot.channel_id
+                or self.bot.config_dict[self.bot.account_id]["state"] is False
+                or self.bot.config_dict[self.bot.account_id]["commands"]["hl"] is False
         ):
             return
 

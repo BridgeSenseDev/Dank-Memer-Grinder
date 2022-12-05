@@ -1,20 +1,8 @@
 import asyncio
-import json
 import random
 import re
-import threading
 
 from discord.ext import commands, tasks
-
-
-def update():
-    global config_dict
-    threading.Timer(5, update).start()
-    with open("config.json", "r") as config_file:
-        config_dict = json.load(config_file)
-
-
-update()
 
 
 def bj_formula(embed):
@@ -130,18 +118,18 @@ class Blackjack(commands.Cog):
     async def bj(self):
         try:
             if (
-                config_dict[self.bot.account_id]["commands"]["bj"]["state"] is True
-                and config_dict[self.bot.account_id]["state"] is True
+                self.bot.config_dict[self.bot.account_id]["commands"]["bj"]["state"] is True
+                and self.bot.config_dict[self.bot.account_id]["state"] is True
             ):
                 try:
                     if multi <= int(
-                        config_dict[self.bot.account_id]["commands"]["bj"]["multi"]
+                        self.bot.config_dict[self.bot.account_id]["commands"]["bj"]["multi"]
                     ):
                         getattr(
                             self.bot.window.ui, f"output_text_{self.bot.account_id}"
                         ).append(
                             "Not blackjacking because multipliers is lower than"
-                            f" {int(config_dict['commands']['bj']['multi'])}"
+                            f" {int(self.bot.config_dict['commands']['bj']['multi'])}"
                         )
                         return
                 except:
@@ -149,12 +137,12 @@ class Blackjack(commands.Cog):
                         self.bot.window.ui, f"output_text_{self.bot.account_id}"
                     ).append(
                         "Not blackjacking because multipliers required"
-                        f" ({config_dict['commands']['bj']['multi']}) is not a number"
+                        f" ({self.bot.config_dict['commands']['bj']['multi']}) is not a number"
                     )
                     return
                 await asyncio.sleep(random.randint(0, 3))
                 await self.bot.channel.send(
-                    f"pls bj {config_dict['commands']['-bj-']['-bjamount-']}"
+                    f"pls bj {self.bot.config_dict['commands']['-bj-']['-bjamount-']}"
                 )
         except KeyError:
             pass
@@ -166,8 +154,8 @@ class Blackjack(commands.Cog):
     @tasks.loop(minutes=3)
     async def multipliers(self):
         if (
-            config_dict[self.bot.account_id]["commands"]["bj"]["state"] is True
-            and config_dict[self.bot.account_id]["state"] is True
+            self.bot.config_dict[self.bot.account_id]["commands"]["bj"]["state"] is True
+            and self.bot.config_dict[self.bot.account_id]["state"] is True
         ):
             await self.bot.send("multipliers")
 
@@ -176,7 +164,7 @@ class Blackjack(commands.Cog):
         global multi
         if (
             message.channel.id != self.bot.channel_id
-            or config_dict[self.bot.account_id]["state"] is False
+            or self.bot.config_dict[self.bot.account_id]["state"] is False
         ):
             return
 
@@ -193,7 +181,7 @@ class Blackjack(commands.Cog):
             try:
                 if (
                     "blackjack game" in embed.to_dict()["author"]["name"]
-                    and config_dict[self.bot.account_id]["commands"]["bj"]["state"]
+                    and self.bot.config_dict[self.bot.account_id]["commands"]["bj"]["state"]
                     is True
                 ):
                     await self.bot.click(message, 0, bj_formula(embed))
@@ -209,7 +197,7 @@ class Blackjack(commands.Cog):
             try:
                 if (
                     "blackjack game" in embed.to_dict()["author"]["name"]
-                    and config_dict[self.bot.account_id]["commands"]["bj"]["state"]
+                    and self.bot.config_dict[self.bot.account_id]["commands"]["bj"]["state"]
                     is True
                 ):
                     if "description" not in embed.to_dict():

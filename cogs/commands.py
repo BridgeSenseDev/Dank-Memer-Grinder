@@ -1,32 +1,20 @@
 import asyncio
-import json
 import random
-import threading
 import time
 
 from discord.ext import commands
 
 
-def update():
-    global config_dict
-    threading.Timer(5, update).start()
-    with open("config.json", "r") as config_file:
-        config_dict = json.load(config_file)
-
-
-update()
-
-
 class Commands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.chance = config_dict[self.bot.account_id]["trivia_correct_chance"]
+        self.chance = self.bot.config_dict[self.bot.account_id]["trivia_correct_chance"]
 
     async def cog_load(self):
-        self.bot.channel_id = config_dict[self.bot.account_id]["channel_id"]
+        self.bot.channel_id = self.bot.config_dict[self.bot.account_id]["channel_id"]
         self.bot.channel = self.bot.get_channel(self.bot.channel_id)
         while True:
-            if config_dict[self.bot.account_id]["state"] is False:
+            if self.bot.config_dict[self.bot.account_id]["state"] is False:
                 await asyncio.sleep(1)
                 continue
             for command in self.bot.commands_list:
@@ -34,9 +22,9 @@ class Commands(commands.Cog):
                 if command == "bj":
                     continue
                 if (
-                    time.time() - self.bot.last_ran[command]
-                    < self.bot.commands_delay[command]
-                    or config_dict[self.bot.account_id]["commands"][command] is False
+                        time.time() - self.bot.last_ran[command]
+                        < self.bot.commands_delay[command]
+                        or self.bot.config_dict[self.bot.account_id]["commands"][command] is False
                 ):
                     await asyncio.sleep(0.5)
                     continue
