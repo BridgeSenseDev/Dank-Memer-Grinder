@@ -101,11 +101,13 @@ async def start_bot(token, account_id):
             with open("config.json", "r") as config_file:
                 self.config_dict = json.load(config_file)
 
-        async def send(self, command_name, **kwargs):
+        async def send(self, command_name, channel=None, **kwargs):
             if self.channel is None:
                 self.channel_id = int(self.config_dict[account_id]["channel_id"])
                 self.channel = self.get_channel(self.channel_id)
-            async for cmd in self.channel.slash_commands(
+            if channel is None:
+                channel = self.channel
+            async for cmd in channel.slash_commands(
                 query=command_name, limit=None
             ):
                 if cmd.application.id == 270904126974590976:
@@ -115,11 +117,13 @@ async def start_bot(token, account_id):
                         pass
                     return
 
-        async def sub_send(self, command_name, sub_command_name, **kwargs):
+        async def sub_send(self, command_name, sub_command_name, channel=None, **kwargs):
             if self.channel is None:
                 self.channel_id = int(self.config_dict[account_id]["channel_id"])
                 self.channel = self.get_channel(self.channel_id)
-            async for cmd in self.channel.slash_commands(
+            if channel is None:
+                channel = self.channel
+            async for cmd in channel.slash_commands(
                 query=command_name, limit=None
             ):
                 if cmd.application.id == 270904126974590976:
