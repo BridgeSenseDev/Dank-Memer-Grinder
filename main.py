@@ -1,17 +1,19 @@
 import asyncio
 import ctypes
+import json
+import os
+import subprocess
 import sys
 import tempfile
-import os
-import json
 import threading
+
 import discord.errors
 import numpy as np
-
+import requests
 from PIL import Image, ImageDraw
 from PyQt5.QtGui import QIcon, QFontDatabase
 from PyQt5.QtWidgets import QApplication, QMainWindow
-from discord.ext import commands, tasks
+from discord.ext import commands
 from qasync import QEventLoop, asyncSlot
 
 # noinspection PyUnresolvedReferences
@@ -22,6 +24,14 @@ try:
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("dankmemergrinder")
 except:
     pass
+
+version = requests.get(
+    "https://raw.githubusercontent.com/BridgeSenseDev/Dank-Memer-Grinder/main/"
+    "resources/version.txt"
+).text
+if int(version.replace(".", "")) > 120:
+    subprocess.Popen("./Updater.exe")
+    sys.exit(0)
 
 
 def update():
