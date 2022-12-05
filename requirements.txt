@@ -2,9 +2,10 @@ aiohttp==3.8.3
 aiosignal==1.3.1
 async-timeout==4.0.2
 attrs==22.1.0
+certifi==2022.9.24
 cffi==1.15.1
 charset-normalizer==3.0.1
-discord.py-self @ git+https://github.com/dolfies/discord.py-self@cbc5d706c2a2954a01b8c5444c431e0fc076dd50
+discord.py-self @ file:///C:/Users/BridgeSense/Documents/Python/Dank%20Memer%20Grinder/discord.py-self
 frozenlist==1.3.3
 idna==3.4
 multidict==6.0.3
@@ -16,4 +17,6 @@ PyQt5==5.15.7
 PyQt5-Qt5==5.15.2
 PyQt5-sip==12.11.0
 qasync==0.23.0
+requests==2.28.1
+urllib3==1.26.13
 yarl==1.8.2
