@@ -38,7 +38,9 @@ class Autobuy(commands.Cog):
                         if remaining < required:
                             channel = await message.author.create_dm()
                             await self.bot.send(
-                                "withdraw", channel, amount=str((required - remaining) * 85000)
+                                "withdraw",
+                                channel,
+                                amount=str((required - remaining) * 85000),
                             )
                             await self.bot.sub_send(
                                 "shop",
