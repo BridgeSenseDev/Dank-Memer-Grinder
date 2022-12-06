@@ -1,3 +1,4 @@
+import asyncio
 import random
 
 from discord.ext import commands
@@ -18,8 +19,14 @@ class Pm(commands.Cog):
 
         for embed in message.embeds:
             try:
-                if "meme posting session" in embed.to_dict()["author"]["name"]:
-                    await self.bot.click(message, 0, random.randint(0, 4))
+                print(embed.to_dict())
+                if "Meme Posting Session" in embed.to_dict()["author"]["name"]:
+                    await asyncio.sleep(0.7)
+                    await self.bot.select(message, 0, 0, random.randint(0, 3))
+                    await asyncio.sleep(0.7)
+                    await self.bot.select(message, 1, 0, random.randint(0, 4))
+                    await asyncio.sleep(0.7)
+                    await self.bot.click(message, 2, 0)
             except KeyError:
                 pass
 

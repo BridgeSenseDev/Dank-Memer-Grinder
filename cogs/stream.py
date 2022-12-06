@@ -76,9 +76,7 @@ class Stream(commands.Cog):
                     await asyncio.sleep(4)
 
                     # Select trending game
-                    await message.components[0].children[0].choose(
-                        message.components[0].children[0].options[game]
-                    )
+                    await self.bot.select(0, 0, game)
                     await asyncio.sleep(0.7)
                     await self.bot.click(message, 1, 0)
                     await asyncio.sleep(0.7)

@@ -101,15 +101,28 @@ async def start_bot(token, account_id):
             with open("config.json", "r") as config_file:
                 self.config_dict = json.load(config_file)
 
+        @staticmethod
+        async def click(message, component, children):
+            try:
+                await message.components[component].children[children].click()
+            except (discord.errors.HTTPException, discord.errors.InvalidData):
+                pass
+
+        @staticmethod
+        async def select(message, component, children, option):
+            try:
+                select_menu = message.components[component].children[children]
+                await select_menu.choose(select_menu.options[option])
+            except (discord.errors.HTTPException, discord.errors.InvalidData):
+                pass
+
         async def send(self, command_name, channel=None, **kwargs):
             if self.channel is None:
                 self.channel_id = int(self.config_dict[account_id]["channel_id"])
                 self.channel = self.get_channel(self.channel_id)
             if channel is None:
                 channel = self.channel
-            async for cmd in channel.slash_commands(
-                query=command_name, limit=None
-            ):
+            async for cmd in channel.slash_commands(query=command_name, limit=None):
                 if cmd.application.id == 270904126974590976:
                     try:
                         await cmd(**kwargs)
@@ -117,28 +130,21 @@ async def start_bot(token, account_id):
                         pass
                     return
 
-        async def sub_send(self, command_name, sub_command_name, channel=None, **kwargs):
+        async def sub_send(
+            self, command_name, sub_command_name, channel=None, **kwargs
+        ):
             if self.channel is None:
                 self.channel_id = int(self.config_dict[account_id]["channel_id"])
                 self.channel = self.get_channel(self.channel_id)
             if channel is None:
                 channel = self.channel
-            async for cmd in channel.slash_commands(
-                query=command_name, limit=None
-            ):
+            async for cmd in channel.slash_commands(query=command_name, limit=None):
                 if cmd.application.id == 270904126974590976:
                     for count, sub_cmd in enumerate(cmd.children):
                         if sub_cmd.name.lower() == sub_command_name.lower():
                             await cmd.children[count](**kwargs)
                             break
                     return
-
-        # noinspection PyMethodMayBeStatic
-        async def click(self, message, component, children):
-            try:
-                await message.components[component].children[children].click()
-            except (discord.errors.HTTPException, discord.errors.InvalidData):
-                pass
 
         async def on_ready(self):
             self.update.start()
