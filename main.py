@@ -55,11 +55,11 @@ async def start_bot(token, account_id):
     class MyClient(commands.Bot):
         def __init__(self):
             super().__init__(command_prefix="-", self_bot=True)
-            self.config_dict = None
+            self.config_dict = config_dict
             self.window = window
             self.account_id = account_id
-            self.channel_id = ""
-            self.channel = ""
+            self.channel_id = int(config_dict[account_id]["channel_id"])
+            self.channel = None
             self.commands_list = {
                 "trivia": "trivia",
                 "dig": "dig",
@@ -117,9 +117,6 @@ async def start_bot(token, account_id):
                 pass
 
         async def send(self, command_name, channel=None, **kwargs):
-            if self.channel is None:
-                self.channel_id = int(self.config_dict[account_id]["channel_id"])
-                self.channel = self.get_channel(self.channel_id)
             if channel is None:
                 channel = self.channel
             async for cmd in channel.slash_commands(query=command_name, limit=None):
@@ -133,9 +130,6 @@ async def start_bot(token, account_id):
         async def sub_send(
             self, command_name, sub_command_name, channel=None, **kwargs
         ):
-            if self.channel is None:
-                self.channel_id = int(self.config_dict[account_id]["channel_id"])
-                self.channel = self.get_channel(self.channel_id)
             if channel is None:
                 channel = self.channel
             async for cmd in channel.slash_commands(query=command_name, limit=None):
@@ -146,8 +140,9 @@ async def start_bot(token, account_id):
                             break
                     return
 
-        async def on_ready(self):
+        async def setup_hook(self):
             self.update.start()
+            self.channel = await self.fetch_channel(self.channel_id)
             if getattr(window.ui, f"account_btn_{account_id}").text() != "Logging In":
                 return
             getattr(window.ui, f"output_text_{self.account_id}").append(
@@ -180,6 +175,8 @@ async def start_bot(token, account_id):
                 getattr(self.window.ui, f"account_btn_{account_id}").setIconSize(
                     QtCore.QSize(35, 35)
                 )
+
+            await self.load_extension("cogs.captcha")
             await self.load_extension("cogs.trivia")
             await self.load_extension("cogs.pm")
             await self.load_extension("cogs.hl")
