@@ -22,32 +22,23 @@
 
 > Despite this, there is no chance of detection by either Discord or Dank Memer provided that you take appropriate measures to ensure this. This includes but is not limited to running the bot only in private channels, not being open about the fact that you use it and not running so much as to raise suspicion.
 
--  [🖼️ Screenshots](#screenshots)
--  [💡 Features](#features)
--  [⚙️ Configuration](#configuration)
-   -  [Installation](#installation)
-   -  [Getting Started](#getting-started)
+### Features
+- [x] Easy to use GUI for configuration and logs
+- [x] Support for running up to 5 accounts at once
+- [x] Automation of most currency commands and minigames (e.g. automatically completes all work minigames and captures dragons)
+- [x] Automatically selects and streams the daily trending game
+- [x] Answers all trivia questions with a configurable chance in order to avoid suspiscion
+- [x] Automatically searches the best places to avoid death
+- [x] Automatically buy fishing poles, hunting rifles, shovels or pizza's
+- [x] Automatically buys lifesavers when under a configurable amount
+- [x] Uses very little system resources
 
-## Screenshots
-<p float="left">
+<p align="center">
    <img src=".github/assets/img/settings.png" width="400" height="auto" />
    <img src=".github/assets/img/commands.png" width="400" height="auto" />
    <img src=".github/assets/img/autobuy.png" width="400" height="auto" />
    <img src=".github/assets/img/gambling.png" width="400" height="auto" />
 </p>
-
-## Features
-
-* Easy to use GUI for configuration and logs
-* Support for running up to 5 accounts at once
-* Automation of most currency commands and minigames (e.g. automatically completes all work minigames and captures dragons)
-* Automatically selects and streams the daily trending game
-* Answers all trivia questions with a configurable chance in order to avoid suspiscion
-* Automatically searches the best places to avoid death
-* Blackjack automation optimized for both low stakes and high stakes table
-* Automatically buy fishing poles, hunting rifles, shovels or pizza's
-* Automatically buys lifesavers when under a configurable amount
-* Uses very little system resources
 
 ## Configuration
    ### Installation
@@ -66,5 +57,5 @@
    1. Go to the settings tab and enter your discord auth token [(how)](https://www.youtube.com/watch?v=YEgFvgg7ZPI) and channel id [(how)](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-#:~:text=On%20Android%20press%20and%20hold,name%20and%20select%20Copy%20ID.)
    2. Go to the autobuy tab and turn everything on (recommended). Make sure to set lifesavers to at least 4 (recommended)
    3. Go to the commands tab and toggle the commands to your liking
-   4. Start / Stop the entire bot using the button on the bottom left
+   4. Start / Stop the entire bot using the toggle on the bottom left
    5. Repeat steps 1-4 for as many accounts as you would like
