@@ -119,11 +119,11 @@ async def start_bot(token, account_id):
         async def send(self, command_name, channel=None, **kwargs):
             if channel is None:
                 channel = self.channel
-            async for cmd in channel.slash_commands(query=command_name, limit=None):
-                if cmd.application.id == 270904126974590976:
+                async for cmd in channel.slash_commands(query=command_name, limit=None):
                     try:
-                        await cmd(**kwargs)
-                    except:
+                        if cmd.application.id == 270904126974590976:
+                            await cmd(**kwargs)
+                    except (discord.errors.DiscordServerError, KeyError):
                         pass
                     return
 
@@ -132,13 +132,16 @@ async def start_bot(token, account_id):
         ):
             if channel is None:
                 channel = self.channel
-            async for cmd in channel.slash_commands(query=command_name, limit=None):
-                if cmd.application.id == 270904126974590976:
-                    for count, sub_cmd in enumerate(cmd.children):
-                        if sub_cmd.name.lower() == sub_command_name.lower():
-                            await cmd.children[count](**kwargs)
-                            break
-                    return
+            try:
+                async for cmd in channel.slash_commands(query=command_name, limit=None):
+                    if cmd.application.id == 270904126974590976:
+                        for count, sub_cmd in enumerate(cmd.children):
+                            if sub_cmd.name.lower() == sub_command_name.lower():
+                                await cmd.children[count](**kwargs)
+                                break
+                        return
+            except (discord.errors.DiscordServerError, KeyError):
+                pass
 
         async def setup_hook(self):
             self.update.start()
@@ -176,7 +179,6 @@ async def start_bot(token, account_id):
                     QtCore.QSize(35, 35)
                 )
 
-            await self.load_extension("cogs.captcha")
             await self.load_extension("cogs.trivia")
             await self.load_extension("cogs.pm")
             await self.load_extension("cogs.hl")

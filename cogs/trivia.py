@@ -41,7 +41,7 @@ class Trivia(commands.Cog):
                     ).group(1)
                     try:
                         answer = trivia_dict[category][question]
-                    except:
+                    except KeyError:
                         await self.bot.click(message, 0, 0)
                         return
                     if random.random() <= self.chance:
