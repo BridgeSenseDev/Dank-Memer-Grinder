@@ -598,7 +598,7 @@ if __name__ == "__main__":
         "resources/version.txt"
     ).text
     window = MainWindow()
-    if int(version.replace(".", "")) > 110:
+    if int(version.replace(".", "")) > 130:
         updater = UpdaterWindow()
     else:
         window.show()
