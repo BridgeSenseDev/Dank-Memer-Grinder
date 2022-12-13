@@ -2,6 +2,7 @@ import asyncio
 import ctypes
 import io
 import json
+import sys
 import os
 import platform
 import subprocess
@@ -220,7 +221,7 @@ async def start_bot(token, account_id):
             )
             with tempfile.TemporaryDirectory() as dirpath:
                 path = os.path.join(dirpath, f"account_{account_id}")
-                await self.user.avatar.save(path)
+                await self.user.display_avatar.save(path)
 
                 # Convert image to circle
                 img = Image.open(path).convert("RGB")
