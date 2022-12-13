@@ -1,14 +1,16 @@
 import asyncio
 import ctypes
+import io
 import json
 import os
+import platform
 import subprocess
-import sys
 import tempfile
 import threading
+import zipfile
 
 import discord.errors
-import numpy as np
+import numpy
 import requests
 from PIL import Image, ImageDraw
 from PyQt5.QtGui import QIcon, QFontDatabase
@@ -19,19 +21,81 @@ from qasync import QEventLoop, asyncSlot
 # noinspection PyUnresolvedReferences
 import resources.icons
 from resources.interface import *
+from resources.updater import *
 
 try:
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("dankmemergrinder")
 except:
     pass
 
-version = requests.get(
-    "https://raw.githubusercontent.com/BridgeSenseDev/Dank-Memer-Grinder/main/"
-    "resources/version.txt"
-).text
-if int(version.replace(".", "")) > 120:
-    subprocess.Popen("./Updater.exe")
-    sys.exit(0)
+
+class UpdaterWindow(QMainWindow):
+    # noinspection PyShadowingNames
+    def __init__(self):
+        QMainWindow.__init__(self)
+        self.setWindowIcon(QIcon(resource_path("resources/icon.ico")))
+        QFontDatabase.addApplicationFont(resource_path("fonts/Segoe.ttf"))
+        self.ui = Ui_Updater()
+        self.ui.setupUi(self)
+        self.show()
+        self.ui.changelog_label.setText(
+            requests.get(
+                "https://api.github.com/repos/BridgeSenseDev/Dank-Memer-Grinder/releases"
+            )
+            .json()[0]["body"]
+            .replace("## ", "")
+            .replace("* ", "• ")
+        )
+        self.ui.update_btn.clicked.connect(self.update)
+        self.ui.skip_btn.clicked.connect(self.skip)
+
+    def update(self):
+        self.close()
+        match platform.system():
+            case "Windows":
+                r = requests.get(
+                    "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/blob/main/"
+                    "updater/Windows-amd64.exe?raw=true",
+                    stream=True,
+                )
+                open("Windows-amd64.exe", "wb").write(r.content)
+                subprocess.Popen("./Windows-amd64.exe")
+            case "Linux":
+                if platform.machine() == "aarch64":
+                    r = requests.get(
+                        "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/releases/download/v"
+                        f"{version}/Dank-Memer-Grinder-v{version}-Linux-arm64.zip",
+                        stream=True,
+                    )
+                    with zipfile.ZipFile(io.BytesIO(r.content)) as z:
+                        with open("Dank Memer Grinder", "wb") as f:
+                            f.write(z.read("Dank Memer Grinder"))
+                    subprocess.Popen("./Dank Memer Grinder")
+                else:
+                    r = requests.get(
+                        "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/releases/download/v"
+                        f"{version}/Dank-Memer-Grinder-v{version}-Linux-amd64.zip",
+                        stream=True,
+                    )
+                    with zipfile.ZipFile(io.BytesIO(r.content)) as z:
+                        with open("Dank Memer Grinder", "wb") as f:
+                            f.write(z.read("Dank Memer Grinder"))
+                    subprocess.Popen("./Dank Memer Grinder")
+            case "Darwin":
+                r = requests.get(
+                    "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/releases/download/v"
+                    f"{version}/Dank-Memer-Grinder-v{version}-Darwin-amd64.zip",
+                    stream=True,
+                )
+                with zipfile.ZipFile(io.BytesIO(r.content)) as z:
+                    with open("Dank Memer Grinder", "wb") as f:
+                        f.write(z.read("Dank Memer Grinder"))
+                subprocess.Popen("./Dank Memer Grinder")
+        sys.exit(os._exit(0))
+
+    def skip(self):
+        self.close()
+        window.show()
 
 
 def update():
@@ -167,9 +231,9 @@ async def start_bot(token, account_id):
                 draw.pieslice(
                     ((0, 0), (height, width)), 0, 360, fill=255, outline="white"
                 )
-                img_arr = np.array(img)
-                lum_img_arr = np.array(lum_img)
-                final_img_arr = np.dstack((img_arr, lum_img_arr))
+                img_arr = numpy.array(img)
+                lum_img_arr = numpy.array(lum_img)
+                final_img_arr = numpy.dstack((img_arr, lum_img_arr))
                 Image.fromarray(final_img_arr).save(f"{path}.png")
 
                 getattr(self.window.ui, f"account_btn_{account_id}").setIcon(
@@ -197,11 +261,10 @@ class MainWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
         self.setWindowIcon(QIcon(resource_path("resources/icon.ico")))
-        QFontDatabase.addApplicationFont(resource_path("fonts/Segoe.ttf"))
-        QFontDatabase.addApplicationFont(resource_path("fonts/Impact.ttf"))
+        QFontDatabase.addApplicationFont(resource_path("resources/fonts/Segoe.ttf"))
+        QFontDatabase.addApplicationFont(resource_path("resources/fonts/Impact.ttf"))
         self.ui = Ui_DankMemerGrinder()
         self.ui.setupUi(self)
-        self.show()
         self.account_id = "1"
         config_dict.update({"state": False})
         with open("config.json", "w") as file:
@@ -530,8 +593,15 @@ def between_callback(token, account_id):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    version = requests.get(
+        "https://raw.githubusercontent.com/BridgeSenseDev/Dank-Memer-Grinder/main/"
+        "resources/version.txt"
+    ).text
     window = MainWindow()
-    window.show()
+    if int(version.replace(".", "")) > 110:
+        updater = UpdaterWindow()
+    else:
+        window.show()
     for account_id in map(str, range(1, 6)):
         if config_dict[account_id]["discord_token"] != "":
             threading.Thread(
