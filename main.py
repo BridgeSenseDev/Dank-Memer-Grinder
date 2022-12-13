@@ -188,7 +188,11 @@ async def start_bot(token, account_id):
                     try:
                         if cmd.application.id == 270904126974590976:
                             await cmd(**kwargs)
-                    except (discord.errors.DiscordServerError, KeyError):
+                    except (
+                        discord.errors.DiscordServerError,
+                        KeyError,
+                        discord.errors.InvalidData,
+                    ):
                         pass
                     return
 
@@ -205,7 +209,11 @@ async def start_bot(token, account_id):
                                 await cmd.children[count](**kwargs)
                                 break
                         return
-            except (discord.errors.DiscordServerError, KeyError):
+            except (
+                discord.errors.DiscordServerError,
+                KeyError,
+                discord.errors.InvalidData,
+            ):
                 pass
 
         async def setup_hook(self):
