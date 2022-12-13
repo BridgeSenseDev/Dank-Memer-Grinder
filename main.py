@@ -15,7 +15,7 @@ import numpy
 import requests
 from PIL import Image, ImageDraw
 from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtGui import QIcon, QFontDatabase
+from PyQt5.QtGui import QIcon, QFontDatabase, QColor
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from discord.ext import commands, tasks
 from qasync import QEventLoop, asyncSlot
@@ -222,7 +222,9 @@ async def start_bot(token, account_id):
             self.channel = await self.fetch_channel(self.channel_id)
             if getattr(window.ui, f"account_btn_{account_id}").text() != "Logging In":
                 return
-            self.window.output.emit([f"output_text_{self.account_id}", f"Logged in as {self.user}"])
+            self.window.output.emit(
+                [f"output_text_{self.account_id}", f"Logged in as {self.user}"]
+            )
             getattr(window.ui, f"account_btn_{account_id}").setText(
                 f"{self.user.name}\n#{self.user.discriminator}"
             )
@@ -264,6 +266,13 @@ async def start_bot(token, account_id):
     await MyClient().start(token)
 
 
+class Stream(QtCore.QObject):
+    newText = QtCore.pyqtSignal(str)
+
+    def write(self, text):
+        self.newText.emit(str(text))
+
+
 class MainWindow(QMainWindow):
     output = pyqtSignal(list)
 
@@ -274,6 +283,8 @@ class MainWindow(QMainWindow):
         QFontDatabase.addApplicationFont(resource_path("resources/fonts/Impact.ttf"))
         self.ui = Ui_DankMemerGrinder()
         self.ui.setupUi(self)
+        sys.stdout = Stream(newText=self.onUpdateText)
+        sys.stderr = Stream(newText=self.onUpdateText)
         self.output.connect(self.appendText)
         self.account_id = "1"
         config_dict.update({"state": False})
@@ -438,6 +449,18 @@ class MainWindow(QMainWindow):
                 )
             )
 
+    def onUpdateText(self, text):
+        for account_id in map(str, range(1, 6)):
+            getattr(self.ui, f"output_text_{account_id}").setTextColor(
+                QColor(216, 60, 62)
+            )
+            cursor = getattr(self.ui, f"output_text_{account_id}").textCursor()
+            cursor.insertText("‎")
+            cursor.movePosition(QtGui.QTextCursor.End)
+            cursor.insertText(text)
+            getattr(self.ui, f"output_text_{account_id}").setTextCursor(cursor)
+            getattr(self.ui, f"output_text_{account_id}").ensureCursorVisible()
+
     @asyncSlot()
     async def check(self):
         if config_dict[self.account_id]["state"] is False:
@@ -575,7 +598,13 @@ class MainWindow(QMainWindow):
                 json.dump(config_dict, file, ensure_ascii=False, indent=4)
 
     def appendText(self, data):
-        getattr(self.ui, data[0]).append(data[1])
+        getattr(self.ui, data[0]).setTextColor(QColor(232, 230, 227))
+        cursor = getattr(self.ui, data[0]).textCursor()
+        cursor.insertText("‎")
+        cursor.movePosition(QtGui.QTextCursor.End)
+        cursor.insertText(data[1] + "\n")
+        getattr(self.ui, data[0]).setTextCursor(cursor)
+        getattr(self.ui, data[0]).ensureCursorVisible()
 
 
 def between_callback(token, account_id):
