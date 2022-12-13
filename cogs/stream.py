@@ -6,7 +6,7 @@ from discord.ext import commands
 Games = {
     "apex legends": 0,
     "call of duty": 1,
-    "cs go": 2,
+    "csgo": 2,
     "dead by daylight": 3,
     "destiny 2": 4,
     "dota 2": 5,
