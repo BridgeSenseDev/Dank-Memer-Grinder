@@ -14,6 +14,7 @@ import discord.errors
 import numpy
 import requests
 from PIL import Image, ImageDraw
+from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QIcon, QFontDatabase
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from discord.ext import commands, tasks
@@ -221,9 +222,7 @@ async def start_bot(token, account_id):
             self.channel = await self.fetch_channel(self.channel_id)
             if getattr(window.ui, f"account_btn_{account_id}").text() != "Logging In":
                 return
-            getattr(window.ui, f"output_text_{self.account_id}").append(
-                f"Logged in as {self.user}"
-            )
+            self.window.output.emit([f"output_text_{self.account_id}", f"Logged in as {self.user}"])
             getattr(window.ui, f"account_btn_{account_id}").setText(
                 f"{self.user.name}\n#{self.user.discriminator}"
             )
@@ -266,7 +265,8 @@ async def start_bot(token, account_id):
 
 
 class MainWindow(QMainWindow):
-    # noinspection PyShadowingNames
+    output = pyqtSignal(list)
+
     def __init__(self):
         QMainWindow.__init__(self)
         self.setWindowIcon(QIcon(resource_path("resources/icon.ico")))
@@ -274,6 +274,7 @@ class MainWindow(QMainWindow):
         QFontDatabase.addApplicationFont(resource_path("resources/fonts/Impact.ttf"))
         self.ui = Ui_DankMemerGrinder()
         self.ui.setupUi(self)
+        self.output.connect(self.appendText)
         self.account_id = "1"
         config_dict.update({"state": False})
         with open("config.json", "w") as file:
@@ -572,6 +573,9 @@ class MainWindow(QMainWindow):
             )
             with open("config.json", "w") as file:
                 json.dump(config_dict, file, ensure_ascii=False, indent=4)
+
+    def appendText(self, data):
+        getattr(self.ui, data[0]).append(data[1])
 
 
 def between_callback(token, account_id):
