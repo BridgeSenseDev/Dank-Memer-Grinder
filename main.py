@@ -2,7 +2,6 @@ import asyncio
 import ctypes
 import io
 import json
-import sys
 import os
 import platform
 import subprocess
@@ -20,7 +19,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow
 from discord.ext import commands, tasks
 from qasync import QEventLoop, asyncSlot
 
-# noinspection PyUnresolvedReferences
+import sys
 import resources.icons
 from resources.interface import *
 from resources.updater import *
@@ -32,7 +31,6 @@ except:
 
 
 class UpdaterWindow(QMainWindow):
-    # noinspection PyShadowingNames
     def __init__(self):
         QMainWindow.__init__(self)
         self.setWindowIcon(QIcon(resource_path("resources/icon.ico")))
@@ -112,7 +110,6 @@ update()
 
 def resource_path(relative_path):
     if hasattr(sys, "_MEIPASS"):
-        # noinspection PyProtectedMember
         return os.path.join(sys._MEIPASS, relative_path)
     return os.path.join(os.path.abspath("."), relative_path)
 
@@ -220,7 +217,7 @@ async def start_bot(token, account_id):
         async def setup_hook(self):
             self.update.start()
             self.channel = await self.fetch_channel(self.channel_id)
-            if getattr(window.ui, f"account_btn_{account_id}").text() != "Logging In":
+            if getattr(window.ui, f"account_btn_{self.account_id}").text() != "Logging In":
                 return
             self.window.output.emit(
                 [f"output_text_{self.account_id}", f"Logged in as {self.user}"]
@@ -241,7 +238,9 @@ async def start_bot(token, account_id):
                 draw.pieslice(
                     ((0, 0), (height, width)), 0, 360, fill=255, outline="white"
                 )
+                # noinspection PyTypeChecker
                 img_arr = numpy.array(img)
+                # noinspection PyTypeChecker
                 lum_img_arr = numpy.array(lum_img)
                 final_img_arr = numpy.dstack((img_arr, lum_img_arr))
                 Image.fromarray(final_img_arr).save(f"{path}.png")
@@ -267,7 +266,9 @@ async def start_bot(token, account_id):
 
 
 class Stream(QtCore.QObject):
-    newText = QtCore.pyqtSignal(str)
+    def __init__(self, new_text):
+        super().__init__()
+        new_text = QtCore.pyqtSignal(str)
 
     def write(self, text):
         self.newText.emit(str(text))
@@ -283,8 +284,8 @@ class MainWindow(QMainWindow):
         QFontDatabase.addApplicationFont(resource_path("resources/fonts/Impact.ttf"))
         self.ui = Ui_DankMemerGrinder()
         self.ui.setupUi(self)
-        sys.stdout = Stream(newText=self.onUpdateText)
-        sys.stderr = Stream(newText=self.onUpdateText)
+        sys.stdout = Stream(new_text=self.onUpdateText)
+        sys.stderr = Stream(new_text=self.onUpdateText)
         self.output.connect(self.appendText)
         self.account_id = "1"
         config_dict.update({"state": False})
@@ -296,8 +297,8 @@ class MainWindow(QMainWindow):
         else:
             self.ui.toggle.setStyleSheet("background-color : #2d7d46")
             self.ui.toggle.setText(f"Bot {self.account_id} Enabled")
-            getattr(self.ui, f"output_text_{self.account_id}").append(
-                f"Started Bot {self.account_id}"
+            self.output.emit(
+                [f"output_text_{self.account_id}", f"Started Bot {self.account_id}"]
             )
         self.ui.toggle.clicked.connect(lambda: self.check())
 
@@ -469,8 +470,8 @@ class MainWindow(QMainWindow):
                 json.dump(config_dict, file, ensure_ascii=False, indent=4)
             self.ui.toggle.setStyleSheet("background-color : #2d7d46")
             self.ui.toggle.setText(f"Bot {self.account_id} Enabled")
-            getattr(self.ui, f"output_text_{self.account_id}").append(
-                f"Started Bot {self.account_id}"
+            self.output.emit(
+                [f"output_text_{self.account_id}", f"Started Bot {self.account_id}"]
             )
         else:
             config_dict[self.account_id].update({"state": False})
@@ -478,8 +479,8 @@ class MainWindow(QMainWindow):
                 json.dump(config_dict, file, ensure_ascii=False, indent=4)
             self.ui.toggle.setStyleSheet("background-color : #d83c3e")
             self.ui.toggle.setText(f"Bot {self.account_id} Disabled")
-            getattr(self.ui, f"output_text_{self.account_id}").append(
-                f"Stopped Bot {self.account_id}"
+            self.output.emit(
+                [f"output_text_{self.account_id}", f"Stopped Bot {self.account_id}"]
             )
 
     @asyncSlot()
@@ -644,15 +645,15 @@ if __name__ == "__main__":
         updater = UpdaterWindow()
     else:
         window.show()
-    for account_id in map(str, range(1, 6)):
-        if config_dict[account_id]["discord_token"] != "":
+    for account in map(str, range(1, 6)):
+        if config_dict[account]["discord_token"] != "":
             threading.Thread(
                 target=between_callback,
-                args=(config_dict[account_id]["discord_token"], account_id),
+                args=(config_dict[account]["discord_token"], account),
             ).start()
         else:
-            getattr(window.ui, f"account_btn_{account_id}").setText(
-                f"Account {account_id}"
+            getattr(window.ui, f"account_btn_{account}").setText(
+                f"Account {account}"
             )
             icon = QtGui.QIcon()
             icon.addPixmap(
@@ -660,9 +661,8 @@ if __name__ == "__main__":
                 QtGui.QIcon.Mode.Normal,
                 QtGui.QIcon.State.Off,
             )
-            getattr(window.ui, f"account_btn_{account_id}").setIcon(icon)
+            getattr(window.ui, f"account_btn_{account}").setIcon(icon)
     loop = QEventLoop(app)
     asyncio.set_event_loop(loop)
     loop.run_forever()
-    # noinspection PyProtectedMember
     sys.exit(os._exit(0))
