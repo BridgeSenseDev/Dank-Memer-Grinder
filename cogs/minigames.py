@@ -205,8 +205,6 @@ class Minigames(commands.Cog):
             # Catch the fish
             try:
                 if "Catch the fish!" in embed["description"]:
-                    print("fish")
-                    print(embed["description"])
                     await asyncio.sleep(2)
                     embed = message.embeds[0].to_dict()
                     if (
