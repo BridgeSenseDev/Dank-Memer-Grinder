@@ -23,8 +23,10 @@ spinner.start()
 
 
 r = requests.get(
-    "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/releases/download/v"
-    f"{version}/Dank-Memer-Grinder-v{version}-Linux-arm64.zip",
+    (
+        "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/releases/download/v"
+        f"{version}/Dank-Memer-Grinder-v{version}-Linux-arm64.zip"
+    ),
     stream=True,
 )
 with zipfile.ZipFile(io.BytesIO(r.content)) as z:

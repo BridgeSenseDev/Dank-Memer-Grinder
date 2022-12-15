@@ -56,8 +56,10 @@ class UpdaterWindow(QMainWindow):
         match platform.system():
             case "Windows":
                 r = requests.get(
-                    "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/blob/main/"
-                    "updater/Windows-amd64.exe?raw=true",
+                    (
+                        "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/blob/main/"
+                        "updater/Windows-amd64.exe?raw=true"
+                    ),
                     stream=True,
                 )
                 open("Windows-amd64.exe", "wb").write(r.content)
@@ -65,8 +67,10 @@ class UpdaterWindow(QMainWindow):
             case "Linux":
                 if platform.machine() == "aarch64":
                     r = requests.get(
-                        "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/releases/download/v"
-                        f"{version}/Dank-Memer-Grinder-v{version}-Linux-arm64.zip",
+                        (
+                            "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/releases/download/v"
+                            f"{version}/Dank-Memer-Grinder-v{version}-Linux-arm64.zip"
+                        ),
                         stream=True,
                     )
                     with zipfile.ZipFile(io.BytesIO(r.content)) as z:
@@ -75,8 +79,10 @@ class UpdaterWindow(QMainWindow):
                     subprocess.Popen("./Dank Memer Grinder")
                 else:
                     r = requests.get(
-                        "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/releases/download/v"
-                        f"{version}/Dank-Memer-Grinder-v{version}-Linux-amd64.zip",
+                        (
+                            "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/releases/download/v"
+                            f"{version}/Dank-Memer-Grinder-v{version}-Linux-amd64.zip"
+                        ),
                         stream=True,
                     )
                     with zipfile.ZipFile(io.BytesIO(r.content)) as z:
@@ -85,8 +91,10 @@ class UpdaterWindow(QMainWindow):
                     subprocess.Popen("./Dank Memer Grinder")
             case "Darwin":
                 r = requests.get(
-                    "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/releases/download/v"
-                    f"{version}/Dank-Memer-Grinder-v{version}-Darwin-amd64.zip",
+                    (
+                        "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/releases/download/v"
+                        f"{version}/Dank-Memer-Grinder-v{version}-Darwin-amd64.zip"
+                    ),
                     stream=True,
                 )
                 with zipfile.ZipFile(io.BytesIO(r.content)) as z:
