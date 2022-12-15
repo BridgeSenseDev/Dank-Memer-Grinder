@@ -29,8 +29,6 @@ try:
 except AttributeError:
     pass
 
-global config_dict
-
 
 class UpdaterWindow(QMainWindow):
     def __init__(self):
@@ -109,6 +107,7 @@ class UpdaterWindow(QMainWindow):
 
 
 def update():
+    global config_dict
     threading.Timer(5, update).start()
     with open("config.json", "r") as config_file:
         config_dict = json.load(config_file)
