@@ -26,8 +26,10 @@ from resources.updater import *
 
 try:
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("dankmemergrinder")
-except:
+except AttributeError:
     pass
+
+global config_dict
 
 
 class UpdaterWindow(QMainWindow):
@@ -99,7 +101,6 @@ class UpdaterWindow(QMainWindow):
 
 
 def update():
-    global config_dict
     threading.Timer(5, update).start()
     with open("config.json", "r") as config_file:
         config_dict = json.load(config_file)
@@ -217,7 +218,10 @@ async def start_bot(token, account_id):
         async def setup_hook(self):
             self.update.start()
             self.channel = await self.fetch_channel(self.channel_id)
-            if getattr(window.ui, f"account_btn_{self.account_id}").text() != "Logging In":
+            if (
+                getattr(window.ui, f"account_btn_{self.account_id}").text()
+                != "Logging In"
+            ):
                 return
             self.window.output.emit(
                 [f"output_text_{self.account_id}", f"Logged in as {self.user}"]
@@ -266,12 +270,10 @@ async def start_bot(token, account_id):
 
 
 class Stream(QtCore.QObject):
-    def __init__(self, new_text):
-        super().__init__()
-        new_text = QtCore.pyqtSignal(str)
+    new_text = QtCore.pyqtSignal(str)
 
     def write(self, text):
-        self.newText.emit(str(text))
+        self.new_text.emit(str(text))
 
 
 class MainWindow(QMainWindow):
@@ -284,7 +286,9 @@ class MainWindow(QMainWindow):
         QFontDatabase.addApplicationFont(resource_path("resources/fonts/Impact.ttf"))
         self.ui = Ui_DankMemerGrinder()
         self.ui.setupUi(self)
+        # noinspection PyArgumentList
         sys.stdout = Stream(new_text=self.onUpdateText)
+        # noinspection PyArgumentList
         sys.stderr = Stream(new_text=self.onUpdateText)
         self.output.connect(self.appendText)
         self.account_id = "1"
@@ -652,9 +656,7 @@ if __name__ == "__main__":
                 args=(config_dict[account]["discord_token"], account),
             ).start()
         else:
-            getattr(window.ui, f"account_btn_{account}").setText(
-                f"Account {account}"
-            )
+            getattr(window.ui, f"account_btn_{account}").setText(f"Account {account}")
             icon = QtGui.QIcon()
             icon.addPixmap(
                 QtGui.QPixmap(":/icons/icons/user.svg"),
