@@ -178,7 +178,7 @@ class Minigames(commands.Cog):
 
             # Dragon
             try:
-                if "Dodge the Fireball" in embed["Description"]:
+                if "Dodge the Fireball" in embed["description"]:
                     print("dragon")
                     print(embed["description"])
                     await asyncio.sleep(2)
