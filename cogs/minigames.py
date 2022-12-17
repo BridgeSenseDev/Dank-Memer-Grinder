@@ -14,6 +14,34 @@ class Minigames(commands.Cog):
 
         for embed in message.embeds:
             embed = embed.to_dict()
+            # MoleMan
+            try:
+                if "Dodge the Worms!" in embed["description"]:
+                    print("moleman")
+                    print(embed["description"])
+                    await asyncio.sleep(2)
+                    embed = message.embeds[0].to_dict()
+                    if (
+                        "<:emptyspace:827651824739156030><:Worm:864261394920898600>"
+                        "<:Worm:864261394920898600>"
+                        == embed["description"].splitlines()[2]
+                    ):
+                        await self.bot.click(message, 0, 0)
+                    elif (
+                        "<:Worm:864261394920898600><:emptyspace:827651824739156030>"
+                        "<:Worm:864261394920898600>"
+                        == embed["description"].splitlines()[2]
+                    ):
+                        await self.bot.click(message, 0, 1)
+                    elif (
+                        "<:Worm:864261394920898600><:Worm:864261394920898600>"
+                        "<:emptyspace:827651824739156030>"
+                        == embed["description"].splitlines()[2]
+                    ):
+                        await self.bot.click(message, 0, 3)
+            except KeyError:
+                pass
+
             # Football
             try:
                 if "Hit the ball!" in embed["description"]:
@@ -179,8 +207,6 @@ class Minigames(commands.Cog):
             # Dragon
             try:
                 if "Dodge the Fireball" in embed["description"]:
-                    print("dragon")
-                    print(embed["description"])
                     await asyncio.sleep(2)
                     embed = message.embeds[0].to_dict()
                     if (
