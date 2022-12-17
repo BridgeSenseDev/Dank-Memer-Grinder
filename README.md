@@ -8,13 +8,13 @@
   
 <h3 align="center">
   An up-to-date GUI based Discord Selfbot for Grinding Dank Memer
-  <br />
 </h3>
 
 <p align="center">
   <img alt="License" src="https://img.shields.io/github/license/BridgeSenseDev/Dank-Memer-Grinder?color=598e3c&style=for-the-badge">
   <img alt="Lines of Code" src="https://img.shields.io/tokei/lines/github/BridgeSenseDev/Dank-Memer-Grinder?color=598e3c&style=for-the-badge">
-  <img alt="Stars" src="https://img.shields.io/github/languages/code-size/BridgeSenseDev/Dank-Memer-Grinder?color=598e3c&style=for-the-badge">
+  <img alt="Stars" src="https://img.shields.io/github/languages/code-size/BridgeSenseDev/Dank-Memer-Grinder?color=598e3c&style=for-the-badge"><br>
+  <a href="https://discord.gg/KTrmQnhCHb"><img src="https://discord.com/api/guilds/1052536060552433735/widget.png?style=banner2"></a>
 </p>
 
 > 🚨 USE AT YOUR OWN RISK:
@@ -25,7 +25,8 @@
 ### Features
 - [x] Easy to use GUI for configuration and logs
 - [x] Support for running up to 5 accounts at once
-- [x] Automation of most currency commands and minigames (e.g. automatically completes all work minigames and captures dragons)
+- [x] Automatic updater
+- [x] Automation of most currency commands and minigames (e.g. all work minigames, dragons, kraken, legendary fish, moleman)
 - [x] Automatically selects and streams the daily trending game
 - [x] Answers all trivia questions with a configurable chance in order to avoid suspiscion
 - [x] Automatically searches the best places to avoid death
@@ -41,8 +42,8 @@
 </p>
 
 ## Configuration
-   ### Installation
-   1. Download the latest release for your opperating system [here](https://github.com/BridgeSenseDev/Dank-Memer-Grinder/releases/) (recommended) or run from source.
+   ### Installing from release (recommended)
+   1. Download the latest release for your opperating system [here](https://github.com/BridgeSenseDev/Dank-Memer-Grinder/releases/)
    2. Extract the downloaded zip file
    3. Run the binary
       #### Windows
@@ -53,6 +54,22 @@
 
       #### Mac 
       Open a terminal window and navigate to the folder the files were extracted to and run `./Dank\ Memer\ Grinder`
+   ### Installing from source (unstable)
+   Download [python](https://www.python.org/downloads/)
+   ```
+   git clone https://github.com/BridgeSenseDev/Dank-Memer-Grinder.git
+   ```
+   ```
+   cd Dank-Memer-Grinder
+   ```
+   ```
+   pip install -r .\requirements.txt
+   ```
+   Rename config.json.example to config.json
+   ```
+   python main.py
+   ```
+   
    ### Getting Started
    1. Go to the settings tab and enter your discord auth token [(how)](https://www.youtube.com/watch?v=YEgFvgg7ZPI) and channel id [(how)](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-#:~:text=On%20Android%20press%20and%20hold,name%20and%20select%20Copy%20ID.)
    2. Go to the autobuy tab and turn everything on (recommended). Make sure to set lifesavers to at least 4 (recommended)
