@@ -600,6 +600,14 @@ class MainWindow(QMainWindow):
             config_dict[self.account_id].update({"channel_id": state})
             with open("config.json", "w") as file:
                 json.dump(config_dict, file, ensure_ascii=False, indent=4)
+            if config_dict[self.account_id]["discord_token"] != "":
+                threading.Thread(
+                    target=between_callback,
+                    args=(
+                        config_dict[self.account_id]["discord_token"],
+                        self.account_id,
+                    ),
+                ).start()
         elif command == "token":
             config_dict[self.account_id].update({"discord_token": state})
             with open("config.json", "w") as file:
