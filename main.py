@@ -273,7 +273,28 @@ async def start_bot(token, account_id):
             await self.load_extension("cogs.blackjack")
             await self.load_extension("cogs.commands")
 
-    await MyClient().start(token)
+    try:
+        await MyClient().start(token)
+    except discord.errors.LoginFailure:
+        getattr(window.ui, f"account_btn_{account_id}").setText("Invalid Token")
+        icon = QtGui.QIcon()
+        icon.addPixmap(
+            QtGui.QPixmap(":/icons/icons/alert-triangle.svg"),
+            QtGui.QIcon.Mode.Normal,
+            QtGui.QIcon.State.Off,
+        )
+        getattr(window.ui, f"account_btn_{account_id}").setIcon(icon)
+        getattr(window.ui, f"account_btn_{account_id}")
+    except discord.errors.NotFound:
+        getattr(window.ui, f"account_btn_{account_id}").setText("Invalid Channel")
+        icon = QtGui.QIcon()
+        icon.addPixmap(
+            QtGui.QPixmap(":/icons/icons/alert-triangle.svg"),
+            QtGui.QIcon.Mode.Normal,
+            QtGui.QIcon.State.Off,
+        )
+        getattr(window.ui, f"account_btn_{account_id}").setIcon(icon)
+        getattr(window.ui, f"account_btn_{account_id}")
 
 
 class Stream(QtCore.QObject):
@@ -630,18 +651,7 @@ def between_callback(token, account_id):
     getattr(window.ui, f"account_btn_{account_id}").setIcon(icon)
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    try:
-        loop.run_until_complete(start_bot(token, account_id))
-    except discord.errors.LoginFailure:
-        getattr(window.ui, f"account_btn_{account_id}").setText("Invalid Token")
-        icon = QtGui.QIcon()
-        icon.addPixmap(
-            QtGui.QPixmap(":/icons/icons/alert-triangle.svg"),
-            QtGui.QIcon.Mode.Normal,
-            QtGui.QIcon.State.Off,
-        )
-        getattr(window.ui, f"account_btn_{account_id}").setIcon(icon)
-        getattr(window.ui, f"account_btn_{account_id}")
+    loop.run_until_complete(start_bot(token, account_id))
     loop.close()
 
 
