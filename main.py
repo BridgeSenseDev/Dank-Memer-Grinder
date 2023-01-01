@@ -284,8 +284,7 @@ async def start_bot(token, account_id):
             QtGui.QIcon.State.Off,
         )
         getattr(window.ui, f"account_btn_{account_id}").setIcon(icon)
-        getattr(window.ui, f"account_btn_{account_id}")
-    except discord.errors.NotFound:
+    except (discord.errors.NotFound, ValueError):
         getattr(window.ui, f"account_btn_{account_id}").setText("Invalid Channel")
         icon = QtGui.QIcon()
         icon.addPixmap(
@@ -294,7 +293,6 @@ async def start_bot(token, account_id):
             QtGui.QIcon.State.Off,
         )
         getattr(window.ui, f"account_btn_{account_id}").setIcon(icon)
-        getattr(window.ui, f"account_btn_{account_id}")
 
 
 class Stream(QtCore.QObject):
