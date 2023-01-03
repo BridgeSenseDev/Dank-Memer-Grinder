@@ -8,62 +8,121 @@ class Minigames(commands.Cog):
         self.bot = bot
 
     @commands.Cog.listener()
+    async def on_message_edit(self, before, after):
+        if after.channel.id != self.bot.channel_id:
+            return
+
+        for embed in after.embeds:
+            embed = embed.to_dict()
+            # Football
+            try:
+                if "Hit the ball!" in embed["description"]:
+                    if ":levitate:" == embed["description"].splitlines()[2]:
+                        await self.bot.click(after, 0, 2)
+                    elif (
+                        "<:emptyspace:827651824739156030>:levitate:"
+                        == embed["description"].splitlines()[2]
+                    ):
+                        await self.bot.click(after, 0, 0)
+                    if (
+                        "<:emptyspace:827651824739156030>"
+                        "<:emptyspace:827651824739156030>:levitate:"
+                        == embed["description"].splitlines()[2]
+                    ):
+                        await self.bot.click(after, 0, 1)
+                    return
+            except KeyError:
+                pass
+
+                # Basketball
+                try:
+                    if "Dunk the ball!" in embed["description"]:
+                        if (
+                            "<:emptyspace:827651824739156030>"
+                            "<:emptyspace:827651824739156030>:basketball:"
+                            == embed["description"].splitlines()[2]
+                        ):
+                            await self.bot.click(after, 0, 2)
+                        elif (
+                            "<:emptyspace:827651824739156030>:basketball:"
+                            == embed["description"].splitlines()[2]
+                        ):
+                            await self.bot.click(after, 0, 1)
+                        elif ":basketball:" == embed["description"].splitlines()[2]:
+                            await self.bot.click(after, 0, 0)
+                        return
+                except KeyError:
+                    pass
+
+                # Dragon
+                try:
+                    if "Dodge the Fireball" in embed["description"]:
+                        if (
+                            "<:emptyspace:827651824739156030>"
+                            "<:emptyspace:827651824739156030><:FireBall:883714770748964864>"
+                            == embed["description"].splitlines()[2]
+                        ):
+                            await self.bot.click(after, 0, 1)
+                        elif (
+                            "<:emptyspace:827651824739156030><:FireBall:883714770748964864>"
+                            == embed["description"].splitlines()[2]
+                        ):
+                            await self.bot.click(after, 0, 0)
+                        elif (
+                            "<:FireBall:883714770748964864>"
+                            == embed["description"].splitlines()[2]
+                        ):
+                            await self.bot.click(after, 0, 2)
+                except KeyError:
+                    pass
+
+                # Catch the fish
+                try:
+                    if "Catch the fish!" in embed["description"]:
+                        if (
+                            "<:emptyspace:827651824739156030>"
+                            "<:emptyspace:827651824739156030>"
+                            "<a:LegendaryFish:971430841211322408>"
+                            == embed["description"].splitlines()[1]
+                        ):
+                            await self.bot.click(after, 0, 2)
+                        elif (
+                            "<:emptyspace:827651824739156030>"
+                            "<a:LegendaryFish:971430841211322408>"
+                            == embed["description"].splitlines()[1]
+                        ):
+                            await self.bot.click(after, 0, 1)
+                        elif (
+                            "<a:LegendaryFish:971430841211322408>"
+                            == embed["description"].splitlines()[1]
+                        ):
+                            await self.bot.click(after, 0, 0)
+                        if (
+                            "<:emptyspace:827651824739156030>"
+                            "<:emptyspace:827651824739156030><:Kraken:860228238956429313>"
+                            == embed["description"].splitlines()[1]
+                        ):
+                            await self.bot.click(after, 0, 2)
+                        elif (
+                            "<:emptyspace:827651824739156030><:Kraken:860228238956429313>"
+                            == embed["description"].splitlines()[1]
+                        ):
+                            await self.bot.click(after, 0, 1)
+                        elif (
+                            "<:Kraken:860228238956429313>"
+                            == embed["description"].splitlines()[1]
+                        ):
+                            await self.bot.click(after, 0, 0)
+                except KeyError:
+                    pass
+
+    @commands.Cog.listener()
     async def on_message(self, message):
         if message.channel.id != self.bot.channel_id:
             return
 
         for embed in message.embeds:
             embed = embed.to_dict()
-            # MoleMan
-            try:
-                if "Dodge the Worms!" in embed["description"]:
-                    print("moleman")
-                    print(embed["description"])
-                    await asyncio.sleep(2)
-                    embed = message.embeds[0].to_dict()
-                    if (
-                        "<:emptyspace:827651824739156030><:Worm:864261394920898600>"
-                        "<:Worm:864261394920898600>"
-                        == embed["description"].splitlines()[2]
-                    ):
-                        await self.bot.click(message, 0, 0)
-                    elif (
-                        "<:Worm:864261394920898600><:emptyspace:827651824739156030>"
-                        "<:Worm:864261394920898600>"
-                        == embed["description"].splitlines()[2]
-                    ):
-                        await self.bot.click(message, 0, 1)
-                    elif (
-                        "<:Worm:864261394920898600><:Worm:864261394920898600>"
-                        "<:emptyspace:827651824739156030>"
-                        == embed["description"].splitlines()[2]
-                    ):
-                        await self.bot.click(message, 0, 3)
-            except KeyError:
-                pass
-
-            # Football
-            try:
-                if "Hit the ball!" in embed["description"]:
-                    await asyncio.sleep(2)
-                    embed = message.embeds[0].to_dict()
-                    if ":levitate:" == embed["description"].splitlines()[2]:
-                        await self.bot.click(message, 0, 2)
-                    elif (
-                        "<:emptyspace:827651824739156030>:levitate:"
-                        == embed["description"].splitlines()[2]
-                    ):
-                        await self.bot.click(message, 0, 0)
-                    if (
-                        "<:emptyspace:827651824739156030>"
-                        "<:emptyspace:827651824739156030>:levitate:"
-                        == embed["description"].splitlines()[2]
-                    ):
-                        await self.bot.click(message, 0, 1)
-                    return
-            except KeyError:
-                pass
-
             # Color match
             try:
                 if (
@@ -175,100 +234,10 @@ class Minigames(commands.Cog):
             except KeyError:
                 pass
 
-            # Basketball
-            try:
-                if "Dunk the ball!" in embed["description"]:
-                    await asyncio.sleep(2)
-                    embed = message.embeds[0].to_dict()
-                    if (
-                        "<:emptyspace:827651824739156030>"
-                        "<:emptyspace:827651824739156030>:basketball:"
-                        == embed["description"].splitlines()[2]
-                    ):
-                        await self.bot.click(message, 0, 2)
-                    elif (
-                        "<:emptyspace:827651824739156030>:basketball:"
-                        == embed["description"].splitlines()[2]
-                    ):
-                        await self.bot.click(message, 0, 1)
-                    elif ":basketball:" == embed["description"].splitlines()[2]:
-                        await self.bot.click(message, 0, 0)
-                    return
-            except KeyError:
-                pass
-
             # F in the chat
             try:
                 if embed["description"] == "F":
                     await self.bot.click(message, 0, 0)
-            except KeyError:
-                pass
-
-            # Dragon
-            try:
-                if "Dodge the Fireball" in embed["description"]:
-                    await asyncio.sleep(2)
-                    embed = message.embeds[0].to_dict()
-                    if (
-                        "<:emptyspace:827651824739156030>"
-                        "<:emptyspace:827651824739156030><:FireBall:883714770748964864>"
-                        == embed["description"].splitlines()[2]
-                    ):
-                        await self.bot.click(message, 0, 1)
-                    elif (
-                        "<:emptyspace:827651824739156030><:FireBall:883714770748964864>"
-                        == embed["description"].splitlines()[2]
-                    ):
-                        await self.bot.click(message, 0, 0)
-                    elif (
-                        "<:FireBall:883714770748964864>"
-                        == embed["description"].splitlines()[2]
-                    ):
-                        await self.bot.click(message, 0, 2)
-            except KeyError:
-                pass
-
-            # Catch the fish
-            try:
-                if "Catch the fish!" in embed["description"]:
-                    await asyncio.sleep(2)
-                    embed = message.embeds[0].to_dict()
-                    if (
-                        "<:emptyspace:827651824739156030>"
-                        "<:emptyspace:827651824739156030>"
-                        "<a:LegendaryFish:971430841211322408>"
-                        == embed["description"].splitlines()[1]
-                    ):
-                        await self.bot.click(message, 0, 2)
-                    elif (
-                        "<:emptyspace:827651824739156030>"
-                        "<a:LegendaryFish:971430841211322408>"
-                        == embed["description"].splitlines()[1]
-                    ):
-                        await self.bot.click(message, 0, 1)
-                    elif (
-                        "<a:LegendaryFish:971430841211322408>"
-                        == embed["description"].splitlines()[1]
-                    ):
-                        await self.bot.click(message, 0, 0)
-                    await asyncio.sleep(2)
-                    embed = message.embeds[0].to_dict()
-                    if (
-                        "<:emptyspace:827651824739156030>"
-                        "<:emptyspace:827651824739156030><:Kraken:860228238956429313>"
-                        == embed["description"].splitlines()[1]
-                    ):
-                        await self.bot.click(message, 0, 2)
-                    elif (
-                        "<:emptyspace:827651824739156030><:Kraken:860228238956429313>"
-                        == embed["description"].splitlines()[1]
-                    ):
-                        await self.bot.click(message, 0, 1)
-                    elif (
-                        "<:Kraken:860228238956429313>"
-                        == embed["description"].splitlines()[1]
-                    ):
-                        await self.bot.click(message, 0, 0)
             except KeyError:
                 pass
 
