@@ -8,7 +8,7 @@ from discord.ext import commands, tasks
 def bj_formula(embed):
     player_sum = []
     dealer_sum = []
-    for i in re.findall("\[`(.*?)`]", embed.to_dict()["fields"][0]["value"]):
+    for i in re.findall("\[`(.*?)`]", embed.to_dict()["fields"][1]["value"]):
         try:
             player_sum.append(int(i[2:]))
         except:
@@ -16,7 +16,7 @@ def bj_formula(embed):
                 player_sum.append(10)
             elif i[2:] == "A":
                 player_sum.append(11)
-    for i in re.findall("\[`(.*?)`]", embed.to_dict()["fields"][1]["value"]):
+    for i in re.findall("\[`(.*?)`]", embed.to_dict()["fields"][0]["value"]):
         try:
             dealer_sum.append(int(i[2:]))
         except:
@@ -135,7 +135,7 @@ class Blackjack(commands.Cog):
                             f" {int(self.bot.config_dict['commands']['bj']['multi'])}"
                         )
                         return
-                except:
+                except NameError:
                     getattr(
                         self.bot.window.ui, f"output_text_{self.bot.account_id}"
                     ).append(
@@ -145,8 +145,11 @@ class Blackjack(commands.Cog):
                     )
                     return
                 await asyncio.sleep(random.randint(0, 3))
-                await self.bot.channel.send(
-                    f"pls bj {self.bot.config_dict['commands']['-bj-']['-bjamount-']}"
+                await self.bot.send(
+                    "blackjack",
+                    bet=self.bot.config_dict[self.bot.account_id]["commands"]["bj"][
+                        "bj_amount"
+                    ],
                 )
         except KeyError:
             pass
@@ -163,6 +166,10 @@ class Blackjack(commands.Cog):
         ):
             await self.bot.send("multipliers")
 
+    @multipliers.before_loop
+    async def before_multipliers(self):
+        await asyncio.sleep(10)
+
     @commands.Cog.listener()
     async def on_message(self, message):
         global multi
@@ -177,8 +184,11 @@ class Blackjack(commands.Cog):
                 if "Your Multipliers" in embed.to_dict()["title"]:
                     multi = int(
                         (
-                            re.search("Total: `(.*?)%`", embed.to_dict()["description"])
-                        ).group(1)
+                            re.search(
+                                "Coin Multiplier: ` +(.*?)% `",
+                                embed.to_dict()["description"],
+                            )
+                        ).group(1)[1:]
                     )
             except KeyError:
                 pass
@@ -209,12 +219,13 @@ class Blackjack(commands.Cog):
                     is True
                 ):
                     if "description" not in embed.to_dict():
-                        await after.components[0].children[bj_formula(embed)].click()
+                        await self.bot.click(after, 0, bj_formula(embed))
                     elif any(
                         i in embed.to_dict()["description"]
                         for i in ["Tied.", "Lost.", "Won"]
                     ):
-                        await after.components[0].children[2].click()
+                        await asyncio.sleep(0.2)
+                        await self.bot.click(after, 0, 2)
             except KeyError:
                 pass
 
