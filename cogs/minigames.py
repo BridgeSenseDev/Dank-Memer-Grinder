@@ -2,6 +2,18 @@ import re
 import asyncio
 from discord.ext import commands
 
+moleman_loc = {
+    "<a:MoleMan:1022972147175526441><:emptyspace:827651824739156030><:emptyspace:827651824739156030>": 0,
+    "<:emptyspace:827651824739156030><a:MoleMan:1022972147175526441><:emptyspace:827651824739156030>": 1,
+    "<:emptyspace:827651824739156030><:emptyspace:827651824739156030><a:MoleMan:1022972147175526441>": 2,
+}
+
+worms_loc = {
+    "<:emptyspace:827651824739156030><:Worm:864261394920898600><:Worm:864261394920898600>": 0,
+    "<:Worm:864261394920898600><:emptyspace:827651824739156030><:Worm:864261394920898600>": 1,
+    "<:Worm:864261394920898600><:Worm:864261394920898600><:emptyspace:827651824739156030>": 2,
+}
+
 
 class Minigames(commands.Cog):
     def __init__(self, bot):
@@ -14,6 +26,40 @@ class Minigames(commands.Cog):
 
         for embed in after.embeds:
             embed = embed.to_dict()
+            # MoleMan
+            try:
+                if "Dodge the Worms!" in embed["description"]:
+                    moleman = embed["description"].splitlines()[5]
+                    for i in reversed(embed["description"].splitlines()):
+                        if i not in worms_loc:
+                            continue
+                        match worms_loc[i]:
+                            case 0:
+                                if moleman_loc[moleman] == 1:
+                                    await self.bot.click(after, 0, 0)
+                                elif moleman_loc[moleman] == 2:
+                                    await self.bot.click(after, 0, 0)
+                                    await asyncio.sleep(0.2)
+                                    await self.bot.click(after, 0, 0)
+                                break
+                            case 1:
+                                if moleman_loc[moleman] == 0:
+                                    await self.bot.click(after, 0, 1)
+                                elif moleman_loc[moleman] == 2:
+                                    await self.bot.click(after, 0, 0)
+                                break
+                            case 2:
+                                if moleman_loc[moleman] == 0:
+                                    await self.bot.click(after, 0, 1)
+                                    await asyncio.sleep(0.2)
+                                    await self.bot.click(after, 0, 1)
+                                if moleman_loc[moleman] == 1:
+                                    await self.bot.click(after, 0, 1)
+                                break
+                    return
+            except KeyError:
+                pass
+
             # Football
             try:
                 if "Hit the ball!" in embed["description"]:
