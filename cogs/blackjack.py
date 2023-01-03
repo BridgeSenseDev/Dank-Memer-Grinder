@@ -114,7 +114,7 @@ class Blackjack(commands.Cog):
         self.multipliers.start()
         self.bj.start()
 
-    @tasks.loop(seconds=20)
+    @tasks.loop(seconds=15)
     async def bj(self):
         try:
             if (
