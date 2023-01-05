@@ -4,10 +4,13 @@ import io
 import json
 import os
 import platform
+import stat
 import subprocess
+import sys
 import tempfile
 import threading
 import zipfile
+from pathlib import Path
 
 import discord.errors
 import numpy
@@ -19,7 +22,6 @@ from PyQt5.QtWidgets import QApplication, QMainWindow
 from discord.ext import commands, tasks
 from qasync import QEventLoop, asyncSlot
 
-import sys
 import resources.icons
 from resources.interface import *
 from resources.updater import *
@@ -55,8 +57,8 @@ class UpdaterWindow(QMainWindow):
             case "Windows":
                 r = requests.get(
                     (
-                        "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/blob/main/"
-                        "updater/Windows-amd64.exe?raw=true"
+                        "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/blob/"
+                        "main/updater/Windows-amd64.exe?raw=true"
                     ),
                     stream=True,
                 )
@@ -66,39 +68,45 @@ class UpdaterWindow(QMainWindow):
                 if platform.machine() == "aarch64":
                     r = requests.get(
                         (
-                            "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/releases/download/v"
-                            f"{version}/Dank-Memer-Grinder-v{version}-Linux-arm64.zip"
+                            "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/blob/"
+                            "main/updater/Linux-arm64?raw=true"
                         ),
                         stream=True,
                     )
                     with zipfile.ZipFile(io.BytesIO(r.content)) as z:
-                        with open("Dank Memer Grinder", "wb") as f:
-                            f.write(z.read("Dank Memer Grinder"))
-                    subprocess.Popen("./Dank Memer Grinder")
+                        with open("Linux-arm64", "wb") as f:
+                            f.write(z.read("Linux-arm64"))
+                    f = Path("Linux-arm64")
+                    f.chmod(f.stat().st_mode | stat.S_IEXEC)
+                    subprocess.Popen("./Linux-arm64")
                 else:
                     r = requests.get(
                         (
-                            "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/releases/download/v"
-                            f"{version}/Dank-Memer-Grinder-v{version}-Linux-amd64.zip"
+                            "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/blob/main/"
+                            "updater/Linux-amd64?raw=true"
                         ),
                         stream=True,
                     )
                     with zipfile.ZipFile(io.BytesIO(r.content)) as z:
-                        with open("Dank Memer Grinder", "wb") as f:
-                            f.write(z.read("Dank Memer Grinder"))
-                    subprocess.Popen("./Dank Memer Grinder")
+                        with open("Linux-amd64", "wb") as f:
+                            f.write(z.read("Linux-amd64"))
+                    f = Path("Linux-amd64")
+                    f.chmod(f.stat().st_mode | stat.S_IEXEC)
+                    subprocess.Popen("./Linux-amd64")
             case "Darwin":
                 r = requests.get(
                     (
-                        "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/releases/download/v"
-                        f"{version}/Dank-Memer-Grinder-v{version}-Darwin-amd64.zip"
+                        "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/blob/main/"
+                        "updater/Darwin-amd64?raw=true"
                     ),
                     stream=True,
                 )
                 with zipfile.ZipFile(io.BytesIO(r.content)) as z:
-                    with open("Dank Memer Grinder", "wb") as f:
-                        f.write(z.read("Dank Memer Grinder"))
-                subprocess.Popen("./Dank Memer Grinder")
+                    with open("Darwin-amd64", "wb") as f:
+                        f.write(z.read("Darwin-amd64"))
+                f = Path("Darwin-amd64")
+                f.chmod(f.stat().st_mode | stat.S_IEXEC)
+                subprocess.Popen("./Darwin-amd64")
         sys.exit(os._exit(0))
 
     def skip(self):
@@ -662,6 +670,9 @@ def between_callback(token, account_id):
 
 
 if __name__ == "__main__":
+    for i in ["Windows-amd64.exe", "Linux-amd64", "Linux-arm64", "Darwin-amd64"]:
+        if os.path.exists(i):
+            os.remove(i)
     app = QApplication(sys.argv)
     version = requests.get(
         "https://raw.githubusercontent.com/BridgeSenseDev/Dank-Memer-Grinder/main/"

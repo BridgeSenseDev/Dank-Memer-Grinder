@@ -4,6 +4,8 @@ import sys
 import zipfile
 import io
 import requests
+import stat
+from pathlib import Path
 from halo import Halo
 
 
@@ -32,5 +34,8 @@ r = requests.get(
 with zipfile.ZipFile(io.BytesIO(r.content)) as z:
     with open("Dank Memer Grinder", "wb") as f:
         f.write(z.read("Dank Memer Grinder"))
+
+f = Path("Dank Memer Grinder")
+f.chmod(f.stat().st_mode | stat.S_IEXEC)
 subprocess.Popen("./Dank Memer Grinder")
 sys.exit(0)
