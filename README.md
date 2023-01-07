@@ -11,7 +11,7 @@
   ![Lines of Code](https://img.shields.io/tokei/lines/github/BridgeSenseDev/Dank-Memer-Grinder?color=598e3c&style=for-the-badge)
   ![Stars](https://img.shields.io/github/languages/code-size/BridgeSenseDev/Dank-Memer-Grinder?color=598e3c&style=for-the-badge)
 
-  [![Foo](https://discord.com/api/guilds/1052536060552433735/widget.png?style=banner2)](https://discord.gg/KTrmQnhCHb)
+  [![Discord Server Invite]https://discord.com/api/guilds/1052536060552433735/widget.png?style=banner2)](https://discord.gg/KTrmQnhCHb)
 </div>
 
 
