@@ -80,87 +80,87 @@ class Minigames(commands.Cog):
             except KeyError:
                 pass
 
-                # Basketball
-                try:
-                    if "Dunk the ball!" in embed["description"]:
-                        if (
-                            "<:emptyspace:827651824739156030>"
-                            "<:emptyspace:827651824739156030>:basketball:"
-                            == embed["description"].splitlines()[2]
-                        ):
-                            await self.bot.click(after, 0, 2)
-                        elif (
-                            "<:emptyspace:827651824739156030>:basketball:"
-                            == embed["description"].splitlines()[2]
-                        ):
-                            await self.bot.click(after, 0, 1)
-                        elif ":basketball:" == embed["description"].splitlines()[2]:
-                            await self.bot.click(after, 0, 0)
-                        return
-                except KeyError:
-                    pass
+            # Basketball
+            try:
+                if "Dunk the ball!" in embed["description"]:
+                    if (
+                        "<:emptyspace:827651824739156030>"
+                        "<:emptyspace:827651824739156030>:basketball:"
+                        == embed["description"].splitlines()[2]
+                    ):
+                        await self.bot.click(after, 0, 2)
+                    elif (
+                        "<:emptyspace:827651824739156030>:basketball:"
+                        == embed["description"].splitlines()[2]
+                    ):
+                        await self.bot.click(after, 0, 1)
+                    elif ":basketball:" == embed["description"].splitlines()[2]:
+                        await self.bot.click(after, 0, 0)
+                    return
+            except KeyError:
+                pass
 
-                # Dragon
-                try:
-                    if "Dodge the Fireball" in embed["description"]:
-                        if (
-                            "<:emptyspace:827651824739156030>"
-                            "<:emptyspace:827651824739156030><:FireBall:883714770748964864>"
-                            == embed["description"].splitlines()[2]
-                        ):
-                            await self.bot.click(after, 0, 1)
-                        elif (
-                            "<:emptyspace:827651824739156030><:FireBall:883714770748964864>"
-                            == embed["description"].splitlines()[2]
-                        ):
-                            await self.bot.click(after, 0, 0)
-                        elif (
-                            "<:FireBall:883714770748964864>"
-                            == embed["description"].splitlines()[2]
-                        ):
-                            await self.bot.click(after, 0, 2)
-                except KeyError:
-                    pass
+            # Dragon
+            try:
+                if "Dodge the Fireball" in embed["description"]:
+                    if (
+                        "<:emptyspace:827651824739156030>"
+                        "<:emptyspace:827651824739156030><:FireBall:883714770748964864>"
+                        == embed["description"].splitlines()[2]
+                    ):
+                        await self.bot.click(after, 0, 1)
+                    elif (
+                        "<:emptyspace:827651824739156030><:FireBall:883714770748964864>"
+                        == embed["description"].splitlines()[2]
+                    ):
+                        await self.bot.click(after, 0, 0)
+                    elif (
+                        "<:FireBall:883714770748964864>"
+                        == embed["description"].splitlines()[2]
+                    ):
+                        await self.bot.click(after, 0, 2)
+            except KeyError:
+                pass
 
-                # Catch the fish
-                try:
-                    if "Catch the fish!" in embed["description"]:
-                        if (
-                            "<:emptyspace:827651824739156030>"
-                            "<:emptyspace:827651824739156030>"
-                            "<a:LegendaryFish:971430841211322408>"
-                            == embed["description"].splitlines()[1]
-                        ):
-                            await self.bot.click(after, 0, 2)
-                        elif (
-                            "<:emptyspace:827651824739156030>"
-                            "<a:LegendaryFish:971430841211322408>"
-                            == embed["description"].splitlines()[1]
-                        ):
-                            await self.bot.click(after, 0, 1)
-                        elif (
-                            "<a:LegendaryFish:971430841211322408>"
-                            == embed["description"].splitlines()[1]
-                        ):
-                            await self.bot.click(after, 0, 0)
-                        if (
-                            "<:emptyspace:827651824739156030>"
-                            "<:emptyspace:827651824739156030><:Kraken:860228238956429313>"
-                            == embed["description"].splitlines()[1]
-                        ):
-                            await self.bot.click(after, 0, 2)
-                        elif (
-                            "<:emptyspace:827651824739156030><:Kraken:860228238956429313>"
-                            == embed["description"].splitlines()[1]
-                        ):
-                            await self.bot.click(after, 0, 1)
-                        elif (
-                            "<:Kraken:860228238956429313>"
-                            == embed["description"].splitlines()[1]
-                        ):
-                            await self.bot.click(after, 0, 0)
-                except KeyError:
-                    pass
+            # Catch the fish
+            try:
+                if "Catch the fish!" in embed["description"]:
+                    if (
+                        "<:emptyspace:827651824739156030>"
+                        "<:emptyspace:827651824739156030>"
+                        "<a:LegendaryFish:971430841211322408>"
+                        == embed["description"].splitlines()[1]
+                    ):
+                        await self.bot.click(after, 0, 2)
+                    elif (
+                        "<:emptyspace:827651824739156030>"
+                        "<a:LegendaryFish:971430841211322408>"
+                        == embed["description"].splitlines()[1]
+                    ):
+                        await self.bot.click(after, 0, 1)
+                    elif (
+                        "<a:LegendaryFish:971430841211322408>"
+                        == embed["description"].splitlines()[1]
+                    ):
+                        await self.bot.click(after, 0, 0)
+                    if (
+                        "<:emptyspace:827651824739156030>"
+                        "<:emptyspace:827651824739156030><:Kraken:860228238956429313>"
+                        == embed["description"].splitlines()[1]
+                    ):
+                        await self.bot.click(after, 0, 2)
+                    elif (
+                        "<:emptyspace:827651824739156030><:Kraken:860228238956429313>"
+                        == embed["description"].splitlines()[1]
+                    ):
+                        await self.bot.click(after, 0, 1)
+                    elif (
+                        "<:Kraken:860228238956429313>"
+                        == embed["description"].splitlines()[1]
+                    ):
+                        await self.bot.click(after, 0, 0)
+            except KeyError:
+                pass
 
     @commands.Cog.listener()
     async def on_message(self, message):
