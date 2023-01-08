@@ -1,8 +1,8 @@
 import json
-import sys
 import os
 import random
 import re
+import sys
 
 from discord.ext import commands
 

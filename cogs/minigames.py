@@ -1,5 +1,6 @@
-import re
 import asyncio
+import re
+
 from discord.ext import commands
 
 moleman_loc = {

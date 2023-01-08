@@ -1,11 +1,11 @@
+import io
 import platform
 import subprocess
 import sys
 import zipfile
-import io
+
 import requests
 from halo import Halo
-
 
 version = requests.get(
     "https://raw.githubusercontent.com/BridgeSenseDev/Dank-Memer-Grinder/main/"

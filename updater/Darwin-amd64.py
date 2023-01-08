@@ -1,13 +1,13 @@
+import io
 import platform
+import stat
 import subprocess
 import sys
 import zipfile
-import io
-import requests
-import stat
 from pathlib import Path
-from halo import Halo
 
+import requests
+from halo import Halo
 
 version = requests.get(
     "https://raw.githubusercontent.com/BridgeSenseDev/Dank-Memer-Grinder/main/"
