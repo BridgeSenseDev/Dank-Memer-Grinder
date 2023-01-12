@@ -15,11 +15,11 @@ from pathlib import Path
 import discord.errors
 import numpy
 import requests
+from discord.ext import commands, tasks
 from PIL import Image, ImageDraw
 from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtGui import QIcon, QFontDatabase, QColor
+from PyQt5.QtGui import QColor, QFontDatabase, QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow
-from discord.ext import commands, tasks
 from qasync import QEventLoop, asyncSlot
 
 import resources.icons
