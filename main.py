@@ -152,7 +152,6 @@ async def start_bot(token, account_id):
                 "stream": "stream",
                 "work": "work",
                 "daily": "daily",
-                "bj": "blackjack",
             }
             self.commands_delay = {
                 "trivia": 10,
@@ -278,7 +277,6 @@ async def start_bot(token, account_id):
             await self.load_extension("cogs.stream")
             await self.load_extension("cogs.minigames")
             await self.load_extension("cogs.autobuy")
-            await self.load_extension("cogs.blackjack")
             await self.load_extension("cogs.commands")
 
     try:
@@ -341,7 +339,7 @@ class MainWindow(QMainWindow):
         self.ui.toggle.clicked.connect(lambda: self.check())
 
         # Sidebar
-        sidebar_buttons = ["home", "settings", "commands", "auto_buy", "gambling"]
+        sidebar_buttons = ["home", "settings", "commands", "auto_buy"]
         for button in sidebar_buttons:
             getattr(self.ui, f"{button}_btn").clicked.connect(
                 lambda checked, button=button: self.sidebar(
@@ -528,7 +526,6 @@ class MainWindow(QMainWindow):
             self.ui.settings_btn,
             self.ui.commands_btn,
             self.ui.auto_buy_btn,
-            self.ui.gambling_btn,
         ]
         for i in buttons:
             if i == button:
@@ -582,12 +579,6 @@ class MainWindow(QMainWindow):
                 config_dict[self.account_id]["commands"].update({command: state})
                 with open("config.json", "w") as file:
                     json.dump(config_dict, file, ensure_ascii=False, indent=4)
-
-    @asyncSlot()
-    async def blackjack(self, command, state):
-        config_dict[self.account_id]["commands"]["bj"].update({command: state})
-        with open("config.json", "w") as file:
-            json.dump(config_dict, file, ensure_ascii=False, indent=4)
 
     @asyncSlot()
     async def autobuy(self, item, state, command=None):
