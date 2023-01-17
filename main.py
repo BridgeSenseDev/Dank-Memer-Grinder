@@ -24,6 +24,7 @@ from qasync import QEventLoop, asyncSlot
 
 import resources.icons
 from resources.interface import *
+from resources.load_account import load_account
 from resources.updater import *
 
 try:
@@ -314,19 +315,21 @@ class MainWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
         self.setWindowIcon(QIcon(resource_path("resources/icon.ico")))
+        self.setWindowTitle("Dank Memer Grinder")
+
         QFontDatabase.addApplicationFont(resource_path("resources/fonts/Segoe.ttf"))
         QFontDatabase.addApplicationFont(resource_path("resources/fonts/Impact.ttf"))
-        self.ui = Ui_DankMemerGrinder()
+        self.ui = Ui_DankMemerGrinder(len(config_dict) + 1)
         self.ui.setupUi(self)
+        # Initialize settings
+        for account_id in range(1, len(config_dict) + 1):
+            load_account(self, str(account_id))
         # noinspection PyArgumentList
         sys.stdout = Stream(new_text=self.onUpdateText)
         # noinspection PyArgumentList
         sys.stderr = Stream(new_text=self.onUpdateText)
         self.output.connect(self.appendText)
         self.account_id = "1"
-        config_dict.update({"state": False})
-        with open("config.json", "w") as file:
-            json.dump(config_dict, file, ensure_ascii=False, indent=4)
         if config_dict[self.account_id]["state"] is False:
             self.ui.toggle.setStyleSheet("background-color : #d83c3e")
             self.ui.toggle.setText(f"Bot {self.account_id} Disabled")
@@ -348,146 +351,12 @@ class MainWindow(QMainWindow):
                 )
             )
 
-        # Initialize settings
-        for account_id in map(str, range(1, 6)):
-            getattr(self.ui, f"output_text_{account_id}").setVerticalScrollBar(
-                getattr(self.ui, f"output_scrollbar_{account_id}")
-            )
-            getattr(self.ui, f"blackjack_checkbox_{account_id}").setChecked(
-                config_dict[account_id]["commands"]["bj"]["state"]
-            )
-            getattr(self.ui, f"multi_amount_{account_id}").setText(
-                str(config_dict[account_id]["commands"]["bj"]["multi"])
-            )
-            getattr(self.ui, f"blackjack_amount_{account_id}").setText(
-                str(config_dict[account_id]["commands"]["bj"]["bj_amount"])
-            )
-            getattr(self.ui, f"lifesavers_checkbox_{account_id}").setChecked(
-                config_dict[account_id]["autobuy"]["lifesavers"]["state"]
-            )
-            getattr(self.ui, f"lifesavers_amount_{account_id}").setValue(
-                config_dict[account_id]["autobuy"]["lifesavers"]["amount"]
-            )
-            getattr(self.ui, f"token_input_{account_id}").setText(
-                config_dict[account_id]["discord_token"]
-            )
-            getattr(self.ui, f"channel_input_{account_id}").setText(
-                config_dict[account_id]["channel_id"]
-            )
-            getattr(self.ui, f"trivia_chance_{account_id}").setValue(
-                int(config_dict[account_id]["trivia_correct_chance"] * 100)
-            )
-
-            for command in config_dict[account_id]["commands"]:
-                try:
-                    getattr(self.ui, f"{command}_checkbox_{account_id}").setChecked(
-                        config_dict[account_id]["commands"][command]
-                    )
-                except AttributeError:
-                    pass
-
-            for autobuy in config_dict[account_id]["autobuy"]:
-                try:
-                    getattr(self.ui, f"{autobuy}_checkbox_{account_id}").setChecked(
-                        config_dict[account_id]["autobuy"][autobuy]
-                    )
-                except (TypeError, AttributeError):
-                    pass
-
-            # Commands
-            command_buttons = [
-                "trivia",
-                "dig",
-                "fish",
-                "hunt",
-                "pm",
-                "beg",
-                "hl",
-                "search",
-                "dep_all",
-                "stream",
-                "work",
-                "daily",
-            ]
-            for button in command_buttons:
-                getattr(self.ui, f"{button}_checkbox_{account_id}").clicked.connect(
-                    lambda checked, account_id=account_id, button=button: self.commands(
-                        button,
-                        getattr(self.ui, f"{button}_checkbox_{account_id}").isChecked(),
-                    )
-                )
-            getattr(self.ui, f"start_btn_{account_id}").clicked.connect(
-                lambda: self.toggle_all(True)
-            )
-            getattr(self.ui, f"stop_btn_{account_id}").clicked.connect(
-                lambda: self.toggle_all(False)
-            )
-
-            # Autobuy
-            autobuy_buttons = ["lifesavers", "fishing", "shovel", "rifle"]
-            for button in autobuy_buttons:
-                getattr(self.ui, f"{button}_checkbox_{account_id}").clicked.connect(
-                    lambda checked, account_id=account_id, button=button: self.autobuy(
-                        button,
-                        getattr(self.ui, f"{button}_checkbox_{account_id}").isChecked(),
-                        "state",
-                    )
-                )
-            getattr(self.ui, f"lifesavers_amount_{account_id}").valueChanged.connect(
-                lambda checked, account_id=account_id: self.autobuy(
-                    "lifesavers",
-                    getattr(self.ui, f"lifesavers_amount_{account_id}").value(),
-                    "amount",
-                )
-            )
-
-            # Blackjack
-            getattr(self.ui, f"blackjack_checkbox_{account_id}").clicked.connect(
-                lambda checked, account_id=account_id: self.blackjack(
-                    "state",
-                    getattr(self.ui, f"blackjack_checkbox_{account_id}").isChecked(),
-                )
-            )
-            getattr(self.ui, f"multi_amount_{account_id}").textChanged.connect(
-                lambda checked, account_id=account_id: self.blackjack(
-                    "multi", int(getattr(self.ui, f"multi_amount_{account_id}").text())
-                )
-            )
-            getattr(self.ui, f"blackjack_amount_{account_id}").textChanged.connect(
-                lambda checked, account_id=account_id: self.blackjack(
-                    "bj_amount",
-                    getattr(self.ui, f"blackjack_amount_{account_id}").text(),
-                )
-            )
-
-            # Settings buttons
-            getattr(self.ui, f"token_input_{account_id}").textChanged.connect(
-                lambda checked, account_id=account_id: self.settings(
-                    "token", getattr(self.ui, f"token_input_{account_id}").text()
-                )
-            )
-            getattr(self.ui, f"channel_input_{account_id}").textChanged.connect(
-                lambda checked, account_id=account_id: self.settings(
-                    "channel", getattr(self.ui, f"channel_input_{account_id}").text()
-                )
-            )
-            getattr(self.ui, f"trivia_chance_{account_id}").valueChanged.connect(
-                lambda checked, account_id=account_id: self.settings(
-                    "trivia_chance",
-                    getattr(self.ui, f"trivia_chance_{account_id}").value(),
-                )
-            )
-
-            # Account buttons
-            getattr(self.ui, f"account_btn_{account_id}").clicked.connect(
-                lambda checked, account_id=account_id: self.accounts(
-                    getattr(self.ui, f"account_btn_{account_id}"),
-                    getattr(self.ui, f"account_widget_{account_id}"),
-                )
-            )
+        self.ui.account_btn_1.setStyleSheet("background-color: #5865f2;")
+        self.ui.add_account_btn.clicked.connect(self.add_account)
+        self.ui.minus_account_btn.clicked.connect(self.delete_account)
 
     def onUpdateText(self, text):
-        for account_id in map(str, range(1, 6)):
+        for account_id in map(str, range(1, len(config_dict) + 1)):
             getattr(self.ui, f"output_text_{account_id}").setTextColor(
                 QColor(216, 60, 62)
             )
@@ -535,18 +404,13 @@ class MainWindow(QMainWindow):
         getattr(self.ui, f"main_menu_widget_{self.account_id}").setCurrentWidget(widget)
 
     @asyncSlot()
-    async def accounts(self, button, widget):
-        buttons = [
-            self.ui.account_btn_1,
-            self.ui.account_btn_2,
-            self.ui.account_btn_3,
-            self.ui.account_btn_4,
-            self.ui.account_btn_5,
-        ]
-        for count, i in enumerate(buttons):
-            if i == button:
-                button.setStyleSheet("background-color: #5865f2")
-                self.account_id = str(count + 1)
+    async def accounts(self, account_id):
+        for i in range(1, len(config_dict) + 1):
+            if i == int(account_id):
+                self.account_id = account_id
+                getattr(self.ui, f"account_btn_{i}").setStyleSheet(
+                    "background-color: #5865f2"
+                )
                 if config_dict[self.account_id]["state"] is False:
                     self.ui.toggle.setStyleSheet("background-color : #d83c3e")
                     self.ui.toggle.setText(f"Bot {self.account_id} Disabled")
@@ -554,8 +418,12 @@ class MainWindow(QMainWindow):
                     self.ui.toggle.setStyleSheet("background-color : #2d7d46")
                     self.ui.toggle.setText(f"Bot {self.account_id} Enabled")
             else:
-                i.setStyleSheet("background-color: #42464d")
-        self.ui.main_menu_widget.setCurrentWidget(widget)
+                getattr(self.ui, f"account_btn_{i}").setStyleSheet(
+                    "background-color: #42464d"
+                )
+        self.ui.main_menu_widget.setCurrentWidget(
+            getattr(self.ui, f"account_widget_{account_id}")
+        )
         current_widget = getattr(
             self.ui, f"main_menu_widget_{self.account_id}"
         ).currentWidget()
@@ -627,6 +495,9 @@ class MainWindow(QMainWindow):
                     QtGui.QIcon.Mode.Normal,
                     QtGui.QIcon.State.Off,
                 )
+                getattr(self.ui, f"account_btn_{account_id}").setIconSize(
+                    QtCore.QSize(22, 22)
+                )
                 getattr(window.ui, f"account_btn_{self.account_id}").setIcon(icon)
         elif command == "trivia_chance":
             config_dict[self.account_id].update(
@@ -634,6 +505,52 @@ class MainWindow(QMainWindow):
             )
             with open("config.json", "w") as file:
                 json.dump(config_dict, file, ensure_ascii=False, indent=4)
+
+    @asyncSlot()
+    async def add_account(self):
+        with open("config.json", "r+") as file:
+            config_dict = json.load(file)
+            account_id = len(config_dict) + 1
+            config_dict[account_id] = {
+                "trivia_correct_chance": 0.75,
+                "channel_id": "",
+                "discord_token": "",
+                "state": False,
+                "autobuy": {
+                    "lifesavers": {"state": True, "amount": 5},
+                    "fishing": False,
+                    "shovel": False,
+                    "rifle": False,
+                },
+                "commands": {
+                    "trivia": False,
+                    "dig": False,
+                    "fish": False,
+                    "hunt": False,
+                    "pm": False,
+                    "hl": False,
+                    "search": False,
+                    "beg": False,
+                    "dep_all": False,
+                    "stream": False,
+                    "work": False,
+                    "daily": False,
+                },
+            }
+            file.seek(0)
+            json.dump(config_dict, file, ensure_ascii=False, indent=4)
+            file.truncate()
+        load_account(self, str(account_id))
+
+    @asyncSlot()
+    async def delete_account(self):
+        with open("config.json", "r+") as file:
+            config_dict = json.load(file)
+            getattr(self.ui, f"account_btn_{len(config_dict)}").deleteLater()
+            config_dict.pop(str(len(config_dict)))
+            file.seek(0)
+            json.dump(config_dict, file, ensure_ascii=False, indent=4)
+            file.truncate()
 
     def appendText(self, data):
         getattr(self.ui, data[0]).setTextColor(QColor(232, 230, 227))
@@ -674,7 +591,7 @@ if __name__ == "__main__":
         updater = UpdaterWindow()
     else:
         window.show()
-    for account in map(str, range(1, 6)):
+    for account in map(str, range(1, len(config_dict) + 1)):
         if config_dict[account]["discord_token"] != "":
             threading.Thread(
                 target=between_callback,
