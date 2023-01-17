@@ -286,7 +286,7 @@ async def start_bot(token, account_id):
         getattr(window.ui, f"account_btn_{account_id}").setText("Invalid Token")
         icon = QtGui.QIcon()
         icon.addPixmap(
-            QtGui.QPixmap(":/icons/icons/alert-triangle.svg"),
+            QtGui.QPixmap(":/icons/icons/warning.png"),
             QtGui.QIcon.Mode.Normal,
             QtGui.QIcon.State.Off,
         )
@@ -295,7 +295,7 @@ async def start_bot(token, account_id):
         getattr(window.ui, f"account_btn_{account_id}").setText("Invalid Channel")
         icon = QtGui.QIcon()
         icon.addPixmap(
-            QtGui.QPixmap(":/icons/icons/alert-triangle.svg"),
+            QtGui.QPixmap(":/icons/icons/warning.png"),
             QtGui.QIcon.Mode.Normal,
             QtGui.QIcon.State.Off,
         )
@@ -491,7 +491,7 @@ class MainWindow(QMainWindow):
                 )
                 icon = QtGui.QIcon()
                 icon.addPixmap(
-                    QtGui.QPixmap(":/icons/icons/user.svg"),
+                    QtGui.QPixmap(":/icons/icons/user.png"),
                     QtGui.QIcon.Mode.Normal,
                     QtGui.QIcon.State.Off,
                 )
@@ -566,7 +566,7 @@ def between_callback(token, account_id):
     getattr(window.ui, f"account_btn_{account_id}").setText("Logging In")
     icon = QtGui.QIcon()
     icon.addPixmap(
-        QtGui.QPixmap(":/icons/icons/loader.svg"),
+        QtGui.QPixmap(":/icons/icons/loading.png"),
         QtGui.QIcon.Mode.Normal,
         QtGui.QIcon.State.Off,
     )
@@ -601,7 +601,7 @@ if __name__ == "__main__":
             getattr(window.ui, f"account_btn_{account}").setText(f"Account {account}")
             icon = QtGui.QIcon()
             icon.addPixmap(
-                QtGui.QPixmap(":/icons/icons/user.svg"),
+                QtGui.QPixmap(":/icons/icons/user.png"),
                 QtGui.QIcon.Mode.Normal,
                 QtGui.QIcon.State.Off,
             )
