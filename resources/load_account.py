@@ -1,8 +1,22 @@
 import json
+import math
+
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtGui import QColor, QFontDatabase, QIcon
-from PyQt5.QtWidgets import QApplication, QMainWindow
+
+commands = [
+    "trivia",
+    "dig",
+    "fish",
+    "hunt",
+    "pm",
+    "beg",
+    "hl",
+    "search",
+    "dep_all",
+    "stream",
+    "work",
+    "daily",
+]
 
 
 def load_account(self, account_id):
@@ -653,356 +667,85 @@ def load_account(self, account_id):
     )
     self.ui.horizontalLayout_4.setSpacing(50)
     self.ui.horizontalLayout_4.setObjectName("horizontalLayout_4")
-    setattr(
-        self.ui,
-        f"commands_settings_right_frame_{account_id}",
-        QtWidgets.QFrame(getattr(self.ui, f"commands_settings_frame_{account_id}")),
-    )
-    getattr(self.ui, f"commands_settings_right_frame_{account_id}").setFrameShape(
-        QtWidgets.QFrame.StyledPanel
-    )
-    getattr(self.ui, f"commands_settings_right_frame_{account_id}").setFrameShadow(
-        QtWidgets.QFrame.Raised
-    )
-    getattr(self.ui, f"commands_settings_right_frame_{account_id}").setObjectName(
-        f"commands_settings_right_frame_{account_id}"
-    )
-    self.ui.verticalLayout_20 = QtWidgets.QVBoxLayout(
-        getattr(self.ui, f"commands_settings_right_frame_{account_id}")
-    )
-    self.ui.verticalLayout_20.setContentsMargins(0, 0, 0, 0)
-    self.ui.verticalLayout_20.setSpacing(0)
-    self.ui.verticalLayout_20.setObjectName("verticalLayout_20")
-    setattr(
-        self.ui,
-        f"commands_settings_right_frame_2_{account_id}",
-        QtWidgets.QFrame(
-            getattr(self.ui, f"commands_settings_right_frame_{account_id}")
-        ),
-    )
-    getattr(self.ui, f"commands_settings_right_frame_2_{account_id}").setFrameShape(
-        QtWidgets.QFrame.StyledPanel
-    )
-    getattr(self.ui, f"commands_settings_right_frame_2_{account_id}").setFrameShadow(
-        QtWidgets.QFrame.Raised
-    )
-    getattr(self.ui, f"commands_settings_right_frame_2_{account_id}").setObjectName(
-        f"commands_settings_right_frame_2_{account_id}"
-    )
-    self.ui.verticalLayout_13 = QtWidgets.QVBoxLayout(
-        getattr(self.ui, f"commands_settings_right_frame_2_{account_id}")
-    )
-    self.ui.verticalLayout_13.setContentsMargins(0, 0, 0, 0)
-    self.ui.verticalLayout_13.setSpacing(0)
-    self.ui.verticalLayout_13.setObjectName("verticalLayout_13")
-    setattr(
-        self.ui,
-        f"trivia_checkbox_{account_id}",
-        QtWidgets.QCheckBox(
-            getattr(self.ui, f"commands_settings_right_frame_2_{account_id}")
-        ),
-    )
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(15)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"trivia_checkbox_{account_id}").setFont(font)
-    getattr(self.ui, f"trivia_checkbox_{account_id}").setCursor(
-        QtGui.QCursor(QtCore.Qt.PointingHandCursor)
-    )
-    getattr(self.ui, f"trivia_checkbox_{account_id}").setObjectName(
-        f"trivia_checkbox_{account_id}"
-    )
-    self.ui.verticalLayout_13.addWidget(
-        getattr(self.ui, f"trivia_checkbox_{account_id}")
-    )
-    setattr(
-        self.ui,
-        f"dig_checkbox_{account_id}",
-        QtWidgets.QCheckBox(
-            getattr(self.ui, f"commands_settings_right_frame_2_{account_id}")
-        ),
-    )
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(15)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"dig_checkbox_{account_id}").setFont(font)
-    getattr(self.ui, f"dig_checkbox_{account_id}").setCursor(
-        QtGui.QCursor(QtCore.Qt.PointingHandCursor)
-    )
-    getattr(self.ui, f"dig_checkbox_{account_id}").setObjectName(
-        f"dig_checkbox_{account_id}"
-    )
-    self.ui.verticalLayout_13.addWidget(getattr(self.ui, f"dig_checkbox_{account_id}"))
-    setattr(
-        self.ui,
-        f"fish_checkbox_{account_id}",
-        QtWidgets.QCheckBox(
-            getattr(self.ui, f"commands_settings_right_frame_2_{account_id}")
-        ),
-    )
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(15)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"fish_checkbox_{account_id}").setFont(font)
-    getattr(self.ui, f"fish_checkbox_{account_id}").setCursor(
-        QtGui.QCursor(QtCore.Qt.PointingHandCursor)
-    )
-    getattr(self.ui, f"fish_checkbox_{account_id}").setObjectName(
-        f"fish_checkbox_{account_id}"
-    )
-    self.ui.verticalLayout_13.addWidget(getattr(self.ui, f"fish_checkbox_{account_id}"))
-    setattr(
-        self.ui,
-        f"hunt_checkbox_{account_id}",
-        QtWidgets.QCheckBox(
-            getattr(self.ui, f"commands_settings_right_frame_2_{account_id}")
-        ),
-    )
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(15)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"hunt_checkbox_{account_id}").setFont(font)
-    getattr(self.ui, f"hunt_checkbox_{account_id}").setCursor(
-        QtGui.QCursor(QtCore.Qt.PointingHandCursor)
-    )
-    getattr(self.ui, f"hunt_checkbox_{account_id}").setObjectName(
-        f"hunt_checkbox_{account_id}"
-    )
-    self.ui.verticalLayout_13.addWidget(getattr(self.ui, f"hunt_checkbox_{account_id}"))
-    setattr(
-        self.ui,
-        f"pm_checkbox_{account_id}",
-        QtWidgets.QCheckBox(
-            getattr(self.ui, f"commands_settings_right_frame_2_{account_id}")
-        ),
-    )
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(15)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"pm_checkbox_{account_id}").setFont(font)
-    getattr(self.ui, f"pm_checkbox_{account_id}").setCursor(
-        QtGui.QCursor(QtCore.Qt.PointingHandCursor)
-    )
-    getattr(self.ui, f"pm_checkbox_{account_id}").setObjectName(
-        f"pm_checkbox_{account_id}"
-    )
-    self.ui.verticalLayout_13.addWidget(getattr(self.ui, f"pm_checkbox_{account_id}"))
-    setattr(
-        self.ui,
-        f"beg_checkbox_{account_id}",
-        QtWidgets.QCheckBox(
-            getattr(self.ui, f"commands_settings_right_frame_2_{account_id}")
-        ),
-    )
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(15)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"beg_checkbox_{account_id}").setFont(font)
-    getattr(self.ui, f"beg_checkbox_{account_id}").setCursor(
-        QtGui.QCursor(QtCore.Qt.PointingHandCursor)
-    )
-    getattr(self.ui, f"beg_checkbox_{account_id}").setObjectName(
-        f"beg_checkbox_{account_id}"
-    )
-    self.ui.verticalLayout_13.addWidget(getattr(self.ui, f"beg_checkbox_{account_id}"))
-    self.ui.verticalLayout_20.addWidget(
-        getattr(self.ui, f"commands_settings_right_frame_2_{account_id}")
-    )
-    self.ui.horizontalLayout_4.addWidget(
-        getattr(self.ui, f"commands_settings_right_frame_{account_id}"),
-        0,
-        QtCore.Qt.AlignRight,
-    )
-    setattr(
-        self.ui,
-        f"commands_settings_left_frame_{account_id}",
-        QtWidgets.QFrame(getattr(self.ui, f"commands_settings_frame_{account_id}")),
-    )
-    getattr(self.ui, f"commands_settings_left_frame_{account_id}").setFrameShape(
-        QtWidgets.QFrame.StyledPanel
-    )
-    getattr(self.ui, f"commands_settings_left_frame_{account_id}").setFrameShadow(
-        QtWidgets.QFrame.Raised
-    )
-    getattr(self.ui, f"commands_settings_left_frame_{account_id}").setObjectName(
-        f"commands_settings_left_frame_{account_id}"
-    )
-    self.ui.horizontalLayout_28 = QtWidgets.QHBoxLayout(
-        getattr(self.ui, f"commands_settings_left_frame_{account_id}")
-    )
-    self.ui.horizontalLayout_28.setContentsMargins(0, 0, 0, 0)
-    self.ui.horizontalLayout_28.setSpacing(0)
-    self.ui.horizontalLayout_28.setObjectName("horizontalLayout_28")
-    setattr(
-        self.ui,
-        f"commands_settings_left_frame_2_{account_id}",
-        QtWidgets.QFrame(
-            getattr(self.ui, f"commands_settings_left_frame_{account_id}")
-        ),
-    )
-    getattr(self.ui, f"commands_settings_left_frame_2_{account_id}").setFrameShape(
-        QtWidgets.QFrame.StyledPanel
-    )
-    getattr(self.ui, f"commands_settings_left_frame_2_{account_id}").setFrameShadow(
-        QtWidgets.QFrame.Raised
-    )
-    getattr(self.ui, f"commands_settings_left_frame_2_{account_id}").setObjectName(
-        f"commands_settings_left_frame_2_{account_id}"
-    )
-    self.ui.verticalLayout_14 = QtWidgets.QVBoxLayout(
-        getattr(self.ui, f"commands_settings_left_frame_2_{account_id}")
-    )
-    self.ui.verticalLayout_14.setContentsMargins(0, 0, 0, 0)
-    self.ui.verticalLayout_14.setSpacing(0)
-    self.ui.verticalLayout_14.setObjectName("verticalLayout_14")
-    setattr(
-        self.ui,
-        f"hl_checkbox_{account_id}",
-        QtWidgets.QCheckBox(
-            getattr(self.ui, f"commands_settings_left_frame_2_{account_id}")
-        ),
-    )
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(15)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"hl_checkbox_{account_id}").setFont(font)
-    getattr(self.ui, f"hl_checkbox_{account_id}").setCursor(
-        QtGui.QCursor(QtCore.Qt.PointingHandCursor)
-    )
-    getattr(self.ui, f"hl_checkbox_{account_id}").setObjectName(
-        f"hl_checkbox_{account_id}"
-    )
-    self.ui.verticalLayout_14.addWidget(getattr(self.ui, f"hl_checkbox_{account_id}"))
-    setattr(
-        self.ui,
-        f"search_checkbox_{account_id}",
-        QtWidgets.QCheckBox(
-            getattr(self.ui, f"commands_settings_left_frame_2_{account_id}")
-        ),
-    )
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(15)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"search_checkbox_{account_id}").setFont(font)
-    getattr(self.ui, f"search_checkbox_{account_id}").setCursor(
-        QtGui.QCursor(QtCore.Qt.PointingHandCursor)
-    )
-    getattr(self.ui, f"search_checkbox_{account_id}").setObjectName(
-        f"search_checkbox_{account_id}"
-    )
-    self.ui.verticalLayout_14.addWidget(
-        getattr(self.ui, f"search_checkbox_{account_id}")
-    )
-    setattr(
-        self.ui,
-        f"dep_all_checkbox_{account_id}",
-        QtWidgets.QCheckBox(
-            getattr(self.ui, f"commands_settings_left_frame_2_{account_id}")
-        ),
-    )
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(15)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"dep_all_checkbox_{account_id}").setFont(font)
-    getattr(self.ui, f"dep_all_checkbox_{account_id}").setCursor(
-        QtGui.QCursor(QtCore.Qt.PointingHandCursor)
-    )
-    getattr(self.ui, f"dep_all_checkbox_{account_id}").setObjectName(
-        f"dep_all_checkbox_{account_id}"
-    )
-    self.ui.verticalLayout_14.addWidget(
-        getattr(self.ui, f"dep_all_checkbox_{account_id}")
-    )
-    setattr(
-        self.ui,
-        f"stream_checkbox_{account_id}",
-        QtWidgets.QCheckBox(
-            getattr(self.ui, f"commands_settings_left_frame_2_{account_id}")
-        ),
-    )
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(15)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"stream_checkbox_{account_id}").setFont(font)
-    getattr(self.ui, f"stream_checkbox_{account_id}").setCursor(
-        QtGui.QCursor(QtCore.Qt.PointingHandCursor)
-    )
-    getattr(self.ui, f"stream_checkbox_{account_id}").setObjectName(
-        f"stream_checkbox_{account_id}"
-    )
-    self.ui.verticalLayout_14.addWidget(
-        getattr(self.ui, f"stream_checkbox_{account_id}")
-    )
-    setattr(
-        self.ui,
-        f"work_checkbox_{account_id}",
-        QtWidgets.QCheckBox(
-            getattr(self.ui, f"commands_settings_left_frame_2_{account_id}")
-        ),
-    )
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(15)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"work_checkbox_{account_id}").setFont(font)
-    getattr(self.ui, f"work_checkbox_{account_id}").setCursor(
-        QtGui.QCursor(QtCore.Qt.PointingHandCursor)
-    )
-    getattr(self.ui, f"work_checkbox_{account_id}").setObjectName(
-        f"work_checkbox_{account_id}"
-    )
-    self.ui.verticalLayout_14.addWidget(getattr(self.ui, f"work_checkbox_{account_id}"))
-    setattr(
-        self.ui,
-        f"daily_checkbox_{account_id}",
-        QtWidgets.QCheckBox(
-            getattr(self.ui, f"commands_settings_left_frame_2_{account_id}")
-        ),
-    )
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(15)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"daily_checkbox_{account_id}").setFont(font)
-    getattr(self.ui, f"daily_checkbox_{account_id}").setCursor(
-        QtGui.QCursor(QtCore.Qt.PointingHandCursor)
-    )
-    getattr(self.ui, f"daily_checkbox_{account_id}").setObjectName(
-        f"daily_checkbox_{account_id}"
-    )
-    self.ui.verticalLayout_14.addWidget(
-        getattr(self.ui, f"daily_checkbox_{account_id}")
-    )
-    self.ui.horizontalLayout_28.addWidget(
-        getattr(self.ui, f"commands_settings_left_frame_2_{account_id}")
-    )
-    self.ui.horizontalLayout_4.addWidget(
-        getattr(self.ui, f"commands_settings_left_frame_{account_id}"),
-        0,
-        QtCore.Qt.AlignLeft,
-    )
+    for i in ["left", "right"]:
+        setattr(
+            self.ui,
+            f"commands_settings_{i}_frame_{account_id}",
+            QtWidgets.QFrame(getattr(self.ui, f"commands_settings_frame_{account_id}")),
+        )
+        getattr(self.ui, f"commands_settings_{i}_frame_{account_id}").setFrameShape(
+            QtWidgets.QFrame.StyledPanel
+        )
+        getattr(self.ui, f"commands_settings_{i}_frame_{account_id}").setFrameShadow(
+            QtWidgets.QFrame.Raised
+        )
+        getattr(self.ui, f"commands_settings_{i}_frame_{account_id}").setObjectName(
+            f"commands_settings_{i}_frame_{account_id}"
+        )
+        self.ui.verticalLayout_20 = QtWidgets.QVBoxLayout(
+            getattr(self.ui, f"commands_settings_{i}_frame_{account_id}")
+        )
+        self.ui.verticalLayout_20.setContentsMargins(0, 0, 0, 0)
+        self.ui.verticalLayout_20.setSpacing(0)
+        self.ui.verticalLayout_20.setObjectName("verticalLayout_20")
+        setattr(
+            self.ui,
+            f"commands_settings_{i}_frame_2_{account_id}",
+            QtWidgets.QFrame(
+                getattr(self.ui, f"commands_settings_{i}_frame_{account_id}")
+            ),
+        )
+        getattr(self.ui, f"commands_settings_{i}_frame_2_{account_id}").setFrameShape(
+            QtWidgets.QFrame.StyledPanel
+        )
+        getattr(self.ui, f"commands_settings_{i}_frame_2_{account_id}").setFrameShadow(
+            QtWidgets.QFrame.Raised
+        )
+        getattr(self.ui, f"commands_settings_{i}_frame_2_{account_id}").setObjectName(
+            f"commands_settings_{i}_frame_2_{account_id}"
+        )
+        self.ui.verticalLayout_13 = QtWidgets.QVBoxLayout(
+            getattr(self.ui, f"commands_settings_{i}_frame_2_{account_id}")
+        )
+        self.ui.verticalLayout_13.setContentsMargins(0, 0, 0, 0)
+        self.ui.verticalLayout_13.setSpacing(0)
+        self.ui.verticalLayout_13.setObjectName("verticalLayout_13")
+        if i == "left":
+            commands_list = commands[: math.floor(len(commands) / 2)]
+        elif i == "right":
+            commands_list = commands[math.floor(len(commands) / 2) :]
+        for command in commands_list:
+            setattr(
+                self.ui,
+                f"{command}_checkbox_{account_id}",
+                QtWidgets.QCheckBox(
+                    getattr(self.ui, f"commands_settings_{i}_frame_2_{account_id}")
+                ),
+            )
+            font = QtGui.QFont()
+            font.setFamily("Segoe UI")
+            font.setPointSize(15)
+            font.setBold(True)
+            font.setWeight(75)
+            getattr(self.ui, f"{command}_checkbox_{account_id}").setFont(font)
+            getattr(self.ui, f"{command}_checkbox_{account_id}").setCursor(
+                QtGui.QCursor(QtCore.Qt.PointingHandCursor)
+            )
+            getattr(self.ui, f"{command}_checkbox_{account_id}").setObjectName(
+                f"{command}_checkbox_{account_id}"
+            )
+            self.ui.verticalLayout_13.addWidget(
+                getattr(self.ui, f"{command}_checkbox_{account_id}")
+            )
+        self.ui.verticalLayout_20.addWidget(
+            getattr(self.ui, f"commands_settings_{i}_frame_2_{account_id}")
+        )
+        self.ui.horizontalLayout_4.addWidget(
+            getattr(self.ui, f"commands_settings_{i}_frame_{account_id}"),
+            0,
+            QtCore.Qt.AlignRight,
+        )
+
     self.ui.verticalLayout_12.addWidget(
         getattr(self.ui, f"commands_settings_frame_{account_id}"),
         0,
@@ -1494,18 +1237,18 @@ def load_account(self, account_id):
     getattr(self.ui, f"channel_label_{account_id}").setText("Channel ID")
     getattr(self.ui, f"trivia_label_{account_id}").setText("Correct Trivia Chance")
     getattr(self.ui, f"commands_label_{account_id}").setText("Commands")
-    getattr(self.ui, f"trivia_checkbox_{account_id}").setText("Trivia")
-    getattr(self.ui, f"dig_checkbox_{account_id}").setText("Dig")
-    getattr(self.ui, f"fish_checkbox_{account_id}").setText("Fish")
-    getattr(self.ui, f"hunt_checkbox_{account_id}").setText("Hunt")
+
+    # Command labels
+    for command in commands:
+        if command in ["pm", "hl", "dep_all"]:
+            continue
+        getattr(self.ui, f"{command}_checkbox_{account_id}").setText(
+            command.capitalize()
+        )
     getattr(self.ui, f"pm_checkbox_{account_id}").setText("Post Memes")
-    getattr(self.ui, f"beg_checkbox_{account_id}").setText("Beg")
     getattr(self.ui, f"hl_checkbox_{account_id}").setText("High Low")
-    getattr(self.ui, f"search_checkbox_{account_id}").setText("Search")
     getattr(self.ui, f"dep_all_checkbox_{account_id}").setText("Deposit All")
-    getattr(self.ui, f"stream_checkbox_{account_id}").setText("Stream")
-    getattr(self.ui, f"work_checkbox_{account_id}").setText("Work")
-    getattr(self.ui, f"daily_checkbox_{account_id}").setText("Daily")
+
     getattr(self.ui, f"start_btn_{account_id}").setText("Start All")
     getattr(self.ui, f"stop_btn_{account_id}").setText("Stop All")
     getattr(self.ui, f"auto_buy_label_{account_id}").setText("Auto Buy")
@@ -1566,21 +1309,7 @@ def load_account(self, account_id):
             pass
 
     # Commands
-    command_buttons = [
-        "trivia",
-        "dig",
-        "fish",
-        "hunt",
-        "pm",
-        "beg",
-        "hl",
-        "search",
-        "dep_all",
-        "stream",
-        "work",
-        "daily",
-    ]
-    for button in command_buttons:
+    for button in commands:
         getattr(self.ui, f"{button}_checkbox_{account_id}").clicked.connect(
             lambda checked, account_id=account_id, button=button: self.commands(
                 button,
