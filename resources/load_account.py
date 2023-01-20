@@ -14,15 +14,15 @@ def load_account(self, account_id):
         f"account_btn_{account_id}",
         QtWidgets.QPushButton(self.ui.scrollAreaWidgetContents),
     )
-    sizePolicy = QtWidgets.QSizePolicy(
+    size_policy = QtWidgets.QSizePolicy(
         QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed
     )
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(
+    size_policy.setHorizontalStretch(0)
+    size_policy.setVerticalStretch(0)
+    size_policy.setHeightForWidth(
         getattr(self.ui, f"account_btn_{account_id}").sizePolicy().hasHeightForWidth()
     )
-    getattr(self.ui, f"account_btn_{account_id}").setSizePolicy(sizePolicy)
+    getattr(self.ui, f"account_btn_{account_id}").setSizePolicy(size_policy)
     getattr(self.ui, f"account_btn_{account_id}").setMinimumSize(QtCore.QSize(0, 45))
     getattr(self.ui, f"account_btn_{account_id}").setMaximumSize(QtCore.QSize(150, 45))
     font = QtGui.QFont()
@@ -61,17 +61,17 @@ def load_account(self, account_id):
         f"main_menu_frame_{account_id}",
         QtWidgets.QFrame(getattr(self.ui, f"account_widget_{account_id}")),
     )
-    sizePolicy = QtWidgets.QSizePolicy(
+    size_policy = QtWidgets.QSizePolicy(
         QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred
     )
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(
+    size_policy.setHorizontalStretch(0)
+    size_policy.setVerticalStretch(0)
+    size_policy.setHeightForWidth(
         getattr(self.ui, f"main_menu_frame_{account_id}")
         .sizePolicy()
         .hasHeightForWidth()
     )
-    getattr(self.ui, f"main_menu_frame_{account_id}").setSizePolicy(sizePolicy)
+    getattr(self.ui, f"main_menu_frame_{account_id}").setSizePolicy(size_policy)
     getattr(self.ui, f"main_menu_frame_{account_id}").setFrameShape(
         QtWidgets.QFrame.StyledPanel
     )
@@ -130,15 +130,15 @@ def load_account(self, account_id):
         f"home_frame_{account_id}",
         QtWidgets.QFrame(getattr(self.ui, f"home_widget_{account_id}")),
     )
-    sizePolicy = QtWidgets.QSizePolicy(
+    size_policy = QtWidgets.QSizePolicy(
         QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding
     )
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(
+    size_policy.setHorizontalStretch(0)
+    size_policy.setVerticalStretch(0)
+    size_policy.setHeightForWidth(
         getattr(self.ui, f"home_frame_{account_id}").sizePolicy().hasHeightForWidth()
     )
-    getattr(self.ui, f"home_frame_{account_id}").setSizePolicy(sizePolicy)
+    getattr(self.ui, f"home_frame_{account_id}").setSizePolicy(size_policy)
     getattr(self.ui, f"home_frame_{account_id}").setFrameShape(
         QtWidgets.QFrame.StyledPanel
     )
@@ -239,17 +239,17 @@ def load_account(self, account_id):
         f"settings_frame_{account_id}",
         QtWidgets.QFrame(getattr(self.ui, f"settings_widget_{account_id}")),
     )
-    sizePolicy = QtWidgets.QSizePolicy(
+    size_policy = QtWidgets.QSizePolicy(
         QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding
     )
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(
+    size_policy.setHorizontalStretch(0)
+    size_policy.setVerticalStretch(0)
+    size_policy.setHeightForWidth(
         getattr(self.ui, f"settings_frame_{account_id}")
         .sizePolicy()
         .hasHeightForWidth()
     )
-    getattr(self.ui, f"settings_frame_{account_id}").setSizePolicy(sizePolicy)
+    getattr(self.ui, f"settings_frame_{account_id}").setSizePolicy(size_policy)
     getattr(self.ui, f"settings_frame_{account_id}").setFrameShape(
         QtWidgets.QFrame.StyledPanel
     )
@@ -304,15 +304,15 @@ def load_account(self, account_id):
         f"token_label_{account_id}",
         QtWidgets.QLabel(getattr(self.ui, f"token_frame_2_{account_id}")),
     )
-    sizePolicy = QtWidgets.QSizePolicy(
+    size_policy = QtWidgets.QSizePolicy(
         QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred
     )
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(
+    size_policy.setHorizontalStretch(0)
+    size_policy.setVerticalStretch(0)
+    size_policy.setHeightForWidth(
         getattr(self.ui, f"token_label_{account_id}").sizePolicy().hasHeightForWidth()
     )
-    getattr(self.ui, f"token_label_{account_id}").setSizePolicy(sizePolicy)
+    getattr(self.ui, f"token_label_{account_id}").setSizePolicy(size_policy)
     font = QtGui.QFont()
     font.setFamily("Segoe UI")
     font.setPointSize(15)
@@ -328,15 +328,15 @@ def load_account(self, account_id):
         f"token_input_{account_id}",
         QtWidgets.QLineEdit(getattr(self.ui, f"token_frame_2_{account_id}")),
     )
-    sizePolicy = QtWidgets.QSizePolicy(
+    size_policy = QtWidgets.QSizePolicy(
         QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
     )
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(
+    size_policy.setHorizontalStretch(0)
+    size_policy.setVerticalStretch(0)
+    size_policy.setHeightForWidth(
         getattr(self.ui, f"token_input_{account_id}").sizePolicy().hasHeightForWidth()
     )
-    getattr(self.ui, f"token_input_{account_id}").setSizePolicy(sizePolicy)
+    getattr(self.ui, f"token_input_{account_id}").setSizePolicy(size_policy)
     getattr(self.ui, f"token_input_{account_id}").setMinimumSize(QtCore.QSize(440, 0))
     getattr(self.ui, f"token_input_{account_id}").setMaximumSize(
         QtCore.QSize(440, 16777215)
@@ -402,15 +402,15 @@ def load_account(self, account_id):
         f"channel_label_{account_id}",
         QtWidgets.QLabel(getattr(self.ui, f"channel_frame_2_{account_id}")),
     )
-    sizePolicy = QtWidgets.QSizePolicy(
+    size_policy = QtWidgets.QSizePolicy(
         QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred
     )
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(
+    size_policy.setHorizontalStretch(0)
+    size_policy.setVerticalStretch(0)
+    size_policy.setHeightForWidth(
         getattr(self.ui, f"channel_label_{account_id}").sizePolicy().hasHeightForWidth()
     )
-    getattr(self.ui, f"channel_label_{account_id}").setSizePolicy(sizePolicy)
+    getattr(self.ui, f"channel_label_{account_id}").setSizePolicy(size_policy)
     font = QtGui.QFont()
     font.setFamily("Segoe UI")
     font.setPointSize(15)
@@ -428,15 +428,15 @@ def load_account(self, account_id):
         f"channel_input_{account_id}",
         QtWidgets.QLineEdit(getattr(self.ui, f"channel_frame_2_{account_id}")),
     )
-    sizePolicy = QtWidgets.QSizePolicy(
+    size_policy = QtWidgets.QSizePolicy(
         QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
     )
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(
+    size_policy.setHorizontalStretch(0)
+    size_policy.setVerticalStretch(0)
+    size_policy.setHeightForWidth(
         getattr(self.ui, f"channel_input_{account_id}").sizePolicy().hasHeightForWidth()
     )
-    getattr(self.ui, f"channel_input_{account_id}").setSizePolicy(sizePolicy)
+    getattr(self.ui, f"channel_input_{account_id}").setSizePolicy(size_policy)
     getattr(self.ui, f"channel_input_{account_id}").setMinimumSize(QtCore.QSize(200, 0))
     getattr(self.ui, f"channel_input_{account_id}").setMaximumSize(
         QtCore.QSize(500, 200)
@@ -502,15 +502,15 @@ def load_account(self, account_id):
         f"trivia_label_{account_id}",
         QtWidgets.QLabel(getattr(self.ui, f"trivia_frame_2_{account_id}")),
     )
-    sizePolicy = QtWidgets.QSizePolicy(
+    size_policy = QtWidgets.QSizePolicy(
         QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred
     )
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(
+    size_policy.setHorizontalStretch(0)
+    size_policy.setVerticalStretch(0)
+    size_policy.setHeightForWidth(
         getattr(self.ui, f"trivia_label_{account_id}").sizePolicy().hasHeightForWidth()
     )
-    getattr(self.ui, f"trivia_label_{account_id}").setSizePolicy(sizePolicy)
+    getattr(self.ui, f"trivia_label_{account_id}").setSizePolicy(size_policy)
     font = QtGui.QFont()
     font.setFamily("Segoe UI")
     font.setPointSize(15)
@@ -528,15 +528,15 @@ def load_account(self, account_id):
         f"trivia_chance_{account_id}",
         QtWidgets.QSpinBox(getattr(self.ui, f"trivia_frame_2_{account_id}")),
     )
-    sizePolicy = QtWidgets.QSizePolicy(
+    size_policy = QtWidgets.QSizePolicy(
         QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
     )
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(
+    size_policy.setHorizontalStretch(0)
+    size_policy.setVerticalStretch(0)
+    size_policy.setHeightForWidth(
         getattr(self.ui, f"trivia_chance_{account_id}").sizePolicy().hasHeightForWidth()
     )
-    getattr(self.ui, f"trivia_chance_{account_id}").setSizePolicy(sizePolicy)
+    getattr(self.ui, f"trivia_chance_{account_id}").setSizePolicy(size_policy)
     getattr(self.ui, f"trivia_chance_{account_id}").setMinimumSize(QtCore.QSize(50, 30))
     getattr(self.ui, f"trivia_chance_{account_id}").setMaximumSize(QtCore.QSize(50, 30))
     font = QtGui.QFont()
@@ -599,17 +599,17 @@ def load_account(self, account_id):
         f"commands_frame_{account_id}",
         QtWidgets.QFrame(getattr(self.ui, f"commands_widget_{account_id}")),
     )
-    sizePolicy = QtWidgets.QSizePolicy(
+    size_policy = QtWidgets.QSizePolicy(
         QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding
     )
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(
+    size_policy.setHorizontalStretch(0)
+    size_policy.setVerticalStretch(0)
+    size_policy.setHeightForWidth(
         getattr(self.ui, f"commands_frame_{account_id}")
         .sizePolicy()
         .hasHeightForWidth()
     )
-    getattr(self.ui, f"commands_frame_{account_id}").setSizePolicy(sizePolicy)
+    getattr(self.ui, f"commands_frame_{account_id}").setSizePolicy(size_policy)
     getattr(self.ui, f"commands_frame_{account_id}").setFrameShape(
         QtWidgets.QFrame.StyledPanel
     )
@@ -628,17 +628,17 @@ def load_account(self, account_id):
         f"commands_settings_frame_{account_id}",
         QtWidgets.QFrame(getattr(self.ui, f"commands_frame_{account_id}")),
     )
-    sizePolicy = QtWidgets.QSizePolicy(
+    size_policy = QtWidgets.QSizePolicy(
         QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding
     )
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(
+    size_policy.setHorizontalStretch(0)
+    size_policy.setVerticalStretch(0)
+    size_policy.setHeightForWidth(
         getattr(self.ui, f"commands_settings_frame_{account_id}")
         .sizePolicy()
         .hasHeightForWidth()
     )
-    getattr(self.ui, f"commands_settings_frame_{account_id}").setSizePolicy(sizePolicy)
+    getattr(self.ui, f"commands_settings_frame_{account_id}").setSizePolicy(size_policy)
     getattr(self.ui, f"commands_settings_frame_{account_id}").setFrameShape(
         QtWidgets.QFrame.StyledPanel
     )
@@ -1063,15 +1063,15 @@ def load_account(self, account_id):
         QtWidgets.QPushButton(getattr(self.ui, f"commands_toggle_btn_{account_id}")),
     )
     getattr(self.ui, f"start_btn_{account_id}").setEnabled(True)
-    sizePolicy = QtWidgets.QSizePolicy(
+    size_policy = QtWidgets.QSizePolicy(
         QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed
     )
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(
+    size_policy.setHorizontalStretch(0)
+    size_policy.setVerticalStretch(0)
+    size_policy.setHeightForWidth(
         getattr(self.ui, f"start_btn_{account_id}").sizePolicy().hasHeightForWidth()
     )
-    getattr(self.ui, f"start_btn_{account_id}").setSizePolicy(sizePolicy)
+    getattr(self.ui, f"start_btn_{account_id}").setSizePolicy(size_policy)
     getattr(self.ui, f"start_btn_{account_id}").setMinimumSize(QtCore.QSize(140, 45))
     getattr(self.ui, f"start_btn_{account_id}").setMaximumSize(QtCore.QSize(50, 45))
     font = QtGui.QFont()
@@ -1094,15 +1094,15 @@ def load_account(self, account_id):
         QtWidgets.QPushButton(getattr(self.ui, f"commands_toggle_btn_{account_id}")),
     )
     getattr(self.ui, f"stop_btn_{account_id}").setEnabled(True)
-    sizePolicy = QtWidgets.QSizePolicy(
+    size_policy = QtWidgets.QSizePolicy(
         QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed
     )
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(
+    size_policy.setHorizontalStretch(0)
+    size_policy.setVerticalStretch(0)
+    size_policy.setHeightForWidth(
         getattr(self.ui, f"stop_btn_{account_id}").sizePolicy().hasHeightForWidth()
     )
-    getattr(self.ui, f"stop_btn_{account_id}").setSizePolicy(sizePolicy)
+    getattr(self.ui, f"stop_btn_{account_id}").setSizePolicy(size_policy)
     getattr(self.ui, f"stop_btn_{account_id}").setMinimumSize(QtCore.QSize(140, 45))
     getattr(self.ui, f"stop_btn_{account_id}").setMaximumSize(QtCore.QSize(50, 45))
     font = QtGui.QFont()
@@ -1166,17 +1166,17 @@ def load_account(self, account_id):
         f"auto_buy_frame_{account_id}",
         QtWidgets.QFrame(getattr(self.ui, f"auto_buy_widget_{account_id}")),
     )
-    sizePolicy = QtWidgets.QSizePolicy(
+    size_policy = QtWidgets.QSizePolicy(
         QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding
     )
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(
+    size_policy.setHorizontalStretch(0)
+    size_policy.setVerticalStretch(0)
+    size_policy.setHeightForWidth(
         getattr(self.ui, f"auto_buy_frame_{account_id}")
         .sizePolicy()
         .hasHeightForWidth()
     )
-    getattr(self.ui, f"auto_buy_frame_{account_id}").setSizePolicy(sizePolicy)
+    getattr(self.ui, f"auto_buy_frame_{account_id}").setSizePolicy(size_policy)
     getattr(self.ui, f"auto_buy_frame_{account_id}").setFrameShape(
         QtWidgets.QFrame.StyledPanel
     )
@@ -1231,17 +1231,17 @@ def load_account(self, account_id):
         f"lifesavers_checkbox_{account_id}",
         QtWidgets.QCheckBox(getattr(self.ui, f"lifesavers_frame_2_{account_id}")),
     )
-    sizePolicy = QtWidgets.QSizePolicy(
+    size_policy = QtWidgets.QSizePolicy(
         QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
     )
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(
+    size_policy.setHorizontalStretch(0)
+    size_policy.setVerticalStretch(0)
+    size_policy.setHeightForWidth(
         getattr(self.ui, f"lifesavers_checkbox_{account_id}")
         .sizePolicy()
         .hasHeightForWidth()
     )
-    getattr(self.ui, f"lifesavers_checkbox_{account_id}").setSizePolicy(sizePolicy)
+    getattr(self.ui, f"lifesavers_checkbox_{account_id}").setSizePolicy(size_policy)
     font = QtGui.QFont()
     font.setFamily("Segoe UI")
     font.setPointSize(15)
@@ -1263,17 +1263,17 @@ def load_account(self, account_id):
         f"lifesavers_amount_{account_id}",
         QtWidgets.QSpinBox(getattr(self.ui, f"lifesavers_frame_2_{account_id}")),
     )
-    sizePolicy = QtWidgets.QSizePolicy(
+    size_policy = QtWidgets.QSizePolicy(
         QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
     )
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(
+    size_policy.setHorizontalStretch(0)
+    size_policy.setVerticalStretch(0)
+    size_policy.setHeightForWidth(
         getattr(self.ui, f"lifesavers_amount_{account_id}")
         .sizePolicy()
         .hasHeightForWidth()
     )
-    getattr(self.ui, f"lifesavers_amount_{account_id}").setSizePolicy(sizePolicy)
+    getattr(self.ui, f"lifesavers_amount_{account_id}").setSizePolicy(size_policy)
     getattr(self.ui, f"lifesavers_amount_{account_id}").setMinimumSize(
         QtCore.QSize(50, 30)
     )
@@ -1329,17 +1329,17 @@ def load_account(self, account_id):
         f"fishing_checkbox_{account_id}",
         QtWidgets.QCheckBox(getattr(self.ui, f"fishing_frame_{account_id}")),
     )
-    sizePolicy = QtWidgets.QSizePolicy(
+    size_policy = QtWidgets.QSizePolicy(
         QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
     )
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(
+    size_policy.setHorizontalStretch(0)
+    size_policy.setVerticalStretch(0)
+    size_policy.setHeightForWidth(
         getattr(self.ui, f"fishing_checkbox_{account_id}")
         .sizePolicy()
         .hasHeightForWidth()
     )
-    getattr(self.ui, f"fishing_checkbox_{account_id}").setSizePolicy(sizePolicy)
+    getattr(self.ui, f"fishing_checkbox_{account_id}").setSizePolicy(size_policy)
     font = QtGui.QFont()
     font.setFamily("Segoe UI")
     font.setPointSize(15)
@@ -1378,17 +1378,17 @@ def load_account(self, account_id):
         f"shovel_checkbox_{account_id}",
         QtWidgets.QCheckBox(getattr(self.ui, f"shovel_frame_{account_id}")),
     )
-    sizePolicy = QtWidgets.QSizePolicy(
+    size_policy = QtWidgets.QSizePolicy(
         QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
     )
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(
+    size_policy.setHorizontalStretch(0)
+    size_policy.setVerticalStretch(0)
+    size_policy.setHeightForWidth(
         getattr(self.ui, f"shovel_checkbox_{account_id}")
         .sizePolicy()
         .hasHeightForWidth()
     )
-    getattr(self.ui, f"shovel_checkbox_{account_id}").setSizePolicy(sizePolicy)
+    getattr(self.ui, f"shovel_checkbox_{account_id}").setSizePolicy(size_policy)
     font = QtGui.QFont()
     font.setFamily("Segoe UI")
     font.setPointSize(15)
@@ -1429,17 +1429,17 @@ def load_account(self, account_id):
         f"rifle_checkbox_{account_id}",
         QtWidgets.QCheckBox(getattr(self.ui, f"rifle_frame_{account_id}")),
     )
-    sizePolicy = QtWidgets.QSizePolicy(
+    size_policy = QtWidgets.QSizePolicy(
         QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
     )
-    sizePolicy.setHorizontalStretch(0)
-    sizePolicy.setVerticalStretch(0)
-    sizePolicy.setHeightForWidth(
+    size_policy.setHorizontalStretch(0)
+    size_policy.setVerticalStretch(0)
+    size_policy.setHeightForWidth(
         getattr(self.ui, f"rifle_checkbox_{account_id}")
         .sizePolicy()
         .hasHeightForWidth()
     )
-    getattr(self.ui, f"rifle_checkbox_{account_id}").setSizePolicy(sizePolicy)
+    getattr(self.ui, f"rifle_checkbox_{account_id}").setSizePolicy(size_policy)
     font = QtGui.QFont()
     font.setFamily("Segoe UI")
     font.setPointSize(15)
