@@ -46,16 +46,13 @@ class Stream(commands.Cog):
             return
 
         for embed in message.embeds:
+            embed = embed.to_dict()
             # Get trending game
             try:
-                if embed.to_dict()["title"] == "Trending Game":
+                if embed["title"] == "Trending Game":
                     global game
                     game = Games[
-                        (
-                            re.search(
-                                "\*\*(.*?)\*\*", embed.to_dict()["description"]
-                            ).group(1)
-                        )
+                        (re.search("\*\*(.*?)\*\*", embed["description"]).group(1))
                         .title()
                         .lower()
                     ]
@@ -64,7 +61,7 @@ class Stream(commands.Cog):
 
             # Go live
             try:
-                if embed.to_dict()["fields"][1]["name"] == "Last Live":
+                if embed["fields"][1]["name"] == "Last Live":
                     await self.bot.click(message, 0, 0)
 
                     # Get trending game
@@ -86,7 +83,7 @@ class Stream(commands.Cog):
 
             # Read chat
             try:
-                if embed.to_dict()["fields"][1]["name"] == "Live Since":
+                if embed["fields"][1]["name"] == "Live Since":
                     await self.bot.click(message, 0, 1)
             except (KeyError, IndexError):
                 pass

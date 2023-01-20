@@ -17,13 +17,12 @@ class Hl(commands.Cog):
             return
 
         for embed in message.embeds:
+            embed = embed.to_dict()
             try:
-                if "I just chose a secret number" in embed.to_dict()["description"]:
+                if "I just chose a secret number" in embed["description"]:
                     num = int(
                         (
-                            re.search(
-                                "\*\*(.*?)\*\*", embed.to_dict()["description"]
-                            ).group(1)
+                            re.search("\*\*(.*?)\*\*", embed["description"]).group(1)
                         ).title()
                     )
                     if num >= 50:

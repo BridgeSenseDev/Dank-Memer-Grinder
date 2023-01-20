@@ -28,8 +28,9 @@ class Search(commands.Cog):
             return
 
         for embed in message.embeds:
+            embed = embed.to_dict()
             try:
-                if "to search?" in embed.to_dict()["description"]:
+                if "to search?" in embed["description"]:
                     for count, i in enumerate(message.components[0].children):
                         if i.label in search_priority:
                             await self.bot.click(message, 0, count)

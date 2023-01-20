@@ -15,10 +15,11 @@ class Autobuy(commands.Cog):
             and self.bot.config_dict[self.bot.account_id]["state"] is True
         ):
             for embed in message.embeds:
+                embed = embed.to_dict()
                 # Buy lifesavers
                 try:
                     if (
-                        embed.to_dict()["title"] == "Your lifesaver protected you!"
+                        embed["title"] == "Your lifesaver protected you!"
                         and self.bot.config_dict[self.bot.account_id]["autobuy"][
                             "lifesavers"
                         ]["state"]
@@ -56,7 +57,7 @@ class Autobuy(commands.Cog):
                 # Confirm purchase
                 try:
                     if (
-                        embed.to_dict()["title"] == "Pending Confirmation"
+                        embed["title"] == "Pending Confirmation"
                         and self.bot.config_dict[self.bot.account_id]["autobuy"][
                             "lifesavers"
                         ]["state"]
@@ -77,7 +78,7 @@ class Autobuy(commands.Cog):
             try:
                 if (
                     "You don't have a shovel, you need to go buy one."
-                    in embed.to_dict()["description"]
+                    in embed["description"]
                 ):
                     await self.bot.send("withdraw", amount="25k")
                     await self.bot.sub_send("shop", "buy", item="Shovel", quantity="1")
@@ -88,7 +89,7 @@ class Autobuy(commands.Cog):
             try:
                 if (
                     "You don't have a fishing pole, you need to go buy one"
-                    in embed.to_dict()["description"]
+                    in embed["description"]
                 ):
                     await self.bot.send("withdraw", amount="25k")
                     await self.bot.sub_send(
@@ -101,7 +102,7 @@ class Autobuy(commands.Cog):
             try:
                 if (
                     "You don't have a hunting rifle, you need to go buy one."
-                    in embed.to_dict()["description"]
+                    in embed["description"]
                 ):
                     await self.bot.send("withdraw", amount="25k")
                     await self.bot.sub_send(

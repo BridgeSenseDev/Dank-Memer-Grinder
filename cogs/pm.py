@@ -18,8 +18,9 @@ class Pm(commands.Cog):
             return
 
         for embed in message.embeds:
+            embed = embed.to_dict()
             try:
-                if "Meme Posting Session" in embed.to_dict()["author"]["name"]:
+                if "Meme Posting Session" in embed["author"]["name"]:
                     await asyncio.sleep(0.7)
                     await self.bot.select(message, 0, 0, random.randint(0, 3))
                     await asyncio.sleep(0.7)

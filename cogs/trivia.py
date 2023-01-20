@@ -33,12 +33,11 @@ class Trivia(commands.Cog):
             return
 
         for embed in message.embeds:
+            embed = embed.to_dict()
             try:
-                if embed.to_dict()["fields"][0]["name"] == "Difficulty":
-                    category = embed.to_dict()["fields"][1]["value"][1:-1]
-                    question = re.search(
-                        "\*\*(.*?)\*\*", embed.to_dict()["description"]
-                    ).group(1)
+                if embed["fields"][0]["name"] == "Difficulty":
+                    category = embed["fields"][1]["value"][1:-1]
+                    question = re.search("\*\*(.*?)\*\*", embed["description"]).group(1)
                     try:
                         answer = trivia_dict[category][question]
                     except KeyError:
