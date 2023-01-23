@@ -41,17 +41,12 @@ class Trivia(commands.Cog):
                     try:
                         answer = trivia_dict[category][question]
                     except KeyError:
-                        await self.bot.click(message, 0, 0)
+                        await self.bot.click(message, 0, random.randint(0, 3))
                         return
                     if random.random() <= self.chance:
-                        if message.components[0].children[0].label == answer:
-                            await self.bot.click(message, 0, 0)
-                        elif message.components[0].children[1].label == answer:
-                            await self.bot.click(message, 0, 1)
-                        elif message.components[0].children[2].label == answer:
-                            await self.bot.click(message, 0, 2)
-                        elif message.components[0].children[3].label == answer:
-                            await self.bot.click(message, 0, 3)
+                        for count, i in enumerate(message.components[0].children):
+                            if i.label == answer:
+                                await self.bot.click(message, 0, count)
                     else:
                         if message.components[0].children[0].label != answer:
                             await self.bot.click(message, 0, 0)
