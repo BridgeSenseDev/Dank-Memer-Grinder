@@ -74,6 +74,7 @@ class Autobuy(commands.Cog):
             return
 
         for embed in message.embeds:
+            embed = embed.to_dict()
             # Shovel
             try:
                 if (
