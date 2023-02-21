@@ -10,6 +10,7 @@
   ![License](https://img.shields.io/github/license/BridgeSenseDev/Dank-Memer-Grinder?color=598e3c&style=for-the-badge)
   ![Lines of Code](https://img.shields.io/tokei/lines/github/BridgeSenseDev/Dank-Memer-Grinder?color=598e3c&style=for-the-badge)
   ![Code Size](https://img.shields.io/github/languages/code-size/BridgeSenseDev/Dank-Memer-Grinder?color=598e3c&style=for-the-badge)
+  ![Downloads](https://img.shields.io/github/downloads/BridgeSenseDev/Dank-Memer-Grinder/total?color=598e3c&style=for-the-badge)
 
   [![Discord Server Invite](https://discord.com/api/guilds/1052536060552433735/widget.png?style=banner2)](https://discord.gg/KTrmQnhCHb)
 </div>
@@ -22,14 +23,16 @@
 ## Features
 
 -   [x] Easy to use GUI for configuration and logs
--   [x] Support for running up to 5 accounts at once
+-   [x] Support for running unlimited accounts at once
 -   [x] Automatic updater
--   [x] Automation of most currency commands and minigames (e.g. all work minigames, dragons, kraken, legendary fish, moleman)
+-   [x] Automation of most currency commands and minigames (e.g. all work minigames, pets care, moleman, dragons, kraken, legendary fish)
 -   [x] Automatically selects and streams the daily trending game
 -   [x] Answers all trivia questions with a configurable chance in order to avoid suspiscion
 -   [x] Automatically searches the best places to avoid death
 -   [x] Automatically buy fishing poles, hunting rifles, shovels or pizza's
 -   [x] Automatically buys lifesavers when under a configurable amount
+-   [x] Appear offline in discord status
+-   [x] Auto read alerts
 -   [x] Uses very little system resources
 
 <div align="center">
