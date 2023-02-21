@@ -34,7 +34,7 @@ class Minigames(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):
-        if after.channel.id != self.bot.channel_id:
+        if after.channel.id != self.bot.channel_id or self.bot.state is False:
             return
 
         for embed in after.embeds:
@@ -177,7 +177,7 @@ class Minigames(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.channel.id != self.bot.channel_id:
+        if message.channel.id != self.bot.channel_id or self.bot.state is False:
             return
 
         for embed in message.embeds:
