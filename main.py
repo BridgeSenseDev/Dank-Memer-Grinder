@@ -273,14 +273,9 @@ async def start_bot(token, account_id):
                     QtCore.QSize(35, 35)
                 )
 
-            await self.load_extension("cogs.trivia")
-            await self.load_extension("cogs.pm")
-            await self.load_extension("cogs.hl")
-            await self.load_extension("cogs.search")
-            await self.load_extension("cogs.stream")
-            await self.load_extension("cogs.minigames")
-            await self.load_extension("cogs.autobuy")
-            await self.load_extension("cogs.commands")
+            for filename in os.listdir("./cogs"):
+                if filename.endswith(".py"):
+                    await self.load_extension(f"cogs.{filename[:-3]}")
 
     try:
         await MyClient().start(token)
