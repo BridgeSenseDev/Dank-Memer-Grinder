@@ -10,6 +10,7 @@ commands = [
     "hunt",
     "pm",
     "beg",
+    "pet",
     "hl",
     "search",
     "dep_all",
