@@ -14,7 +14,7 @@ class Commands(commands.Cog):
 
     @tasks.loop(seconds=0.05)
     async def commands(self):
-        if self.bot.config_dict[self.bot.account_id]["state"] is False:
+        if self.bot.state is False:
             await asyncio.sleep(1)
             return
         for command in self.bot.commands_list:

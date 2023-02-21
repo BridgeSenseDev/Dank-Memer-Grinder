@@ -11,8 +11,8 @@ class Hl(commands.Cog):
     async def on_message(self, message):
         if (
             message.channel.id != self.bot.channel_id
-            or self.bot.config_dict[self.bot.account_id]["state"] is False
-            or self.bot.config_dict[self.bot.account_id]["commands"]["hl"] is False
+            or self.bot.state is False
+            or self.bot.config_dict["commands"]["hl"] is False
         ):
             return
 

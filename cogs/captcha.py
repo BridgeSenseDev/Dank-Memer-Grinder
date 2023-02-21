@@ -7,10 +7,7 @@ class Captcha(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if (
-            message.channel.id != self.bot.channel_id
-            or self.bot.config_dict[self.bot.account_id]["state"] is False
-        ):
+        if message.channel.id != self.bot.channel_id or self.bot.state is False:
             return
 
         for embed in message.embeds:

@@ -21,14 +21,14 @@ with open(resource_path("resources/trivia.json")) as file:
 class Trivia(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.chance = self.bot.config_dict[self.bot.account_id]["trivia_correct_chance"]
+        self.chance = self.bot.config_dict["trivia_correct_chance"]
 
     @commands.Cog.listener()
     async def on_message(self, message):
         if (
             message.channel.id != self.bot.channel_id
-            or self.bot.config_dict[self.bot.account_id]["state"] is False
-            or self.bot.config_dict[self.bot.account_id]["commands"]["trivia"] is False
+            or self.bot.state is False
+            or self.bot.config_dict["commands"]["trivia"] is False
         ):
             return
 

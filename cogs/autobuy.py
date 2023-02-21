@@ -12,7 +12,7 @@ class Autobuy(commands.Cog):
         if (
             message.guild is None
             and message.author.id == 270904126974590976
-            and self.bot.config_dict[self.bot.account_id]["state"] is True
+            and self.bot.state is True
         ):
             for embed in message.embeds:
                 embed = embed.to_dict()
@@ -20,9 +20,7 @@ class Autobuy(commands.Cog):
                 try:
                     if (
                         embed["title"] == "Your lifesaver protected you!"
-                        and self.bot.config_dict[self.bot.account_id]["autobuy"][
-                            "lifesavers"
-                        ]["state"]
+                        and self.bot.config_dict["autobuy"]["lifesavers"]["state"]
                         is True
                     ):
                         remaining = int(
@@ -32,9 +30,7 @@ class Autobuy(commands.Cog):
                             ).group(1)
                         )
                         required = int(
-                            self.bot.config_dict[self.bot.account_id]["autobuy"][
-                                "lifesavers"
-                            ]["amount"]
+                            self.bot.config_dict["autobuy"]["lifesavers"]["amount"]
                         )
                         if remaining < required:
                             channel = await message.author.create_dm()
@@ -58,19 +54,14 @@ class Autobuy(commands.Cog):
                 try:
                     if (
                         embed["title"] == "Pending Confirmation"
-                        and self.bot.config_dict[self.bot.account_id]["autobuy"][
-                            "lifesavers"
-                        ]["state"]
+                        and self.bot.config_dict["autobuy"]["lifesavers"]["state"]
                         is True
                     ):
                         await self.bot.click(message, 0, 1)
                 except KeyError:
                     pass
 
-        if (
-            message.channel.id != self.bot.channel_id
-            or self.bot.config_dict[self.bot.account_id]["state"] is False
-        ):
+        if message.channel.id != self.bot.channel_id or self.bot.state is False:
             return
 
         for embed in message.embeds:

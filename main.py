@@ -135,9 +135,10 @@ async def start_bot(token, account_id):
     class MyClient(commands.Bot):
         def __init__(self):
             super().__init__(command_prefix="-", self_bot=True)
-            self.config_dict = config_dict
             self.window = window
             self.account_id = account_id
+            self.config_dict = config_dict[self.account_id]
+            self.state = self.config_dict["state"]
             self.channel_id = int(config_dict[account_id]["channel_id"])
             self.channel = None
             self.commands_list = {
@@ -178,7 +179,8 @@ async def start_bot(token, account_id):
         @tasks.loop(seconds=5)
         async def update(self):
             with open("config.json", "r") as config_file:
-                self.config_dict = json.load(config_file)
+                self.config_dict = json.load(config_file)[self.account_id]
+                self.state = self.config_dict["state"]
 
         @staticmethod
         async def click(message, component, children):
