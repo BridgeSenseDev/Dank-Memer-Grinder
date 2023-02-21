@@ -154,6 +154,7 @@ async def start_bot(token, account_id):
                 "stream": "stream",
                 "work": "work",
                 "daily": "daily",
+                "crime": "crime",
             }
             self.commands_delay = {
                 "trivia": 10,
@@ -168,6 +169,7 @@ async def start_bot(token, account_id):
                 "stream": 660,
                 "work": 3600,
                 "daily": 86400,
+                "crime": 50,
             }
             # Add delay to commands
             for command in self.commands_delay:
@@ -538,6 +540,7 @@ class MainWindow(QMainWindow):
                     "stream": False,
                     "work": False,
                     "daily": False,
+                    "crime": False,
                 },
             }
             file.seek(0)

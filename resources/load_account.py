@@ -16,6 +16,7 @@ commands = [
     "stream",
     "work",
     "daily",
+    "crime",
 ]
 
 

@@ -1,20 +1,11 @@
 from discord.ext import commands
 
-priority = [
-    "phoenix pits",
-    "aeradella's home",
-    "soul's chamber",
-    "god's own place",
-    "dog",
-    "grass",
-    "air",
-    "kitchen",
-]
-second_priority = ["who asked", "fridge"]
-avoid = ["area51", "bank"]
+priority = []
+second_priority = []
+avoid = []
 
 
-class Search(commands.Cog):
+class Crime(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -23,14 +14,14 @@ class Search(commands.Cog):
         if (
             message.channel.id != self.bot.channel_id
             or self.bot.state is False
-            or self.bot.config_dict["commands"]["search"] is False
+            or self.bot.config_dict["commands"]["crime"] is False
         ):
             return
 
         for embed in message.embeds:
             embed = embed.to_dict()
             try:
-                if "to search?" in embed["description"]:
+                if "What crime do you want to commit?" in embed["description"]:
                     for count, i in enumerate(message.components[0].children):
                         if i.label in priority:
                             await self.bot.click(message, 0, count)
@@ -48,4 +39,4 @@ class Search(commands.Cog):
 
 
 async def setup(bot):
-    await bot.add_cog(Search(bot))
+    await bot.add_cog(Crime(bot))
