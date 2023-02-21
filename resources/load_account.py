@@ -1,6 +1,7 @@
 import json
 import math
 
+import requests
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 commands = [
@@ -1424,48 +1425,64 @@ def load_account(self, account_id):
         ),
     )
     getattr(self.ui, f"main_menu_widget_{account_id}").setCurrentIndex(0)
-
-    # Initialize settings
     getattr(self.ui, f"output_text_{account_id}").setVerticalScrollBar(
         getattr(self.ui, f"output_scrollbar_{account_id}")
     )
-    getattr(self.ui, f"lifesavers_checkbox_{account_id}").setChecked(
-        config_dict[account_id]["autobuy"]["lifesavers"]["state"]
-    )
-    getattr(self.ui, f"lifesavers_amount_{account_id}").setValue(
-        config_dict[account_id]["autobuy"]["lifesavers"]["amount"]
-    )
-    getattr(self.ui, f"token_input_{account_id}").setText(
-        config_dict[account_id]["discord_token"]
-    )
-    getattr(self.ui, f"channel_input_{account_id}").setText(
-        config_dict[account_id]["channel_id"]
-    )
-    getattr(self.ui, f"trivia_chance_{account_id}").setValue(
-        int(config_dict[account_id]["trivia_correct_chance"] * 100)
-    )
-    getattr(self.ui, f"offline_checkbox_{account_id}").setChecked(
-        config_dict[account_id]["offline"]
-    )
-    getattr(self.ui, f"alerts_checkbox_{account_id}").setChecked(
-        config_dict[account_id]["alerts"]
-    )
 
-    for command in config_dict[account_id]["commands"]:
+    # Initialize settings
+    while True:
         try:
-            getattr(self.ui, f"{command}_checkbox_{account_id}").setChecked(
-                config_dict[account_id]["commands"][command]
+            getattr(self.ui, f"lifesavers_checkbox_{account_id}").setChecked(
+                config_dict[account_id]["autobuy"]["lifesavers"]["state"]
             )
-        except AttributeError:
-            pass
+            getattr(self.ui, f"lifesavers_amount_{account_id}").setValue(
+                config_dict[account_id]["autobuy"]["lifesavers"]["amount"]
+            )
+            getattr(self.ui, f"token_input_{account_id}").setText(
+                config_dict[account_id]["discord_token"]
+            )
+            getattr(self.ui, f"channel_input_{account_id}").setText(
+                config_dict[account_id]["channel_id"]
+            )
+            getattr(self.ui, f"trivia_chance_{account_id}").setValue(
+                int(config_dict[account_id]["trivia_correct_chance"] * 100)
+            )
+            getattr(self.ui, f"offline_checkbox_{account_id}").setChecked(
+                config_dict[account_id]["offline"]
+            )
+            getattr(self.ui, f"alerts_checkbox_{account_id}").setChecked(
+                config_dict[account_id]["alerts"]
+            )
 
-    for autobuy in config_dict[account_id]["autobuy"]:
-        try:
-            getattr(self.ui, f"{autobuy}_checkbox_{account_id}").setChecked(
-                config_dict[account_id]["autobuy"][autobuy]
-            )
-        except (TypeError, AttributeError):
-            pass
+            for command in config_dict[account_id]["commands"]:
+                try:
+                    getattr(self.ui, f"{command}_checkbox_{account_id}").setChecked(
+                        config_dict[account_id]["commands"][command]
+                    )
+                except AttributeError:
+                    pass
+
+            for autobuy in config_dict[account_id]["autobuy"]:
+                try:
+                    getattr(self.ui, f"{autobuy}_checkbox_{account_id}").setChecked(
+                        config_dict[account_id]["autobuy"][autobuy]
+                    )
+                except (TypeError, AttributeError):
+                    pass
+            break
+        except KeyError as e:
+            if e not in config_dict[account_id]:
+                if e not in config_dict[account_id]:
+                    config_example = json.loads(
+                        requests.get(
+                            "https://raw.githubusercontent.com/BridgeSenseDev/Dank-Memer-Grinder/main/"
+                            "config.json.example"
+                        ).text
+                    )
+                    value = config_example["1"][str(e).split("'")[1]]
+                    config_dict[account_id].update({str(e).split("'")[1]: value})
+                    with open("config.json", "w") as file:
+                        json.dump(config_dict, file, ensure_ascii=False, indent=4)
 
     # Commands
     for button in commands:
