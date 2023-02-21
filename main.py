@@ -497,7 +497,7 @@ class MainWindow(QMainWindow):
                     QtGui.QIcon.Mode.Normal,
                     QtGui.QIcon.State.Off,
                 )
-                getattr(self.ui, f"account_btn_{account_id}").setIconSize(
+                getattr(self.ui, f"account_btn_{self.account_id}").setIconSize(
                     QtCore.QSize(22, 22)
                 )
                 getattr(window.ui, f"account_btn_{self.account_id}").setIcon(icon)
@@ -507,6 +507,10 @@ class MainWindow(QMainWindow):
             )
             with open("config.json", "w") as file:
                 json.dump(config_dict, file, ensure_ascii=False, indent=4)
+        else:
+            config_dict[self.account_id].update({command: state})
+            with open("config.json", "w") as file:
+                json.dump(config_dict, file, ensure_ascii=False, indent=4)
 
     @asyncSlot()
     async def add_account(self):
@@ -514,10 +518,12 @@ class MainWindow(QMainWindow):
             config_dict = json.load(file)
             account_id = len(config_dict) + 1
             config_dict[account_id] = {
+                "state": False,
                 "trivia_correct_chance": 0.75,
                 "channel_id": "",
                 "discord_token": "",
-                "state": False,
+                "offline": False,
+                "alerts": False,
                 "autobuy": {
                     "lifesavers": {"state": True, "amount": 5},
                     "fishing": False,

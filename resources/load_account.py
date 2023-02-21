@@ -576,6 +576,155 @@ def load_account(self, account_id):
     self.ui.verticalLayout_19.addWidget(
         getattr(self.ui, f"trivia_frame_{account_id}"), 0, QtCore.Qt.AlignVCenter
     )
+    setattr(
+        self.ui,
+        f"toggles_frame_{account_id}",
+        QtWidgets.QFrame(getattr(self.ui, f"settings_frame_{account_id}")),
+    )
+    getattr(self.ui, f"toggles_frame_{account_id}").setFrameShape(
+        QtWidgets.QFrame.StyledPanel
+    )
+    getattr(self.ui, f"toggles_frame_{account_id}").setFrameShadow(
+        QtWidgets.QFrame.Raised
+    )
+    getattr(self.ui, f"toggles_frame_{account_id}").setObjectName(
+        f"toggles_frame_{account_id}"
+    )
+    self.horizontalLayout_6 = QtWidgets.QHBoxLayout(
+        getattr(self.ui, f"toggles_frame_{account_id}")
+    )
+    self.horizontalLayout_6.setContentsMargins(0, 0, 0, 0)
+    self.horizontalLayout_6.setSpacing(0)
+    self.horizontalLayout_6.setObjectName("horizontalLayout_6")
+    setattr(
+        self.ui,
+        f"toggles_left_frame_{account_id}",
+        QtWidgets.QFrame(getattr(self.ui, f"toggles_frame_{account_id}")),
+    )
+    getattr(self.ui, f"toggles_left_frame_{account_id}").setFrameShape(
+        QtWidgets.QFrame.StyledPanel
+    )
+    getattr(self.ui, f"toggles_left_frame_{account_id}").setFrameShadow(
+        QtWidgets.QFrame.Raised
+    )
+    getattr(self.ui, f"toggles_left_frame_{account_id}").setObjectName(
+        f"toggles_left_frame_{account_id}"
+    )
+    self.verticalLayout_10 = QtWidgets.QVBoxLayout(
+        getattr(self.ui, f"toggles_left_frame_{account_id}")
+    )
+    self.verticalLayout_10.setObjectName("verticalLayout_10")
+    setattr(
+        self.ui,
+        f"toggles_left_frame_2_{account_id}",
+        QtWidgets.QFrame(getattr(self.ui, f"toggles_left_frame_{account_id}")),
+    )
+    getattr(self.ui, f"toggles_left_frame_2_{account_id}").setFrameShape(
+        QtWidgets.QFrame.StyledPanel
+    )
+    getattr(self.ui, f"toggles_left_frame_2_{account_id}").setFrameShadow(
+        QtWidgets.QFrame.Raised
+    )
+    getattr(self.ui, f"toggles_left_frame_2_{account_id}").setObjectName(
+        f"toggles_left_frame_2_{account_id}"
+    )
+    self.verticalLayout_15 = QtWidgets.QVBoxLayout(
+        getattr(self.ui, f"toggles_left_frame_2_{account_id}")
+    )
+    self.verticalLayout_15.setContentsMargins(0, 0, 0, 0)
+    self.verticalLayout_15.setSpacing(0)
+    self.verticalLayout_15.setObjectName("verticalLayout_15")
+    setattr(
+        self.ui,
+        f"offline_checkbox_{account_id}",
+        QtWidgets.QCheckBox(getattr(self.ui, f"toggles_left_frame_2_{account_id}")),
+    )
+    font = QtGui.QFont()
+    font.setFamily("Segoe UI")
+    font.setPointSize(15)
+    font.setBold(True)
+    font.setWeight(75)
+    getattr(self.ui, f"offline_checkbox_{account_id}").setFont(font)
+    getattr(self.ui, f"offline_checkbox_{account_id}").setCursor(
+        QtGui.QCursor(QtCore.Qt.PointingHandCursor)
+    )
+    getattr(self.ui, f"offline_checkbox_{account_id}").setObjectName(
+        "offline_checkbox_1"
+    )
+    self.verticalLayout_15.addWidget(
+        getattr(self.ui, f"offline_checkbox_{account_id}"), 0, QtCore.Qt.AlignHCenter
+    )
+    self.verticalLayout_10.addWidget(
+        getattr(self.ui, f"toggles_left_frame_2_{account_id}")
+    )
+    self.horizontalLayout_6.addWidget(
+        getattr(self.ui, f"toggles_left_frame_{account_id}")
+    )
+    setattr(
+        self.ui,
+        f"toggles_right_frame_{account_id}",
+        QtWidgets.QFrame(getattr(self.ui, f"toggles_frame_{account_id}")),
+    )
+    getattr(self.ui, f"toggles_right_frame_{account_id}").setFrameShape(
+        QtWidgets.QFrame.StyledPanel
+    )
+    getattr(self.ui, f"toggles_right_frame_{account_id}").setFrameShadow(
+        QtWidgets.QFrame.Raised
+    )
+    getattr(self.ui, f"toggles_right_frame_{account_id}").setObjectName(
+        "toggles_right_frame_1"
+    )
+    self.verticalLayout_16 = QtWidgets.QVBoxLayout(
+        getattr(self.ui, f"toggles_right_frame_{account_id}")
+    )
+    self.verticalLayout_16.setContentsMargins(0, 0, 0, 0)
+    self.verticalLayout_16.setSpacing(0)
+    self.verticalLayout_16.setObjectName("verticalLayout_16")
+    setattr(
+        self.ui,
+        f"toggles_right_frame_2_{account_id}",
+        QtWidgets.QFrame(getattr(self.ui, f"toggles_right_frame_{account_id}")),
+    )
+    getattr(self.ui, f"toggles_right_frame_2_{account_id}").setFrameShape(
+        QtWidgets.QFrame.StyledPanel
+    )
+    getattr(self.ui, f"toggles_right_frame_2_{account_id}").setFrameShadow(
+        QtWidgets.QFrame.Raised
+    )
+    getattr(self.ui, f"toggles_right_frame_2_{account_id}").setObjectName(
+        f"toggles_right_frame_2_{account_id}"
+    )
+    self.verticalLayout_17 = QtWidgets.QVBoxLayout(
+        getattr(self.ui, f"toggles_right_frame_2_{account_id}")
+    )
+    self.verticalLayout_17.setContentsMargins(0, 0, 0, 0)
+    self.verticalLayout_17.setSpacing(0)
+    self.verticalLayout_17.setObjectName("verticalLayout_17")
+    setattr(
+        self.ui,
+        f"alerts_checkbox_{account_id}",
+        QtWidgets.QCheckBox(getattr(self.ui, f"toggles_right_frame_2_{account_id}")),
+    )
+    font = QtGui.QFont()
+    font.setFamily("Segoe UI")
+    font.setPointSize(15)
+    font.setBold(True)
+    font.setWeight(75)
+    getattr(self.ui, f"alerts_checkbox_{account_id}").setFont(font)
+    getattr(self.ui, f"alerts_checkbox_{account_id}").setCursor(
+        QtGui.QCursor(QtCore.Qt.PointingHandCursor)
+    )
+    getattr(self.ui, f"alerts_checkbox_{account_id}").setObjectName("alerts_checkbox_1")
+    self.verticalLayout_17.addWidget(
+        getattr(self.ui, f"alerts_checkbox_{account_id}"), 0, QtCore.Qt.AlignHCenter
+    )
+    self.verticalLayout_16.addWidget(
+        getattr(self.ui, f"toggles_right_frame_2_{account_id}")
+    )
+    self.horizontalLayout_6.addWidget(
+        getattr(self.ui, f"toggles_right_frame_{account_id}")
+    )
+    self.ui.verticalLayout_19.addWidget(getattr(self.ui, f"toggles_frame_{account_id}"))
     self.ui.verticalLayout_7.addWidget(getattr(self.ui, f"settings_frame_{account_id}"))
     getattr(self.ui, f"main_menu_widget_{account_id}").addWidget(
         getattr(self.ui, f"settings_widget_{account_id}")
@@ -1236,6 +1385,8 @@ def load_account(self, account_id):
     getattr(self.ui, f"token_label_{account_id}").setText("Discord Token")
     getattr(self.ui, f"channel_label_{account_id}").setText("Channel ID")
     getattr(self.ui, f"trivia_label_{account_id}").setText("Correct Trivia Chance")
+    getattr(self.ui, f"offline_checkbox_{account_id}").setText("Appear Offline")
+    getattr(self.ui, f"alerts_checkbox_{account_id}").setText("Read Alerts")
     getattr(self.ui, f"commands_label_{account_id}").setText("Commands")
 
     # Command labels
@@ -1290,6 +1441,12 @@ def load_account(self, account_id):
     )
     getattr(self.ui, f"trivia_chance_{account_id}").setValue(
         int(config_dict[account_id]["trivia_correct_chance"] * 100)
+    )
+    getattr(self.ui, f"offline_checkbox_{account_id}").setChecked(
+        config_dict[account_id]["offline"]
+    )
+    getattr(self.ui, f"alerts_checkbox_{account_id}").setChecked(
+        config_dict[account_id]["alerts"]
     )
 
     for command in config_dict[account_id]["commands"]:
@@ -1356,6 +1513,18 @@ def load_account(self, account_id):
         lambda checked, account_id=account_id: self.settings(
             "trivia_chance",
             getattr(self.ui, f"trivia_chance_{account_id}").value(),
+        )
+    )
+    getattr(self.ui, f"offline_checkbox_{account_id}").clicked.connect(
+        lambda checked, account_id=account_id: self.settings(
+            "offline",
+            getattr(self.ui, f"offline_checkbox_{account_id}").isChecked(),
+        )
+    )
+    getattr(self.ui, f"alerts_checkbox_{account_id}").clicked.connect(
+        lambda checked, account_id=account_id: self.settings(
+            "alerts",
+            getattr(self.ui, f"alerts_checkbox_{account_id}").isChecked(),
         )
     )
 
