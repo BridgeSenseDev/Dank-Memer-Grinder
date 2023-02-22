@@ -1472,17 +1472,16 @@ def load_account(self, account_id):
             break
         except KeyError as e:
             if e not in config_dict[account_id]:
-                if e not in config_dict[account_id]:
-                    config_example = json.loads(
-                        requests.get(
-                            "https://raw.githubusercontent.com/BridgeSenseDev/Dank-Memer-Grinder/main/"
-                            "config.json.example"
-                        ).text
-                    )
-                    value = config_example["1"][str(e).split("'")[1]]
-                    config_dict[account_id].update({str(e).split("'")[1]: value})
-                    with open("config.json", "w") as file:
-                        json.dump(config_dict, file, ensure_ascii=False, indent=4)
+                config_example = json.loads(
+                    requests.get(
+                        "https://raw.githubusercontent.com/BridgeSenseDev/Dank-Memer-Grinder/main/"
+                        "config.json.example"
+                    ).text
+                )
+                value = config_example["1"][str(e).split("'")[1]]
+                config_dict[account_id].update({str(e).split("'")[1]: value})
+                with open("config.json", "w") as file:
+                    json.dump(config_dict, file, ensure_ascii=False, indent=4)
 
     # Commands
     for button in commands:

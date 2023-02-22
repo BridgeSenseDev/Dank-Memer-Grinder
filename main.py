@@ -314,6 +314,7 @@ class MainWindow(QMainWindow):
     output = pyqtSignal(list)
 
     def __init__(self):
+        global config_dict
         QMainWindow.__init__(self)
         self.setWindowIcon(QIcon(resource_path("resources/icon.ico")))
         self.setWindowTitle("Dank Memer Grinder")
@@ -322,8 +323,18 @@ class MainWindow(QMainWindow):
         QFontDatabase.addApplicationFont(resource_path("resources/fonts/Impact.ttf"))
         self.ui = Ui_DankMemerGrinder(len(config_dict) + 1)
         self.ui.setupUi(self)
+
         # Initialize settings
         for account_id in range(1, len(config_dict) + 1):
+            if str(account_id) not in config_dict:
+                config_dict = {
+                    k: v
+                    for i, (k, v) in enumerate(config_dict.items())
+                    if i != account_id - 1
+                }
+                with open("config.json", "w") as file:
+                    json.dump(config_dict, file, ensure_ascii=False, indent=4)
+                continue
             load_account(self, str(account_id))
         # noinspection PyArgumentList
         sys.stdout = Stream(new_text=self.onUpdateText)
