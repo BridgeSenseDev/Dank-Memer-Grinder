@@ -277,7 +277,7 @@ async def start_bot(token, account_id):
                     QtCore.QSize(35, 35)
                 )
 
-            for filename in os.listdir("./cogs"):
+            for filename in os.listdir(resource_path("./cogs")):
                 if filename.endswith(".py"):
                     await self.load_extension(f"cogs.{filename[:-3]}")
 
