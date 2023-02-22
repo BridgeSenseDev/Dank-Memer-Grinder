@@ -1,9 +1,10 @@
 import asyncio
+import random
 import re
 
 from discord.ext import commands
 
-Games = {
+games = {
     "apex legends": 0,
     "call of duty": 1,
     "csgo": 2,
@@ -51,7 +52,7 @@ class Stream(commands.Cog):
             try:
                 if embed["title"] == "Trending Game":
                     global game
-                    game = Games[
+                    game = games[
                         (re.search("\*\*(.*?)\*\*", embed["description"]).group(1))
                         .title()
                         .lower()
@@ -73,7 +74,12 @@ class Stream(commands.Cog):
                     await asyncio.sleep(4)
 
                     # Select trending game
-                    await self.bot.select(message, 0, 0, game)
+                    try:
+                        await self.bot.select(message, 0, 0, game)
+                    except NameError:
+                        await self.bot.select(
+                            message, 0, 0, random.randint(0, 24)
+                        )
                     await asyncio.sleep(0.7)
                     await self.bot.click(message, 1, 0)
                     await asyncio.sleep(0.7)
