@@ -77,9 +77,7 @@ class Stream(commands.Cog):
                     try:
                         await self.bot.select(message, 0, 0, game)
                     except NameError:
-                        await self.bot.select(
-                            message, 0, 0, random.randint(0, 24)
-                        )
+                        await self.bot.select(message, 0, 0, random.randint(0, 24))
                     await asyncio.sleep(0.7)
                     await self.bot.click(message, 1, 0)
                     await asyncio.sleep(0.7)
