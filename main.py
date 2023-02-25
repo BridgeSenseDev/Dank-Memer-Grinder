@@ -63,51 +63,30 @@ class UpdaterWindow(QMainWindow):
                     ),
                     stream=True,
                 )
-                open("Windows-amd64.exe", "wb").write(r.content)
-                subprocess.Popen("./Windows-amd64.exe")
+                temp_file = os.path.join(tempfile.gettempdir(), "Windows-amd64.exe")
+                with open(temp_file, "wb") as f:
+                    f.write(r.content)
+                subprocess.Popen(temp_file)
+                sys.exit(os._exit(0))
             case "Linux":
                 if platform.machine() == "aarch64":
-                    r = requests.get(
-                        (
-                            "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/blob/"
-                            "main/updater/Linux-arm64?raw=true"
-                        ),
-                        stream=True,
-                    )
-                    with zipfile.ZipFile(io.BytesIO(r.content)) as z:
-                        with open("Linux-arm64", "wb") as f:
-                            f.write(z.read("Linux-arm64"))
-                    f = Path("Linux-arm64")
-                    f.chmod(f.stat().st_mode | stat.S_IEXEC)
-                    subprocess.Popen("./Linux-arm64")
+                    arch = "Linux-arm64"
                 else:
-                    r = requests.get(
-                        (
-                            "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/blob/main/"
-                            "updater/Linux-amd64?raw=true"
-                        ),
-                        stream=True,
-                    )
-                    with zipfile.ZipFile(io.BytesIO(r.content)) as z:
-                        with open("Linux-amd64", "wb") as f:
-                            f.write(z.read("Linux-amd64"))
-                    f = Path("Linux-amd64")
-                    f.chmod(f.stat().st_mode | stat.S_IEXEC)
-                    subprocess.Popen("./Linux-amd64")
+                    arch = "Linux-amd64"
             case "Darwin":
-                r = requests.get(
-                    (
-                        "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/blob/main/"
-                        "updater/Darwin-amd64?raw=true"
-                    ),
-                    stream=True,
-                )
-                with zipfile.ZipFile(io.BytesIO(r.content)) as z:
-                    with open("Darwin-amd64", "wb") as f:
-                        f.write(z.read("Darwin-amd64"))
-                f = Path("Darwin-amd64")
-                f.chmod(f.stat().st_mode | stat.S_IEXEC)
-                subprocess.Popen("./Darwin-amd64")
+                arch = "Darwin-amd64"
+        r = requests.get(
+            (
+                "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/blob/main/"
+                f"updater/{arch}?raw=true"
+            ),
+            stream=True,
+        )
+        temp_file = os.path.join(tempfile.gettempdir(), arch)
+        with open(temp_file, "wb") as f:
+            f.write(r.content)
+        os.chmod(temp_file, os.stat(temp_file).st_mode | 0o111)
+        subprocess.Popen(temp_file)
         sys.exit(os._exit(0))
 
     def skip(self):
@@ -598,9 +577,6 @@ def between_callback(token, account_id):
 
 
 if __name__ == "__main__":
-    for i in ["Windows-amd64.exe", "Linux-amd64", "Linux-arm64", "Darwin-amd64"]:
-        if os.path.exists(i):
-            os.remove(i)
     app = QApplication(sys.argv)
     version = requests.get(
         "https://raw.githubusercontent.com/BridgeSenseDev/Dank-Memer-Grinder/main/"
