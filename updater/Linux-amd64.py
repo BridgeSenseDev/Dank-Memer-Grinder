@@ -1,10 +1,8 @@
 import io
-import platform
-import stat
+import os
 import subprocess
 import sys
 import zipfile
-from pathlib import Path
 
 import requests
 from halo import Halo
@@ -23,7 +21,6 @@ spinner = Halo(
 )
 spinner.start()
 
-
 r = requests.get(
     (
         "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/releases/download/v"
@@ -31,11 +28,11 @@ r = requests.get(
     ),
     stream=True,
 )
+
 with zipfile.ZipFile(io.BytesIO(r.content)) as z:
     with open("Dank Memer Grinder", "wb") as f:
         f.write(z.read("Dank Memer Grinder"))
+os.chmod("Dank Memer Grinder", os.stat("Dank Memer Grinder").st_mode | 0o111)
 
-f = Path("Dank Memer Grinder")
-f.chmod(f.stat().st_mode | stat.S_IEXEC)
-subprocess.Popen("./Dank Memer Grinder")
-sys.exit(0)
+subprocess.Popen(f"{os.getcwd()}/Dank Memer Grinder")
+sys.exit(os._exit(0))

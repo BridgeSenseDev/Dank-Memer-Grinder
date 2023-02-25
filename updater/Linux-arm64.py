@@ -1,5 +1,5 @@
 import io
-import platform
+import os
 import stat
 import subprocess
 import sys
@@ -31,11 +31,11 @@ r = requests.get(
     ),
     stream=True,
 )
+
 with zipfile.ZipFile(io.BytesIO(r.content)) as z:
     with open("Dank Memer Grinder", "wb") as f:
         f.write(z.read("Dank Memer Grinder"))
+os.chmod("Dank Memer Grinder", os.stat("Dank Memer Grinder").st_mode | 0o111)
 
-f = Path("Dank Memer Grinder")
-f.chmod(f.stat().st_mode | stat.S_IEXEC)
-subprocess.Popen("./Dank Memer Grinder")
-sys.exit(0)
+subprocess.Popen(f"{os.getcwd()}/Dank Memer Grinder")
+sys.exit(os._exit(0))
