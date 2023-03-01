@@ -36,13 +36,11 @@ class Others(commands.Cog):
             self.bot.config_dict["offline"]
             and self.bot.status != discord.Status.invisible
         ):
-            print("change")
             await self.bot.change_presence(status=discord.Status.invisible)
         elif (
             not self.bot.config_dict["offline"]
             and self.bot.status == discord.Status.invisible
         ):
-            print("change online")
             await self.bot.change_presence(status=discord.Status.online)
 
     @presence.before_loop
