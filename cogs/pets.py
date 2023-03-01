@@ -37,7 +37,7 @@ class Pets(commands.Cog):
                         while percentage <= 90:
                             await self.bot.click(message, 1, count)
                             if count == 3:
-                                await asyncio.sleep(5)
+                                return
                             await asyncio.sleep(0.5)
                             embed = message.embeds[0].to_dict()
                             percentage = int(
