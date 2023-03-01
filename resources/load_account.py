@@ -4,25 +4,8 @@ import math
 import requests
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-commands = [
-    "trivia",
-    "dig",
-    "fish",
-    "hunt",
-    "pm",
-    "beg",
-    "pet",
-    "hl",
-    "search",
-    "dep_all",
-    "stream",
-    "work",
-    "daily",
-    "crime",
-]
 
-
-def load_account(self, account_id):
+def load_account(self, account_id, commands):
     with open("config.json", "r") as config_file:
         config_dict = json.load(config_file)
     # Account btn
@@ -1454,13 +1437,17 @@ def load_account(self, account_id):
                 config_dict[account_id]["alerts"]
             )
 
-            for command in config_dict[account_id]["commands"]:
+            for command in commands:
                 try:
                     getattr(self.ui, f"{command}_checkbox_{account_id}").setChecked(
                         config_dict[account_id]["commands"][command]
                     )
-                except AttributeError:
-                    pass
+                except KeyError as e:
+                    config_dict[account_id]["commands"].update(
+                        {str(e).split("'")[1]: False}
+                    )
+                    with open("config.json", "w") as file:
+                        json.dump(config_dict, file, ensure_ascii=False, indent=4)
 
             for autobuy in config_dict[account_id]["autobuy"]:
                 try:

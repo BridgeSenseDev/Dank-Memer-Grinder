@@ -1,16 +1,12 @@
 import asyncio
 import ctypes
-import io
 import json
 import os
 import platform
-import stat
 import subprocess
 import sys
 import tempfile
 import threading
-import zipfile
-from pathlib import Path
 
 import discord.errors
 import numpy
@@ -31,6 +27,23 @@ try:
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("dankmemergrinder")
 except AttributeError:
     pass
+
+commands_dict = {
+    "trivia": "trivia",
+    "dig": "dig",
+    "fish": "fish",
+    "hunt": "hunt",
+    "pm": "postmemes",
+    "beg": "beg",
+    "pet": "pets",
+    "hl": "highlow",
+    "search": "search",
+    "dep_all": "deposit",
+    "stream": "stream",
+    "work": "work",
+    "daily": "daily",
+    "crime": "crime",
+}
 
 
 class UpdaterWindow(QMainWindow):
@@ -114,22 +127,7 @@ async def start_bot(token, account_id):
             self.state = self.config_dict["state"]
             self.channel_id = int(config_dict[account_id]["channel_id"])
             self.channel = None
-            self.commands_list = {
-                "trivia": "trivia",
-                "dig": "dig",
-                "fish": "fish",
-                "hunt": "hunt",
-                "pm": "postmemes",
-                "beg": "beg",
-                "pet": "pets",
-                "hl": "highlow",
-                "search": "search",
-                "dep_all": "deposit",
-                "stream": "stream",
-                "work": "work",
-                "daily": "daily",
-                "crime": "crime",
-            }
+            self.commands_dict = commands_dict
             self.commands_delay = {
                 "trivia": 10,
                 "dig": 40,
@@ -150,7 +148,7 @@ async def start_bot(token, account_id):
             for command in self.commands_delay:
                 self.commands_delay[command] = int(self.commands_delay[command] * 1.1)
             self.last_ran = {}
-            for command in self.commands_list:
+            for command in self.commands_dict:
                 self.last_ran[command] = 0
 
         @tasks.loop(seconds=5)
@@ -310,7 +308,7 @@ class MainWindow(QMainWindow):
                 with open("config.json", "w") as file:
                     json.dump(config_dict, file, ensure_ascii=False, indent=4)
                 continue
-            load_account(self, str(account_id))
+            load_account(self, str(account_id), list(commands_dict.keys()))
         # noinspection PyArgumentList
         sys.stdout = Stream(new_text=self.onUpdateText)
         # noinspection PyArgumentList
@@ -535,7 +533,7 @@ class MainWindow(QMainWindow):
             file.seek(0)
             json.dump(config_dict, file, ensure_ascii=False, indent=4)
             file.truncate()
-        load_account(self, str(account_id))
+        load_account(self, str(account_id), list(commands_dict.keys()))
 
     @asyncSlot()
     async def delete_account(self):
