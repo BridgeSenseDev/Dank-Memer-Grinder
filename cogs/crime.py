@@ -1,3 +1,5 @@
+import random
+
 from discord.ext import commands
 
 priority = []
@@ -22,17 +24,17 @@ class Crime(commands.Cog):
             embed = embed.to_dict()
             try:
                 if "What crime do you want to commit?" in embed["description"]:
-                    for count, i in enumerate(message.components[0].children):
+                    children = message.components[0].children
+                    random.shuffle(children)
+                    for i in children:
                         if i.label in priority:
-                            await self.bot.click(message, 0, count)
+                            await self.bot.click(message, 0, children.index(i))
                             return
-                    for count, i in enumerate(message.components[0].children):
                         if i.label in second_priority:
-                            await self.bot.click(message, 0, count)
+                            await self.bot.click(message, 0, children.index(i))
                             return
-                    for count, i in enumerate(message.components[0].children):
                         if i.label not in avoid:
-                            await self.bot.click(message, 0, count)
+                            await self.bot.click(message, 0, children.index(i))
                             return
             except KeyError:
                 pass
