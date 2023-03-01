@@ -94,14 +94,8 @@ class UpdaterWindow(QMainWindow):
         window.show()
 
 
-def update():
-    global config_dict
-    threading.Timer(5, update).start()
-    with open("config.json", "r") as config_file:
-        config_dict = json.load(config_file)
-
-
-update()
+with open("config.json", "r") as config_file:
+    config_dict = json.load(config_file)
 
 
 def resource_path(relative_path):
@@ -306,6 +300,8 @@ class MainWindow(QMainWindow):
         # Initialize settings
         for account_id in range(1, len(config_dict) + 1):
             if str(account_id) not in config_dict:
+                with open("config.json", "r") as config_file:
+                    config_dict = json.load(config_file)
                 config_dict = {
                     k: v
                     for i, (k, v) in enumerate(config_dict.items())
