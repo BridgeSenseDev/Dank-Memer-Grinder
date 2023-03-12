@@ -16,20 +16,62 @@
             "rifle": false
         },
         "commands": {
-            "trivia": false,
-            "dig": false,
-            "fish": false,
-            "hunt": false,
-            "pm": false,
-            "beg": false,
-            "pet": false,
-            "hl": false,
-            "search": false,
-            "dep_all": false,
-            "stream": false,
-            "work": false,
-            "daily": false,
-            "crime": false
+            "trivia": {
+                "state": false,
+                "delay": 10
+            },
+            "dig": {
+                "state": false,
+                "delay": 40
+            },
+            "fish": {
+                "state": false,
+                "delay": 40
+            },
+            "hunt": {
+                "state": false,
+                "delay": 40
+            },
+            "pm": {
+                "state": false,
+                "delay": 50
+            },
+            "beg": {
+                "state": false,
+                "delay": 45
+            },
+            "pet": {
+                "state": false,
+                "delay": 1800
+            },
+            "hl": {
+                "state": false,
+                "delay": 30
+            },
+            "search": {
+                "state": false,
+                "delay": 30
+            },
+            "dep_all": {
+                "state": false,
+                "delay": 60
+            },
+            "stream": {
+                "state": false,
+                "delay": 660
+            },
+            "work": {
+                "state": false,
+                "delay": 3600
+            },
+            "daily": {
+                "state": false,
+                "delay": 86400
+            },
+            "crime": {
+                "state": false,
+                "delay": 50
+            }
         }
     },
     "2": {
@@ -49,20 +91,62 @@
             "rifle": false
         },
         "commands": {
-            "trivia": false,
-            "dig": false,
-            "fish": false,
-            "hunt": false,
-            "pm": false,
-            "beg": false,
-            "pet": false,
-            "hl": false,
-            "search": false,
-            "dep_all": false,
-            "stream": false,
-            "work": false,
-            "daily": false,
-            "crime": false
+            "trivia": {
+                "state": false,
+                "delay": 10
+            },
+            "dig": {
+                "state": false,
+                "delay": 40
+            },
+            "fish": {
+                "state": false,
+                "delay": 40
+            },
+            "hunt": {
+                "state": false,
+                "delay": 40
+            },
+            "pm": {
+                "state": false,
+                "delay": 50
+            },
+            "beg": {
+                "state": false,
+                "delay": 45
+            },
+            "pet": {
+                "state": false,
+                "delay": 1800
+            },
+            "hl": {
+                "state": false,
+                "delay": 30
+            },
+            "search": {
+                "state": false,
+                "delay": 30
+            },
+            "dep_all": {
+                "state": false,
+                "delay": 60
+            },
+            "stream": {
+                "state": false,
+                "delay": 660
+            },
+            "work": {
+                "state": false,
+                "delay": 3600
+            },
+            "daily": {
+                "state": false,
+                "delay": 86400
+            },
+            "crime": {
+                "state": false,
+                "delay": 50
+            }
         }
     },
     "3": {
@@ -82,20 +166,62 @@
             "rifle": false
         },
         "commands": {
-            "trivia": false,
-            "dig": false,
-            "fish": false,
-            "hunt": false,
-            "pm": false,
-            "beg": false,
-            "pet": false,
-            "hl": false,
-            "search": false,
-            "dep_all": false,
-            "stream": false,
-            "work": false,
-            "daily": false,
-            "crime": false
+            "trivia": {
+                "state": false,
+                "delay": 10
+            },
+            "dig": {
+                "state": false,
+                "delay": 40
+            },
+            "fish": {
+                "state": false,
+                "delay": 40
+            },
+            "hunt": {
+                "state": false,
+                "delay": 40
+            },
+            "pm": {
+                "state": false,
+                "delay": 50
+            },
+            "beg": {
+                "state": false,
+                "delay": 45
+            },
+            "pet": {
+                "state": false,
+                "delay": 1800
+            },
+            "hl": {
+                "state": false,
+                "delay": 30
+            },
+            "search": {
+                "state": false,
+                "delay": 30
+            },
+            "dep_all": {
+                "state": false,
+                "delay": 60
+            },
+            "stream": {
+                "state": false,
+                "delay": 660
+            },
+            "work": {
+                "state": false,
+                "delay": 3600
+            },
+            "daily": {
+                "state": false,
+                "delay": 86400
+            },
+            "crime": {
+                "state": false,
+                "delay": 50
+            }
         }
     },
     "4": {
@@ -115,20 +241,62 @@
             "rifle": false
         },
         "commands": {
-            "trivia": false,
-            "dig": false,
-            "fish": false,
-            "hunt": false,
-            "pm": false,
-            "beg": false,
-            "pet": false,
-            "hl": false,
-            "search": false,
-            "dep_all": false,
-            "stream": false,
-            "work": false,
-            "daily": false,
-            "crime": false
+            "trivia": {
+                "state": false,
+                "delay": 10
+            },
+            "dig": {
+                "state": false,
+                "delay": 40
+            },
+            "fish": {
+                "state": false,
+                "delay": 40
+            },
+            "hunt": {
+                "state": false,
+                "delay": 40
+            },
+            "pm": {
+                "state": false,
+                "delay": 50
+            },
+            "beg": {
+                "state": false,
+                "delay": 45
+            },
+            "pet": {
+                "state": false,
+                "delay": 1800
+            },
+            "hl": {
+                "state": false,
+                "delay": 30
+            },
+            "search": {
+                "state": false,
+                "delay": 30
+            },
+            "dep_all": {
+                "state": false,
+                "delay": 60
+            },
+            "stream": {
+                "state": false,
+                "delay": 660
+            },
+            "work": {
+                "state": false,
+                "delay": 3600
+            },
+            "daily": {
+                "state": false,
+                "delay": 86400
+            },
+            "crime": {
+                "state": false,
+                "delay": 50
+            }
         }
     },
     "5": {
@@ -148,20 +316,62 @@
             "rifle": false
         },
         "commands": {
-            "trivia": false,
-            "dig": false,
-            "fish": false,
-            "hunt": false,
-            "pm": false,
-            "beg": false,
-            "pet": false,
-            "hl": false,
-            "search": false,
-            "dep_all": false,
-            "stream": false,
-            "work": false,
-            "daily": false,
-            "crime": false
+            "trivia": {
+                "state": false,
+                "delay": 10
+            },
+            "dig": {
+                "state": false,
+                "delay": 40
+            },
+            "fish": {
+                "state": false,
+                "delay": 40
+            },
+            "hunt": {
+                "state": false,
+                "delay": 40
+            },
+            "pm": {
+                "state": false,
+                "delay": 50
+            },
+            "beg": {
+                "state": false,
+                "delay": 45
+            },
+            "pet": {
+                "state": false,
+                "delay": 1800
+            },
+            "hl": {
+                "state": false,
+                "delay": 30
+            },
+            "search": {
+                "state": false,
+                "delay": 30
+            },
+            "dep_all": {
+                "state": false,
+                "delay": 60
+            },
+            "stream": {
+                "state": false,
+                "delay": 660
+            },
+            "work": {
+                "state": false,
+                "delay": 3600
+            },
+            "daily": {
+                "state": false,
+                "delay": 86400
+            },
+            "crime": {
+                "state": false,
+                "delay": 50
+            }
         }
     }
 }

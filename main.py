@@ -45,6 +45,37 @@ commands_dict = {
     "crime": "crime",
 }
 
+config_example = {
+    "state": False,
+    "trivia_correct_chance": 0.75,
+    "channel_id": "",
+    "discord_token": "",
+    "offline": False,
+    "alerts": False,
+    "autobuy": {
+        "lifesavers": {"state": True, "amount": 5},
+        "fishing": False,
+        "shovel": False,
+        "rifle": False,
+    },
+    "commands": {
+        "trivia": {"state": False, "delay": 10},
+        "dig": {"state": False, "delay": 40},
+        "fish": {"state": False, "delay": 40},
+        "hunt": {"state": False, "delay": 40},
+        "pm": {"state": False, "delay": 50},
+        "beg": {"state": False, "delay": 45},
+        "pet": {"state": False, "delay": 1800},
+        "hl": {"state": False, "delay": 30},
+        "search": {"state": False, "delay": 30},
+        "dep_all": {"state": False, "delay": 60},
+        "stream": {"state": False, "delay": 660},
+        "work": {"state": False, "delay": 3600},
+        "daily": {"state": False, "delay": 86400},
+        "crime": {"state": False, "delay": 50},
+    },
+}
+
 
 class UpdaterWindow(QMainWindow):
     def __init__(self):
@@ -289,7 +320,7 @@ class MainWindow(QMainWindow):
                 with open("config.json", "w") as file:
                     json.dump(config_dict, file, ensure_ascii=False, indent=4)
                 continue
-            load_account(self, str(account_id), list(commands_dict.keys()))
+            load_account(self, str(account_id), config_example)
         # noinspection PyArgumentList
         sys.stdout = Stream(new_text=self.onUpdateText)
         # noinspection PyArgumentList
@@ -485,40 +516,11 @@ class MainWindow(QMainWindow):
         with open("config.json", "r+") as file:
             config_dict = json.load(file)
             account_id = len(config_dict) + 1
-            config_dict[account_id] = {
-                "state": False,
-                "trivia_correct_chance": 0.75,
-                "channel_id": "",
-                "discord_token": "",
-                "offline": False,
-                "alerts": False,
-                "autobuy": {
-                    "lifesavers": {"state": True, "amount": 5},
-                    "fishing": False,
-                    "shovel": False,
-                    "rifle": False,
-                },
-                "commands": {
-                    "trivia": {"state": False, "delay": 10},
-                    "dig": {"state": False, "delay": 40},
-                    "fish": {"state": False, "delay": 40},
-                    "hunt": {"state": False, "delay": 40},
-                    "pm": {"state": False, "delay": 50},
-                    "beg": {"state": False, "delay": 45},
-                    "pet": {"state": False, "delay": 1800},
-                    "hl": {"state": False, "delay": 30},
-                    "search": {"state": False, "delay": 30},
-                    "dep_all": {"state": False, "delay": 60},
-                    "stream": {"state": False, "delay": 660},
-                    "work": {"state": False, "delay": 3600},
-                    "daily": {"state": False, "delay": 86400},
-                    "crime": {"state": False, "delay": 50},
-                },
-            }
+            config_dict[account_id] = config_example
             file.seek(0)
             json.dump(config_dict, file, ensure_ascii=False, indent=4)
             file.truncate()
-        load_account(self, str(account_id), list(commands_dict.keys()))
+        load_account(self, str(account_id), config_example)
 
     @asyncSlot()
     async def delete_account(self):

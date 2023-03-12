@@ -5,9 +5,11 @@ import requests
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-def load_account(self, account_id, commands):
+def load_account(self, account_id, config_example):
     with open("config.json", "r") as config_file:
         config_dict = json.load(config_file)
+    commands = list(config_example["commands"].keys())
+
     # Account btn
     setattr(
         self.ui,
@@ -1537,9 +1539,17 @@ def load_account(self, account_id, commands):
                         "value", config_dict[account_id]["commands"][command]["delay"]
                     )
                 except KeyError as e:
-                    config_dict[account_id]["commands"][str(e).split("'")[1]].update(
-                        {"state": False}
-                    )
+                    config_dict[account_id]["commands"][str(e).split("'")[1]] = {
+                        "state": False,
+                        "delay": config_example["commands"][command]["delay"],
+                    }
+                    with open("config.json", "w") as file:
+                        json.dump(config_dict, file, ensure_ascii=False, indent=4)
+                except TypeError as e:
+                    config_dict[account_id]["commands"][command] = {
+                        "state": config_dict[account_id]["commands"][command],
+                        "delay": config_example["commands"][command]["delay"],
+                    }
                     with open("config.json", "w") as file:
                         json.dump(config_dict, file, ensure_ascii=False, indent=4)
 
@@ -1553,13 +1563,7 @@ def load_account(self, account_id, commands):
             break
         except KeyError as e:
             if e not in config_dict[account_id]:
-                config_example = json.loads(
-                    requests.get(
-                        "https://raw.githubusercontent.com/BridgeSenseDev/Dank-Memer-Grinder/main/"
-                        "config.json.example"
-                    ).text
-                )
-                value = config_example["1"][str(e).split("'")[1]]
+                value = config_example[str(e).split("'")[1]]
                 config_dict[account_id].update({str(e).split("'")[1]: value})
                 with open("config.json", "w") as file:
                     json.dump(config_dict, file, ensure_ascii=False, indent=4)
