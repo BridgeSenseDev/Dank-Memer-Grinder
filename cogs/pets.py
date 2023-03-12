@@ -17,7 +17,7 @@ class Pets(commands.Cog):
         if (
             message.channel.id != self.bot.channel_id
             or self.bot.state is False
-            or self.bot.config_dict["commands"]["pet"] is False
+            or self.bot.config_dict["commands"]["pet"]["state"] is False
         ):
             return
 

@@ -25,7 +25,7 @@ class Search(commands.Cog):
         if (
             message.channel.id != self.bot.channel_id
             or self.bot.state is False
-            or self.bot.config_dict["commands"]["search"] is False
+            or self.bot.config_dict["commands"]["search"]["state"] is False
         ):
             return
 

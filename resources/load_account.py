@@ -463,44 +463,44 @@ def load_account(self, account_id, commands):
     self.ui.verticalLayout_19.addWidget(getattr(self.ui, f"channel_frame_{account_id}"))
     setattr(
         self.ui,
-        f"trivia_frame_{account_id}",
+        f"trivia_correct_frame_{account_id}",
         QtWidgets.QFrame(getattr(self.ui, f"settings_frame_{account_id}")),
     )
-    getattr(self.ui, f"trivia_frame_{account_id}").setFrameShape(
+    getattr(self.ui, f"trivia_correct_frame_{account_id}").setFrameShape(
         QtWidgets.QFrame.StyledPanel
     )
-    getattr(self.ui, f"trivia_frame_{account_id}").setFrameShadow(
+    getattr(self.ui, f"trivia_correct_frame_{account_id}").setFrameShadow(
         QtWidgets.QFrame.Raised
     )
-    getattr(self.ui, f"trivia_frame_{account_id}").setObjectName(
-        f"trivia_frame_{account_id}"
+    getattr(self.ui, f"trivia_correct_frame_{account_id}").setObjectName(
+        f"trivia_correct_frame_{account_id}"
     )
     self.ui.horizontalLayout_25 = QtWidgets.QHBoxLayout(
-        getattr(self.ui, f"trivia_frame_{account_id}")
+        getattr(self.ui, f"trivia_correct_frame_{account_id}")
     )
     self.ui.horizontalLayout_25.setObjectName("horizontalLayout_25")
     setattr(
         self.ui,
-        f"trivia_frame_2_{account_id}",
-        QtWidgets.QFrame(getattr(self.ui, f"trivia_frame_{account_id}")),
+        f"trivia_correct_frame_2_{account_id}",
+        QtWidgets.QFrame(getattr(self.ui, f"trivia_correct_frame_{account_id}")),
     )
-    getattr(self.ui, f"trivia_frame_2_{account_id}").setFrameShape(
+    getattr(self.ui, f"trivia_correct_frame_2_{account_id}").setFrameShape(
         QtWidgets.QFrame.StyledPanel
     )
-    getattr(self.ui, f"trivia_frame_2_{account_id}").setFrameShadow(
+    getattr(self.ui, f"trivia_correct_frame_2_{account_id}").setFrameShadow(
         QtWidgets.QFrame.Raised
     )
-    getattr(self.ui, f"trivia_frame_2_{account_id}").setObjectName(
-        f"trivia_frame_2_{account_id}"
+    getattr(self.ui, f"trivia_correct_frame_2_{account_id}").setObjectName(
+        f"trivia_correct_frame_2_{account_id}"
     )
     self.ui.horizontalLayout_24 = QtWidgets.QHBoxLayout(
-        getattr(self.ui, f"trivia_frame_2_{account_id}")
+        getattr(self.ui, f"trivia_correct_frame_2_{account_id}")
     )
     self.ui.horizontalLayout_24.setObjectName("horizontalLayout_24")
     setattr(
         self.ui,
-        f"trivia_label_{account_id}",
-        QtWidgets.QLabel(getattr(self.ui, f"trivia_frame_2_{account_id}")),
+        f"trivia_correct_label_{account_id}",
+        QtWidgets.QLabel(getattr(self.ui, f"trivia_correct_frame_2_{account_id}")),
     )
     size_policy = QtWidgets.QSizePolicy(
         QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred
@@ -508,25 +508,27 @@ def load_account(self, account_id, commands):
     size_policy.setHorizontalStretch(0)
     size_policy.setVerticalStretch(0)
     size_policy.setHeightForWidth(
-        getattr(self.ui, f"trivia_label_{account_id}").sizePolicy().hasHeightForWidth()
+        getattr(self.ui, f"trivia_correct_label_{account_id}")
+        .sizePolicy()
+        .hasHeightForWidth()
     )
-    getattr(self.ui, f"trivia_label_{account_id}").setSizePolicy(size_policy)
+    getattr(self.ui, f"trivia_correct_label_{account_id}").setSizePolicy(size_policy)
     font = QtGui.QFont()
     font.setFamily("Segoe UI")
     font.setPointSize(15)
     font.setBold(True)
     font.setWeight(75)
-    getattr(self.ui, f"trivia_label_{account_id}").setFont(font)
-    getattr(self.ui, f"trivia_label_{account_id}").setObjectName(
-        f"trivia_label_{account_id}"
+    getattr(self.ui, f"trivia_correct_label_{account_id}").setFont(font)
+    getattr(self.ui, f"trivia_correct_label_{account_id}").setObjectName(
+        f"trivia_correct_label_{account_id}"
     )
     self.ui.horizontalLayout_24.addWidget(
-        getattr(self.ui, f"trivia_label_{account_id}")
+        getattr(self.ui, f"trivia_correct_label_{account_id}")
     )
     setattr(
         self.ui,
-        f"trivia_chance_{account_id}",
-        QtWidgets.QSpinBox(getattr(self.ui, f"trivia_frame_2_{account_id}")),
+        f"trivia_correct_chance_{account_id}",
+        QtWidgets.QSpinBox(getattr(self.ui, f"trivia_correct_frame_2_{account_id}")),
     )
     size_policy = QtWidgets.QSizePolicy(
         QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
@@ -534,33 +536,45 @@ def load_account(self, account_id, commands):
     size_policy.setHorizontalStretch(0)
     size_policy.setVerticalStretch(0)
     size_policy.setHeightForWidth(
-        getattr(self.ui, f"trivia_chance_{account_id}").sizePolicy().hasHeightForWidth()
+        getattr(self.ui, f"trivia_correct_chance_{account_id}")
+        .sizePolicy()
+        .hasHeightForWidth()
     )
-    getattr(self.ui, f"trivia_chance_{account_id}").setSizePolicy(size_policy)
-    getattr(self.ui, f"trivia_chance_{account_id}").setMinimumSize(QtCore.QSize(50, 30))
-    getattr(self.ui, f"trivia_chance_{account_id}").setMaximumSize(QtCore.QSize(50, 30))
+    getattr(self.ui, f"trivia_correct_chance_{account_id}").setSizePolicy(size_policy)
+    getattr(self.ui, f"trivia_correct_chance_{account_id}").setMinimumSize(
+        QtCore.QSize(50, 30)
+    )
+    getattr(self.ui, f"trivia_correct_chance_{account_id}").setMaximumSize(
+        QtCore.QSize(50, 30)
+    )
     font = QtGui.QFont()
     font.setFamily("Segoe UI")
     font.setPointSize(12)
-    getattr(self.ui, f"trivia_chance_{account_id}").setFont(font)
-    getattr(self.ui, f"trivia_chance_{account_id}").setAutoFillBackground(False)
-    getattr(self.ui, f"trivia_chance_{account_id}").setStyleSheet("")
-    getattr(self.ui, f"trivia_chance_{account_id}").setWrapping(False)
-    getattr(self.ui, f"trivia_chance_{account_id}").setFrame(True)
-    getattr(self.ui, f"trivia_chance_{account_id}").setAlignment(QtCore.Qt.AlignCenter)
-    getattr(self.ui, f"trivia_chance_{account_id}").setMinimum(25)
-    getattr(self.ui, f"trivia_chance_{account_id}").setMaximum(100)
-    getattr(self.ui, f"trivia_chance_{account_id}").setObjectName(
-        f"trivia_chance_{account_id}"
+    getattr(self.ui, f"trivia_correct_chance_{account_id}").setFont(font)
+    getattr(self.ui, f"trivia_correct_chance_{account_id}").setAutoFillBackground(False)
+    getattr(self.ui, f"trivia_correct_chance_{account_id}").setStyleSheet("")
+    getattr(self.ui, f"trivia_correct_chance_{account_id}").setWrapping(False)
+    getattr(self.ui, f"trivia_correct_chance_{account_id}").setFrame(True)
+    getattr(self.ui, f"trivia_correct_chance_{account_id}").setAlignment(
+        QtCore.Qt.AlignCenter
+    )
+    getattr(self.ui, f"trivia_correct_chance_{account_id}").setMinimum(25)
+    getattr(self.ui, f"trivia_correct_chance_{account_id}").setMaximum(100)
+    getattr(self.ui, f"trivia_correct_chance_{account_id}").setObjectName(
+        f"trivia_correct_chance_{account_id}"
     )
     self.ui.horizontalLayout_24.addWidget(
-        getattr(self.ui, f"trivia_chance_{account_id}")
+        getattr(self.ui, f"trivia_correct_chance_{account_id}")
     )
     self.ui.horizontalLayout_25.addWidget(
-        getattr(self.ui, f"trivia_frame_2_{account_id}"), 0, QtCore.Qt.AlignHCenter
+        getattr(self.ui, f"trivia_correct_frame_2_{account_id}"),
+        0,
+        QtCore.Qt.AlignHCenter,
     )
     self.ui.verticalLayout_19.addWidget(
-        getattr(self.ui, f"trivia_frame_{account_id}"), 0, QtCore.Qt.AlignVCenter
+        getattr(self.ui, f"trivia_correct_frame_{account_id}"),
+        0,
+        QtCore.Qt.AlignVCenter,
     )
     setattr(
         self.ui,
@@ -777,6 +791,18 @@ def load_account(self, account_id, commands):
         f"commands_settings_frame_{account_id}",
         QtWidgets.QFrame(getattr(self.ui, f"commands_frame_{account_id}")),
     )
+    getattr(self.ui, f"commands_settings_frame_{account_id}").setStyleSheet(
+        "QSpinBox {"
+        "    font-size: 14px;"
+        "    font-weight: bold;"
+        "}"
+        "QSpinBox::up-button{"
+        "    width: 0px;"
+        "}"
+        "QSpinBox::down-button{"
+        "    width: 0px;"
+        "}"
+    )
     size_policy = QtWidgets.QSizePolicy(
         QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding
     )
@@ -852,6 +878,67 @@ def load_account(self, account_id, commands):
         for command in commands_list:
             setattr(
                 self.ui,
+                f"{command}_frame_{account_id}",
+                QtWidgets.QFrame(
+                    getattr(self.ui, f"commands_settings_{i}_frame_2_{account_id}")
+                ),
+            )
+            getattr(self.ui, f"{command}_frame_{account_id}").setFrameShape(
+                QtWidgets.QFrame.StyledPanel
+            )
+            getattr(self.ui, f"{command}_frame_{account_id}").setFrameShadow(
+                QtWidgets.QFrame.Raised
+            )
+            getattr(self.ui, f"{command}_frame_{account_id}").setObjectName(
+                f"{command}_frame_{account_id}"
+            )
+            setattr(
+                self.ui,
+                f"horizontalLayout_{int(account_id) + 30}",
+                QtWidgets.QHBoxLayout(
+                    getattr(self.ui, f"{command}_frame_{account_id}")
+                ),
+            )
+            getattr(
+                self.ui, f"horizontalLayout_{int(account_id) + 30}"
+            ).setContentsMargins(0, 0, 0, 0)
+            getattr(self.ui, f"horizontalLayout_{int(account_id) + 30}").setObjectName(
+                f"horizontalLayout_{int(account_id) + 30}"
+            )
+            setattr(
+                self.ui,
+                f"{command}_spinbox_{account_id}",
+                QtWidgets.QSpinBox(getattr(self.ui, f"{command}_frame_{account_id}")),
+            )
+            getattr(self.ui, f"{command}_spinbox_{account_id}").setMinimumSize(
+                QtCore.QSize(45, 25)
+            )
+            getattr(self.ui, f"{command}_spinbox_{account_id}").setMaximumSize(
+                QtCore.QSize(45, 25)
+            )
+            font = QtGui.QFont()
+            font.setFamily("Segoe UI")
+            font.setPointSize(-1)
+            font.setBold(True)
+            font.setWeight(75)
+            getattr(self.ui, f"{command}_spinbox_{account_id}").setFont(font)
+            getattr(self.ui, f"{command}_spinbox_{account_id}").setStyleSheet("")
+            getattr(self.ui, f"{command}_spinbox_{account_id}").setAlignment(
+                QtCore.Qt.AlignCenter
+            )
+            getattr(self.ui, f"{command}_spinbox_{account_id}").setButtonSymbols(
+                QtWidgets.QAbstractSpinBox.NoButtons
+            )
+            getattr(self.ui, f"{command}_spinbox_{account_id}").setMaximum(100000)
+            getattr(self.ui, f"{command}_spinbox_{account_id}").setProperty("value", 0)
+            getattr(self.ui, f"{command}_spinbox_{account_id}").setObjectName(
+                f"{command}_spinbox_{account_id}"
+            )
+            getattr(self.ui, f"horizontalLayout_{int(account_id) + 30}").addWidget(
+                getattr(self.ui, f"{command}_spinbox_{account_id}")
+            )
+            setattr(
+                self.ui,
                 f"{command}_checkbox_{account_id}",
                 QtWidgets.QCheckBox(
                     getattr(self.ui, f"commands_settings_{i}_frame_2_{account_id}")
@@ -869,8 +956,11 @@ def load_account(self, account_id, commands):
             getattr(self.ui, f"{command}_checkbox_{account_id}").setObjectName(
                 f"{command}_checkbox_{account_id}"
             )
-            self.ui.verticalLayout_13.addWidget(
+            getattr(self.ui, f"horizontalLayout_{int(account_id) + 30}").addWidget(
                 getattr(self.ui, f"{command}_checkbox_{account_id}")
+            )
+            self.ui.verticalLayout_13.addWidget(
+                getattr(self.ui, f"{command}_frame_{account_id}")
             )
         self.ui.verticalLayout_20.addWidget(
             getattr(self.ui, f"commands_settings_{i}_frame_2_{account_id}")
@@ -1370,7 +1460,9 @@ def load_account(self, account_id, commands):
     getattr(self.ui, f"settings_label_{account_id}").setText("Settings")
     getattr(self.ui, f"token_label_{account_id}").setText("Discord Token")
     getattr(self.ui, f"channel_label_{account_id}").setText("Channel ID")
-    getattr(self.ui, f"trivia_label_{account_id}").setText("Correct Trivia Chance")
+    getattr(self.ui, f"trivia_correct_label_{account_id}").setText(
+        "Correct Trivia Chance"
+    )
     getattr(self.ui, f"offline_checkbox_{account_id}").setText("Appear Offline")
     getattr(self.ui, f"alerts_checkbox_{account_id}").setText("Read Alerts")
     getattr(self.ui, f"commands_label_{account_id}").setText("Commands")
@@ -1385,7 +1477,6 @@ def load_account(self, account_id, commands):
     getattr(self.ui, f"pm_checkbox_{account_id}").setText("Post Memes")
     getattr(self.ui, f"hl_checkbox_{account_id}").setText("High Low")
     getattr(self.ui, f"dep_all_checkbox_{account_id}").setText("Deposit All")
-
     getattr(self.ui, f"start_btn_{account_id}").setText("Start All")
     getattr(self.ui, f"stop_btn_{account_id}").setText("Stop All")
     getattr(self.ui, f"auto_buy_label_{account_id}").setText("Auto Buy")
@@ -1427,7 +1518,7 @@ def load_account(self, account_id, commands):
             getattr(self.ui, f"channel_input_{account_id}").setText(
                 config_dict[account_id]["channel_id"]
             )
-            getattr(self.ui, f"trivia_chance_{account_id}").setValue(
+            getattr(self.ui, f"trivia_correct_chance_{account_id}").setValue(
                 int(config_dict[account_id]["trivia_correct_chance"] * 100)
             )
             getattr(self.ui, f"offline_checkbox_{account_id}").setChecked(
@@ -1440,11 +1531,14 @@ def load_account(self, account_id, commands):
             for command in commands:
                 try:
                     getattr(self.ui, f"{command}_checkbox_{account_id}").setChecked(
-                        config_dict[account_id]["commands"][command]
+                        config_dict[account_id]["commands"][command]["state"]
+                    )
+                    getattr(self.ui, f"{command}_spinbox_{account_id}").setProperty(
+                        "value", config_dict[account_id]["commands"][command]["delay"]
                     )
                 except KeyError as e:
-                    config_dict[account_id]["commands"].update(
-                        {str(e).split("'")[1]: False}
+                    config_dict[account_id]["commands"][str(e).split("'")[1]].update(
+                        {"state": False}
                     )
                     with open("config.json", "w") as file:
                         json.dump(config_dict, file, ensure_ascii=False, indent=4)
@@ -1475,7 +1569,17 @@ def load_account(self, account_id, commands):
         getattr(self.ui, f"{button}_checkbox_{account_id}").clicked.connect(
             lambda checked, account_id=account_id, button=button: self.commands(
                 button,
-                getattr(self.ui, f"{button}_checkbox_{account_id}").isChecked(),
+                {
+                    "state": getattr(
+                        self.ui, f"{button}_checkbox_{account_id}"
+                    ).isChecked()
+                },
+            )
+        )
+        getattr(self.ui, f"{button}_spinbox_{account_id}").valueChanged.connect(
+            lambda checked, account_id=account_id, button=button: self.commands(
+                button,
+                {"delay": getattr(self.ui, f"{button}_spinbox_{account_id}").value()},
             )
         )
     getattr(self.ui, f"start_btn_{account_id}").clicked.connect(
@@ -1514,10 +1618,10 @@ def load_account(self, account_id, commands):
             "channel", getattr(self.ui, f"channel_input_{account_id}").text()
         )
     )
-    getattr(self.ui, f"trivia_chance_{account_id}").valueChanged.connect(
+    getattr(self.ui, f"trivia_correct_chance_{account_id}").valueChanged.connect(
         lambda checked, account_id=account_id: self.settings(
-            "trivia_chance",
-            getattr(self.ui, f"trivia_chance_{account_id}").value(),
+            "trivia_correct_chance",
+            getattr(self.ui, f"trivia_correct_chance_{account_id}").value(),
         )
     )
     getattr(self.ui, f"offline_checkbox_{account_id}").clicked.connect(

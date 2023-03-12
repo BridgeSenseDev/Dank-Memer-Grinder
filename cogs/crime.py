@@ -16,7 +16,7 @@ class Crime(commands.Cog):
         if (
             message.channel.id != self.bot.channel_id
             or self.bot.state is False
-            or self.bot.config_dict["commands"]["crime"] is False
+            or self.bot.config_dict["commands"]["crime"]["state"] is False
         ):
             return
 

@@ -12,7 +12,7 @@ class Hl(commands.Cog):
         if (
             message.channel.id != self.bot.channel_id
             or self.bot.state is False
-            or self.bot.config_dict["commands"]["hl"] is False
+            or self.bot.config_dict["commands"]["hl"]["state"] is False
         ):
             return
 

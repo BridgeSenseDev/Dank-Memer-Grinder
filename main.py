@@ -128,25 +128,6 @@ async def start_bot(token, account_id):
             self.channel_id = int(config_dict[account_id]["channel_id"])
             self.channel = None
             self.commands_dict = commands_dict
-            self.commands_delay = {
-                "trivia": 10,
-                "dig": 40,
-                "fish": 40,
-                "hunt": 40,
-                "pm": 50,
-                "beg": 45,
-                "pet": 1800,
-                "hl": 30,
-                "search": 30,
-                "dep_all": 60,
-                "stream": 660,
-                "work": 3600,
-                "daily": 86400,
-                "crime": 50,
-            }
-            # Add delay to commands
-            for command in self.commands_delay:
-                self.commands_delay[command] = int(self.commands_delay[command] * 1.1)
             self.last_ran = {}
             for command in self.commands_dict:
                 self.last_ran[command] = 0
@@ -418,7 +399,7 @@ class MainWindow(QMainWindow):
 
     @asyncSlot()
     async def commands(self, command, state):
-        config_dict[self.account_id]["commands"].update({command: state})
+        config_dict[self.account_id]["commands"][command].update(state)
         with open("config.json", "w") as file:
             json.dump(config_dict, file, ensure_ascii=False, indent=4)
 
@@ -429,7 +410,9 @@ class MainWindow(QMainWindow):
                 getattr(self.ui, f"{command}_checkbox_{self.account_id}").setChecked(
                     state
                 )
-                config_dict[self.account_id]["commands"].update({command: state})
+                config_dict[self.account_id]["commands"][command].update(
+                    {"state": state}
+                )
                 with open("config.json", "w") as file:
                     json.dump(config_dict, file, ensure_ascii=False, indent=4)
 
@@ -451,6 +434,8 @@ class MainWindow(QMainWindow):
             with open("config.json", "w") as file:
                 json.dump(config_dict, file, ensure_ascii=False, indent=4)
             if config_dict[self.account_id]["discord_token"] != "":
+                for thread in threading.enumerate():
+                    print(thread.name)
                 threading.Thread(
                     target=between_callback,
                     args=(
@@ -484,7 +469,7 @@ class MainWindow(QMainWindow):
                     QtCore.QSize(22, 22)
                 )
                 getattr(window.ui, f"account_btn_{self.account_id}").setIcon(icon)
-        elif command == "trivia_chance":
+        elif command == "trivia_correct_chance":
             config_dict[self.account_id].update(
                 {"trivia_correct_chance": int(state) / 100}
             )
@@ -514,20 +499,20 @@ class MainWindow(QMainWindow):
                     "rifle": False,
                 },
                 "commands": {
-                    "trivia": False,
-                    "dig": False,
-                    "fish": False,
-                    "hunt": False,
-                    "pm": False,
-                    "beg": False,
-                    "pet": False,
-                    "hl": False,
-                    "search": False,
-                    "dep_all": False,
-                    "stream": False,
-                    "work": False,
-                    "daily": False,
-                    "crime": False,
+                    "trivia": {"state": False, "delay": 10},
+                    "dig": {"state": False, "delay": 40},
+                    "fish": {"state": False, "delay": 40},
+                    "hunt": {"state": False, "delay": 40},
+                    "pm": {"state": False, "delay": 50},
+                    "beg": {"state": False, "delay": 45},
+                    "pet": {"state": False, "delay": 1800},
+                    "hl": {"state": False, "delay": 30},
+                    "search": {"state": False, "delay": 30},
+                    "dep_all": {"state": False, "delay": 60},
+                    "stream": {"state": False, "delay": 660},
+                    "work": {"state": False, "delay": 3600},
+                    "daily": {"state": False, "delay": 86400},
+                    "crime": {"state": False, "delay": 50},
                 },
             }
             file.seek(0)

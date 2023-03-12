@@ -42,7 +42,7 @@ class Stream(commands.Cog):
         if (
             message.channel.id != self.bot.channel_id
             or self.bot.state is False
-            or self.bot.config_dict["commands"]["stream"] is False
+            or self.bot.config_dict["commands"]["stream"]["state"] is False
         ):
             return
 

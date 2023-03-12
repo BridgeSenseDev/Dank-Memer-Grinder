@@ -20,8 +20,8 @@ class Commands(commands.Cog):
         for command in self.bot.commands_dict:
             if (
                 time.time() - self.bot.last_ran[command]
-                < self.bot.commands_delay[command]
-                or self.bot.config_dict["commands"][command] is False
+                < self.bot.config_dict["commands"][command]["delay"]
+                or self.bot.config_dict["commands"][command]["state"] is False
             ):
                 await asyncio.sleep(0.5)
                 continue

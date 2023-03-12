@@ -28,7 +28,7 @@ class Trivia(commands.Cog):
         if (
             message.channel.id != self.bot.channel_id
             or self.bot.state is False
-            or self.bot.config_dict["commands"]["trivia"] is False
+            or self.bot.config_dict["commands"]["trivia"]["state"] is False
         ):
             return
 
