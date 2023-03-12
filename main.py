@@ -138,8 +138,9 @@ class UpdaterWindow(QMainWindow):
         window.show()
 
 
-with open("config.json", "r") as config_file:
-    config_dict = json.load(config_file)
+def get_config():
+    with open("config.json", "r") as config_file:
+        return json.load(config_file)
 
 
 def resource_path(relative_path):
@@ -152,6 +153,7 @@ async def start_bot(token, account_id):
     class MyClient(commands.Bot):
         def __init__(self):
             super().__init__(command_prefix="-", self_bot=True)
+            config_dict = get_config()
             self.window = window
             self.account_id = account_id
             self.config_dict = config_dict[self.account_id]
@@ -297,21 +299,20 @@ class MainWindow(QMainWindow):
     output = pyqtSignal(list)
 
     def __init__(self):
-        global config_dict
         QMainWindow.__init__(self)
         self.setWindowIcon(QIcon(resource_path("resources/icon.ico")))
         self.setWindowTitle("Dank Memer Grinder")
 
         QFontDatabase.addApplicationFont(resource_path("resources/fonts/Segoe.ttf"))
         QFontDatabase.addApplicationFont(resource_path("resources/fonts/Impact.ttf"))
+        config_dict = get_config()
         self.ui = Ui_DankMemerGrinder(len(config_dict) + 1)
         self.ui.setupUi(self)
 
         # Initialize settings
         for account_id in range(1, len(config_dict) + 1):
             if str(account_id) not in config_dict:
-                with open("config.json", "r") as config_file:
-                    config_dict = json.load(config_file)
+                config_dict = get_config()
                 config_dict = {
                     k: v
                     for i, (k, v) in enumerate(config_dict.items())
@@ -353,6 +354,7 @@ class MainWindow(QMainWindow):
         self.ui.minus_account_btn.clicked.connect(self.delete_account)
 
     def onUpdateText(self, text):
+        config_dict = get_config()
         for account_id in map(str, range(1, len(config_dict) + 1)):
             getattr(self.ui, f"output_text_{account_id}").setTextColor(
                 QColor(216, 60, 62)
@@ -366,6 +368,7 @@ class MainWindow(QMainWindow):
 
     @asyncSlot()
     async def check(self):
+        config_dict = get_config()
         if config_dict[self.account_id]["state"] is False:
             config_dict[self.account_id].update({"state": True})
             with open("config.json", "w") as file:
@@ -402,6 +405,7 @@ class MainWindow(QMainWindow):
 
     @asyncSlot()
     async def accounts(self, account_id):
+        config_dict = get_config()
         for i in range(1, len(config_dict) + 1):
             if i == int(account_id):
                 self.account_id = account_id
@@ -430,12 +434,14 @@ class MainWindow(QMainWindow):
 
     @asyncSlot()
     async def commands(self, command, state):
+        config_dict = get_config()
         config_dict[self.account_id]["commands"][command].update(state)
         with open("config.json", "w") as file:
             json.dump(config_dict, file, ensure_ascii=False, indent=4)
 
     @asyncSlot()
     async def toggle_all(self, state):
+        config_dict = get_config()
         for command in config_dict[self.account_id]["commands"]:
             if command != "bj":
                 getattr(self.ui, f"{command}_checkbox_{self.account_id}").setChecked(
@@ -449,6 +455,7 @@ class MainWindow(QMainWindow):
 
     @asyncSlot()
     async def autobuy(self, item, state, command=None):
+        config_dict = get_config()
         if item == "lifesavers":
             config_dict[self.account_id]["autobuy"][item].update({command: state})
             with open("config.json", "w") as file:
@@ -460,13 +467,12 @@ class MainWindow(QMainWindow):
 
     @asyncSlot()
     async def settings(self, command, state):
+        config_dict = get_config()
         if command == "channel":
             config_dict[self.account_id].update({"channel_id": state})
             with open("config.json", "w") as file:
                 json.dump(config_dict, file, ensure_ascii=False, indent=4)
             if config_dict[self.account_id]["discord_token"] != "":
-                for thread in threading.enumerate():
-                    print(thread.name)
                 threading.Thread(
                     target=between_callback,
                     args=(
@@ -570,6 +576,7 @@ if __name__ == "__main__":
         updater = UpdaterWindow()
     else:
         window.show()
+    config_dict = get_config()
     for account in map(str, range(1, len(config_dict) + 1)):
         if config_dict[account]["discord_token"] != "":
             threading.Thread(
