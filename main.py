@@ -526,6 +526,8 @@ class MainWindow(QMainWindow):
     async def delete_account(self):
         with open("config.json", "r+") as file:
             config_dict = json.load(file)
+            if len(config_dict) <= 1:
+                return
             getattr(self.ui, f"account_btn_{len(config_dict)}").deleteLater()
             config_dict.pop(str(len(config_dict)))
             file.seek(0)
