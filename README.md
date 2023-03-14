@@ -16,24 +16,33 @@
 </div>
 
 
-> 🚨 USE AT YOUR OWN RISK: This is a self-bot. Such bots are against Discord's and Dank Memer's rules and TOS. By using this software you acknowledge that we take no responsibility whatsoever for any action taken against your account, whether by Discord or Dank Memer.
+> 🚨 WARNING: USE AT YOUR OWN RISK. This is a self-bot and is in violation of Discord's and Dank Memer's rules and TOS. By using this software, you acknowledge that we take no responsibility for any action taken against your account, whether by Discord or Dank Memer.
 >
-> Despite this, there is no chance of detection by either Discord or Dank Memer provided that you take appropriate measures to ensure this. This includes but is not limited to running the bot only in private channels, not being open about the fact that you use it and not running so much as to raise suspicion.
+>Possible actions that could be taken against your account include but are not limited to suspension or termination.
+>
+> It is crucial that you take appropriate measures to avoid detection. These measures include:
+> <ol>
+>  <li>Running the bot only in private channels.</li>
+>  <li>Not being open about the fact that you use it.</li>
+>  <li>Avoiding running the bot excessively to prevent raising suspicion.</li>
+> </ol>
+> Remember, using this bot comes with significant risks, and you must take appropriate measures to protect your account from any consequences.
+      
 
 ## Features
 
--   [x] Easy to use GUI for configuration and logs
--   [x] Support for running unlimited accounts at once
--   [x] Automatic updater
--   [x] Automation of most currency commands and minigames (e.g. all work minigames, pets care, moleman, dragons, kraken, legendary fish)
+-   [x] User-friendly GUI for easy configuration and log management
+-   [x] Supports running unlimited accounts simultaneously
+-   [x] Automatically updates to the latest version
+-   [x] Automates currency commands and minigames, such as work, pets care, moleman, dragons, kraken, and legendary fish
 -   [x] Automatically selects and streams the daily trending game
--   [x] Answers all trivia questions with a configurable chance in order to avoid suspiscion
--   [x] Automatically searches the best places to avoid death
--   [x] Automatically buy fishing poles, hunting rifles, shovels or pizza's
--   [x] Automatically buys lifesavers when under a configurable amount
--   [x] Appear offline in discord status
--   [x] Auto read alerts
--   [x] Uses very little system resources
+-   [x] Randomizes answers to trivia questions to avoid suspicion
+-   [x] Finds safe locations to avoid danger automatically
+-   [x] Automatically purchases fishing poles, hunting rifles, shovels, and pizzas
+-   [x] Buys lifesavers when the user falls below a configurable amount
+-   [x] Appears offline in Discord status
+-   [x] Automatically reads alerts
+-   [x] Uses minimal system resources.
 
 <div align="center">
   <img src=".github/assets/img/settings.png" width="400">
@@ -51,9 +60,7 @@
 3. Run the binary by doing the following:
 
 * **Windows:** Double click `Dank Memer Grinder.exe`.
-* **Linux and macOS:** Open a terminal window, and navigate to the folder the files were extracted to. Run `./Dank\ Memer\ Grinder` in a terminal.
-
-> **Note** If you are on **Linux or macOS**, you may have to execute **`chmod +x path_to_binary`** in a shell to be able to run the binary.
+* **Linux and macOS:** Open a terminal window, and navigate to the folder the files were extracted to. Then run `chmod +x ./Dank\ Memer\ Grinder` and `./Dank\ Memer\ Grinder` in the terminal.
 
 ### Installing from source (unstable)
 
