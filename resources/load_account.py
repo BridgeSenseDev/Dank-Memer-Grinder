@@ -920,7 +920,6 @@ def load_account(self, account_id, config_example):
             )
             font = QtGui.QFont()
             font.setFamily("Segoe UI")
-            font.setPointSize(-1)
             font.setBold(True)
             font.setWeight(75)
             getattr(self.ui, f"{command}_spinbox_{account_id}").setFont(font)
