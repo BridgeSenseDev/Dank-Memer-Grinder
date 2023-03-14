@@ -60,9 +60,7 @@
 3. Run the binary by doing the following:
 
 * **Windows:** Double click `Dank Memer Grinder.exe`.
-* **Linux and macOS:** Open a terminal window, and navigate to the folder the files were extracted to. Run `./Dank\ Memer\ Grinder` in a terminal.
-
-> **Note** If you are on **Linux or macOS**, you may have to execute **`chmod +x path_to_binary`** in a shell to be able to run the binary.
+* **Linux and macOS:** Open a terminal window, and navigate to the folder the files were extracted to. Then run `chmod +x ./Dank\ Memer\ Grinder` and `./Dank\ Memer\ Grinder` in the terminal.
 
 ### Installing from source (unstable)
 
