@@ -18,6 +18,3 @@ If applicable, add screenshots to help explain your problem.
 
 **OS:**
 Windows, Linux arm64, Linux amd64 or MacOS
-
-**Additional context**
-Add any other context about the problem here.
