@@ -277,6 +277,9 @@ async def start_bot(token, account_id):
             QtGui.QIcon.State.Off,
         )
         getattr(window.ui, f"account_btn_{account_id}").setIcon(icon)
+        getattr(window.ui, f"account_btn_{account_id}").setIconSize(
+            QtCore.QSize(22, 22)
+        )
     except (discord.errors.NotFound, ValueError):
         getattr(window.ui, f"account_btn_{account_id}").setText("Invalid Channel")
         icon = QtGui.QIcon()
@@ -286,6 +289,9 @@ async def start_bot(token, account_id):
             QtGui.QIcon.State.Off,
         )
         getattr(window.ui, f"account_btn_{account_id}").setIcon(icon)
+        getattr(window.ui, f"account_btn_{account_id}").setIconSize(
+            QtCore.QSize(22, 22)
+        )
 
 
 class Stream(QtCore.QObject):
@@ -502,10 +508,10 @@ class MainWindow(QMainWindow):
                     QtGui.QIcon.Mode.Normal,
                     QtGui.QIcon.State.Off,
                 )
+                getattr(window.ui, f"account_btn_{self.account_id}").setIcon(icon)
                 getattr(self.ui, f"account_btn_{self.account_id}").setIconSize(
                     QtCore.QSize(22, 22)
                 )
-                getattr(window.ui, f"account_btn_{self.account_id}").setIcon(icon)
         elif command == "trivia_correct_chance":
             config_dict[self.account_id].update(
                 {"trivia_correct_chance": int(state) / 100}
@@ -559,6 +565,9 @@ def between_callback(token, account_id):
         QtGui.QIcon.State.Off,
     )
     getattr(window.ui, f"account_btn_{account_id}").setIcon(icon)
+    getattr(window.ui, f"account_btn_{account_id}").setIconSize(
+        QtCore.QSize(25, 25)
+    )
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     loop.run_until_complete(start_bot(token, account_id))
