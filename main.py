@@ -168,8 +168,13 @@ async def start_bot(token, account_id):
         @tasks.loop(seconds=5)
         async def update(self):
             with open("config.json", "r") as config_file:
+                if str(self.account_id) not in json.load(config_file):
+                    sys.exit()
+                config_file.seek(0)
                 self.config_dict = json.load(config_file)[self.account_id]
                 self.state = self.config_dict["state"]
+                if self.config_dict["channel_id"] != str(self.channel_id):
+                    sys.exit()
 
         @staticmethod
         async def click(message, component, children):
