@@ -296,87 +296,30 @@ class Ui_DankMemerGrinder(object):
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_3.setSpacing(8)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.home_btn = QtWidgets.QPushButton(self.buttons)
-        self.home_btn.setMinimumSize(QtCore.QSize(0, 45))
-        self.home_btn.setMaximumSize(QtCore.QSize(16777215, 45))
-        font = QtGui.QFont()
-        font.setFamily("Segoe UI")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.home_btn.setFont(font)
-        self.home_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.home_btn.setStyleSheet("background-color: #5865f2;")
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(
-            QtGui.QPixmap(":/icons/icons/home.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off
-        )
-        self.home_btn.setIcon(icon1)
-        self.home_btn.setIconSize(QtCore.QSize(20, 20))
-        self.home_btn.setObjectName("home_btn")
-        self.verticalLayout_3.addWidget(self.home_btn)
-        self.settings_btn = QtWidgets.QPushButton(self.buttons)
-        self.settings_btn.setMinimumSize(QtCore.QSize(0, 45))
-        self.settings_btn.setMaximumSize(QtCore.QSize(16777215, 45))
-        font = QtGui.QFont()
-        font.setFamily("Segoe UI")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.settings_btn.setFont(font)
-        self.settings_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.settings_btn.setStyleSheet("")
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(
-            QtGui.QPixmap(":/icons/icons/settings.png"),
-            QtGui.QIcon.Normal,
-            QtGui.QIcon.Off,
-        )
-        self.settings_btn.setIcon(icon2)
-        self.settings_btn.setIconSize(QtCore.QSize(20, 20))
-        self.settings_btn.setObjectName("settings_btn")
-        self.verticalLayout_3.addWidget(self.settings_btn)
-        self.commands_btn = QtWidgets.QPushButton(self.buttons)
-        self.commands_btn.setMinimumSize(QtCore.QSize(0, 45))
-        self.commands_btn.setMaximumSize(QtCore.QSize(16777215, 45))
-        font = QtGui.QFont()
-        font.setFamily("Segoe UI")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.commands_btn.setFont(font)
-        self.commands_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.commands_btn.setStyleSheet("")
-        icon3 = QtGui.QIcon()
-        icon3.addPixmap(
-            QtGui.QPixmap(":/icons/icons/commands.png"),
-            QtGui.QIcon.Normal,
-            QtGui.QIcon.Off,
-        )
-        self.commands_btn.setIcon(icon3)
-        self.commands_btn.setIconSize(QtCore.QSize(20, 20))
-        self.commands_btn.setObjectName("commands_btn")
-        self.verticalLayout_3.addWidget(self.commands_btn)
-        self.auto_buy_btn = QtWidgets.QPushButton(self.buttons)
-        self.auto_buy_btn.setMinimumSize(QtCore.QSize(0, 45))
-        self.auto_buy_btn.setMaximumSize(QtCore.QSize(16777215, 45))
-        font = QtGui.QFont()
-        font.setFamily("Segoe UI")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.auto_buy_btn.setFont(font)
-        self.auto_buy_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        icon4 = QtGui.QIcon()
-        icon4.addPixmap(
-            QtGui.QPixmap(":/icons/icons/dollar.png"),
-            QtGui.QIcon.Normal,
-            QtGui.QIcon.Off,
-        )
-        self.auto_buy_btn.setIcon(icon4)
-        self.auto_buy_btn.setIconSize(QtCore.QSize(20, 20))
-        self.auto_buy_btn.setObjectName("auto_buy_btn")
-        self.verticalLayout_3.addWidget(self.auto_buy_btn)
+        sidebar_buttons = ["home", "settings", "commands", "auto_buy", "auto_use"]
+        for button in sidebar_buttons:
+            setattr(self, f"{button}_btn", QtWidgets.QPushButton(self.buttons))
+            getattr(self, f"{button}_btn").setMinimumSize(QtCore.QSize(0, 45))
+            getattr(self, f"{button}_btn").setMaximumSize(QtCore.QSize(16777215, 45))
+            font = QtGui.QFont()
+            font.setFamily("Segoe UI")
+            font.setPointSize(12)
+            font.setBold(True)
+            font.setWeight(75)
+            getattr(self, f"{button}_btn").setFont(font)
+            getattr(self, f"{button}_btn").setCursor(
+                QtGui.QCursor(QtCore.Qt.PointingHandCursor)
+            )
+            icon = QtGui.QIcon()
+            icon.addPixmap(
+                QtGui.QPixmap(f":/icons/icons/{button}.png"),
+                QtGui.QIcon.Normal,
+                QtGui.QIcon.Off,
+            )
+            getattr(self, f"{button}_btn").setIcon(icon)
+            getattr(self, f"{button}_btn").setIconSize(QtCore.QSize(20, 20))
+            getattr(self, f"{button}_btn").setObjectName(f"{button}_btn")
+            self.verticalLayout_3.addWidget(getattr(self, f"{button}_btn"))
         self.verticalLayout_2.addWidget(self.buttons, 0, QtCore.Qt.AlignTop)
         self.toggle = QtWidgets.QPushButton(self.side_menu_widget)
         self.toggle.setEnabled(True)

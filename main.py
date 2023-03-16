@@ -74,6 +74,13 @@ config_example = {
         "daily": {"state": False, "delay": 86400},
         "crime": {"state": False, "delay": 50},
     },
+    "autouse": {
+        "state": False,
+        "hide_disabled": False,
+        "pizza_slice": {"state": False},
+        "cowboy_boots": {"state": False},
+        "lucky_horseshoe": {"state": False},
+    },
 }
 
 
@@ -194,17 +201,17 @@ async def start_bot(token, account_id):
         async def send(self, command_name, channel=None, **kwargs):
             if channel is None:
                 channel = self.channel
-                async for cmd in channel.slash_commands(query=command_name, limit=None):
-                    try:
-                        if cmd.application.id == 270904126974590976:
-                            await cmd(**kwargs)
-                    except (
-                        discord.errors.DiscordServerError,
-                        KeyError,
-                        discord.errors.InvalidData,
-                    ):
-                        pass
-                    return
+            async for cmd in channel.slash_commands(query=command_name, limit=None):
+                try:
+                    if cmd.application.id == 270904126974590976:
+                        await cmd(**kwargs)
+                except (
+                    discord.errors.DiscordServerError,
+                    KeyError,
+                    discord.errors.InvalidData,
+                ):
+                    pass
+                return
 
         async def sub_send(
             self, command_name, sub_command_name, channel=None, **kwargs
@@ -313,7 +320,6 @@ class MainWindow(QMainWindow):
         QMainWindow.__init__(self)
         self.setWindowIcon(QIcon(resource_path("resources/icon.ico")))
         self.setWindowTitle("Dank Memer Grinder")
-
         QFontDatabase.addApplicationFont(resource_path("resources/fonts/Segoe.ttf"))
         QFontDatabase.addApplicationFont(resource_path("resources/fonts/Impact.ttf"))
         config_dict = get_config()
@@ -351,7 +357,7 @@ class MainWindow(QMainWindow):
         self.ui.toggle.clicked.connect(lambda: self.check())
 
         # Sidebar
-        sidebar_buttons = ["home", "settings", "commands", "auto_buy"]
+        sidebar_buttons = ["home", "settings", "commands", "auto_buy", "auto_use"]
         for button in sidebar_buttons:
             getattr(self.ui, f"{button}_btn").clicked.connect(
                 lambda checked, button=button: self.sidebar(
@@ -406,6 +412,7 @@ class MainWindow(QMainWindow):
             self.ui.settings_btn,
             self.ui.commands_btn,
             self.ui.auto_buy_btn,
+            self.ui.auto_use_btn,
         ]
         for i in buttons:
             if i == button:
@@ -473,6 +480,42 @@ class MainWindow(QMainWindow):
                 json.dump(config_dict, file, ensure_ascii=False, indent=4)
         else:
             config_dict[self.account_id]["autobuy"][item] = state
+            with open("config.json", "w") as file:
+                json.dump(config_dict, file, ensure_ascii=False, indent=4)
+
+    @asyncSlot()
+    async def autouse(self, item, state, command=None):
+        config_dict = get_config()
+        if item == "state":
+            config_dict[self.account_id]["autouse"]["state"] = state
+            with open("config.json", "w") as file:
+                json.dump(config_dict, file, ensure_ascii=False, indent=4)
+        elif item == "hide_disabled":
+            if config_dict[self.account_id]["autouse"]["hide_disabled"] != state:
+                config_dict[self.account_id]["autouse"]["hide_disabled"] = state
+                with open("config.json", "w") as file:
+                    json.dump(config_dict, file, ensure_ascii=False, indent=4)
+            if state:
+                for autouse in config_dict[self.account_id]["autouse"]:
+                    if autouse in ["state", "hide_disabled"]:
+                        continue
+                    if not config_dict[self.account_id]["autouse"][autouse]["state"]:
+                        getattr(self.ui, f"{autouse}_frame_{self.account_id}").hide()
+            else:
+                for autouse in config_dict[self.account_id]["autouse"]:
+                    if autouse in ["state", "hide_disabled"]:
+                        continue
+                    getattr(self.ui, f"{autouse}_frame_{self.account_id}").show()
+        elif item == "search":
+            for autouse in config_dict[self.account_id]["autouse"]:
+                if autouse in ["state", "hide_disabled"]:
+                    continue
+                if state in autouse:
+                    getattr(self.ui, f"{autouse}_frame_{self.account_id}").show()
+                else:
+                    getattr(self.ui, f"{autouse}_frame_{self.account_id}").hide()
+        else:
+            config_dict[self.account_id]["autouse"][item].update({command: state})
             with open("config.json", "w") as file:
                 json.dump(config_dict, file, ensure_ascii=False, indent=4)
 
@@ -570,9 +613,7 @@ def between_callback(token, account_id):
         QtGui.QIcon.State.Off,
     )
     getattr(window.ui, f"account_btn_{account_id}").setIcon(icon)
-    getattr(window.ui, f"account_btn_{account_id}").setIconSize(
-        QtCore.QSize(25, 25)
-    )
+    getattr(window.ui, f"account_btn_{account_id}").setIconSize(QtCore.QSize(25, 25))
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     loop.run_until_complete(start_bot(token, account_id))

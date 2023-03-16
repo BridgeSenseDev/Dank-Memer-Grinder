@@ -97,6 +97,8 @@ def load_account(self, account_id, config_example):
     getattr(self.ui, f"main_menu_widget_{account_id}").setObjectName(
         f"main_menu_widget_{account_id}"
     )
+
+    # Home widget
     setattr(self.ui, f"home_widget_{account_id}", QtWidgets.QWidget())
     getattr(self.ui, f"home_widget_{account_id}").setObjectName(
         f"home_widget_{account_id}"
@@ -206,6 +208,8 @@ def load_account(self, account_id, config_example):
     getattr(self.ui, f"main_menu_widget_{account_id}").addWidget(
         getattr(self.ui, f"home_widget_{account_id}")
     )
+
+    # Settings widget
     setattr(self.ui, f"settings_widget_{account_id}", QtWidgets.QWidget())
     getattr(self.ui, f"settings_widget_{account_id}").setObjectName(
         f"settings_widget_{account_id}"
@@ -651,7 +655,7 @@ def load_account(self, account_id, config_example):
         QtGui.QCursor(QtCore.Qt.PointingHandCursor)
     )
     getattr(self.ui, f"offline_checkbox_{account_id}").setObjectName(
-        "offline_checkbox_1"
+        f"offline_checkbox_{account_id}"
     )
     self.verticalLayout_15.addWidget(
         getattr(self.ui, f"offline_checkbox_{account_id}"), 0, QtCore.Qt.AlignHCenter
@@ -674,7 +678,7 @@ def load_account(self, account_id, config_example):
         QtWidgets.QFrame.Raised
     )
     getattr(self.ui, f"toggles_right_frame_{account_id}").setObjectName(
-        "toggles_right_frame_1"
+        f"toggles_right_frame_{account_id}"
     )
     self.verticalLayout_16 = QtWidgets.QVBoxLayout(
         getattr(self.ui, f"toggles_right_frame_{account_id}")
@@ -716,7 +720,9 @@ def load_account(self, account_id, config_example):
     getattr(self.ui, f"alerts_checkbox_{account_id}").setCursor(
         QtGui.QCursor(QtCore.Qt.PointingHandCursor)
     )
-    getattr(self.ui, f"alerts_checkbox_{account_id}").setObjectName("alerts_checkbox_1")
+    getattr(self.ui, f"alerts_checkbox_{account_id}").setObjectName(
+        f"alerts_checkbox_{account_id}"
+    )
     self.verticalLayout_17.addWidget(
         getattr(self.ui, f"alerts_checkbox_{account_id}"), 0, QtCore.Qt.AlignHCenter
     )
@@ -731,6 +737,8 @@ def load_account(self, account_id, config_example):
     getattr(self.ui, f"main_menu_widget_{account_id}").addWidget(
         getattr(self.ui, f"settings_widget_{account_id}")
     )
+
+    # Commands widget
     setattr(self.ui, f"commands_widget_{account_id}", QtWidgets.QWidget())
     getattr(self.ui, f"commands_widget_{account_id}").setObjectName(
         f"commands_widget_{account_id}"
@@ -1102,6 +1110,8 @@ def load_account(self, account_id, config_example):
     getattr(self.ui, f"main_menu_widget_{account_id}").addWidget(
         getattr(self.ui, f"commands_widget_{account_id}")
     )
+
+    # Autobuy Widget
     setattr(self.ui, f"auto_buy_widget_{account_id}", QtWidgets.QWidget())
     getattr(self.ui, f"auto_buy_widget_{account_id}").setObjectName(
         f"auto_buy_widget_{account_id}"
@@ -1430,6 +1440,448 @@ def load_account(self, account_id, config_example):
     getattr(self.ui, f"main_menu_widget_{account_id}").addWidget(
         getattr(self.ui, f"auto_buy_widget_{account_id}")
     )
+
+    # Autouse widget
+    setattr(self.ui, f"auto_use_widget_{account_id}", QtWidgets.QWidget())
+    getattr(self.ui, f"auto_use_widget_{account_id}").setObjectName(
+        f"auto_use_widget_{account_id}"
+    )
+    setattr(
+        self.ui,
+        f"verticallayout_{int(account_id) + 100}",
+        QtWidgets.QVBoxLayout(getattr(self.ui, f"auto_use_widget_{account_id}")),
+    )
+    getattr(self.ui, f"verticallayout_{int(account_id) + 100}").setObjectName(
+        f"verticallayout_{int(account_id) + 100}"
+    )
+    setattr(
+        self.ui,
+        f"auto_use_label_{account_id}",
+        QtWidgets.QLabel(
+            getattr(self.ui, f"auto_use_widget_{account_id}"),
+        ),
+    )
+    getattr(self.ui, f"auto_use_label_{account_id}").setMinimumSize(QtCore.QSize(0, 50))
+    getattr(self.ui, f"auto_use_label_{account_id}").setMaximumSize(
+        QtCore.QSize(16777215, 50)
+    )
+    font = QtGui.QFont()
+    font.setFamily("Segoe UI")
+    font.setPointSize(25)
+    font.setBold(True)
+    font.setWeight(75)
+    getattr(self.ui, f"auto_use_label_{account_id}").setFont(font)
+    getattr(self.ui, f"auto_use_label_{account_id}").setAlignment(QtCore.Qt.AlignCenter)
+    getattr(self.ui, f"auto_use_label_{account_id}").setObjectName(
+        f"auto_use_label_{account_id}"
+    )
+    getattr(self.ui, f"verticallayout_{int(account_id) + 100}").addWidget(
+        getattr(self.ui, f"auto_use_label_{account_id}")
+    )
+    setattr(
+        self.ui,
+        f"auto_use_frame_{account_id}",
+        QtWidgets.QFrame(getattr(self.ui, f"auto_use_widget_{account_id}")),
+    )
+    sizePolicy = QtWidgets.QSizePolicy(
+        QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding
+    )
+    sizePolicy.setHorizontalStretch(0)
+    sizePolicy.setVerticalStretch(0)
+    sizePolicy.setHeightForWidth(
+        getattr(self.ui, f"auto_use_frame_{account_id}")
+        .sizePolicy()
+        .hasHeightForWidth()
+    )
+    getattr(self.ui, f"auto_use_frame_{account_id}").setSizePolicy(sizePolicy)
+    getattr(self.ui, f"auto_use_frame_{account_id}").setFrameShape(
+        QtWidgets.QFrame.StyledPanel
+    )
+    getattr(self.ui, f"auto_use_frame_{account_id}").setFrameShadow(
+        QtWidgets.QFrame.Raised
+    )
+    getattr(self.ui, f"auto_use_frame_{account_id}").setObjectName(
+        f"auto_use_frame_{account_id}"
+    )
+    setattr(
+        self.ui,
+        f"horizontallayout_{int(account_id) + 102}",
+        QtWidgets.QHBoxLayout(getattr(self.ui, f"auto_use_frame_{account_id}")),
+    )
+    getattr(self.ui, f"horizontallayout_{int(account_id) + 102}").setObjectName(
+        f"horizontallayout_{int(account_id) + 102}"
+    )
+    setattr(
+        self.ui,
+        f"auto_use_left_frame_{account_id}",
+        QtWidgets.QFrame(getattr(self.ui, f"auto_use_frame_{account_id}")),
+    )
+    getattr(self.ui, f"auto_use_left_frame_{account_id}").setFrameShape(
+        QtWidgets.QFrame.StyledPanel
+    )
+    getattr(self.ui, f"auto_use_left_frame_{account_id}").setFrameShadow(
+        QtWidgets.QFrame.Raised
+    )
+    getattr(self.ui, f"auto_use_left_frame_{account_id}").setObjectName(
+        f"auto_use_left_frame_{account_id}"
+    )
+    setattr(
+        self.ui,
+        f"verticallayout_{int(account_id) + 101}",
+        QtWidgets.QVBoxLayout(getattr(self.ui, f"auto_use_left_frame_{account_id}")),
+    )
+    getattr(self.ui, f"verticallayout_{int(account_id) + 101}").setObjectName(
+        f"verticallayout_{int(account_id) + 101}"
+    )
+    setattr(
+        self.ui,
+        f"auto_use_left_frame_2_{account_id}",
+        QtWidgets.QFrame(getattr(self.ui, f"auto_use_left_frame_{account_id}")),
+    )
+    getattr(self.ui, f"auto_use_left_frame_2_{account_id}").setFrameShape(
+        QtWidgets.QFrame.StyledPanel
+    )
+    getattr(self.ui, f"auto_use_left_frame_2_{account_id}").setFrameShadow(
+        QtWidgets.QFrame.Raised
+    )
+    getattr(self.ui, f"auto_use_left_frame_2_{account_id}").setObjectName(
+        f"auto_use_left_frame_2_{account_id}"
+    )
+    setattr(
+        self.ui,
+        f"verticallayout_{int(account_id) + 102}",
+        QtWidgets.QVBoxLayout(getattr(self.ui, f"auto_use_left_frame_2_{account_id}")),
+    )
+    getattr(self.ui, f"verticallayout_{int(account_id) + 102}").setObjectName(
+        f"verticallayout_{int(account_id) + 102}"
+    )
+    setattr(
+        self.ui,
+        f"auto_use_btn_frame_{account_id}",
+        QtWidgets.QFrame(getattr(self.ui, f"auto_use_left_frame_2_{account_id}")),
+    )
+    getattr(self.ui, f"auto_use_btn_frame_{account_id}").setFrameShape(
+        QtWidgets.QFrame.StyledPanel
+    )
+    getattr(self.ui, f"auto_use_btn_frame_{account_id}").setFrameShadow(
+        QtWidgets.QFrame.Raised
+    )
+    getattr(self.ui, f"auto_use_btn_frame_{account_id}").setObjectName(
+        f"auto_use_btn_frame_{account_id}"
+    )
+    setattr(
+        self.ui,
+        f"verticallayout_{int(account_id) + 103}",
+        QtWidgets.QVBoxLayout(getattr(self.ui, f"auto_use_btn_frame_{account_id}")),
+    )
+    getattr(self.ui, f"verticallayout_{int(account_id) + 103}").setObjectName(
+        f"verticallayout_{int(account_id) + 103}"
+    )
+    setattr(
+        self.ui,
+        f"auto_use_checkbox_{account_id}",
+        QtWidgets.QCheckBox(getattr(self.ui, f"auto_use_btn_frame_{account_id}")),
+    )
+    font = QtGui.QFont()
+    font.setFamily("Segoe UI")
+    font.setPointSize(15)
+    font.setBold(True)
+    font.setWeight(75)
+    getattr(self.ui, f"auto_use_checkbox_{account_id}").setFont(font)
+    getattr(self.ui, f"auto_use_checkbox_{account_id}").setCursor(
+        QtGui.QCursor(QtCore.Qt.PointingHandCursor)
+    )
+    getattr(self.ui, f"auto_use_checkbox_{account_id}").setObjectName(
+        f"auto_use_checkbox_{account_id}"
+    )
+    getattr(self.ui, f"verticallayout_{int(account_id) + 103}").addWidget(
+        getattr(self.ui, f"auto_use_checkbox_{account_id}")
+    )
+    getattr(self.ui, f"verticallayout_{int(account_id) + 102}").addWidget(
+        getattr(self.ui, f"auto_use_btn_frame_{account_id}")
+    )
+    setattr(
+        self.ui,
+        f"search_frame_{account_id}",
+        QtWidgets.QFrame(getattr(self.ui, f"auto_use_left_frame_2_{account_id}")),
+    )
+    getattr(self.ui, f"search_frame_{account_id}").setFrameShape(
+        QtWidgets.QFrame.StyledPanel
+    )
+    getattr(self.ui, f"search_frame_{account_id}").setFrameShadow(
+        QtWidgets.QFrame.Raised
+    )
+    getattr(self.ui, f"search_frame_{account_id}").setObjectName(
+        f"search_frame_{account_id}"
+    )
+    setattr(
+        self.ui,
+        f"verticallayout_{int(account_id) + 106}",
+        QtWidgets.QVBoxLayout(getattr(self.ui, f"search_frame_{account_id}")),
+    )
+    getattr(self.ui, f"verticallayout_{int(account_id) + 106}").setObjectName(
+        f"verticallayout_{int(account_id) + 106}"
+    )
+    setattr(
+        self.ui,
+        f"search_label_{account_id}",
+        QtWidgets.QLabel(getattr(self.ui, f"search_frame_{account_id}")),
+    )
+    font = QtGui.QFont()
+    font.setFamily("Segoe UI")
+    font.setPointSize(14)
+    font.setBold(True)
+    font.setWeight(75)
+    getattr(self.ui, f"search_label_{account_id}").setFont(font)
+    getattr(self.ui, f"search_label_{account_id}").setAlignment(QtCore.Qt.AlignCenter)
+    getattr(self.ui, f"search_label_{account_id}").setObjectName(
+        f"search_label_{account_id}"
+    )
+    getattr(self.ui, f"verticallayout_{int(account_id) + 106}").addWidget(
+        getattr(self.ui, f"search_label_{account_id}")
+    )
+    setattr(
+        self.ui,
+        f"search_input_{account_id}",
+        QtWidgets.QLineEdit(getattr(self.ui, f"search_frame_{account_id}")),
+    )
+    sizePolicy = QtWidgets.QSizePolicy(
+        QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed
+    )
+    sizePolicy.setHorizontalStretch(0)
+    sizePolicy.setVerticalStretch(0)
+    sizePolicy.setHeightForWidth(
+        getattr(self.ui, f"search_input_{account_id}").sizePolicy().hasHeightForWidth()
+    )
+    getattr(self.ui, f"search_input_{account_id}").setSizePolicy(sizePolicy)
+    getattr(self.ui, f"search_input_{account_id}").setMinimumSize(QtCore.QSize(200, 0))
+    getattr(self.ui, f"search_input_{account_id}").setMaximumSize(QtCore.QSize(500, 30))
+    font = QtGui.QFont()
+    font.setFamily("Segoe UI")
+    font.setPointSize(15)
+    font.setBold(True)
+    font.setWeight(75)
+    getattr(self.ui, f"search_input_{account_id}").setFont(font)
+    getattr(self.ui, f"search_input_{account_id}").setStyleSheet(
+        "background-color: #5c6066; border-radius: 10px;"
+    )
+    getattr(self.ui, f"search_input_{account_id}").setAlignment(QtCore.Qt.AlignCenter)
+    getattr(self.ui, f"search_input_{account_id}").setObjectName(
+        f"search_input_{account_id}"
+    )
+    getattr(self.ui, f"verticallayout_{int(account_id) + 106}").addWidget(
+        getattr(self.ui, f"search_input_{account_id}")
+    )
+    getattr(self.ui, f"verticallayout_{int(account_id) + 102}").addWidget(
+        getattr(self.ui, f"search_frame_{account_id}")
+    )
+    setattr(
+        self.ui,
+        f"hide_disabled_frame_{account_id}",
+        QtWidgets.QFrame(getattr(self.ui, f"auto_use_left_frame_2_{account_id}")),
+    )
+    getattr(self.ui, f"hide_disabled_frame_{account_id}").setFrameShape(
+        QtWidgets.QFrame.StyledPanel
+    )
+    getattr(self.ui, f"hide_disabled_frame_{account_id}").setFrameShadow(
+        QtWidgets.QFrame.Raised
+    )
+    getattr(self.ui, f"hide_disabled_frame_{account_id}").setObjectName(
+        f"hide_disabled_frame_{account_id}"
+    )
+    setattr(
+        self.ui,
+        f"verticallayout_{int(account_id) + 105}",
+        QtWidgets.QVBoxLayout(getattr(self.ui, f"hide_disabled_frame_{account_id}")),
+    )
+    getattr(self.ui, f"verticallayout_{int(account_id) + 105}").setObjectName(
+        f"verticallayout_{int(account_id) + 105}"
+    )
+    setattr(
+        self.ui,
+        f"hide_disabled_checkbox_{account_id}",
+        QtWidgets.QCheckBox(getattr(self.ui, f"hide_disabled_frame_{account_id}")),
+    )
+    font = QtGui.QFont()
+    font.setFamily("Segoe UI")
+    font.setPointSize(15)
+    font.setBold(True)
+    font.setWeight(75)
+    getattr(self.ui, f"hide_disabled_checkbox_{account_id}").setFont(font)
+    getattr(self.ui, f"hide_disabled_checkbox_{account_id}").setCursor(
+        QtGui.QCursor(QtCore.Qt.PointingHandCursor)
+    )
+    getattr(self.ui, f"hide_disabled_checkbox_{account_id}").setObjectName(
+        f"hide_disabled_checkbox_{account_id}"
+    )
+    getattr(self.ui, f"verticallayout_{int(account_id) + 105}").addWidget(
+        getattr(self.ui, f"hide_disabled_checkbox_{account_id}")
+    )
+    getattr(self.ui, f"verticallayout_{int(account_id) + 102}").addWidget(
+        getattr(self.ui, f"hide_disabled_frame_{account_id}")
+    )
+    getattr(self.ui, f"verticallayout_{int(account_id) + 101}").addWidget(
+        getattr(self.ui, f"auto_use_left_frame_2_{account_id}"),
+        0,
+        QtCore.Qt.AlignHCenter,
+    )
+    getattr(self.ui, f"horizontallayout_{int(account_id) + 102}").addWidget(
+        getattr(self.ui, f"auto_use_left_frame_{account_id}")
+    )
+    setattr(
+        self.ui,
+        f"auto_use_right_frame_{account_id}",
+        QtWidgets.QFrame(getattr(self.ui, f"auto_use_frame_{account_id}")),
+    )
+    getattr(self.ui, f"auto_use_right_frame_{account_id}").setFrameShape(
+        QtWidgets.QFrame.StyledPanel
+    )
+    getattr(self.ui, f"auto_use_right_frame_{account_id}").setFrameShadow(
+        QtWidgets.QFrame.Raised
+    )
+    getattr(self.ui, f"auto_use_right_frame_{account_id}").setObjectName(
+        f"auto_use_right_frame_{account_id}"
+    )
+    setattr(
+        self.ui,
+        f"horizontalLayout_{int(account_id) + 101}",
+        QtWidgets.QHBoxLayout(getattr(self.ui, f"auto_use_right_frame_{account_id}")),
+    )
+    getattr(self.ui, f"horizontalLayout_{int(account_id) + 101}").setContentsMargins(
+        0, 0, 0, 0
+    )
+    getattr(self.ui, f"horizontalLayout_{int(account_id) + 101}").setSpacing(0)
+    getattr(self.ui, f"horizontalLayout_{int(account_id) + 101}").setObjectName(
+        f"horizontalLayout_{int(account_id) + 101}"
+    )
+    setattr(
+        self.ui,
+        f"auto_use_right_frame_2_{account_id}",
+        QtWidgets.QScrollArea(getattr(self.ui, f"auto_use_right_frame_{account_id}")),
+    )
+    sizePolicy = QtWidgets.QSizePolicy(
+        QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
+    )
+    sizePolicy.setHorizontalStretch(0)
+    sizePolicy.setVerticalStretch(0)
+    sizePolicy.setHeightForWidth(
+        getattr(self.ui, f"auto_use_right_frame_2_{account_id}")
+        .sizePolicy()
+        .hasHeightForWidth()
+    )
+    getattr(self.ui, f"auto_use_right_frame_2_{account_id}").setSizePolicy(sizePolicy)
+    getattr(self.ui, f"auto_use_right_frame_2_{account_id}").setWidgetResizable(True)
+    getattr(self.ui, f"auto_use_right_frame_2_{account_id}").setObjectName(
+        f"auto_use_right_frame_2_{account_id}"
+    )
+    setattr(self.ui, f"auto_use_right_widget_{account_id}", QtWidgets.QWidget())
+    getattr(self.ui, f"auto_use_right_widget_{account_id}").setGeometry(
+        QtCore.QRect(0, 0, 232, 329)
+    )
+    getattr(self.ui, f"auto_use_right_widget_{account_id}").setObjectName(
+        f"auto_use_right_widget_{account_id}"
+    )
+    setattr(
+        self.ui,
+        f"verticallayout_{int(account_id) + 104}",
+        QtWidgets.QVBoxLayout(getattr(self.ui, f"auto_use_right_widget_{account_id}")),
+    )
+    getattr(self.ui, f"verticallayout_{int(account_id) + 104}").setObjectName(
+        f"verticallayout_{int(account_id) + 104}"
+    )
+    if "autouse" not in list(config_dict[account_id]):
+        config_dict[account_id]["autouse"] = config_example["autouse"]
+        with open("config.json", "w") as file:
+            json.dump(config_dict, file, ensure_ascii=False, indent=4)
+    for autouse in list(config_example["autouse"]):
+        if autouse not in config_dict[account_id]["autouse"]:
+            config_dict[account_id]["autouse"].update(
+                {autouse: {config_example["autouse"][autouse]}}
+            )
+        if autouse in ["state", "hide_disabled"]:
+            continue
+        setattr(
+            self.ui,
+            f"{autouse}_frame_{account_id}",
+            QtWidgets.QFrame(getattr(self.ui, f"auto_use_right_widget_{account_id}")),
+        )
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            getattr(self.ui, f"{autouse}_frame_{account_id}")
+            .sizePolicy()
+            .hasHeightForWidth()
+        )
+        getattr(self.ui, f"{autouse}_frame_{account_id}").setSizePolicy(sizePolicy)
+        getattr(self.ui, f"{autouse}_frame_{account_id}").setMinimumSize(
+            QtCore.QSize(0, 50)
+        )
+        getattr(self.ui, f"{autouse}_frame_{account_id}").setMaximumSize(
+            QtCore.QSize(16777215, 50)
+        )
+        getattr(self.ui, f"{autouse}_frame_{account_id}").setFrameShape(
+            QtWidgets.QFrame.StyledPanel
+        )
+        getattr(self.ui, f"{autouse}_frame_{account_id}").setFrameShadow(
+            QtWidgets.QFrame.Raised
+        )
+        getattr(self.ui, f"{autouse}_frame_{account_id}").setObjectName(
+            f"{autouse}_frame_{account_id}"
+        )
+        setattr(
+            self.ui,
+            f"horizontalLayout_{int(account_id) + 100}",
+            QtWidgets.QHBoxLayout(getattr(self.ui, f"{autouse}_frame_{account_id}")),
+        )
+        getattr(self.ui, f"horizontalLayout_{int(account_id) + 100}").setObjectName(
+            f"horizontalLayout_{int(account_id) + 100}"
+        )
+        setattr(
+            self.ui,
+            f"{autouse}_checkbox_{account_id}",
+            QtWidgets.QCheckBox(getattr(self.ui, f"{autouse}_frame_{account_id}")),
+        )
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(15)
+        font.setBold(True)
+        font.setWeight(75)
+        getattr(self.ui, f"{autouse}_checkbox_{account_id}").setFont(font)
+        getattr(self.ui, f"{autouse}_checkbox_{account_id}").setCursor(
+            QtGui.QCursor(QtCore.Qt.PointingHandCursor)
+        )
+        getattr(self.ui, f"{autouse}_checkbox_{account_id}").setText(
+            autouse.replace("_", " ").title()
+        )
+        getattr(self.ui, f"{autouse}_checkbox_{account_id}").setObjectName(
+            f"{autouse}_checkbox_{account_id}"
+        )
+        getattr(self.ui, f"horizontalLayout_{int(account_id) + 100}").addWidget(
+            getattr(self.ui, f"{autouse}_checkbox_{account_id}")
+        )
+        getattr(self.ui, f"verticallayout_{int(account_id) + 104}").addWidget(
+            getattr(self.ui, f"{autouse}_frame_{account_id}")
+        )
+    getattr(self.ui, f"auto_use_right_frame_2_{account_id}").setWidget(
+        getattr(self.ui, f"auto_use_right_widget_{account_id}")
+    )
+    getattr(self.ui, f"horizontalLayout_{int(account_id) + 101}").addWidget(
+        getattr(self.ui, f"auto_use_right_frame_2_{account_id}"),
+        0,
+        QtCore.Qt.AlignHCenter,
+    )
+    getattr(self.ui, f"horizontallayout_{int(account_id) + 102}").addWidget(
+        getattr(self.ui, f"auto_use_right_frame_{account_id}")
+    )
+    getattr(self.ui, f"verticallayout_{int(account_id) + 100}").addWidget(
+        getattr(self.ui, f"auto_use_frame_{account_id}")
+    )
+    getattr(self.ui, f"main_menu_widget_{account_id}").addWidget(
+        getattr(self.ui, f"auto_use_widget_{account_id}")
+    )
     self.ui.verticalLayout_4.addWidget(
         getattr(self.ui, f"main_menu_widget_{account_id}")
     )
@@ -1444,6 +1896,8 @@ def load_account(self, account_id, config_example):
     self.ui.settings_btn.setText("Settings")
     self.ui.commands_btn.setText("Commands")
     self.ui.auto_buy_btn.setText("Auto Buy")
+    self.ui.auto_use_btn.setText("Auto Use")
+    self.ui.home_btn.setStyleSheet("background-color: #5865f2;")
     getattr(self.ui, f"home_label_{account_id}").setText("Home")
     getattr(self.ui, f"output_text_{account_id}").setHtml(
         (
@@ -1485,6 +1939,10 @@ def load_account(self, account_id, config_example):
     getattr(self.ui, f"fishing_checkbox_{account_id}").setText("Fishing Pole")
     getattr(self.ui, f"shovel_checkbox_{account_id}").setText("Shovel")
     getattr(self.ui, f"rifle_checkbox_{account_id}").setText("Hunting Rifle")
+    getattr(self.ui, f"auto_use_label_{account_id}").setText("Auto Use")
+    getattr(self.ui, f"auto_use_checkbox_{account_id}").setText("Auto Use")
+    getattr(self.ui, f"search_label_{account_id}").setText("Search")
+    getattr(self.ui, f"hide_disabled_checkbox_{account_id}").setText("Hide Disabled")
     getattr(self.ui, f"home_label_{account_id}").setText("Home")
     getattr(self.ui, f"output_text_{account_id}").setHtml(
         (
@@ -1559,6 +2017,20 @@ def load_account(self, account_id, config_example):
                     )
                 except (TypeError, AttributeError):
                     pass
+
+            getattr(self.ui, f"auto_use_checkbox_{account_id}").setChecked(
+                config_dict[account_id]["autouse"]["state"]
+            )
+            getattr(self.ui, f"hide_disabled_checkbox_{account_id}").setChecked(
+                config_dict[account_id]["autouse"]["hide_disabled"]
+            )
+            for autouse in config_dict[account_id]["autouse"]:
+                try:
+                    getattr(self.ui, f"{autouse}_checkbox_{account_id}").setChecked(
+                        config_dict[account_id]["autouse"][autouse]["state"]
+                    )
+                except (TypeError, AttributeError):
+                    pass
             break
         except KeyError as e:
             if e not in config_dict[account_id]:
@@ -1609,6 +2081,31 @@ def load_account(self, account_id, config_example):
             "amount",
         )
     )
+
+    # Autouse
+    getattr(self.ui, f"auto_use_checkbox_{account_id}").clicked.connect(
+        lambda: self.autouse(
+            "state",
+            getattr(self.ui, f"auto_use_checkbox_{account_id}").isChecked(),
+        )
+    )
+    getattr(self.ui, f"search_input_{account_id}").textChanged.connect(
+        lambda: self.autouse(
+            "search",
+            getattr(self.ui, f"search_input_{account_id}").text(),
+        )
+    )
+
+    for button in config_dict[account_id]["autouse"]:
+        if button == "state":
+            continue
+        getattr(self.ui, f"{button}_checkbox_{account_id}").clicked.connect(
+            lambda checked, account_id=account_id, button=button: self.autouse(
+                button,
+                getattr(self.ui, f"{button}_checkbox_{account_id}").isChecked(),
+                "state",
+            )
+        )
 
     # Settings buttons
     getattr(self.ui, f"token_input_{account_id}").textChanged.connect(
