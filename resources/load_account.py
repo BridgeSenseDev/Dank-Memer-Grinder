@@ -1,8 +1,16 @@
 import json
 import math
 
-import requests
 from PyQt5 import QtCore, QtGui, QtWidgets
+
+
+def create_font(font_size):
+    font = QtGui.QFont()
+    font.setFamily("Segoe UI")
+    font.setPointSize(font_size)
+    font.setBold(True)
+    font.setWeight(75)
+    return font
 
 
 def load_account(self, account_id, config_example):
@@ -27,12 +35,7 @@ def load_account(self, account_id, config_example):
     getattr(self.ui, f"account_btn_{account_id}").setSizePolicy(size_policy)
     getattr(self.ui, f"account_btn_{account_id}").setMinimumSize(QtCore.QSize(0, 45))
     getattr(self.ui, f"account_btn_{account_id}").setMaximumSize(QtCore.QSize(150, 45))
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(12)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"account_btn_{account_id}").setFont(font)
+    getattr(self.ui, f"account_btn_{account_id}").setFont(create_font(12))
     getattr(self.ui, f"account_btn_{account_id}").setCursor(
         QtGui.QCursor(QtCore.Qt.PointingHandCursor)
     )
@@ -116,12 +119,7 @@ def load_account(self, account_id, config_example):
     getattr(self.ui, f"home_label_{account_id}").setMaximumSize(
         QtCore.QSize(16777215, 50)
     )
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(25)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"home_label_{account_id}").setFont(font)
+    getattr(self.ui, f"home_label_{account_id}").setFont(create_font(25))
     getattr(self.ui, f"home_label_{account_id}").setAlignment(QtCore.Qt.AlignCenter)
     getattr(self.ui, f"home_label_{account_id}").setObjectName(
         f"home_label_{account_id}"
@@ -227,12 +225,7 @@ def load_account(self, account_id, config_example):
     getattr(self.ui, f"settings_label_{account_id}").setMaximumSize(
         QtCore.QSize(16777215, 50)
     )
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(25)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"settings_label_{account_id}").setFont(font)
+    getattr(self.ui, f"settings_label_{account_id}").setFont(create_font(25))
     getattr(self.ui, f"settings_label_{account_id}").setAlignment(QtCore.Qt.AlignCenter)
     getattr(self.ui, f"settings_label_{account_id}").setObjectName(
         f"settings_label_{account_id}"
@@ -319,12 +312,7 @@ def load_account(self, account_id, config_example):
         getattr(self.ui, f"token_label_{account_id}").sizePolicy().hasHeightForWidth()
     )
     getattr(self.ui, f"token_label_{account_id}").setSizePolicy(size_policy)
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(15)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"token_label_{account_id}").setFont(font)
+    getattr(self.ui, f"token_label_{account_id}").setFont(create_font(15))
     getattr(self.ui, f"token_label_{account_id}").setObjectName(
         f"token_label_{account_id}"
     )
@@ -417,12 +405,7 @@ def load_account(self, account_id, config_example):
         getattr(self.ui, f"channel_label_{account_id}").sizePolicy().hasHeightForWidth()
     )
     getattr(self.ui, f"channel_label_{account_id}").setSizePolicy(size_policy)
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(15)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"channel_label_{account_id}").setFont(font)
+    getattr(self.ui, f"channel_label_{account_id}").setFont(create_font(15))
     getattr(self.ui, f"channel_label_{account_id}").setObjectName(
         f"channel_label_{account_id}"
     )
@@ -519,12 +502,7 @@ def load_account(self, account_id, config_example):
         .hasHeightForWidth()
     )
     getattr(self.ui, f"trivia_correct_label_{account_id}").setSizePolicy(size_policy)
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(15)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"trivia_correct_label_{account_id}").setFont(font)
+    getattr(self.ui, f"trivia_correct_label_{account_id}").setFont(create_font(15))
     getattr(self.ui, f"trivia_correct_label_{account_id}").setObjectName(
         f"trivia_correct_label_{account_id}"
     )
@@ -645,12 +623,7 @@ def load_account(self, account_id, config_example):
         f"offline_checkbox_{account_id}",
         QtWidgets.QCheckBox(getattr(self.ui, f"toggles_left_frame_2_{account_id}")),
     )
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(15)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"offline_checkbox_{account_id}").setFont(font)
+    getattr(self.ui, f"offline_checkbox_{account_id}").setFont(create_font(15))
     getattr(self.ui, f"offline_checkbox_{account_id}").setCursor(
         QtGui.QCursor(QtCore.Qt.PointingHandCursor)
     )
@@ -711,12 +684,7 @@ def load_account(self, account_id, config_example):
         f"alerts_checkbox_{account_id}",
         QtWidgets.QCheckBox(getattr(self.ui, f"toggles_right_frame_2_{account_id}")),
     )
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(15)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"alerts_checkbox_{account_id}").setFont(font)
+    getattr(self.ui, f"alerts_checkbox_{account_id}").setFont(create_font(15))
     getattr(self.ui, f"alerts_checkbox_{account_id}").setCursor(
         QtGui.QCursor(QtCore.Qt.PointingHandCursor)
     )
@@ -756,12 +724,7 @@ def load_account(self, account_id, config_example):
     getattr(self.ui, f"commands_label_{account_id}").setMaximumSize(
         QtCore.QSize(16777215, 50)
     )
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(25)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"commands_label_{account_id}").setFont(font)
+    getattr(self.ui, f"commands_label_{account_id}").setFont(create_font(25))
     getattr(self.ui, f"commands_label_{account_id}").setAlignment(QtCore.Qt.AlignCenter)
     getattr(self.ui, f"commands_label_{account_id}").setObjectName(
         f"commands_label_{account_id}"
@@ -953,12 +916,9 @@ def load_account(self, account_id, config_example):
                     getattr(self.ui, f"commands_settings_{i}_frame_2_{account_id}")
                 ),
             )
-            font = QtGui.QFont()
-            font.setFamily("Segoe UI")
-            font.setPointSize(15)
-            font.setBold(True)
-            font.setWeight(75)
-            getattr(self.ui, f"{command}_checkbox_{account_id}").setFont(font)
+            getattr(self.ui, f"{command}_checkbox_{account_id}").setFont(
+                create_font(15)
+            )
             getattr(self.ui, f"{command}_checkbox_{account_id}").setCursor(
                 QtGui.QCursor(QtCore.Qt.PointingHandCursor)
             )
@@ -1051,12 +1011,7 @@ def load_account(self, account_id, config_example):
     getattr(self.ui, f"start_btn_{account_id}").setSizePolicy(size_policy)
     getattr(self.ui, f"start_btn_{account_id}").setMinimumSize(QtCore.QSize(140, 45))
     getattr(self.ui, f"start_btn_{account_id}").setMaximumSize(QtCore.QSize(50, 45))
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(12)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"start_btn_{account_id}").setFont(font)
+    getattr(self.ui, f"start_btn_{account_id}").setFont(create_font(12))
     getattr(self.ui, f"start_btn_{account_id}").setCursor(
         QtGui.QCursor(QtCore.Qt.PointingHandCursor)
     )
@@ -1082,12 +1037,7 @@ def load_account(self, account_id, config_example):
     getattr(self.ui, f"stop_btn_{account_id}").setSizePolicy(size_policy)
     getattr(self.ui, f"stop_btn_{account_id}").setMinimumSize(QtCore.QSize(140, 45))
     getattr(self.ui, f"stop_btn_{account_id}").setMaximumSize(QtCore.QSize(50, 45))
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(12)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"stop_btn_{account_id}").setFont(font)
+    getattr(self.ui, f"stop_btn_{account_id}").setFont(create_font(12))
     getattr(self.ui, f"stop_btn_{account_id}").setCursor(
         QtGui.QCursor(QtCore.Qt.PointingHandCursor)
     )
@@ -1129,12 +1079,7 @@ def load_account(self, account_id, config_example):
     getattr(self.ui, f"auto_buy_label_{account_id}").setMaximumSize(
         QtCore.QSize(16777215, 50)
     )
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(25)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"auto_buy_label_{account_id}").setFont(font)
+    getattr(self.ui, f"auto_buy_label_{account_id}").setFont(create_font(25))
     getattr(self.ui, f"auto_buy_label_{account_id}").setAlignment(QtCore.Qt.AlignCenter)
     getattr(self.ui, f"auto_buy_label_{account_id}").setObjectName(
         f"auto_buy_label_{account_id}"
@@ -1221,12 +1166,7 @@ def load_account(self, account_id, config_example):
         .hasHeightForWidth()
     )
     getattr(self.ui, f"lifesavers_checkbox_{account_id}").setSizePolicy(size_policy)
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(15)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"lifesavers_checkbox_{account_id}").setFont(font)
+    getattr(self.ui, f"lifesavers_checkbox_{account_id}").setFont(create_font(15))
     getattr(self.ui, f"lifesavers_checkbox_{account_id}").setCursor(
         QtGui.QCursor(QtCore.Qt.PointingHandCursor)
     )
@@ -1319,12 +1259,7 @@ def load_account(self, account_id, config_example):
         .hasHeightForWidth()
     )
     getattr(self.ui, f"fishing_checkbox_{account_id}").setSizePolicy(size_policy)
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(15)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"fishing_checkbox_{account_id}").setFont(font)
+    getattr(self.ui, f"fishing_checkbox_{account_id}").setFont(create_font(15))
     getattr(self.ui, f"fishing_checkbox_{account_id}").setCursor(
         QtGui.QCursor(QtCore.Qt.PointingHandCursor)
     )
@@ -1368,12 +1303,7 @@ def load_account(self, account_id, config_example):
         .hasHeightForWidth()
     )
     getattr(self.ui, f"shovel_checkbox_{account_id}").setSizePolicy(size_policy)
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(15)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"shovel_checkbox_{account_id}").setFont(font)
+    getattr(self.ui, f"shovel_checkbox_{account_id}").setFont(create_font(15))
     getattr(self.ui, f"shovel_checkbox_{account_id}").setCursor(
         QtGui.QCursor(QtCore.Qt.PointingHandCursor)
     )
@@ -1419,12 +1349,7 @@ def load_account(self, account_id, config_example):
         .hasHeightForWidth()
     )
     getattr(self.ui, f"rifle_checkbox_{account_id}").setSizePolicy(size_policy)
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(15)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"rifle_checkbox_{account_id}").setFont(font)
+    getattr(self.ui, f"rifle_checkbox_{account_id}").setFont(create_font(15))
     getattr(self.ui, f"rifle_checkbox_{account_id}").setCursor(
         QtGui.QCursor(QtCore.Qt.PointingHandCursor)
     )
@@ -1465,12 +1390,7 @@ def load_account(self, account_id, config_example):
     getattr(self.ui, f"auto_use_label_{account_id}").setMaximumSize(
         QtCore.QSize(16777215, 50)
     )
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(25)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"auto_use_label_{account_id}").setFont(font)
+    getattr(self.ui, f"auto_use_label_{account_id}").setFont(create_font(25))
     getattr(self.ui, f"auto_use_label_{account_id}").setAlignment(QtCore.Qt.AlignCenter)
     getattr(self.ui, f"auto_use_label_{account_id}").setObjectName(
         f"auto_use_label_{account_id}"
@@ -1582,12 +1502,7 @@ def load_account(self, account_id, config_example):
         f"auto_use_checkbox_{account_id}",
         QtWidgets.QCheckBox(getattr(self.ui, f"auto_use_btn_frame_{account_id}")),
     )
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(15)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"auto_use_checkbox_{account_id}").setFont(font)
+    getattr(self.ui, f"auto_use_checkbox_{account_id}").setFont(create_font(15))
     getattr(self.ui, f"auto_use_checkbox_{account_id}").setCursor(
         QtGui.QCursor(QtCore.Qt.PointingHandCursor)
     )
@@ -1627,12 +1542,7 @@ def load_account(self, account_id, config_example):
         f"search_label_{account_id}",
         QtWidgets.QLabel(getattr(self.ui, f"search_frame_{account_id}")),
     )
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(14)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"search_label_{account_id}").setFont(font)
+    getattr(self.ui, f"search_label_{account_id}").setFont(create_font(15))
     getattr(self.ui, f"search_label_{account_id}").setAlignment(QtCore.Qt.AlignCenter)
     getattr(self.ui, f"search_label_{account_id}").setObjectName(
         f"search_label_{account_id}"
@@ -1656,12 +1566,7 @@ def load_account(self, account_id, config_example):
     getattr(self.ui, f"search_input_{account_id}").setSizePolicy(sizePolicy)
     getattr(self.ui, f"search_input_{account_id}").setMinimumSize(QtCore.QSize(200, 0))
     getattr(self.ui, f"search_input_{account_id}").setMaximumSize(QtCore.QSize(500, 30))
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(15)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"search_input_{account_id}").setFont(font)
+    getattr(self.ui, f"search_input_{account_id}").setFont(create_font(15))
     getattr(self.ui, f"search_input_{account_id}").setStyleSheet(
         "background-color: #5c6066; border-radius: 10px;"
     )
@@ -1702,12 +1607,7 @@ def load_account(self, account_id, config_example):
         f"hide_disabled_checkbox_{account_id}",
         QtWidgets.QCheckBox(getattr(self.ui, f"hide_disabled_frame_{account_id}")),
     )
-    font = QtGui.QFont()
-    font.setFamily("Segoe UI")
-    font.setPointSize(15)
-    font.setBold(True)
-    font.setWeight(75)
-    getattr(self.ui, f"hide_disabled_checkbox_{account_id}").setFont(font)
+    getattr(self.ui, f"hide_disabled_checkbox_{account_id}").setFont(create_font(15))
     getattr(self.ui, f"hide_disabled_checkbox_{account_id}").setCursor(
         QtGui.QCursor(QtCore.Qt.PointingHandCursor)
     )
@@ -1844,12 +1744,7 @@ def load_account(self, account_id, config_example):
             f"{autouse}_checkbox_{account_id}",
             QtWidgets.QCheckBox(getattr(self.ui, f"{autouse}_frame_{account_id}")),
         )
-        font = QtGui.QFont()
-        font.setFamily("Segoe UI")
-        font.setPointSize(15)
-        font.setBold(True)
-        font.setWeight(75)
-        getattr(self.ui, f"{autouse}_checkbox_{account_id}").setFont(font)
+        getattr(self.ui, f"{autouse}_checkbox_{account_id}").setFont(create_font(15))
         getattr(self.ui, f"{autouse}_checkbox_{account_id}").setCursor(
             QtGui.QCursor(QtCore.Qt.PointingHandCursor)
         )

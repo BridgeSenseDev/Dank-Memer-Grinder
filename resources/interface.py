@@ -1,6 +1,15 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
+def create_font(font_size):
+    font = QtGui.QFont()
+    font.setFamily("Segoe UI")
+    font.setPointSize(font_size)
+    font.setBold(True)
+    font.setWeight(75)
+    return font
+
+
 class Ui_DankMemerGrinder(object):
     def __init__(self, accounts):
         self.accounts = accounts
@@ -301,12 +310,7 @@ class Ui_DankMemerGrinder(object):
             setattr(self, f"{button}_btn", QtWidgets.QPushButton(self.buttons))
             getattr(self, f"{button}_btn").setMinimumSize(QtCore.QSize(0, 45))
             getattr(self, f"{button}_btn").setMaximumSize(QtCore.QSize(16777215, 45))
-            font = QtGui.QFont()
-            font.setFamily("Segoe UI")
-            font.setPointSize(12)
-            font.setBold(True)
-            font.setWeight(75)
-            getattr(self, f"{button}_btn").setFont(font)
+            getattr(self, f"{button}_btn").setFont(create_font(12))
             getattr(self, f"{button}_btn").setCursor(
                 QtGui.QCursor(QtCore.Qt.PointingHandCursor)
             )
@@ -332,12 +336,7 @@ class Ui_DankMemerGrinder(object):
         self.toggle.setSizePolicy(sizePolicy)
         self.toggle.setMinimumSize(QtCore.QSize(0, 45))
         self.toggle.setMaximumSize(QtCore.QSize(16777215, 45))
-        font = QtGui.QFont()
-        font.setFamily("Segoe UI")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.toggle.setFont(font)
+        self.toggle.setFont(create_font(12))
         self.toggle.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.toggle.setStyleSheet("background-color : #d83c3e")
         self.toggle.setObjectName("toggle")
