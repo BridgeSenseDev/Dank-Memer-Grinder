@@ -1897,6 +1897,9 @@ def load_account(self, account_id, config_example):
                     }
                     with open("config.json", "w") as file:
                         json.dump(config_dict, file, ensure_ascii=False, indent=4)
+                    getattr(self.ui, f"{command}_spinbox_{account_id}").setProperty(
+                        "value", config_dict[account_id]["commands"][command]["delay"]
+                    )
                 except TypeError as e:
                     config_dict[account_id]["commands"][command] = {
                         "state": config_dict[account_id]["commands"][command],
@@ -1904,6 +1907,9 @@ def load_account(self, account_id, config_example):
                     }
                     with open("config.json", "w") as file:
                         json.dump(config_dict, file, ensure_ascii=False, indent=4)
+                    getattr(self.ui, f"{command}_spinbox_{account_id}").setProperty(
+                        "value", config_dict[account_id]["commands"][command]["delay"]
+                    )
 
             for autobuy in config_dict[account_id]["autobuy"]:
                 try:
