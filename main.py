@@ -81,7 +81,7 @@ config_example = {
         "cowboy_boots": {"state": False},
         "lucky_horseshoe": {"state": False},
         "daily_box": {"state": False},
-        "apple": {"state": False}
+        "apple": {"state": False},
     },
 }
 
@@ -629,7 +629,7 @@ if __name__ == "__main__":
         "resources/version.txt"
     ).text
     window = MainWindow()
-    if int(version.replace(".", "")) > 141:
+    if int(version.replace(".", "")) > 150:
         updater = UpdaterWindow()
     else:
         window.show()
