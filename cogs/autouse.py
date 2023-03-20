@@ -23,7 +23,7 @@ class Autouse(commands.Cog):
             await asyncio.sleep(1)
             return
         for autouse in self.bot.config_dict["autouse"]:
-            if autouse == "state":
+            if autouse in ["state", "hide_disabled"]:
                 continue
             if (
                 time.time() - self.last_ran[autouse] < 1800

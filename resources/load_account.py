@@ -1696,8 +1696,10 @@ def load_account(self, account_id, config_example):
     for autouse in list(config_example["autouse"]):
         if autouse not in config_dict[account_id]["autouse"]:
             config_dict[account_id]["autouse"].update(
-                {autouse: {config_example["autouse"][autouse]}}
+                {autouse: config_example["autouse"][autouse]}
             )
+            with open("config.json", "w") as file:
+                json.dump(config_dict, file, ensure_ascii=False, indent=4)
         if autouse in ["state", "hide_disabled"]:
             continue
         setattr(
@@ -1996,7 +1998,6 @@ def load_account(self, account_id, config_example):
             getattr(self.ui, f"search_input_{account_id}").text(),
         )
     )
-
     for button in config_dict[account_id]["autouse"]:
         if button == "state":
             continue
