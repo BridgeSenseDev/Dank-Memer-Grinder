@@ -21,11 +21,11 @@ class Pm(commands.Cog):
             embed = embed.to_dict()
             try:
                 if "Meme Posting Session" in embed["author"]["name"]:
-                    await asyncio.sleep(0.7)
+                    await asyncio.sleep(0.5)
                     await self.bot.select(message, 0, 0, random.randint(0, 3))
-                    await asyncio.sleep(0.7)
+                    await asyncio.sleep(0.5)
                     await self.bot.select(message, 1, 0, random.randint(0, 4))
-                    await asyncio.sleep(0.7)
+                    await asyncio.sleep(0.5)
                     await self.bot.click(message, 2, 0)
             except KeyError:
                 pass
