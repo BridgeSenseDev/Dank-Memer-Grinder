@@ -81,6 +81,7 @@ config_example = {
         "cowboy_boots": {"state": False},
         "lucky_horseshoe": {"state": False},
         "daily_box": {"state": False},
+        "apple": {"state": False}
     },
 }
 
