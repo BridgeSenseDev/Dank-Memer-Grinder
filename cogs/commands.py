@@ -17,7 +17,11 @@ class Commands(commands.Cog):
         if self.bot.state is False:
             await asyncio.sleep(1)
             return
-        for command in self.bot.commands_dict:
+
+        shuffled_commands = list(self.bot.commands_dict)[:]
+        random.shuffle(shuffled_commands)
+
+        for command in shuffled_commands:
             if (
                 time.time() - self.bot.last_ran[command]
                 < self.bot.config_dict["commands"][command]["delay"]
