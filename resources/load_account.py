@@ -1693,7 +1693,7 @@ def load_account(self, account_id, config_example):
         config_dict[account_id]["autouse"] = config_example["autouse"]
         with open("config.json", "w") as file:
             json.dump(config_dict, file, ensure_ascii=False, indent=4)
-    for autouse in list(config_example["autouse"]):
+    for autouse in sorted(list(config_example["autouse"])):
         if autouse not in config_dict[account_id]["autouse"]:
             config_dict[account_id]["autouse"].update(
                 {autouse: config_example["autouse"][autouse]}
