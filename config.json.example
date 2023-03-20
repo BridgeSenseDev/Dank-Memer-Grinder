@@ -72,6 +72,25 @@
                 "state": false,
                 "delay": 50
             }
+        },
+        "autouse": {
+            "state": false,
+            "hide_disabled": false,
+            "pizza_slice": {
+                "state": false
+            },
+            "cowboy_boots": {
+                "state": false
+            },
+            "lucky_horseshoe": {
+                "state": false
+            },
+            "daily_box": {
+                "state": false
+            },
+            "apple": {
+                "state": false
+            }
         }
     },
     "2": {
@@ -146,6 +165,25 @@
             "crime": {
                 "state": false,
                 "delay": 50
+            }
+        },
+        "autouse": {
+            "state": false,
+            "hide_disabled": false,
+            "pizza_slice": {
+                "state": false
+            },
+            "cowboy_boots": {
+                "state": false
+            },
+            "lucky_horseshoe": {
+                "state": false
+            },
+            "daily_box": {
+                "state": false
+            },
+            "apple": {
+                "state": false
             }
         }
     },
@@ -222,6 +260,25 @@
                 "state": false,
                 "delay": 50
             }
+        },
+        "autouse": {
+            "state": false,
+            "hide_disabled": false,
+            "pizza_slice": {
+                "state": false
+            },
+            "cowboy_boots": {
+                "state": false
+            },
+            "lucky_horseshoe": {
+                "state": false
+            },
+            "daily_box": {
+                "state": false
+            },
+            "apple": {
+                "state": false
+            }
         }
     },
     "4": {
@@ -297,6 +354,25 @@
                 "state": false,
                 "delay": 50
             }
+        },
+        "autouse": {
+            "state": false,
+            "hide_disabled": false,
+            "pizza_slice": {
+                "state": false
+            },
+            "cowboy_boots": {
+                "state": false
+            },
+            "lucky_horseshoe": {
+                "state": false
+            },
+            "daily_box": {
+                "state": false
+            },
+            "apple": {
+                "state": false
+            }
         }
     },
     "5": {
@@ -371,6 +447,25 @@
             "crime": {
                 "state": false,
                 "delay": 50
+            }
+        },
+        "autouse": {
+            "state": false,
+            "hide_disabled": false,
+            "pizza_slice": {
+                "state": false
+            },
+            "cowboy_boots": {
+                "state": false
+            },
+            "lucky_horseshoe": {
+                "state": false
+            },
+            "daily_box": {
+                "state": false
+            },
+            "apple": {
+                "state": false
             }
         }
     }
