@@ -72,7 +72,7 @@ class Autobuy(commands.Cog):
                     "You don't have a shovel, you need to go buy one."
                     in embed["description"]
                 ):
-                    await self.bot.send("withdraw", amount="25k")
+                    await self.bot.send("withdraw", amount="35k")
                     await self.bot.sub_send("shop", "buy", item="Shovel", quantity="1")
             except KeyError:
                 pass
@@ -83,7 +83,7 @@ class Autobuy(commands.Cog):
                     "You don't have a fishing pole, you need to go buy one"
                     in embed["description"]
                 ):
-                    await self.bot.send("withdraw", amount="25k")
+                    await self.bot.send("withdraw", amount="35k")
                     await self.bot.sub_send(
                         "shop", "buy", item="Fishing Pole", quantity="1"
                     )
@@ -96,7 +96,7 @@ class Autobuy(commands.Cog):
                     "You don't have a hunting rifle, you need to go buy one."
                     in embed["description"]
                 ):
-                    await self.bot.send("withdraw", amount="25k")
+                    await self.bot.send("withdraw", amount="35k")
                     await self.bot.sub_send(
                         "shop", "buy", item="Hunting Rifle", quantity="1"
                     )
