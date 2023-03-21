@@ -38,7 +38,7 @@
 -   [x] Automatically selects and streams the daily trending game
 -   [x] Randomizes answers to trivia questions to avoid suspicion
 -   [x] Finds safe locations to avoid danger automatically
--   [x] Automatically purchases fishing poles, hunting rifles, shovels, and pizzas
+-   [x] Automatically purchases fishing poles, hunting rifles and shovels
 -   [x] Buys lifesavers when the user falls below a configurable amount
 -   [x] Appears offline in Discord status
 -   [x] Automatically reads alerts
