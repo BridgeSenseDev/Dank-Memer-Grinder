@@ -40,7 +40,7 @@
 -   [x] Finds safe locations to avoid danger automatically
 -   [x] Automatically purchases fishing poles, hunting rifles and shovels
 -   [x] Buys lifesavers when the user falls below a configurable amount
--   [x] Appears offline in Discord status
+-   [x] Option to appear offline in Discord status
 -   [x] Automatically reads alerts
 -   [x] Uses minimal system resources.
 
