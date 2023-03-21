@@ -39,7 +39,7 @@
 -   [x] Randomizes answers to trivia questions to avoid suspicion
 -   [x] Finds safe locations to avoid danger automatically
 -   [x] Automatically purchases fishing poles, hunting rifles and shovels
--   [x] Buys lifesavers when the user falls below a configurable amount
+-   [x] Buys lifesavers when it falls below a configurable amount
 -   [x] Option to appear offline in Discord status
 -   [x] Automatically reads alerts
 -   [x] Uses minimal system resources.
