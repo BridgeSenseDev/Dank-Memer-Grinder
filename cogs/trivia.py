@@ -1,9 +1,11 @@
+import asyncio
 import json
 import os
 import random
 import re
 import sys
 
+import discord
 from discord.ext import commands
 
 
@@ -42,7 +44,17 @@ class Trivia(commands.Cog):
                         answer = trivia_dict[category][question]
                     except KeyError:
                         await self.bot.click(message, 0, random.randint(0, 3))
-                        return
+                        await asyncio.sleep(0.5)
+                        for button in message.components[0].children:
+                            if button.style == discord.ButtonStyle.success:
+                                trivia_dict[category][question] = button.label
+                                with open(
+                                    resource_path("resources/trivia.json"),
+                                    "w",
+                                    encoding="utf-8",
+                                ) as file:
+                                    json.dump(trivia_dict, file, indent=4)
+                                return
                     if random.random() <= self.chance:
                         for count, i in enumerate(message.components[0].children):
                             if i.label == answer:
