@@ -36,7 +36,7 @@ class Trivia(commands.Cog):
             embed = embed.to_dict()
             try:
                 if embed["fields"][0]["name"] == "Difficulty":
-                    category = embed["fields"][1]["value"][1:-1]
+                    category = embed["fields"][1]["value"]
                     question = re.search("\*\*(.*?)\*\*", embed["description"]).group(1)
                     try:
                         answer = trivia_dict[category][question]
