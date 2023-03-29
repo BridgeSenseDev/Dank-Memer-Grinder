@@ -13,31 +13,21 @@ class Crime(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if (
-            message.channel.id != self.bot.channel_id
-            or self.bot.state is False
-            or self.bot.config_dict["commands"]["crime"]["state"] is False
-        ):
+        if not await self.bot.is_valid_command(message, "crime"):
             return
 
-        for embed in message.embeds:
-            embed = embed.to_dict()
-            try:
-                if "What crime do you want to commit?" in embed["description"]:
-                    children = message.components[0].children
-                    random.shuffle(children)
-                    for i in children:
-                        if i.label in priority:
-                            await self.bot.click(message, 0, children.index(i))
-                            return
-                        if i.label in second_priority:
-                            await self.bot.click(message, 0, children.index(i))
-                            return
-                        if i.label not in avoid:
-                            await self.bot.click(message, 0, children.index(i))
-                            return
-            except KeyError:
-                pass
+        children = message.components[0].children
+        random.shuffle(children)
+        for i in children:
+            if i.label in priority:
+                await self.bot.click(message, 0, children.index(i))
+                return
+            if i.label in second_priority:
+                await self.bot.click(message, 0, children.index(i))
+                return
+            if i.label not in avoid:
+                await self.bot.click(message, 0, children.index(i))
+                return
 
 
 async def setup(bot):

@@ -9,7 +9,7 @@ class Captcha(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.channel.id != self.bot.channel_id or self.bot.state is False:
+        if message.channel.id != self.bot.channel_id or not self.bot.state:
             return
 
         for embed in message.embeds:
@@ -23,7 +23,6 @@ class Captcha(commands.Cog):
                     captcha_url = embed["image"]["url"]
                     for count, button in enumerate(message.components[0].children):
                         if button.emoji.url in captcha_url:
-                            print(f"clicking {count}")
                             await asyncio.sleep(0.5)
                             await self.bot.click(message, 0, count)
                             return

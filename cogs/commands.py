@@ -14,7 +14,7 @@ class Commands(commands.Cog):
 
     @tasks.loop(seconds=0.05)
     async def commands(self):
-        if self.bot.state is False:
+        if not self.bot.state:
             await asyncio.sleep(1)
             return
 
@@ -25,7 +25,7 @@ class Commands(commands.Cog):
             if (
                 time.time() - self.bot.last_ran[command]
                 < self.bot.config_dict["commands"][command]["delay"]
-                or self.bot.config_dict["commands"][command]["state"] is False
+                or not self.bot.config_dict["commands"][command]["state"]
             ):
                 await asyncio.sleep(0.5)
                 continue

@@ -15,7 +15,7 @@ class Others(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.channel.id != self.bot.channel_id or self.bot.state is False:
+        if message.channel.id != self.bot.channel_id or not self.bot.state:
             return
         for embed in message.embeds:
             embed = embed.to_dict()
@@ -30,7 +30,7 @@ class Others(commands.Cog):
 
     @tasks.loop(seconds=30)
     async def presence(self):
-        if self.bot.state is False:
+        if not self.bot.state:
             return
         if (
             self.bot.config_dict["offline"]

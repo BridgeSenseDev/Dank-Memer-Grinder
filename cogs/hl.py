@@ -9,28 +9,15 @@ class Hl(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if (
-            message.channel.id != self.bot.channel_id
-            or self.bot.state is False
-            or self.bot.config_dict["commands"]["hl"]["state"] is False
-        ):
+        if not await self.bot.is_valid_command(message, "hl"):
             return
 
-        for embed in message.embeds:
-            embed = embed.to_dict()
-            try:
-                if "I just chose a secret number" in embed["description"]:
-                    num = int(
-                        (
-                            re.search("\*\*(.*?)\*\*", embed["description"]).group(1)
-                        ).title()
-                    )
-                    if num >= 50:
-                        await self.bot.click(message, 0, 0)
-                    else:
-                        await self.bot.click(message, 0, 2)
-            except KeyError:
-                pass
+        embed = message.embeds[0].to_dict()
+        num = int((re.search("\*\*(.*?)\*\*", embed["description"]).group(1)).title())
+        if num >= 50:
+            await self.bot.click(message, 0, 0)
+        else:
+            await self.bot.click(message, 0, 2)
 
 
 async def setup(bot):

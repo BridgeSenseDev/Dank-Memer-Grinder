@@ -27,45 +27,36 @@ class Trivia(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if (
-            message.channel.id != self.bot.channel_id
-            or self.bot.state is False
-            or self.bot.config_dict["commands"]["trivia"]["state"] is False
-        ):
+        if not await self.bot.is_valid_command(message, "trivia"):
             return
 
-        for embed in message.embeds:
-            embed = embed.to_dict()
-            try:
-                if embed["fields"][0]["name"] == "Difficulty":
-                    category = embed["fields"][1]["value"]
-                    question = re.search("\*\*(.*?)\*\*", embed["description"]).group(1)
-                    try:
-                        answer = trivia_dict[category][question]
-                    except KeyError:
-                        await self.bot.click(message, 0, random.randint(0, 3))
-                        await asyncio.sleep(0.5)
-                        for button in message.components[0].children:
-                            if button.style == discord.ButtonStyle.success:
-                                trivia_dict[category][question] = button.label
-                                with open(
-                                    resource_path("resources/trivia.json"),
-                                    "w",
-                                    encoding="utf-8",
-                                ) as file:
-                                    json.dump(trivia_dict, file, indent=4)
-                                return
-                    if random.random() <= self.chance:
-                        for count, i in enumerate(message.components[0].children):
-                            if i.label == answer:
-                                await self.bot.click(message, 0, count)
-                    else:
-                        if message.components[0].children[0].label != answer:
-                            await self.bot.click(message, 0, 0)
-                        else:
-                            await self.bot.click(message, 0, 1)
-            except KeyError:
-                pass
+        embed = message.embeds[0].to_dict()
+        category = embed["fields"][1]["value"]
+        question = re.search("\*\*(.*?)\*\*", embed["description"]).group(1)
+        try:
+            answer = trivia_dict[category][question]
+        except KeyError:
+            await self.bot.click(message, 0, random.randint(0, 3))
+            await asyncio.sleep(0.5)
+            for button in message.components[0].children:
+                if button.style == discord.ButtonStyle.success:
+                    trivia_dict[category][question] = button.label
+                    with open(
+                        resource_path("resources/trivia.json"),
+                        "w",
+                        encoding="utf-8",
+                    ) as file:
+                        json.dump(trivia_dict, file, indent=4)
+                    return
+        if random.random() <= self.chance:
+            for count, i in enumerate(message.components[0].children):
+                if i.label == answer:
+                    await self.bot.click(message, 0, count)
+        else:
+            if message.components[0].children[0].label != answer:
+                await self.bot.click(message, 0, 0)
+            else:
+                await self.bot.click(message, 0, 1)
 
 
 async def setup(bot):

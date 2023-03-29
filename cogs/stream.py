@@ -39,58 +39,53 @@ class Stream(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if (
-            message.channel.id != self.bot.channel_id
-            or self.bot.state is False
-            or self.bot.config_dict["commands"]["stream"]["state"] is False
-        ):
+        if not await self.bot.is_valid_command(message, "stream"):
             return
 
-        for embed in message.embeds:
-            embed = embed.to_dict()
-            # Get trending game
-            try:
-                if embed["title"] == "Trending Game":
-                    global game
-                    game = games[
-                        (re.search("\*\*(.*?)\*\*", embed["description"]).group(1))
-                        .title()
-                        .lower()
-                    ]
-            except KeyError:
-                pass
+        embed = message.embeds[0].to_dict()
+        # Get trending game
+        try:
+            if embed["title"] == "Trending Game":
+                global game
+                game = games[
+                    (re.search("\*\*(.*?)\*\*", embed["description"]).group(1))
+                    .title()
+                    .lower()
+                ]
+        except KeyError:
+            pass
 
-            # Go live
-            try:
-                if embed["fields"][1]["name"] == "Last Live":
-                    await self.bot.click(message, 0, 0)
+        # Go live
+        try:
+            if embed["fields"][1]["name"] == "Last Live":
+                await self.bot.click(message, 0, 0)
 
-                    # Get trending game
-                    async for cmd in self.bot.channel.slash_commands(
-                        command_ids=[967369106301026344]
-                    ):
-                        await cmd()
-                        break
-                    await asyncio.sleep(4)
+                # Get trending game
+                async for cmd in self.bot.channel.slash_commands(
+                    command_ids=[967369106301026344]
+                ):
+                    await cmd()
+                    break
+                await asyncio.sleep(4)
 
-                    # Select trending game
-                    try:
-                        await self.bot.select(message, 0, 0, game)
-                    except NameError:
-                        await self.bot.select(message, 0, 0, random.randint(0, 24))
-                    await asyncio.sleep(0.7)
-                    await self.bot.click(message, 1, 0)
-                    await asyncio.sleep(0.7)
-                    await self.bot.click(message, 0, 1)
-            except (KeyError, IndexError):
-                pass
+                # Select trending game
+                try:
+                    await self.bot.select(message, 0, 0, game)
+                except NameError:
+                    await self.bot.select(message, 0, 0, random.randint(0, 24))
+                await asyncio.sleep(0.7)
+                await self.bot.click(message, 1, 0)
+                await asyncio.sleep(0.7)
+                await self.bot.click(message, 0, 1)
+        except (KeyError, IndexError):
+            pass
 
-            # Read chat
-            try:
-                if embed["fields"][1]["name"] == "Live Since":
-                    await self.bot.click(message, 0, 1)
-            except (KeyError, IndexError):
-                pass
+        # Read chat
+        try:
+            if embed["fields"][1]["name"] == "Live Since":
+                await self.bot.click(message, 0, 1)
+        except (KeyError, IndexError):
+            pass
 
 
 async def setup(bot):

@@ -10,25 +10,14 @@ class Pm(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if (
-            message.channel.id != self.bot.channel_id
-            or self.bot.config_dict["commands"]["pm"]["state"] is False
-            or self.bot.state is False
-        ):
+        if not await self.bot.is_valid_command(message, "pm"):
             return
 
-        for embed in message.embeds:
-            embed = embed.to_dict()
-            try:
-                if "Meme Posting Session" in embed["author"]["name"]:
-                    await asyncio.sleep(0.5)
-                    await self.bot.select(message, 0, 0, random.randint(0, 3))
-                    await asyncio.sleep(0.5)
-                    await self.bot.select(message, 1, 0, random.randint(0, 4))
-                    await asyncio.sleep(0.5)
-                    await self.bot.click(message, 2, 0)
-            except KeyError:
-                pass
+        await self.bot.select(message, 0, 0, random.randint(0, 3))
+        await asyncio.sleep(0.3)
+        await self.bot.select(message, 1, 0, random.randint(0, 4))
+        await asyncio.sleep(0.3)
+        await self.bot.click(message, 2, 0)
 
 
 async def setup(bot):

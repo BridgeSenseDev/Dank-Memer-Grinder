@@ -19,7 +19,7 @@ class Autouse(commands.Cog):
 
     @tasks.loop(seconds=0.05)
     async def autouse(self):
-        if self.bot.state is False:
+        if not self.bot.state:
             await asyncio.sleep(1)
             return
         for autouse in self.bot.config_dict["autouse"]:

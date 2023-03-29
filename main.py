@@ -235,6 +235,29 @@ async def start_bot(token, account_id):
             ):
                 pass
 
+        async def is_valid_command(self, message, command, sub_command=""):
+            if not message.interaction:
+                return False
+
+            try:
+                if (
+                    "[premium](https://www.patreon.com/dankmemerbot) cooldown is"
+                    in message.embeds[0].to_dict()["description"]
+                ):
+                    return False
+            except (IndexError, KeyError):
+                pass
+
+            return (
+                message.channel.id == self.channel_id
+                and self.state
+                and message.interaction.name
+                == f"{commands_dict[command]} {sub_command}"
+                and self.config_dict["commands"][command]["state"]
+                and message.interaction.user == self.user
+                and not message.flags.ephemeral
+            )
+
         async def setup_hook(self):
             self.update.start()
             self.channel = await self.fetch_channel(self.channel_id)
@@ -347,7 +370,7 @@ class MainWindow(QMainWindow):
         sys.stderr = Stream(new_text=self.onUpdateText)
         self.output.connect(self.appendText)
         self.account_id = "1"
-        if config_dict[self.account_id]["state"] is False:
+        if not config_dict[self.account_id]["state"]:
             self.ui.toggle.setStyleSheet("background-color : #d83c3e")
             self.ui.toggle.setText(f"Bot {self.account_id} Disabled")
         else:
@@ -388,7 +411,7 @@ class MainWindow(QMainWindow):
     @asyncSlot()
     async def check(self):
         config_dict = get_config()
-        if config_dict[self.account_id]["state"] is False:
+        if not config_dict[self.account_id]["state"]:
             config_dict[self.account_id].update({"state": True})
             with open("config.json", "w") as file:
                 json.dump(config_dict, file, ensure_ascii=False, indent=4)
@@ -432,7 +455,7 @@ class MainWindow(QMainWindow):
                 getattr(self.ui, f"account_btn_{i}").setStyleSheet(
                     "background-color: #5865f2"
                 )
-                if config_dict[self.account_id]["state"] is False:
+                if not config_dict[self.account_id]["state"]:
                     self.ui.toggle.setStyleSheet("background-color : #d83c3e")
                     self.ui.toggle.setText(f"Bot {self.account_id} Disabled")
                 else:
