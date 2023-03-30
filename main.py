@@ -148,8 +148,16 @@ class UpdaterWindow(QMainWindow):
 
 
 def get_config():
-    with open("config.json", "r") as config_file:
-        return json.load(config_file)
+    try:
+        with open("config.json", "r") as config_file:
+            return json.load(config_file)
+    except:
+        configs = {}
+        for i in range(1, 6):
+            configs[str(i)] = config_example
+        with open("config.json", "w") as config_file:
+            json.dump(configs, config_file, indent=4)
+            return configs
 
 
 def resource_path(relative_path):
