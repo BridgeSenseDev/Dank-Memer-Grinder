@@ -34,7 +34,11 @@ class Minigames(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):
-        if after.channel.id != self.bot.channel_id or self.bot.state is False:
+        if (
+            after.channel.id != self.bot.channel_id
+            or not self.bot.state
+            or (after.interaction and after.interaction.user != self.bot.user)
+        ):
             return
 
         for embed in after.embeds:
@@ -177,7 +181,11 @@ class Minigames(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.channel.id != self.bot.channel_id or self.bot.state is False:
+        if (
+            message.channel.id != self.bot.channel_id
+            or not self.bot.state
+            or (message.interaction and message.interaction.user != self.bot.user)
+        ):
             return
 
         for embed in message.embeds:
@@ -188,47 +196,18 @@ class Minigames(commands.Cog):
                     "Look at each color next to the words closely!"
                     in embed["description"]
                 ):
-                    options = {
-                        str(
-                            re.search(
-                                "`(.*?)`",
-                                embed["description"].splitlines()[1],
-                            ).group(1)
-                        ): str(
-                            re.search(
-                                ":(.*?):",
-                                embed["description"].splitlines()[1],
-                            ).group(1)
-                        ),
-                        str(
-                            re.search(
-                                "`(.*?)`",
-                                embed["description"].splitlines()[2],
-                            ).group(1)
-                        ): str(
-                            re.search(
-                                ":(.*?):",
-                                embed["description"].splitlines()[2],
-                            ).group(1)
-                        ),
-                        str(
-                            re.search(
-                                "`(.*?)`",
-                                embed["description"].splitlines()[3],
-                            ).group(1)
-                        ): str(
-                            re.search(
-                                ":(.*?):",
-                                embed["description"].splitlines()[3],
-                            ).group(1)
-                        ),
-                    }
+                    options = {}
+                    for line in embed["description"].splitlines()[1:]:
+                        match_word = re.search("`(.+?)`", line)
+                        match_color = re.search(":([^:]+):", line)
+                        if match_word and match_color:
+                            options[match_word.group(1)] = match_color.group(1)
                     await asyncio.sleep(6)
                     embed = message.embeds[0].to_dict()
-                    word = re.search("`(.*?)`", embed["description"]).group(1)
+                    word = re.search("`(.+?)`", embed["description"]).group(1)
                     color = options[word]
-                    for count, i in enumerate(message.components[0].children):
-                        if i.label == color:
+                    for count, button in enumerate(message.components[0].children):
+                        if button.label == color:
                             await self.bot.click(message, 0, count)
                     return
             except KeyError:
@@ -239,14 +218,11 @@ class Minigames(commands.Cog):
                 if "Look at the emoji closely!" in embed["description"]:
                     emoji = str(embed["description"].splitlines()[1])
                     await asyncio.sleep(4)
-                    for count, i in enumerate(message.components[0].children):
-                        if str(i.emoji) == emoji:
-                            await self.bot.click(message, 0, count)
-                            return
-                    for count, i in enumerate(message.components[1].children):
-                        if str(i.emoji) == emoji:
-                            await self.bot.click(message, 1, count)
-                        return
+                    for row, i in enumerate(message.components):
+                        for column, button in enumerate(i.children):
+                            if str(button.emoji) == emoji:
+                                await self.bot.click(message, row, column)
+                                return
             except KeyError:
                 pass
 
@@ -257,23 +233,17 @@ class Minigames(commands.Cog):
                     for i in ["Repeat Order", "word order.", "words order"]
                 ):
                     order = [
-                        str(embed["description"].splitlines()[1])[1:-1],
-                        str(embed["description"].splitlines()[2])[1:-1],
-                        str(embed["description"].splitlines()[3])[1:-1],
-                        str(embed["description"].splitlines()[4])[1:-1],
-                        str(embed["description"].splitlines()[5])[1:-1],
+                        line[1:-1]
+                        for line in message.embeds[0].description.splitlines()[1:6]
                     ]
                     await asyncio.sleep(6)
                     answers = {
-                        str(message.components[0].children[0].label): 0,
-                        str(message.components[0].children[1].label): 1,
-                        str(message.components[0].children[2].label): 2,
-                        str(message.components[0].children[3].label): 3,
-                        str(message.components[0].children[4].label): 4,
+                        button.label: i
+                        for i, button in enumerate(message.components[0].children)
                     }
-                    for i in order:
-                        await self.bot.click(message, 0, answers[i])
-                        await asyncio.sleep(0.7)
+                    for choice in order:
+                        await self.bot.click(message, 0, answers[choice])
+                        await asyncio.sleep(0.5)
                     return
             except KeyError:
                 pass
