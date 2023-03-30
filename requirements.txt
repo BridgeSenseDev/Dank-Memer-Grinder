@@ -8,7 +8,7 @@ certifi==2022.12.7
 cffi==1.15.1
 charset-normalizer==3.1.0
 discord-protos==0.0.2
-discord.py-self @ git+https://github.com/dolfies/discord.py-self@9b903c14dcce3f54d04b51bb7bb584cf83ffba08
+discord.py-self @ git+https://github.com/dolfies/discord.py-self@82b5f5d3c23585a9aa86d0905aea857e5b29e23c
 frozenlist==1.3.3
 idna==3.4
 multidict==6.0.4
