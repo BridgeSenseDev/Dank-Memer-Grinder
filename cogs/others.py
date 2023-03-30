@@ -22,6 +22,7 @@ class Others(commands.Cog):
             try:
                 if (
                     "You have an unread alert!" in embed["title"]
+                    and f"<@{self.bot.user.id}>" in message.content
                     and self.bot.config_dict["alerts"]
                 ):
                     await self.bot.send("alert")
