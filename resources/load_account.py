@@ -1671,6 +1671,9 @@ def load_account(self, account_id, config_example):
     )
     getattr(self.ui, f"auto_use_right_frame_2_{account_id}").setSizePolicy(sizePolicy)
     getattr(self.ui, f"auto_use_right_frame_2_{account_id}").setWidgetResizable(True)
+    getattr(
+        self.ui, f"auto_use_right_frame_2_{account_id}"
+    ).setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
     getattr(self.ui, f"auto_use_right_frame_2_{account_id}").setObjectName(
         f"auto_use_right_frame_2_{account_id}"
     )

@@ -82,6 +82,10 @@ config_example = {
         "lucky_horseshoe": {"state": False},
         "daily_box": {"state": False},
         "apple": {"state": False},
+        "ammo": {"state": False},
+        "energy_drink": {"state": False},
+        "fishing_bait": {"state": False},
+        "bank_note": {"state": False},
     },
 }
 
