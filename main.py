@@ -213,7 +213,6 @@ async def start_bot(token, account_id):
                     discord.errors.InvalidData,
                 ):
                     pass
-                return
 
         async def sub_send(
             self, command_name, sub_command_name, channel=None, **kwargs
