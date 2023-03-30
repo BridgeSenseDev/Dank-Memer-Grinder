@@ -30,7 +30,7 @@ class Pets(commands.Cog):
                         1
                     )[:-1]
                 )
-                while percentage <= 90:
+                while percentage < 90:
                     await self.bot.click(message, 1, count)
                     if count == 2:
                         break
