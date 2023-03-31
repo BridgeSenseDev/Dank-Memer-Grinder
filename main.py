@@ -264,7 +264,7 @@ async def start_bot(token, account_id):
                 message.channel.id == self.channel_id
                 and self.state
                 and message.interaction.name
-                == f"{commands_dict[command]} {sub_command}"
+                == f"{commands_dict[command]} {sub_command}".rstrip()
                 and self.config_dict["commands"][command]["state"]
                 and message.interaction.user == self.user
                 and not message.flags.ephemeral
