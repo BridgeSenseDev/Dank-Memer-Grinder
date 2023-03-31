@@ -219,6 +219,7 @@ async def start_bot(token, account_id):
                 try:
                     if cmd.application.id == 270904126974590976:
                         await cmd(**kwargs)
+                        return
                 except (
                     discord.errors.DiscordServerError,
                     KeyError,
