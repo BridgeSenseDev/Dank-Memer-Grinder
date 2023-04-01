@@ -1,5 +1,6 @@
 import asyncio
 import ctypes
+import io
 import json
 import os
 import platform
@@ -9,7 +10,6 @@ import tempfile
 import threading
 
 import discord.errors
-import numpy
 import requests
 from PIL import Image, ImageDraw
 from PyQt5.QtCore import pyqtSignal
@@ -284,25 +284,29 @@ async def start_bot(token, account_id):
             getattr(window.ui, f"account_btn_{account_id}").setText(
                 f"{self.user.name}\n#{self.user.discriminator}"
             )
+
+            # Account image
             with tempfile.TemporaryDirectory() as dirpath:
                 path = os.path.join(dirpath, f"account_{account_id}")
                 await self.user.display_avatar.save(path)
 
-                # Convert image to circle
-                img = Image.open(path).convert("RGB")
+                img = Image.open(path).convert("RGBA")
                 height, width = img.size
-                lum_img = Image.new("L", (height, width), 0)
-
-                draw = ImageDraw.Draw(lum_img)
+                mask = Image.new("L", (height, width), 0)
+                draw = ImageDraw.Draw(mask)
                 draw.pieslice(
                     ((0, 0), (height, width)), 0, 360, fill=255, outline="white"
                 )
-                # noinspection PyTypeChecker
-                img_arr = numpy.array(img)
-                # noinspection PyTypeChecker
-                lum_img_arr = numpy.array(lum_img)
-                final_img_arr = numpy.dstack((img_arr, lum_img_arr))
-                Image.fromarray(final_img_arr).save(f"{path}.png")
+                alpha = Image.new("L", (height, width), 0)
+                alpha.paste(mask, mask)
+                final_img = Image.composite(
+                    img, Image.new("RGBA", (height, width), (0, 0, 0, 0)), alpha
+                )
+
+                img_bytes = io.BytesIO()
+                final_img.save(img_bytes, format="PNG")
+                with open(f"{path}.png", "wb") as f:
+                    f.write(img_bytes.getvalue())
 
                 getattr(self.window.ui, f"account_btn_{account_id}").setIcon(
                     QIcon(f"{path}.png")
