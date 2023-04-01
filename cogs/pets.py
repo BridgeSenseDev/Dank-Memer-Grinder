@@ -21,6 +21,9 @@ class Pets(commands.Cog):
         for pet in message.components[0].children[0].options:
             await message.components[0].children[0].choose(pet)
             await asyncio.sleep(1)
+            if message.components[1].children[0].disabled:
+                continue
+            embed = message.embeds[0].to_dict()
             for count, i in enumerate(embed["fields"]):
                 percentage = int(
                     re.search(
