@@ -215,11 +215,14 @@ async def start_bot(token, account_id):
         async def send(self, command_name, channel=None, **kwargs):
             if channel is None:
                 channel = self.channel
+
             async for cmd in channel.slash_commands(query=command_name, limit=None):
                 try:
                     if cmd.application.id == 270904126974590976:
                         await cmd(**kwargs)
                         return
+                except discord.errors.Forbidden:
+                    await self.send(command_name, **kwargs)
                 except (
                     discord.errors.DiscordServerError,
                     KeyError,
