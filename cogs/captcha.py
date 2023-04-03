@@ -31,8 +31,11 @@ class Captcha(commands.Cog):
                 if "pepe" in embed["description"]:
                     for row, i in enumerate(message.components):
                         for column, button in enumerate(i.children):
-                            if not hasattr(button, "id"):
-                                continue
+                            if not button.emoji:
+                                await self.bot.click(message, row, column)
+                                await asyncio.sleep(0.5)
+                                await self.bot.click(message, row, column)
+                                return
                             if button.emoji.id in [
                                 819014822867894304,
                                 796765883120353280,
@@ -46,7 +49,6 @@ class Captcha(commands.Cog):
                                 await asyncio.sleep(0.3)
                                 await self.bot.click(message, row, column)
                                 continue
-
             except KeyError:
                 pass
 
