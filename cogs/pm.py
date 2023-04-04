@@ -19,6 +19,11 @@ class Pm(commands.Cog):
         await asyncio.sleep(0.3)
         await self.bot.click(message, 2, 0)
 
+        await asyncio.sleep(1)
+        embed = message.embeds[0].to_dict()
+        if "cannot post another meme for another 3 minutes" in embed["description"]:
+            self.bot.last_ran["pm"] += 200
+
 
 async def setup(bot):
     await bot.add_cog(Pm(bot))
