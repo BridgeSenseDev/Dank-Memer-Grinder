@@ -136,6 +136,7 @@ class Minigames(commands.Cog):
                         == embed["description"].splitlines()[2]
                     ):
                         await self.bot.click(after, 0, 2)
+                    return
             except KeyError:
                 pass
 
@@ -176,6 +177,7 @@ class Minigames(commands.Cog):
                         == embed["description"].splitlines()[1]
                     ):
                         await self.bot.click(after, 0, 0)
+                    return
             except KeyError:
                 pass
 
@@ -222,7 +224,7 @@ class Minigames(commands.Cog):
                         for column, button in enumerate(i.children):
                             if str(button.emoji) == emoji:
                                 await self.bot.click(message, row, column)
-                                return
+                    return
             except KeyError:
                 pass
 
@@ -257,7 +259,6 @@ class Minigames(commands.Cog):
                             await self.bot.click(message, 0, 0)
                             await asyncio.sleep(0.5)
                             x -= 1
-                        return
                     except KeyError:
                         return
             except KeyError:
@@ -267,6 +268,23 @@ class Minigames(commands.Cog):
             try:
                 if embed["description"] == "F":
                     await self.bot.click(message, 0, 0)
+                    return
+            except KeyError:
+                pass
+
+            # HighLow
+            try:
+                if "I just chose a secret number" in embed["description"]:
+                    num = int(
+                        (
+                            re.search("\*\*(.*?)\*\*", embed["description"]).group(1)
+                        ).title()
+                    )
+                    if num >= 50:
+                        await self.bot.click(message, 0, 0)
+                    else:
+                        await self.bot.click(message, 0, 2)
+                    return
             except KeyError:
                 pass
 
