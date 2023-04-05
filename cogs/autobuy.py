@@ -65,7 +65,7 @@ class Autobuy(commands.Cog):
                 if (
                     "You don't have a shovel, you need to go buy one."
                     in embed["description"]
-                    and self.bot.config_dict["autobuy"]["shovel"]["state"]
+                    and self.bot.config_dict["autobuy"]["shovel"]
                 ):
                     await self.bot.send("withdraw", amount="35k")
                     await self.bot.sub_send("shop", "buy", item="Shovel", quantity="1")
@@ -77,7 +77,7 @@ class Autobuy(commands.Cog):
                 if (
                     "You don't have a fishing pole, you need to go buy one"
                     in embed["description"]
-                    and self.bot.config_dict["autobuy"]["fishing"]["state"]
+                    and self.bot.config_dict["autobuy"]["fishing"]
                 ):
                     await self.bot.send("withdraw", amount="35k")
                     await self.bot.sub_send(
@@ -91,7 +91,7 @@ class Autobuy(commands.Cog):
                 if (
                     "You don't have a hunting rifle, you need to go buy one."
                     in embed["description"]
-                    and self.bot.config_dict["autobuy"]["rifle"]["state"]
+                    and self.bot.config_dict["autobuy"]["rifle"]
                 ):
                     await self.bot.send("withdraw", amount="35k")
                     await self.bot.sub_send(
