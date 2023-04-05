@@ -6,14 +6,29 @@ priority = [
     "phoenix pits",
     "aeradella's home",
     "soul's chamber",
-    "god's own place",
+    "shadow's realm",
     "dog",
     "grass",
     "air",
     "kitchen",
+    "dresser",
+    "mail box",
+    "police officer",
+    "tesla",
 ]
-second_priority = ["who asked", "fridge"]
-avoid = ["area51", "bank"]
+second_priority = ["fridge", "twitter", "vacuum"]
+avoid = [
+    "bank",
+    "bed",
+    "couch",
+    "discord",
+    "immortals dimension",
+    "laundromat",
+    "pocket",
+    "toilet",
+    "washer",
+    "who asked",
+]
 
 
 class Search(commands.Cog):
@@ -27,15 +42,17 @@ class Search(commands.Cog):
 
         children = message.components[0].children
         random.shuffle(children)
-        for i in children:
-            if i.label in priority:
-                await self.bot.click(message, 0, children.index(i))
+        for count, button in enumerate(children):
+            if button.label.lower() in priority:
+                await self.bot.click(message, 0, count)
                 return
-            if i.label in second_priority:
-                await self.bot.click(message, 0, children.index(i))
+        for count, button in enumerate(children):
+            if button.label.lower() in second_priority:
+                await self.bot.click(message, 0, count)
                 return
-            if i.label not in avoid:
-                await self.bot.click(message, 0, children.index(i))
+        for count, button in enumerate(children):
+            if button.label.lower() not in avoid:
+                await self.bot.click(message, 0, count)
                 return
 
 

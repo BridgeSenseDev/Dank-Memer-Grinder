@@ -2,9 +2,9 @@ import random
 
 from discord.ext import commands
 
-priority = []
-second_priority = []
-avoid = []
+priority = ["hacking", "tax evasion", "treason"]
+second_priority = ["dui", "bank robbing", "eating a hot dog sideways", "murder"]
+avoid = ["arson", "fraud", "trespassing"]
 
 
 class Crime(commands.Cog):
@@ -18,15 +18,17 @@ class Crime(commands.Cog):
 
         children = message.components[0].children
         random.shuffle(children)
-        for i in children:
-            if i.label in priority:
-                await self.bot.click(message, 0, children.index(i))
+        for count, button in enumerate(children):
+            if button.label.lower() in priority:
+                await self.bot.click(message, 0, count)
                 return
-            if i.label in second_priority:
-                await self.bot.click(message, 0, children.index(i))
+        for count, button in enumerate(children):
+            if button.label.lower() in second_priority:
+                await self.bot.click(message, 0, count)
                 return
-            if i.label not in avoid:
-                await self.bot.click(message, 0, children.index(i))
+        for count, button in enumerate(children):
+            if button.label.lower() not in avoid:
+                await self.bot.click(message, 0, count)
                 return
 
 
