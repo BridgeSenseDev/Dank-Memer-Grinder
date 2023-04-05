@@ -17,7 +17,10 @@ class Pets(commands.Cog):
         if not await self.bot.is_valid_command(message, "pet", "care"):
             return
 
-        embed = message.embeds[0].to_dict()
+        self.bot.last_ran = {
+            k: v + 100 if v != 0 else float("inf") for k, v in self.bot.last_ran.items()
+        }
+
         for pet in message.components[0].children[0].options:
             await message.components[0].children[0].choose(pet)
             await asyncio.sleep(1)
@@ -45,6 +48,10 @@ class Pets(commands.Cog):
                         percentage = int(match.group(1))
                     else:
                         percentage = 100
+
+        self.bot.last_ran = {
+            k: v - 100 if v != float("inf") else 0 for k, v in self.bot.last_ran.items()
+        }
 
 
 async def setup(bot):
