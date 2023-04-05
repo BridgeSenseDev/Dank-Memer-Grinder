@@ -27,7 +27,6 @@ class Pets(commands.Cog):
             if message.components[1].children[0].disabled:
                 continue
             embed = message.embeds[0].to_dict()
-            await self.bot.click(message, 2, 1)
             for count, i in enumerate(embed["fields"]):
                 percentage = 100
                 match = re.search(r"\((\d{1,3})%\)", i["value"])
@@ -37,6 +36,8 @@ class Pets(commands.Cog):
                     await self.bot.click(message, 1, count)
                     if count == 2:
                         await asyncio.sleep(10)
+                        await self.bot.click(message, 2, 1)
+                        await asyncio.sleep(0.5)
                         await self.bot.click(message, 2, 2)
                         break
                     await asyncio.sleep(0.5)
