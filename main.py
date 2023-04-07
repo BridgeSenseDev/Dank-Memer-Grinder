@@ -47,7 +47,6 @@ commands_dict = {
 
 config_example = {
     "state": False,
-    "trivia_correct_chance": 0.75,
     "channel_id": "",
     "discord_token": "",
     "offline": False,
@@ -59,7 +58,7 @@ config_example = {
         "rifle": False,
     },
     "commands": {
-        "trivia": {"state": False, "delay": 10},
+        "trivia": {"state": False, "delay": 10, "trivia_correct_chance": 0.75},
         "dig": {"state": False, "delay": 40},
         "fish": {"state": False, "delay": 40},
         "hunt": {"state": False, "delay": 40},
@@ -605,7 +604,7 @@ class MainWindow(QMainWindow):
                     QtCore.QSize(22, 22)
                 )
         elif command == "trivia_correct_chance":
-            config_dict[self.account_id].update(
+            config_dict[self.account_id]["commands"]["trivia"].update(
                 {"trivia_correct_chance": int(state) / 100}
             )
             with open("config.json", "w") as file:
