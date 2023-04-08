@@ -1877,9 +1877,22 @@ def load_account(self, account_id, config_example):
             getattr(self.ui, f"channel_input_{account_id}").setText(
                 config_dict[account_id]["channel_id"]
             )
-            getattr(self.ui, f"trivia_correct_chance_{account_id}").setValue(
-                int(config_dict[account_id]["trivia_correct_chance"] * 100)
-            )
+            try:
+                getattr(self.ui, f"trivia_correct_chance_{account_id}").setValue(
+                    int(
+                        config_dict[account_id]["commands"]["trivia"][
+                            "trivia_correct_chance"
+                        ]
+                        * 100
+                    )
+                )
+            except KeyError:
+                getattr(self.ui, f"trivia_correct_chance_{account_id}").setValue(75)
+                config_dict[account_id]["commands"]["trivia"][
+                    "trivia_correct_chance"
+                ] = 0.75
+                with open("config.json", "w") as file:
+                    json.dump(config_dict, file, ensure_ascii=False, indent=4)
             getattr(self.ui, f"offline_checkbox_{account_id}").setChecked(
                 config_dict[account_id]["offline"]
             )

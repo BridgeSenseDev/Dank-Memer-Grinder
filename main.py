@@ -47,7 +47,6 @@ commands_dict = {
 
 config_example = {
     "state": False,
-    "trivia_correct_chance": 0.75,
     "channel_id": "",
     "discord_token": "",
     "offline": False,
@@ -59,7 +58,7 @@ config_example = {
         "rifle": False,
     },
     "commands": {
-        "trivia": {"state": False, "delay": 5},
+        "trivia": {"state": False, "delay": 5, "trivia_correct_chance": 0.75},
         "dig": {"state": False, "delay": 30},
         "fish": {"state": False, "delay": 30},
         "hunt": {"state": False, "delay": 30},
@@ -67,12 +66,55 @@ config_example = {
         "beg": {"state": False, "delay": 40},
         "pet": {"state": False, "delay": 1800},
         "hl": {"state": False, "delay": 20},
-        "search": {"state": False, "delay": 20},
+        "search": {
+            "state": False,
+            "delay": 20,
+            "priority": [
+                "phoenix pits",
+                "aeradella's home",
+                "shadow's realm",
+                "dog",
+                "grass",
+                "air",
+                "kitchen",
+                "dresser",
+                "mail box",
+                "bed",
+                "couch",
+                "pocket",
+                "toilet",
+                "washer",
+                "who asked",
+            ],
+            "second_priority": ["fridge", "twitter", "vacuum"],
+            "avoid": [
+                "bank",
+                "discord",
+                "immortals dimension",
+                "laundromat",
+                "soul's chamber",
+                "police officer",
+                "tesla",
+                "supreme court",
+            ],
+        },
         "dep_all": {"state": False, "delay": 30},
         "stream": {"state": False, "delay": 660},
         "work": {"state": False, "delay": 3600},
         "daily": {"state": False, "delay": 86400},
-        "crime": {"state": False, "delay": 40},
+        "crime": {
+            "state": False,
+            "delay": 40,
+            "priority": [
+                "hacking",
+                "tax evasion",
+                "fraud",
+                "eating a hot dog sideways",
+                "trespassing",
+            ],
+            "second_priority": ["bank robbing", "murder"],
+            "avoid": ["arson", "dui", "treason"],
+        },
     },
     "autouse": {
         "state": False,
@@ -178,6 +220,7 @@ async def start_bot(token, account_id):
             self.window = window
             self.account_id = account_id
             self.config_dict = config_dict[self.account_id]
+            self.config_example = config_example
             self.state = self.config_dict["state"]
             self.channel_id = int(config_dict[account_id]["channel_id"])
             self.channel = None
@@ -605,7 +648,7 @@ class MainWindow(QMainWindow):
                     QtCore.QSize(22, 22)
                 )
         elif command == "trivia_correct_chance":
-            config_dict[self.account_id].update(
+            config_dict[self.account_id]["commands"]["trivia"].update(
                 {"trivia_correct_chance": int(state) / 100}
             )
             with open("config.json", "w") as file:
