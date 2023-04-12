@@ -68,7 +68,6 @@
 * Run the command `git clone https://github.com/BridgeSenseDev/Dank-Memer-Grinder.git` in a terminal.
 * Run the command `cd Dank-Memer-Grinder` in a terminal.
 * Run the command `pip install -r .\requirements.txt` in a terminal.
-* Edit `main.py` and change the config infomation on line 48. **after first run please edit config.json.**
 * To start the program, run the command `python main.py` in a terminal.
 
 ### Getting Started
