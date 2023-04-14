@@ -48,7 +48,7 @@
   <img src=".github/assets/img/settings.png" width="400">
   <img src=".github/assets/img/commands.png" width="400">
   <img src=".github/assets/img/autobuy.png" width="400">
-  <img src=".github/assets/img/gambling.png" width="400">
+  <img src=".github/assets/img/autouse.png" width="400">
 </div>
 
 ## Installation
@@ -68,7 +68,6 @@
 * Run the command `git clone https://github.com/BridgeSenseDev/Dank-Memer-Grinder.git` in a terminal.
 * Run the command `cd Dank-Memer-Grinder` in a terminal.
 * Run the command `pip install -r .\requirements.txt` in a terminal.
-* Rename `config.json.example` to `config.json`.
 * To start the program, run the command `python main.py` in a terminal.
 
 ### Getting Started
