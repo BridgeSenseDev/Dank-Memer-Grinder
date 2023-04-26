@@ -630,11 +630,26 @@ def load_account(self, account_id, config_example):
     getattr(self.ui, f"offline_checkbox_{account_id}").setObjectName(
         f"offline_checkbox_{account_id}"
     )
+    self.verticalLayout_15.addWidget(getattr(self.ui, f"offline_checkbox_{account_id}"))
+    setattr(
+        self.ui,
+        f"auto_vote_checkbox_{account_id}",
+        QtWidgets.QCheckBox(getattr(self.ui, f"toggles_left_frame_2_{account_id}")),
+    )
+    getattr(self.ui, f"auto_vote_checkbox_{account_id}").setFont(create_font(15))
+    getattr(self.ui, f"auto_vote_checkbox_{account_id}").setCursor(
+        QtGui.QCursor(QtCore.Qt.PointingHandCursor)
+    )
+    getattr(self.ui, f"auto_vote_checkbox_{account_id}").setObjectName(
+        f"auto_vote_checkbox_{account_id}"
+    )
     self.verticalLayout_15.addWidget(
-        getattr(self.ui, f"offline_checkbox_{account_id}"), 0, QtCore.Qt.AlignHCenter
+        getattr(self.ui, f"auto_vote_checkbox_{account_id}")
     )
     self.verticalLayout_10.addWidget(
-        getattr(self.ui, f"toggles_left_frame_2_{account_id}")
+        getattr(self.ui, f"toggles_left_frame_2_{account_id}"),
+        0,
+        QtCore.Qt.AlignHCenter,
     )
     self.horizontalLayout_6.addWidget(
         getattr(self.ui, f"toggles_left_frame_{account_id}")
@@ -1819,6 +1834,7 @@ def load_account(self, account_id, config_example):
         "Correct Trivia Chance"
     )
     getattr(self.ui, f"offline_checkbox_{account_id}").setText("Appear Offline")
+    getattr(self.ui, f"auto_vote_checkbox_{account_id}").setText("Auto Vote")
     getattr(self.ui, f"alerts_checkbox_{account_id}").setText("Read Alerts")
     getattr(self.ui, f"commands_label_{account_id}").setText("Commands")
 
@@ -1895,6 +1911,9 @@ def load_account(self, account_id, config_example):
                     json.dump(config_dict, file, ensure_ascii=False, indent=4)
             getattr(self.ui, f"offline_checkbox_{account_id}").setChecked(
                 config_dict[account_id]["offline"]
+            )
+            getattr(self.ui, f"auto_vote_checkbox_{account_id}").setChecked(
+                config_dict[account_id]["auto_vote"]
             )
             getattr(self.ui, f"alerts_checkbox_{account_id}").setChecked(
                 config_dict[account_id]["alerts"]
@@ -2046,6 +2065,12 @@ def load_account(self, account_id, config_example):
         lambda checked, account_id=account_id: self.settings(
             "offline",
             getattr(self.ui, f"offline_checkbox_{account_id}").isChecked(),
+        )
+    )
+    getattr(self.ui, f"auto_vote_checkbox_{account_id}").clicked.connect(
+        lambda checked, account_id=account_id: self.settings(
+            "auto_vote",
+            getattr(self.ui, f"auto_vote_checkbox_{account_id}").isChecked(),
         )
     )
     getattr(self.ui, f"alerts_checkbox_{account_id}").clicked.connect(

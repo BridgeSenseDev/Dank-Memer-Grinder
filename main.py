@@ -50,6 +50,7 @@ config_example = {
     "channel_id": "",
     "discord_token": "",
     "offline": False,
+    "auto_vote": False,
     "alerts": False,
     "autobuy": {
         "lifesavers": {"state": True, "amount": 5},
