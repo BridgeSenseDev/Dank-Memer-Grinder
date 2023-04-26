@@ -11,20 +11,34 @@ class Autouse(commands.Cog):
         self.last_ran = {}
         self.autouse.start()
 
-    async def cog_load(self):
-        for autouse in self.bot.config_dict["autouse"]:
-            if autouse == "state":
-                continue
-            self.last_ran[autouse] = 0
-
     @tasks.loop(seconds=0.05)
     async def autouse(self):
         if not self.bot.state:
             await asyncio.sleep(1)
             return
+
         for autouse in self.bot.config_dict["autouse"]:
             if autouse in ["state", "hide_disabled"]:
                 continue
+
+            if autouse not in self.last_ran:
+                if (
+                    self.bot.config_dict["autouse"]["state"]
+                    and self.bot.config_dict["autouse"][autouse]["state"]
+                ):
+                    user = await self.bot.fetch_user(270904126974590976)
+                    channel = await user.create_dm()
+                    await self.bot.send(
+                        "use",
+                        channel,
+                        item=autouse.replace("_", " ").title(),
+                    )
+                    self.last_ran[autouse] = time.time()
+                    await asyncio.sleep(10)
+                    continue
+                self.last_ran[autouse] = 0
+                continue
+
             if (
                 time.time() - self.last_ran[autouse] < 1800
                 or not self.bot.config_dict["autouse"]["state"]
