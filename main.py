@@ -99,7 +99,11 @@ config_example = {
             ],
         },
         "dep_all": {"state": False, "delay": 30},
-        "stream": {"state": False, "delay": 660},
+        "stream": {
+            "state": False,
+            "delay": 660,
+            "order": [1, 1, 1, 1, 1, 0, 0, 0, 2, 2, 2],
+        },
         "work": {"state": False, "delay": 3600},
         "daily": {"state": False, "delay": 86400},
         "crime": {
