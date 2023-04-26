@@ -23,4 +23,4 @@ PyQt5-sip==12.12.1
 qasync==0.24.0
 requests==2.28.2
 urllib3==1.26.15
-yarl==1.9.1
+yarl==1.9.2
