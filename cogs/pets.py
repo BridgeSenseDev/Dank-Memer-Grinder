@@ -22,6 +22,7 @@ class Pets(commands.Cog):
         }
 
         for pet in message.components[0].children[0].options:
+            await self.bot.send("withdraw", amount="40k")
             await message.components[0].children[0].choose(pet)
             await asyncio.sleep(1)
             if message.components[1].children[0].disabled:
