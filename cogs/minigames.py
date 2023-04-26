@@ -198,6 +198,10 @@ class Minigames(commands.Cog):
                     "Look at each color next to the words closely!"
                     in embed["description"]
                 ):
+                    self.bot.last_ran = {
+                        k: v + 100 if v != 0 else float("inf")
+                        for k, v in self.bot.last_ran.items()
+                    }
                     options = {}
                     for line in embed["description"].splitlines()[1:]:
                         match_word = re.search("`(.+?)`", line)
@@ -211,6 +215,10 @@ class Minigames(commands.Cog):
                     for count, button in enumerate(message.components[0].children):
                         if button.label == color:
                             await self.bot.click(message, 0, count)
+                    self.bot.last_ran = {
+                        k: v - 100 if v != float("inf") else 0
+                        for k, v in self.bot.last_ran.items()
+                    }
                     return
             except KeyError:
                 pass
@@ -218,12 +226,20 @@ class Minigames(commands.Cog):
             # Emoji
             try:
                 if "Look at the emoji closely!" in embed["description"]:
+                    self.bot.last_ran = {
+                        k: v + 100 if v != 0 else float("inf")
+                        for k, v in self.bot.last_ran.items()
+                    }
                     emoji = str(embed["description"].splitlines()[1])
                     await asyncio.sleep(4)
                     for row, i in enumerate(message.components):
                         for column, button in enumerate(i.children):
                             if str(button.emoji) == emoji:
                                 await self.bot.click(message, row, column)
+                    self.bot.last_ran = {
+                        k: v - 100 if v != float("inf") else 0
+                        for k, v in self.bot.last_ran.items()
+                    }
                     return
             except KeyError:
                 pass
@@ -234,6 +250,10 @@ class Minigames(commands.Cog):
                     i in embed["description"]
                     for i in ["Repeat Order", "word order.", "words order"]
                 ):
+                    self.bot.last_ran = {
+                        k: v + 100 if v != 0 else float("inf")
+                        for k, v in self.bot.last_ran.items()
+                    }
                     order = [
                         line[1:-1]
                         for line in message.embeds[0].description.splitlines()[1:6]
@@ -246,6 +266,10 @@ class Minigames(commands.Cog):
                     for choice in order:
                         await self.bot.click(message, 0, answers[choice])
                         await asyncio.sleep(0.5)
+                    self.bot.last_ran = {
+                        k: v - 100 if v != float("inf") else 0
+                        for k, v in self.bot.last_ran.items()
+                    }
                     return
             except KeyError:
                 pass
@@ -253,14 +277,18 @@ class Minigames(commands.Cog):
             # Attack boss
             try:
                 if "Attack the boss by clicking" in embed["description"]:
-                    x = 16
-                    try:
-                        while x >= 0:
-                            await self.bot.click(message, 0, 0)
-                            await asyncio.sleep(0.5)
-                            x -= 1
-                    except KeyError:
-                        return
+                    self.bot.last_ran = {
+                        k: v + 100 if v != 0 else float("inf")
+                        for k, v in self.bot.last_ran.items()
+                    }
+                    while not message.components[0].children[0].disabled:
+                        await self.bot.click(message, 0, 0)
+                        await asyncio.sleep(0.5)
+                    self.bot.last_ran = {
+                        k: v - 100 if v != float("inf") else 0
+                        for k, v in self.bot.last_ran.items()
+                    }
+                    return
             except KeyError:
                 pass
 
