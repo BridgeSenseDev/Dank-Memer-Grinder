@@ -21,6 +21,6 @@ PyQt5==5.15.9
 PyQt5-Qt5==5.15.2
 PyQt5-sip==12.12.1
 qasync==0.24.0
-requests==2.28.2
+requests==2.29.0
 urllib3==1.26.15
 yarl==1.9.2
