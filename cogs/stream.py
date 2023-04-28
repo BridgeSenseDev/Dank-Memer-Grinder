@@ -10,7 +10,7 @@ class Stream(commands.Cog):
         self.bot = bot
         with open("config.json", "r") as config_file:
             config_dict = json.load(config_file)
-        stream_config = self.bot.config_dict["commands"]["stream"]
+        stream_config = config_dict[self.bot.account_id]["commands"]["stream"]
         if "order" not in stream_config:
             stream_config["order"] = self.bot.config_example["commands"]["stream"][
                 "order"
@@ -25,25 +25,26 @@ class Stream(commands.Cog):
         if not await self.bot.is_valid_command(message, "stream"):
             return
 
-        embed = message.embeds[0].to_dict()
-
         # Go live
         try:
+            embed = message.embeds[0].to_dict()
             if embed["fields"][1]["name"] == "Last Live":
                 await self.bot.click(message, 0, 0)
                 await asyncio.sleep(0.7)
                 await self.bot.select(message, 0, 0, random.randint(0, 24))
                 await asyncio.sleep(0.7)
                 await self.bot.click(message, 1, 0)
+                await asyncio.sleep(0.7)
+                self.click_counter = 0
         except (KeyError, IndexError):
             pass
 
         # Read chat
         try:
+            embed = message.embeds[0].to_dict()
             if embed["fields"][1]["name"] == "Live Since":
                 click_value = self.order[self.click_counter % len(self.order)]
                 await self.bot.click(message, 0, click_value)
-                print(click_value)
                 self.click_counter += 1
         except (KeyError, IndexError):
             pass
