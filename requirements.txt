@@ -12,7 +12,7 @@ discord.py-self @ git+https://github.com/dolfies/discord.py-self@bea744bf1d4da9e
 frozenlist==1.3.3
 idna==3.4
 multidict==6.0.4
-orjson==3.8.13
+orjson==3.8.14
 Pillow==9.5.0
 protobuf==4.23.1
 pycares==4.3.0
