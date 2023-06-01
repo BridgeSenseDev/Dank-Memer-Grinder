@@ -41,6 +41,10 @@ class Autobuy(commands.Cog):
                                 item="Life Saver",
                                 quantity=str(required - remaining),
                             )
+                            self.bot.log(
+                                f"Bought {required - remaining} Lifesavers",
+                                "yellow",
+                            )
                             return
                 except KeyError:
                     pass
@@ -69,6 +73,10 @@ class Autobuy(commands.Cog):
                 ):
                     await self.bot.send("withdraw", amount="35k")
                     await self.bot.sub_send("shop", "buy", item="Shovel", quantity="1")
+                    self.bot.log(
+                        f"Bought Shovel",
+                        "yellow",
+                    )
             except KeyError:
                 pass
 
@@ -83,6 +91,10 @@ class Autobuy(commands.Cog):
                     await self.bot.sub_send(
                         "shop", "buy", item="Fishing Pole", quantity="1"
                     )
+                    self.bot.log(
+                        f"Bought Shovel",
+                        "yellow",
+                    )
             except KeyError:
                 pass
 
@@ -96,6 +108,10 @@ class Autobuy(commands.Cog):
                     await self.bot.send("withdraw", amount="35k")
                     await self.bot.sub_send(
                         "shop", "buy", item="Hunting Rifle", quantity="1"
+                    )
+                    self.bot.log(
+                        f"Bought Shovel",
+                        "yellow",
                     )
             except KeyError:
                 pass

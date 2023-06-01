@@ -34,6 +34,9 @@ class Autouse(commands.Cog):
                         item=autouse.replace("_", " ").title(),
                     )
                     self.last_ran[autouse] = time.time()
+                    self.bot.log(
+                        f"Used {autouse.replace('_', '' '').title()}", "yellow"
+                    )
                     await asyncio.sleep(10)
                     continue
                 self.last_ran[autouse] = 0
@@ -54,6 +57,7 @@ class Autouse(commands.Cog):
                 channel,
                 item=autouse.replace("_", " ").title(),
             )
+            self.bot.log(f"Used {autouse.replace('_', '' '').title()}", "yellow")
             await asyncio.sleep(10)
 
     @commands.Cog.listener()
@@ -79,6 +83,10 @@ class Autouse(commands.Cog):
                                     "use",
                                     channel,
                                     item=autouse.replace("_", " ").title(),
+                                )
+                                self.bot.log(
+                                    f"Used {autouse.replace('_', '' '').title()}",
+                                    "yellow",
                                 )
                                 return
                 except KeyError:

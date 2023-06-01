@@ -46,6 +46,10 @@ class Minigames(commands.Cog):
             # MoleMan
             try:
                 if "Dodge the Worms!" in embed["description"]:
+                    self.bot.log(
+                        f"Solving Dodge Worms Minigame",
+                        "yellow",
+                    )
                     moleman = embed["description"].splitlines()[5]
                     for i in reversed(embed["description"].splitlines()):
                         if i not in worms_loc:
@@ -73,6 +77,10 @@ class Minigames(commands.Cog):
                                 if moleman_loc[moleman] == 1:
                                     await self.bot.click(after, 0, 1)
                                 break
+                    self.bot.log(
+                        f"Solved Dodge Worms Minigame",
+                        "green",
+                    )
                     return
             except KeyError:
                 pass
@@ -80,6 +88,10 @@ class Minigames(commands.Cog):
             # Football
             try:
                 if "Hit the ball!" in embed["description"]:
+                    self.bot.log(
+                        f"Solving Football Minigame",
+                        "yellow",
+                    )
                     if ":levitate:" == embed["description"].splitlines()[2]:
                         await self.bot.click(after, 0, 2)
                     elif (
@@ -93,6 +105,10 @@ class Minigames(commands.Cog):
                         == embed["description"].splitlines()[2]
                     ):
                         await self.bot.click(after, 0, 1)
+                    self.bot.log(
+                        f"Solved Football Minigame",
+                        "green",
+                    )
                     return
             except KeyError:
                 pass
@@ -100,6 +116,10 @@ class Minigames(commands.Cog):
             # Basketball
             try:
                 if "Dunk the ball!" in embed["description"]:
+                    self.bot.log(
+                        f"Solving Basketball Minigame",
+                        "yellow",
+                    )
                     if (
                         "<:emptyspace:827651824739156030>"
                         "<:emptyspace:827651824739156030>:basketball:"
@@ -113,6 +133,10 @@ class Minigames(commands.Cog):
                         await self.bot.click(after, 0, 1)
                     elif ":basketball:" == embed["description"].splitlines()[2]:
                         await self.bot.click(after, 0, 0)
+                    self.bot.log(
+                        f"Solved Basketball Minigame",
+                        "green",
+                    )
                     return
             except KeyError:
                 pass
@@ -120,6 +144,10 @@ class Minigames(commands.Cog):
             # Dragon
             try:
                 if "Dodge the Fireball" in embed["description"]:
+                    self.bot.log(
+                        f"Solving Dragon Minigame",
+                        "yellow",
+                    )
                     if (
                         "<:emptyspace:827651824739156030>"
                         "<:emptyspace:827651824739156030><:FireBall:883714770748964864>"
@@ -136,6 +164,10 @@ class Minigames(commands.Cog):
                         == embed["description"].splitlines()[2]
                     ):
                         await self.bot.click(after, 0, 2)
+                    self.bot.log(
+                        f"Solved Dragon Minigame",
+                        "green",
+                    )
                     return
             except KeyError:
                 pass
@@ -143,6 +175,10 @@ class Minigames(commands.Cog):
             # Catch the fish
             try:
                 if "Catch the fish!" in embed["description"]:
+                    self.bot.log(
+                        f"Solving Fish Minigame",
+                        "yellow",
+                    )
                     if (
                         "<:emptyspace:827651824739156030>"
                         "<:emptyspace:827651824739156030>"
@@ -177,6 +213,10 @@ class Minigames(commands.Cog):
                         == embed["description"].splitlines()[1]
                     ):
                         await self.bot.click(after, 0, 0)
+                    self.bot.log(
+                        f"Solved Fish Minigame",
+                        "green",
+                    )
                     return
             except KeyError:
                 pass
@@ -198,6 +238,10 @@ class Minigames(commands.Cog):
                     "Look at each color next to the words closely!"
                     in embed["description"]
                 ):
+                    self.bot.log(
+                        f"Solving Color Match Minigame",
+                        "yellow",
+                    )
                     self.bot.last_ran = {
                         k: v + 100 if v != 0 else float("inf")
                         for k, v in self.bot.last_ran.items()
@@ -219,6 +263,10 @@ class Minigames(commands.Cog):
                         k: v - 100 if v != float("inf") else 0
                         for k, v in self.bot.last_ran.items()
                     }
+                    self.bot.log(
+                        f"Solved Color Match Minigame",
+                        "green",
+                    )
                     return
             except KeyError:
                 pass
@@ -226,6 +274,10 @@ class Minigames(commands.Cog):
             # Emoji
             try:
                 if "Look at the emoji closely!" in embed["description"]:
+                    self.bot.log(
+                        f"Solving Emoji Minigame",
+                        "yellow",
+                    )
                     self.bot.last_ran = {
                         k: v + 100 if v != 0 else float("inf")
                         for k, v in self.bot.last_ran.items()
@@ -240,6 +292,10 @@ class Minigames(commands.Cog):
                         k: v - 100 if v != float("inf") else 0
                         for k, v in self.bot.last_ran.items()
                     }
+                    self.bot.log(
+                        f"Solved Emoji Minigame",
+                        "green",
+                    )
                     return
             except KeyError:
                 pass
@@ -250,6 +306,10 @@ class Minigames(commands.Cog):
                     i in embed["description"]
                     for i in ["Repeat Order", "word order.", "words order"]
                 ):
+                    self.bot.log(
+                        f"Solving Repeat Order Minigame",
+                        "yellow",
+                    )
                     self.bot.last_ran = {
                         k: v + 100 if v != 0 else float("inf")
                         for k, v in self.bot.last_ran.items()
@@ -270,6 +330,10 @@ class Minigames(commands.Cog):
                         k: v - 100 if v != float("inf") else 0
                         for k, v in self.bot.last_ran.items()
                     }
+                    self.bot.log(
+                        f"Solved Repeat Order Minigame",
+                        "green",
+                    )
                     return
             except KeyError:
                 pass
@@ -277,6 +341,10 @@ class Minigames(commands.Cog):
             # Attack boss
             try:
                 if "Attack the boss by clicking" in embed["description"]:
+                    self.bot.log(
+                        f"Solving Attack Boss Minigame",
+                        "yellow",
+                    )
                     self.bot.last_ran = {
                         k: v + 100 if v != 0 else float("inf")
                         for k, v in self.bot.last_ran.items()
@@ -288,6 +356,10 @@ class Minigames(commands.Cog):
                         k: v - 100 if v != float("inf") else 0
                         for k, v in self.bot.last_ran.items()
                     }
+                    self.bot.log(
+                        f"Solved Attack Boss Minigame",
+                        "green",
+                    )
                     return
             except KeyError:
                 pass
@@ -295,7 +367,15 @@ class Minigames(commands.Cog):
             # F in the chat
             try:
                 if embed["description"] == "F":
+                    self.bot.log(
+                        f"Solving F In The Chat Minigame",
+                        "yellow",
+                    )
                     await self.bot.click(message, 0, 0)
+                    self.bot.log(
+                        f"Solvedg F In The Chat Minigame",
+                        "green",
+                    )
                     return
             except KeyError:
                 pass

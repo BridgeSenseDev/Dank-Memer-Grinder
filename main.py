@@ -298,6 +298,22 @@ async def start_bot(token, account_id):
             ):
                 pass
 
+        def log(self, text, color=QColor(232, 230, 227)):
+            match color:
+                case "red":
+                    color = QColor(216, 60, 62)
+                case "green":
+                    color = QColor(38, 254, 0)
+                case "yellow":
+                    color = QColor(255, 255, 0)
+            self.window.output.emit(
+                [
+                    f"output_text_{account_id}",
+                    text,
+                    color,
+                ]
+            )
+
         async def is_valid_command(self, message, command, sub_command=""):
             if not message.interaction:
                 return False
@@ -687,7 +703,9 @@ class MainWindow(QMainWindow):
             file.truncate()
 
     def appendText(self, data):
-        getattr(self.ui, data[0]).setTextColor(QColor(232, 230, 227))
+        if not len(data) >= 3:
+            data.append(QColor(232, 230, 227))
+        getattr(self.ui, data[0]).setTextColor(data[2])
         cursor = getattr(self.ui, data[0]).textCursor()
         cursor.insertText("‎")
         cursor.movePosition(QtGui.QTextCursor.End)
