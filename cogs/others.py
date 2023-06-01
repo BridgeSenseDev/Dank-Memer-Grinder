@@ -29,7 +29,7 @@ class Others(commands.Cog):
             except KeyError:
                 pass
 
-    @tasks.loop(seconds=30)
+    @tasks.loop(seconds=15)
     async def presence(self):
         if not self.bot.state:
             return
@@ -37,12 +37,16 @@ class Others(commands.Cog):
             self.bot.config_dict["offline"]
             and self.bot.status != discord.Status.invisible
         ):
-            await self.bot.change_presence(status=discord.Status.invisible)
+            await self.bot.change_presence(
+                status=discord.Status.invisible, activity=self.bot.activity
+            )
         elif (
             not self.bot.config_dict["offline"]
             and self.bot.status == discord.Status.invisible
         ):
-            await self.bot.change_presence(status=discord.Status.online)
+            await self.bot.change_presence(
+                status=discord.Status.online, activity=self.bot.activity
+            )
 
     @presence.before_loop
     async def before_presence(self):
