@@ -534,49 +534,83 @@ def load_account(self, account_id, config_example):
     font = QtGui.QFont()
     font.setFamily("Segoe UI")
     font.setPointSize(12)
-    getattr(self.ui, f"trivia_correct_chance_{account_id}").setFont(font)
-    getattr(self.ui, f"trivia_correct_chance_{account_id}").setAutoFillBackground(False)
-    getattr(self.ui, f"trivia_correct_chance_{account_id}").setStyleSheet("")
-    getattr(self.ui, f"trivia_correct_chance_{account_id}").setWrapping(False)
-    getattr(self.ui, f"trivia_correct_chance_{account_id}").setFrame(True)
-    getattr(self.ui, f"trivia_correct_chance_{account_id}").setAlignment(
-        QtCore.Qt.AlignCenter
+    trivia_correct_chance.setFont(font)
+    trivia_correct_chance.setAutoFillBackground(False)
+    trivia_correct_chance.setStyleSheet("")
+    trivia_correct_chance.setWrapping(False)
+    trivia_correct_chance.setFrame(True)
+    trivia_correct_chance.setAlignment(QtCore.Qt.AlignCenter)
+    trivia_correct_chance.setMinimum(25)
+    trivia_correct_chance.setMaximum(100)
+    trivia_correct_chance.setObjectName(f"trivia_correct_chance_{account_id}")
+    setattr(self.ui, f"trivia_correct_chance_{account_id}", trivia_correct_chance)
+    horizontalLayout_24.addWidget(trivia_correct_chance)
+
+    horizontalLayout_25.addWidget(trivia_correct_frame_2, 0, QtCore.Qt.AlignHCenter)
+    self.ui.verticalLayout_19.addWidget(trivia_correct_frame, 0, QtCore.Qt.AlignVCenter)
+
+    # Adventure
+    adventure_frame = QtWidgets.QFrame(settings_frame)
+    setattr(self.ui, f"adventure_frame_{account_id}", adventure_frame)
+
+    adventure_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+    adventure_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    adventure_frame.setObjectName(f"adventure_frame_{account_id}")
+
+    horizontalLayout_85 = QtWidgets.QHBoxLayout(adventure_frame)
+    horizontalLayout_85.setObjectName(f"horizontalLayout_85_{account_id}")
+
+    adventure_frame_2_1 = QtWidgets.QFrame(adventure_frame)
+    adventure_frame_2_1.setFrameShape(QtWidgets.QFrame.StyledPanel)
+    adventure_frame_2_1.setFrameShadow(QtWidgets.QFrame.Raised)
+    adventure_frame_2_1.setObjectName(f"adventure_frame_2_{account_id}")
+
+    horizontalLayout_84 = QtWidgets.QHBoxLayout(adventure_frame_2_1)
+    horizontalLayout_84.setObjectName(f"horizontalLayout_84_{account_id}")
+
+    adventure_label = QtWidgets.QLabel(adventure_frame_2_1)
+    sizePolicy = QtWidgets.QSizePolicy(
+        QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred
     )
-    getattr(self.ui, f"trivia_correct_chance_{account_id}").setMinimum(25)
-    getattr(self.ui, f"trivia_correct_chance_{account_id}").setMaximum(100)
-    getattr(self.ui, f"trivia_correct_chance_{account_id}").setObjectName(
-        f"trivia_correct_chance_{account_id}"
-    )
-    self.ui.horizontalLayout_24.addWidget(
-        getattr(self.ui, f"trivia_correct_chance_{account_id}")
-    )
-    self.ui.horizontalLayout_25.addWidget(
-        getattr(self.ui, f"trivia_correct_frame_2_{account_id}"),
-        0,
-        QtCore.Qt.AlignHCenter,
-    )
-    self.ui.verticalLayout_19.addWidget(
-        getattr(self.ui, f"trivia_correct_frame_{account_id}"),
-        0,
-        QtCore.Qt.AlignVCenter,
-    )
-    setattr(
-        self.ui,
-        f"toggles_frame_{account_id}",
-        QtWidgets.QFrame(getattr(self.ui, f"settings_frame_{account_id}")),
-    )
-    getattr(self.ui, f"toggles_frame_{account_id}").setFrameShape(
-        QtWidgets.QFrame.StyledPanel
-    )
-    getattr(self.ui, f"toggles_frame_{account_id}").setFrameShadow(
-        QtWidgets.QFrame.Raised
-    )
-    getattr(self.ui, f"toggles_frame_{account_id}").setObjectName(
-        f"toggles_frame_{account_id}"
-    )
-    self.horizontalLayout_6 = QtWidgets.QHBoxLayout(
-        getattr(self.ui, f"toggles_frame_{account_id}")
-    )
+    sizePolicy.setHorizontalStretch(0)
+    sizePolicy.setVerticalStretch(0)
+    sizePolicy.setHeightForWidth(adventure_label.sizePolicy().hasHeightForWidth())
+    adventure_label.setSizePolicy(sizePolicy)
+    font = QtGui.QFont()
+    font.setFamily("Segoe UI")
+    font.setPointSize(15)
+    font.setBold(True)
+    font.setWeight(75)
+    adventure_label.setFont(font)
+    adventure_label.setObjectName(f"adventure_label_{account_id}")
+    horizontalLayout_84.addWidget(adventure_label)
+
+    adventure_box = QtWidgets.QComboBox(adventure_frame_2_1)
+    adventure_box.setMinimumSize(QtCore.QSize(80, 30))
+    adventure_box.setMaximumSize(QtCore.QSize(100, 100))
+    font = QtGui.QFont()
+    font.setFamily("Segoe UI")
+    font.setPointSize(12)
+    adventure_box.setFont(font)
+    adventure_box.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+    adventure_box.setLayoutDirection(QtCore.Qt.LeftToRight)
+    adventure_box.setStyleSheet("")
+    adventure_box.setFrame(True)
+    adventure_box.setObjectName(f"adventure_box_{account_id}")
+    setattr(self.ui, f"adventure_box_{account_id}", adventure_box)
+
+    horizontalLayout_84.addWidget(adventure_box)
+    horizontalLayout_85.addWidget(adventure_frame_2_1, 0, QtCore.Qt.AlignHCenter)
+    self.ui.verticalLayout_19.addWidget(adventure_frame)
+
+    # Toggles right
+    toggles_frame = QtWidgets.QFrame(settings_frame)
+    toggles_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+    toggles_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    toggles_frame.setObjectName(f"toggles_frame_{account_id}")
+    setattr(self.ui, f"toggles_frame_{account_id}", toggles_frame)
+
+    self.horizontalLayout_6 = QtWidgets.QHBoxLayout(toggles_frame)
     self.horizontalLayout_6.setContentsMargins(0, 0, 0, 0)
     self.horizontalLayout_6.setSpacing(0)
     self.horizontalLayout_6.setObjectName("horizontalLayout_6")
@@ -1827,15 +1861,17 @@ def load_account(self, account_id, config_example):
             " /></p></body></html>"
         ),
     )
-    getattr(self.ui, f"settings_label_{account_id}").setText("Settings")
-    getattr(self.ui, f"token_label_{account_id}").setText("Discord Token")
-    getattr(self.ui, f"channel_label_{account_id}").setText("Channel ID")
-    getattr(self.ui, f"trivia_correct_label_{account_id}").setText(
-        "Correct Trivia Chance"
-    )
-    getattr(self.ui, f"offline_checkbox_{account_id}").setText("Appear Offline")
-    getattr(self.ui, f"auto_vote_checkbox_{account_id}").setText("Auto Vote")
-    getattr(self.ui, f"alerts_checkbox_{account_id}").setText("Read Alerts")
+
+    settings_label.setText("Settings")
+    token_label.setText("Discord Token")
+    channel_label.setText("Channel ID")
+    trivia_correct_label.setText("Correct Trivia Chance")
+    adventure_label.setText("Adventure")
+    for i in ["space", "west", "brazil", "vacation"]:
+        adventure_box.addItem(i)
+    offline_checkbox.setText("Appear Offline")
+    auto_vote_checkbox.setText("Auto Vote")
+    alerts_checkbox.setText("Read Alerts")
     getattr(self.ui, f"commands_label_{account_id}").setText("Commands")
 
     # Command labels
