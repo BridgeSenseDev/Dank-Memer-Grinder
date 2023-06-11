@@ -291,8 +291,8 @@ class UpdaterWindow(QMainWindow):
         QMainWindow.__init__(self)
         self.setWindowIcon(QIcon(resource_path("resources/icon.ico")))
         QFontDatabase.addApplicationFont(resource_path("fonts/Segoe.ttf"))
-        self.ui = Ui_Updater()
-        self.ui.setupUi(self)
+        self.ui = UiUpdater()
+        self.ui.setup_ui(self)
         self.show()
         self.ui.changelog_label.setText(
             requests.get(
@@ -543,8 +543,8 @@ async def start_bot(token, account_id):
         icon = QtGui.QIcon()
         icon.addPixmap(
             QtGui.QPixmap(":/icons/icons/warning.png"),
-            QtGui.QIcon.Mode.Normal,
-            QtGui.QIcon.State.Off,
+            QIcon.Mode.Normal,
+            QIcon.State.Off,
         )
         getattr(window.ui, f"account_btn_{account_id}").setIcon(icon)
         getattr(window.ui, f"account_btn_{account_id}").setIconSize(
@@ -555,8 +555,8 @@ async def start_bot(token, account_id):
         icon = QtGui.QIcon()
         icon.addPixmap(
             QtGui.QPixmap(":/icons/icons/warning.png"),
-            QtGui.QIcon.Mode.Normal,
-            QtGui.QIcon.State.Off,
+            QIcon.Mode.Normal,
+            QIcon.State.Off,
         )
         getattr(window.ui, f"account_btn_{account_id}").setIcon(icon)
         getattr(window.ui, f"account_btn_{account_id}").setIconSize(
@@ -604,8 +604,8 @@ class MainWindow(QMainWindow):
                     config_dict["global"][category] = ordered_dict
             with open("config.json", "w") as file:
                 json.dump(config_dict, file, ensure_ascii=False, indent=4)
-        self.ui = Ui_DankMemerGrinder()
-        self.ui.setupUi(self)
+        self.ui = UiDankMemerGrinder()
+        self.ui.setup_ui(self)
 
         # Initialize settings
         for account_id in range(1, len(config_dict)):
@@ -620,10 +620,10 @@ class MainWindow(QMainWindow):
                     json.dump(config_dict, file, ensure_ascii=False, indent=4)
                 continue
             load_account(self, str(account_id), config_example)
-        # noinspection PyArgumentList
-        sys.stdout = Stream(new_text=self.onUpdateText)
-        # noinspection PyArgumentList
-        sys.stderr = Stream(new_text=self.onUpdateText)
+        # # noinspection PyArgumentList
+        # sys.stdout = Stream(new_text=self.onUpdateText)
+        # # noinspection PyArgumentList
+        # sys.stderr = Stream(new_text=self.onUpdateText)
         self.output.connect(self.appendText)
         self.account_id = "1"
         if not config_dict[self.account_id]["state"]:
@@ -834,8 +834,8 @@ class MainWindow(QMainWindow):
                 icon = QtGui.QIcon()
                 icon.addPixmap(
                     QtGui.QPixmap(":/icons/icons/user.png"),
-                    QtGui.QIcon.Mode.Normal,
-                    QtGui.QIcon.State.Off,
+                    QIcon.Mode.Normal,
+                    QIcon.State.Off,
                 )
                 getattr(window.ui, f"account_btn_{self.account_id}").setIcon(icon)
                 getattr(self.ui, f"account_btn_{self.account_id}").setIconSize(
@@ -892,8 +892,8 @@ def between_callback(token, account_id):
     icon = QtGui.QIcon()
     icon.addPixmap(
         QtGui.QPixmap(":/icons/icons/loading.png"),
-        QtGui.QIcon.Mode.Normal,
-        QtGui.QIcon.State.Off,
+        QIcon.Mode.Normal,
+        QIcon.State.Off,
     )
     getattr(window.ui, f"account_btn_{account_id}").setIcon(icon)
     getattr(window.ui, f"account_btn_{account_id}").setIconSize(QtCore.QSize(25, 25))
@@ -905,6 +905,7 @@ def between_callback(token, account_id):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+
     version = requests.get(
         "https://raw.githubusercontent.com/BridgeSenseDev/Dank-Memer-Grinder/main/"
         "resources/version.txt"
@@ -926,8 +927,8 @@ if __name__ == "__main__":
             icon = QtGui.QIcon()
             icon.addPixmap(
                 QtGui.QPixmap(":/icons/icons/user.png"),
-                QtGui.QIcon.Mode.Normal,
-                QtGui.QIcon.State.Off,
+                QIcon.Mode.Normal,
+                QIcon.State.Off,
             )
             getattr(window.ui, f"account_btn_{account}").setIcon(icon)
     loop = QEventLoop(app)
