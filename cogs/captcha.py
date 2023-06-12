@@ -1,5 +1,6 @@
-import asyncio
+import json
 
+from PyQt5.QtGui import QColor
 from discord.ext import commands
 
 
@@ -14,6 +15,33 @@ class Captcha(commands.Cog):
 
         try:
             embed = message.embeds[0].to_dict()
+            if "we're under maintenance!" in embed["title"].lower():
+                with open("config.json", "r+") as config_file:
+                    config_dict = json.load(config_file)
+                    for account_id in (str(i) for i in range(1, len(config_dict))):
+                        config_dict[account_id]["state"] = False
+                        self.bot.window.output.emit(
+                            [
+                                f"output_text_{account_id}",
+                                (
+                                    "All bots have been disabled because of a dank"
+                                    " memer maintenance\nPlease check if the update is"
+                                    " safe before continuing to grind"
+                                ),
+                                QColor(216, 60, 62),
+                            ]
+                        )
+                    config_file.seek(0)
+                    json.dump(config_dict, config_file, indent=4)
+                    config_file.truncate()
+
+                self.bot.window.ui.toggle.setStyleSheet("background-color : #d83c3e")
+                account = self.bot.window.ui.accounts.currentText()
+                self.bot.window.ui.toggle.setText(
+                    " ".join(account.split()[:-1] + ["Disabled"])
+                )
+                return
+
             if "captcha" not in embed["title"].lower():
                 return
 
