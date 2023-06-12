@@ -93,18 +93,18 @@ class Minigames(commands.Cog):
                         "yellow",
                     )
                     if ":levitate:" == embed["description"].splitlines()[2]:
-                        await self.bot.click(after, 0, 2)
+                        await self.bot.click(after, 0, 2, [0, 0])
                     elif (
                         "<:emptyspace:827651824739156030>:levitate:"
                         == embed["description"].splitlines()[2]
                     ):
-                        await self.bot.click(after, 0, 0)
+                        await self.bot.click(after, 0, 0, [0, 0])
                     if (
                         "<:emptyspace:827651824739156030>"
                         "<:emptyspace:827651824739156030>:levitate:"
                         == embed["description"].splitlines()[2]
                     ):
-                        await self.bot.click(after, 0, 1)
+                        await self.bot.click(after, 0, 1, [0, 0])
                     self.bot.log(
                         f"Solved Football Minigame",
                         "green",
@@ -125,14 +125,14 @@ class Minigames(commands.Cog):
                         "<:emptyspace:827651824739156030>:basketball:"
                         == embed["description"].splitlines()[2]
                     ):
-                        await self.bot.click(after, 0, 2)
+                        await self.bot.click(after, 0, 2, [0, 0])
                     elif (
                         "<:emptyspace:827651824739156030>:basketball:"
                         == embed["description"].splitlines()[2]
                     ):
                         await self.bot.click(after, 0, 1)
                     elif ":basketball:" == embed["description"].splitlines()[2]:
-                        await self.bot.click(after, 0, 0)
+                        await self.bot.click(after, 0, 0, [0, 0])
                     self.bot.log(
                         f"Solved Basketball Minigame",
                         "green",
@@ -325,7 +325,6 @@ class Minigames(commands.Cog):
                     }
                     for choice in order:
                         await self.bot.click(message, 0, answers[choice])
-                        await asyncio.sleep(0.5)
                     self.bot.last_ran = {
                         k: v - 100 if v != float("inf") else 0
                         for k, v in self.bot.last_ran.items()
@@ -351,7 +350,6 @@ class Minigames(commands.Cog):
                     }
                     while not message.components[0].children[0].disabled:
                         await self.bot.click(message, 0, 0)
-                        await asyncio.sleep(0.5)
                     self.bot.last_ran = {
                         k: v - 100 if v != float("inf") else 0
                         for k, v in self.bot.last_ran.items()

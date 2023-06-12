@@ -1,8 +1,12 @@
 import asyncio
+import json
 import random
 import time
 
 from discord.ext import commands, tasks
+
+with open("config.json", "r") as config_file:
+    config_dict = json.load(config_file)
 
 
 class Commands(commands.Cog):
@@ -12,10 +16,9 @@ class Commands(commands.Cog):
     async def cog_load(self):
         self.commands.start()
 
-    @tasks.loop(seconds=0.05)
+    @tasks.loop(seconds=config_dict["global"]["min_commands_delay"] / 1000)
     async def commands(self):
         if not self.bot.state:
-            await asyncio.sleep(1)
             return
 
         shuffled_commands = list(self.bot.commands_dict)[:]
@@ -27,7 +30,7 @@ class Commands(commands.Cog):
                 < self.bot.config_dict["commands"][command]["delay"]
                 or not self.bot.config_dict["commands"][command]["state"]
             ):
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(0.1)
                 continue
             self.bot.last_ran[command] = time.time()
             if command == "dep_all":

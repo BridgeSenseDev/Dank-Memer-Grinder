@@ -19,7 +19,8 @@ class Captcha(commands.Cog):
 
             # Matching image captcha
             if (
-                "**click the button with matching image.**\nfailing the captcha might result in a temporary ban."
+                "**click the button with matching image.**\nfailing the captcha might"
+                " result in a temporary ban."
                 in embed["description"].lower()
             ):
                 self.bot.log(
@@ -29,7 +30,6 @@ class Captcha(commands.Cog):
                 captcha_url = embed["image"]["url"]
                 for count, button in enumerate(message.components[0].children):
                     if button.emoji.url in captcha_url:
-                        await asyncio.sleep(0.5)
                         await self.bot.click(message, 0, count)
                         self.bot.log(
                             f"Matching Image Captcha Solved",
@@ -39,7 +39,8 @@ class Captcha(commands.Cog):
 
             # Pepe captcha
             if (
-                "**click all buttons with a pepe (green frog) in it.**\nfailing the captcha might result in a temporary ban."
+                "**click all buttons with a pepe (green frog) in it.**\nfailing the"
+                " captcha might result in a temporary ban."
                 in embed["description"].lower()
             ):
                 self.bot.log(
@@ -50,7 +51,6 @@ class Captcha(commands.Cog):
                     for column, button in enumerate(i.children):
                         if not button.emoji:
                             await self.bot.click(message, row, column)
-                            await asyncio.sleep(0.5)
                             await self.bot.click(message, row, column)
                             self.bot.log(
                                 f"Pepe Captcha Solved",
@@ -67,7 +67,6 @@ class Captcha(commands.Cog):
                             933194488241864704,
                             680105017532743700,
                         ]:
-                            await asyncio.sleep(0.5)
                             await self.bot.click(message, row, column)
                             continue
 
@@ -80,7 +79,6 @@ class Captcha(commands.Cog):
                 captcha_url = embed["image"]["url"]
                 for count, button in enumerate(message.components[0].children):
                     if button.emoji.url not in captcha_url:
-                        await asyncio.sleep(0.5)
                         await self.bot.click(message, 0, count)
                 self.bot.log(
                     f"Wrong Images Captcha Solved",
@@ -101,7 +99,6 @@ class Captcha(commands.Cog):
                     for column, button in enumerate(i.children):
                         if not button.emoji:
                             await self.bot.click(message, row, column)
-                            await asyncio.sleep(0.5)
                             await self.bot.click(message, row, column)
                             self.bot.log(
                                 f"Pepe Captcha Solved",
@@ -118,7 +115,6 @@ class Captcha(commands.Cog):
                             933194488241864704,
                             680105017532743700,
                         ]:
-                            await asyncio.sleep(0.5)
                             await self.bot.click(message, row, column)
                             continue
         except KeyError:

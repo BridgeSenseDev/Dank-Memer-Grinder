@@ -25,7 +25,7 @@ class Pets(commands.Cog):
             for pet in message.components[0].children[0].options:
                 await self.bot.send("withdraw", amount="40k")
                 await message.components[0].children[0].choose(pet)
-                await asyncio.sleep(1)
+                await asyncio.sleep(0.5)
                 if message.components[1].children[0].disabled:
                     continue
                 embed = message.embeds[0].to_dict()
@@ -39,7 +39,6 @@ class Pets(commands.Cog):
                         if count == 2:
                             await asyncio.sleep(10)
                             await self.bot.click(message, 2, 1)
-                            await asyncio.sleep(0.5)
                             await self.bot.click(message, 2, 2)
                             break
                         await asyncio.sleep(0.5)

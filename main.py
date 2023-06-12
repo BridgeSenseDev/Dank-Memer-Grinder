@@ -4,6 +4,7 @@ import io
 import json
 import os
 import platform
+import random
 import subprocess
 import sys
 import tempfile
@@ -140,148 +141,157 @@ config_example = {
 }
 
 global_config_example = {
-    "space": {
-        "A friendly alien approached you slowly. What do you do?": "Attack",
-        "A small but wise green alien approaches you.": "Do",
-        "Oh my god even in space you cannot escape it": "69",
-        "This planet seems to be giving off radioactive chemicals. What do you do?": (
-            "Distant Scan"
-        ),
-        "Whaaaat!? You found a space kitchen! It looks like it is full of shady stuff. What do you do?": (
-            "Inspect"
-        ),
-        "You accidentally bumped into the Webb Telescope. Oh god.": "Flee",
-        "You come upon a dark pyramid shaped ship fighting a spherical white ball looking thing. What do you do?": (
-            "Embrace Dark"
-        ),
-        "You encountered someone named Dank Sidious, what do you do?": "Do it",
-        'You find a vending machine selling "Moon Pies". What do you do?': "Buy",
-        "You flew past a dying star": "Flee",
-        "You found a strange looking object. What do you do?": "Ignore",
-        "You got abducted by a group of aliens, who are trying to probe you. What do you do?": (
-            "Sit Back and Enjoy"
-        ),
-        "You ran out of fuel! What next?": "Urinate",
-        "You see a shooting star!": "Wish",
-        "You uh, just came across a pair of Odd Eyes floating around": "Flee",
-        "You're picking up a transmission from deep space!": "*<)#%':]|##",
-    },
-    "west": {
-        "A lady next to a broken down wagon is yelling for help.": "Ignore Her",
-        "A snake is blocking your path. What do you want to do?": "Wait",
-        "A stranger challenges you to a quick draw. What do you want to do?": "Decline",
-        "Someone is getting ambushed by bandits!": "Ignore them",
-        "Someone on the trail is lost and asks you for directions.": "Ignore them",
-        "You bump into someone near the horse stables. They challenge you to a duel": (
-            "Run away"
-        ),
-        "You come across a saloon with a poker game going on inside. What do you want to do?": (
-            "Join"
-        ),
-        "You entered the saloon to rest from the journey. What do you want to do?": (
-            "Play the piano"
-        ),
-        "You find a dank cellar with an old wooden box": "Ignore it",
-        "You find an abandoned mine. What do you want to do?": "Explore",
-        "You found a stray horse. What do you want to do?": "Feed",
-        "You get on a train and some bandits decide to rob the train. What do you do?": (
-            "Don't hurt me!"
-        ),
-        "You see some bandits about to rob the local towns bank. What do you do?": (
-            "Stop them"
-        ),
-        "You wander towards an old abandoned mine.": "Go in",
-        "You're dying of thirst. Where do you want to get water?": "Cactus",
-        "You're riding on your horse and you get ambushed. What do you do?": "Run away",
-        "Your horse sees a snake and throws you off. What do you do?": (
-            "Find a new horse"
-        ),
-        "__**WANTED:**__": "Billy Bob Jr.",
-    },
-    "brazil": {
-        "After a long day shopping for souvenirs in a crowded mall, you stop at the food court to grab some food. What do you order?": (
-            "McDonald's"
-        ),
-        "On your way to the beach, you stop at a comer store to buy some drinks and notice a litle caramel-colored dog is sleeping outside. What do you do?": (
-            "Pet the Dog"
-        ),
-        "While enjoying Carnival, you decide to go to the stadium to watch the samba schools perform. Where do you buy your tickets?": (
-            "Online"
-        ),
-        "While traveling in the city, you hear about Snake Island and decide you have to see if it is really as bad as they say. The boat captain will take you there but demands more money if you want to dock. What do you do?": (
-            "Stay on the Boat"
-        ),
-        "While visiting Rio Grande do Sul, you stop at one of the famous Brazilian steakhouses with all the meat you can eat. What do you want?": (
-            "Broccoli"
-        ),
-        "While visiting São Paulo, you find a place to see capybaras. What do you do?": (
-            "Pull up"
-        ),
-        "You can't get enough of the Brazilian beaches, and decide to spend the day exploring a remote one you found. What do you do first?": (
-            "Go Swimming"
-        ),
-        "You can't visit Rio de Janeiro without touring the Christ the Redeemer statue. How do you get there?": (
-            "Bus"
-        ),
-        "You decide to take an MMA class while visiting to learn from the best. Which style do you choose?": (
-            "Capoiera"
-        ),
-        "You stop at a local bakery for some of the Brazilian cheese bread you've heard so much about. What else do you try?": (
-            "Nothing"
-        ),
-        "You take a boat tour in Manaus to go down the Amazon River. At a fork in the path, the guide tells you to the right are piranhas and left anacondas. Which do you choose?": (
-            "Piranhas"
-        ),
-        "You went to schedule a trip into the Amazon to see the animals. What sort of trip do you book?": (
-            "Private Tour"
-        ),
-    },
-    "vacation": {
-        "A family road trip is a perfect getaway until you end up lost and without cell service. What do you do?": (
-            "Keep Driving"
-        ),
-        "A family vacation can't be complete without a trip to an amusement park. What ride are you dying to try?": (
-            "Waterslide"
-        ),
-        "A friend tells you about a quaint mountain resort, so you decide to spend a few days enjoying the snow. What do you do after you arrive?": (
-            "Go Skiing"
-        ),
-        "Camping has always relaxed you, so you decide to vacation in the wilderness. What sort of camping do you prefer?": (
-            "Rent an RV"
-        ),
-        "During your vacation in Lisbon, the hotel offers you a small pastry for breakfast. What do you do?": (
-            "Pass"
-        ),
-        "Nothing can beat a romantic vacation in Paris. What do you want to do first?": (
-            "Louvre"
-        ),
-        "You can't go on vacation without doing a little sightseeing. What do you want to see?": (
-            "Museum"
-        ),
-        "You decide it's time to visit some famous landmarks in the United States. Which do you visit first?": (
-            "Mt. Rushmore"
-        ),
-        "You decide the beach sounds like a perfect choice for a weekend away. Which beach do you want to visit?": (
-            "Daytona Beach, Florida"
-        ),
-        "You decide to go stargazing in the Chilean desert, but there are only two flights left. Which do you take?": (
-            "Night"
-        ),
-        "You decide to pick up Badosz and spend the weekend at Legoland. What do you look at first?": (
-            "Gift Shop"
-        ),
-        "You find a discounted whale watching tour and decide to give it a go, but the deal is for two. Who do you take with you?": (
-            "Kable"
-        ),
-        "You get a flyer for some discount cruises that sound wonderful. Which destination do you choose?": (
-            "Mediterranean"
-        ),
-        "Your cruise ship docks at a small island for a day of sun and swimming. What do you do?": (
-            "Sunbathe"
-        ),
-        "While vacationing in Rome, you visit the Colosseum and run into a group of people handing out friendship bracelets. What do you do?": (
-            "Take a Bracelet"
-        ),
+    "min_click_delay": 400,
+    "max_click_delay": 600,
+    "min_commands_delay": 2500,
+    "adventure": {
+        "space": {
+            "A friendly alien approached you slowly. What do you do?": "Attack",
+            "A small but wise green alien approaches you.": "Do",
+            "Oh my god even in space you cannot escape it": "69",
+            "This planet seems to be giving off radioactive chemicals. What do you do?": (
+                "Distant Scan"
+            ),
+            "Whaaaat!? You found a space kitchen! It looks like it is full of shady stuff. What do you do?": (
+                "Inspect"
+            ),
+            "You accidentally bumped into the Webb Telescope. Oh god.": "Flee",
+            "You come upon a dark pyramid shaped ship fighting a spherical white ball looking thing. What do you do?": (
+                "Embrace Dark"
+            ),
+            "You encountered someone named Dank Sidious, what do you do?": "Do it",
+            'You find a vending machine selling "Moon Pies". What do you do?': "Buy",
+            "You flew past a dying star": "Flee",
+            "You found a strange looking object. What do you do?": "Ignore",
+            "You got abducted by a group of aliens, who are trying to probe you. What do you do?": (
+                "Sit Back and Enjoy"
+            ),
+            "You ran out of fuel! What next?": "Urinate",
+            "You see a shooting star!": "Wish",
+            "You uh, just came across a pair of Odd Eyes floating around": "Flee",
+            "You're picking up a transmission from deep space!": "*<)#%':]|##",
+        },
+        "west": {
+            "A lady next to a broken down wagon is yelling for help.": "Ignore Her",
+            "A snake is blocking your path. What do you want to do?": "Wait",
+            "A stranger challenges you to a quick draw. What do you want to do?": (
+                "Decline"
+            ),
+            "Someone is getting ambushed by bandits!": "Ignore them",
+            "Someone on the trail is lost and asks you for directions.": "Ignore them",
+            "You bump into someone near the horse stables. They challenge you to a duel": (
+                "Run away"
+            ),
+            "You come across a saloon with a poker game going on inside. What do you want to do?": (
+                "Join"
+            ),
+            "You entered the saloon to rest from the journey. What do you want to do?": (
+                "Play the piano"
+            ),
+            "You find a dank cellar with an old wooden box": "Ignore it",
+            "You find an abandoned mine. What do you want to do?": "Explore",
+            "You found a stray horse. What do you want to do?": "Feed",
+            "You get on a train and some bandits decide to rob the train. What do you do?": (
+                "Don't hurt me!"
+            ),
+            "You see some bandits about to rob the local towns bank. What do you do?": (
+                "Stop them"
+            ),
+            "You wander towards an old abandoned mine.": "Go in",
+            "You're dying of thirst. Where do you want to get water?": "Cactus",
+            "You're riding on your horse and you get ambushed. What do you do?": (
+                "Run away"
+            ),
+            "Your horse sees a snake and throws you off. What do you do?": (
+                "Find a new horse"
+            ),
+            "__**WANTED:**__": "Billy Bob Jr.",
+        },
+        "brazil": {
+            "After a long day shopping for souvenirs in a crowded mall, you stop at the food court to grab some food. What do you order?": (
+                "McDonald's"
+            ),
+            "On your way to the beach, you stop at a comer store to buy some drinks and notice a litle caramel-colored dog is sleeping outside. What do you do?": (
+                "Pet the Dog"
+            ),
+            "While enjoying Carnival, you decide to go to the stadium to watch the samba schools perform. Where do you buy your tickets?": (
+                "Online"
+            ),
+            "While traveling in the city, you hear about Snake Island and decide you have to see if it is really as bad as they say. The boat captain will take you there but demands more money if you want to dock. What do you do?": (
+                "Stay on the Boat"
+            ),
+            "While visiting Rio Grande do Sul, you stop at one of the famous Brazilian steakhouses with all the meat you can eat. What do you want?": (
+                "Broccoli"
+            ),
+            "While visiting São Paulo, you find a place to see capybaras. What do you do?": (
+                "Pull up"
+            ),
+            "You can't get enough of the Brazilian beaches, and decide to spend the day exploring a remote one you found. What do you do first?": (
+                "Go Swimming"
+            ),
+            "You can't visit Rio de Janeiro without touring the Christ the Redeemer statue. How do you get there?": (
+                "Bus"
+            ),
+            "You decide to take an MMA class while visiting to learn from the best. Which style do you choose?": (
+                "Capoiera"
+            ),
+            "You stop at a local bakery for some of the Brazilian cheese bread you've heard so much about. What else do you try?": (
+                "Nothing"
+            ),
+            "You take a boat tour in Manaus to go down the Amazon River. At a fork in the path, the guide tells you to the right are piranhas and left anacondas. Which do you choose?": (
+                "Piranhas"
+            ),
+            "You went to schedule a trip into the Amazon to see the animals. What sort of trip do you book?": (
+                "Private Tour"
+            ),
+        },
+        "vacation": {
+            "A family road trip is a perfect getaway until you end up lost and without cell service. What do you do?": (
+                "Keep Driving"
+            ),
+            "A family vacation can't be complete without a trip to an amusement park. What ride are you dying to try?": (
+                "Waterslide"
+            ),
+            "A friend tells you about a quaint mountain resort, so you decide to spend a few days enjoying the snow. What do you do after you arrive?": (
+                "Go Skiing"
+            ),
+            "Camping has always relaxed you, so you decide to vacation in the wilderness. What sort of camping do you prefer?": (
+                "Rent an RV"
+            ),
+            "During your vacation in Lisbon, the hotel offers you a small pastry for breakfast. What do you do?": (
+                "Pass"
+            ),
+            "Nothing can beat a romantic vacation in Paris. What do you want to do first?": (
+                "Louvre"
+            ),
+            "You can't go on vacation without doing a little sightseeing. What do you want to see?": (
+                "Museum"
+            ),
+            "You decide it's time to visit some famous landmarks in the United States. Which do you visit first?": (
+                "Mt. Rushmore"
+            ),
+            "You decide the beach sounds like a perfect choice for a weekend away. Which beach do you want to visit?": (
+                "Daytona Beach, Florida"
+            ),
+            "You decide to go stargazing in the Chilean desert, but there are only two flights left. Which do you take?": (
+                "Night"
+            ),
+            "You decide to pick up Badosz and spend the weekend at Legoland. What do you look at first?": (
+                "Gift Shop"
+            ),
+            "You find a discounted whale watching tour and decide to give it a go, but the deal is for two. Who do you take with you?": (
+                "Kable"
+            ),
+            "You get a flyer for some discount cruises that sound wonderful. Which destination do you choose?": (
+                "Mediterranean"
+            ),
+            "Your cruise ship docks at a small island for a day of sun and swimming. What do you do?": (
+                "Sunbathe"
+            ),
+            "While vacationing in Rome, you visit the Colosseum and run into a group of people handing out friendship bracelets. What do you do?": (
+                "Take a Bracelet"
+            ),
+        },
     },
 }
 
@@ -396,14 +406,26 @@ async def start_bot(token, account_id):
                     sys.exit()
 
         @staticmethod
-        async def click(message, component, children):
+        async def click(message, component, children, delay=None):
+            min_delay, max_delay = delay or (
+                config_dict["global"]["min_click_delay"],
+                config_dict["global"]["max_click_delay"],
+            )
+            await asyncio.sleep(random.randint(min_delay, max_delay) / 1000)
+
             try:
                 await message.components[component].children[children].click()
             except (discord.errors.HTTPException, discord.errors.InvalidData):
                 pass
 
         @staticmethod
-        async def select(message, component, children, option):
+        async def select(message, component, children, option, delay=None):
+            min_delay, max_delay = delay or (
+                config_dict["global"]["min_click_delay"],
+                config_dict["global"]["max_click_delay"],
+            )
+            await asyncio.sleep(random.randint(min_delay, max_delay) / 1000)
+
             try:
                 select_menu = message.components[component].children[children]
                 await select_menu.choose(select_menu.options[option])
@@ -591,17 +613,18 @@ class MainWindow(QMainWindow):
                 if category not in config_dict["global"]:
                     config_dict["global"][category] = global_config_example[category]
                 else:
-                    updated_dict = config_dict["global"][category].copy()
-                    for key, value in global_config_example[category].items():
-                        if key not in updated_dict:
-                            updated_dict[key] = value
+                    if category == "adventure":
+                        updated_dict = config_dict["global"]["adventure"].copy()
+                        for key, value in global_config_example["adventure"].items():
+                            if key not in updated_dict:
+                                updated_dict[key] = value
 
-                    sorted_keys = sorted(updated_dict.keys())
-                    ordered_dict = OrderedDict(
-                        (key, updated_dict[key]) for key in sorted_keys
-                    )
+                        sorted_keys = sorted(updated_dict.keys())
+                        ordered_dict = OrderedDict(
+                            (key, updated_dict[key]) for key in sorted_keys
+                        )
 
-                    config_dict["global"][category] = ordered_dict
+                        config_dict["global"]["adventure"] = ordered_dict
             with open("config.json", "w") as file:
                 json.dump(config_dict, file, ensure_ascii=False, indent=4)
         self.ui = UiDankMemerGrinder()
@@ -620,10 +643,10 @@ class MainWindow(QMainWindow):
                     json.dump(config_dict, file, ensure_ascii=False, indent=4)
                 continue
             load_account(self, str(account_id), config_example)
-        # # noinspection PyArgumentList
-        # sys.stdout = Stream(new_text=self.onUpdateText)
-        # # noinspection PyArgumentList
-        # sys.stderr = Stream(new_text=self.onUpdateText)
+        # noinspection PyArgumentList
+        sys.stdout = Stream(new_text=self.onUpdateText)
+        # noinspection PyArgumentList
+        sys.stderr = Stream(new_text=self.onUpdateText)
         self.output.connect(self.appendText)
         self.account_id = "1"
         if not config_dict[self.account_id]["state"]:

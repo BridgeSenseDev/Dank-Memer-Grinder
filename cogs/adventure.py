@@ -42,7 +42,6 @@ class Adventure(commands.Cog):
         try:
             embed = after.embeds[0].to_dict()
             if "choose items you want to take with you" in embed["title"]:
-                await asyncio.sleep(0.5)
                 await self.bot.click(after, 2, 0)
                 return
         except KeyError:
@@ -57,16 +56,13 @@ class Adventure(commands.Cog):
                 try:
                     button = after.components[i].children[1]
                     if not button.disabled and button.emoji.id == 1067941108568567818:
-                        await asyncio.sleep(0.5)
                         await self.bot.click(after, i, 1)
                         return
                 except AttributeError:
                     pass
 
             if "Catch one of em!" in embed["description"]:
-                await asyncio.sleep(0.5)
                 await self.bot.click(after, 0, 2)
-                await asyncio.sleep(0.5)
                 await self.bot.click(after, 1, 1)
                 return
 
@@ -75,7 +71,6 @@ class Adventure(commands.Cog):
                 if q.lower() in question.lower():
                     for count, button in enumerate(after.components[0].children):
                         if button.label.lower() == answer.lower():
-                            await asyncio.sleep(0.5)
                             await self.bot.click(after, 0, count)
         except KeyError:
             pass
@@ -90,9 +85,7 @@ class Adventure(commands.Cog):
             if embed["author"]["name"] == "Choose an Adventure":
                 for count, i in enumerate(message.components[0].children[0].options):
                     if i.value == self.adventure:
-                        await asyncio.sleep(0.5)
                         await self.bot.select(message, 0, 0, count)
-                        await asyncio.sleep(0.5)
                         if not message.components[1].children[0].disabled:
                             await self.bot.click(message, 1, 0)
                             self.bot.last_ran = {
