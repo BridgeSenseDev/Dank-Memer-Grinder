@@ -8,7 +8,6 @@ def create_font(font_size):
     font.setFamily("Segoe UI")
     font.setPointSize(font_size)
     font.setBold(True)
-    font.setWeight(75)
     return font
 
 
