@@ -361,7 +361,7 @@ def get_config():
     try:
         with open("config.json", "r") as config_file:
             return json.load(config_file)
-    except:
+    except FileNotFoundError:
         configs = {"global": global_config_example}
         for i in range(1, 6):
             configs[str(i)] = config_example
@@ -643,10 +643,10 @@ class MainWindow(QMainWindow):
                 continue
             load_account(self, str(account_id), config_example)
         # noinspection PyArgumentList
-        sys.stdout = Stream(new_text=self.onUpdateText)
+        sys.stdout = Stream(new_text=self.on_update_text)
         # noinspection PyArgumentList
-        sys.stderr = Stream(new_text=self.onUpdateText)
-        self.output.connect(self.appendText)
+        sys.stderr = Stream(new_text=self.on_update_text)
+        self.output.connect(self.append_text)
         self.account_id = "1"
         if not config_dict[self.account_id]["state"]:
             self.ui.toggle.setStyleSheet("background-color : #d83c3e")
@@ -673,7 +673,7 @@ class MainWindow(QMainWindow):
         self.ui.add_account_btn.clicked.connect(self.add_account)
         self.ui.minus_account_btn.clicked.connect(self.delete_account)
 
-    def onUpdateText(self, text):
+    def on_update_text(self, text):
         config_dict = get_config()
         for account_id in map(str, range(1, len(config_dict))):
             getattr(self.ui, f"output_text_{account_id}").setTextColor(
@@ -897,7 +897,7 @@ class MainWindow(QMainWindow):
             json.dump(config_dict, file, ensure_ascii=False, indent=4)
             file.truncate()
 
-    def appendText(self, data):
+    def append_text(self, data):
         if not len(data) >= 3:
             data.append(QColor(232, 230, 227))
         getattr(self.ui, data[0]).setTextColor(data[2])
