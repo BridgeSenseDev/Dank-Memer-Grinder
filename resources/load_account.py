@@ -101,7 +101,7 @@ def load_account(self, account_id, config_example):
     )
     home_label.setMinimumSize(QtCore.QSize(0, 50))
     home_label.setMaximumSize(QtCore.QSize(16777215, 50))
-    home_label.setFont(create_font(25))
+    home_label.setFont(create_font(25, True))
     home_label.setAlignment(Qt.AlignCenter)
     home_label.setObjectName(f"home_label_{account_id}")
 
@@ -173,7 +173,7 @@ def load_account(self, account_id, config_example):
     )
     settings_label.setMinimumSize(QtCore.QSize(0, 50))
     settings_label.setMaximumSize(QtCore.QSize(16777215, 50))
-    settings_label.setFont(create_font(25))
+    settings_label.setFont(create_font(25, True))
     settings_label.setAlignment(Qt.AlignCenter)
     settings_label.setObjectName(f"settings_label_{account_id}")
 
@@ -515,7 +515,7 @@ def load_account(self, account_id, config_example):
     )
     commands_label.setMinimumSize(QtCore.QSize(0, 50))
     commands_label.setMaximumSize(QtCore.QSize(16777215, 50))
-    commands_label.setFont(create_font(25))
+    commands_label.setFont(create_font(25, True))
     commands_label.setAlignment(Qt.AlignCenter)
     commands_label.setObjectName(f"commands_label_{account_id}")
 
@@ -756,7 +756,7 @@ def load_account(self, account_id, config_example):
     )
     auto_buy_label.setMinimumSize(QtCore.QSize(0, 50))
     auto_buy_label.setMaximumSize(QtCore.QSize(16777215, 50))
-    auto_buy_label.setFont(create_font(25))
+    auto_buy_label.setFont(create_font(25, True))
     auto_buy_label.setAlignment(Qt.AlignCenter)
     auto_buy_label.setObjectName(f"auto_buy_label_{account_id}")
 
@@ -896,7 +896,7 @@ def load_account(self, account_id, config_example):
     )
     auto_use_label.setMinimumSize(QtCore.QSize(0, 50))
     auto_use_label.setMaximumSize(QtCore.QSize(16777215, 50))
-    auto_use_label.setFont(create_font(25))
+    auto_use_label.setFont(create_font(25, True))
     auto_use_label.setAlignment(Qt.AlignCenter)
     auto_use_label.setObjectName(f"auto_use_label_{account_id}")
 
