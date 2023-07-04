@@ -936,7 +936,6 @@ if __name__ == "__main__":
     response = requests.get("https://api.dankmemer.tools/version")
     if response.status_code == 200:
         version = response.json()["release"]
-        print(version)
         if int(version.replace(".", "")) > 152:
             updater = UpdaterWindow()
         else:
