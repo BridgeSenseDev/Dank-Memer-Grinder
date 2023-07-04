@@ -13,6 +13,9 @@ from collections import OrderedDict
 
 import discord.errors
 import requests
+import cv2
+import unidecode
+import onnxruntime
 from PIL import Image, ImageDraw
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QColor, QFontDatabase, QIcon
