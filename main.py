@@ -933,15 +933,19 @@ def between_callback(token, account_id):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 
-    version = requests.get(
-        "https://raw.githubusercontent.com/BridgeSenseDev/Dank-Memer-Grinder/main/"
-        "resources/version.txt"
-    ).text
-    window = MainWindow()
-    if int(version.replace(".", "")) > 152:
-        updater = UpdaterWindow()
+    response = requests.get("https://api.dankmemer.tools/version")
+    if response.status_code == 200:
+        version = response.json()["release"]
+        print(version)
+        if int(version.replace(".", "")) > 152:
+            updater = UpdaterWindow()
+        else:
+            window = MainWindow()
+            window.show()
     else:
+        window = MainWindow()
         window.show()
+
     config_dict = get_config()
     for account in map(str, range(1, len(config_dict))):
         if config_dict[account]["discord_token"] != "":
