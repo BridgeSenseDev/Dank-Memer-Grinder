@@ -6,9 +6,9 @@ import sys
 import cv2
 import numpy as np
 import requests
+from discord.ext import commands
 from PIL import Image
 from PyQt5.QtGui import QColor
-from discord.ext import commands
 from unidecode import unidecode
 
 from resources.yoloseg import yolo_seg

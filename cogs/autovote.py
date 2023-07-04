@@ -1,10 +1,9 @@
 import asyncio
+import json
 import random
 import time
 
 import requests
-import json
-
 from discord.ext import commands, tasks
 
 

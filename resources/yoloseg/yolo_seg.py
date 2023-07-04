@@ -1,10 +1,11 @@
 import math
 import time
+
 import cv2
 import numpy as np
 import onnxruntime
 
-from .utils import xywh2xyxy, nms, sigmoid
+from .utils import nms, sigmoid, xywh2xyxy
 
 
 class yolo_seg:
