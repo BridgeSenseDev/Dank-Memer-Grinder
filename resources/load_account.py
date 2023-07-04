@@ -428,6 +428,7 @@ def load_account(self, account_id, config_example):
     setattr(self.ui, f"toggles_left_frame_{account_id}", toggles_left_frame)
 
     self.vertical_layout_10 = QtWidgets.QVBoxLayout(toggles_left_frame)
+    self.vertical_layout_10.setContentsMargins(0, 0, 0, 0)
     self.vertical_layout_10.setObjectName("vertical_layout_10")
 
     toggles_left_frame_2 = QtWidgets.QFrame(toggles_left_frame)
