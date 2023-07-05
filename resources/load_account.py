@@ -1380,7 +1380,7 @@ def load_account(self, account_id, config_example):
     for button in autobuy_buttons:
         getattr(self.ui, f"{button}_checkbox_{account_id}").clicked.connect(
             lambda checked, clicked_account_id=account_id, clicked_button=button: self.autobuy(
-                button,
+                clicked_button,
                 getattr(
                     self.ui, f"{clicked_button}_checkbox_{clicked_account_id}"
                 ).isChecked(),
@@ -1414,7 +1414,9 @@ def load_account(self, account_id, config_example):
         getattr(self.ui, f"{button}_checkbox_{account_id}").clicked.connect(
             lambda checked, clicked_account_id=account_id, clicked_button=button: self.autouse(
                 clicked_button,
-                getattr(self.ui, f"{button}_checkbox_{clicked_account_id}").isChecked(),
+                getattr(
+                    self.ui, f"{clicked_button}_checkbox_{clicked_account_id}"
+                ).isChecked(),
                 "state",
             )
         )
