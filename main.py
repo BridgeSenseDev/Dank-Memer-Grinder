@@ -615,8 +615,8 @@ class MainWindow(QMainWindow):
         QMainWindow.__init__(self)
         self.setWindowIcon(QIcon(resource_path("resources/icon.ico")))
         self.setWindowTitle("Dank Memer Grinder")
-        self.setFixedWidth(868)
-        self.setFixedHeight(540)
+        self.setMinimumWidth(868)
+        self.setMinimumHeight(540)
         QFontDatabase.addApplicationFont(resource_path("resources/fonts/Segoe.ttf"))
         config_dict = get_config()
         if "global" not in config_dict:
