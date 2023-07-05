@@ -389,7 +389,10 @@ async def start_bot(token, account_id):
             self.config_dict = config_dict[self.account_id]
             self.config_example = config_example
             self.state = self.config_dict["state"]
-            self.channel_id = int(config_dict[account_id]["channel_id"])
+            if config_dict[account_id]["channel_id"]:
+                self.channel_id = int(config_dict[account_id]["channel_id"])
+            else:
+                self.channel_id = 0
             self.channel = None
             self.commands_dict = commands_dict
             self.last_ran = {}
@@ -405,7 +408,9 @@ async def start_bot(token, account_id):
                 config_file.seek(0)
                 self.config_dict = json.load(config_file)[self.account_id]
                 self.state = self.config_dict["state"]
-                if self.config_dict["channel_id"] != str(self.channel_id):
+                if self.config_dict["channel_id"] != "" and self.config_dict[
+                    "channel_id"
+                ] != str(self.channel_id):
                     sys.exit()
 
         @staticmethod
@@ -513,8 +518,15 @@ async def start_bot(token, account_id):
             )
 
         async def setup_hook(self):
-            self.update.start()
+            if not self.channel_id:
+                dank_memer_channel = await (
+                    await self.fetch_user(270904126974590976)
+                ).create_dm()
+                self.channel_id = dank_memer_channel.id
+
             self.channel = await self.fetch_channel(self.channel_id)
+
+            self.update.start()
             if (
                 getattr(window.ui, f"account_btn_{self.account_id}").text()
                 != "Logging In"
