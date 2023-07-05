@@ -7,12 +7,20 @@ Brotli==1.0.9
 certifi==2023.5.7
 cffi==1.15.1
 charset-normalizer==3.1.0
+coloredlogs==15.0.1
 discord-protos==0.0.2
-discord.py-self @ git+https://github.com/dolfies/discord.py-self@61e340981f95435a02aa6a7d7bca06dc661b039c
+discord.py-self @ git+https://github.com/dolfies/discord.py-self@master
+flatbuffers==23.5.26
 frozenlist==1.3.3
+humanfriendly==10.0
 idna==3.4
+mpmath==1.3.0
 multidict==6.0.4
+numpy==1.25.0
+onnxruntime==1.15.1
+opencv-python==4.8.0.74
 orjson==3.9.1
+packaging==23.1
 Pillow==10.0.0
 protobuf==4.23.3
 pycares==4.3.0
@@ -20,9 +28,12 @@ pycparser==2.21
 PyQt5==5.15.9
 PyQt5-Qt5==5.15.2
 PyQt5-sip==12.12.1
+pyreadline3==3.4.1
 qasync==0.24.0
 requests==2.31.0
+sympy==1.12
 tzdata==2023.3
 tzlocal==5.0.1
+Unidecode==1.3.6
 urllib3==2.0.3
 yarl==1.9.2
