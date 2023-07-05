@@ -67,7 +67,9 @@ class Adventure(commands.Cog):
                 return
 
             question = embed["description"].split("\n")[0]
-            for q, answer in self.bot.global_config_dict[self.adventure].items():
+            for q, answer in self.bot.global_config_dict["adventure"][
+                self.adventure
+            ].items():
                 if q.lower() in question.lower():
                     for count, button in enumerate(after.components[0].children):
                         if button.label.lower() == answer.lower():
