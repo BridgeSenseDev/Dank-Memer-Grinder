@@ -10,18 +10,22 @@ class Autobuy(commands.Cog):
         self.shop_message = None
 
     async def shop_buy(self, item, count=1):
-        while not self.shop_message:
-            await self.bot.sub_send("shop", "view")
-            await asyncio.sleep(1)
+        await self.bot.sub_send("shop", "view")
+
+        def check(msg):
+            return msg.embeds[0].to_dict()["title"] == "Dank Memer Shop"
+
+        message = await self.bot.wait_for("message", check=check)
+        if message.components[3].children[1].emoji.id == 1105833876032606350:
+            await self.bot.click(message, 3, 1)
+            await asyncio.sleep(0.5)
 
         found = False
         while not found:
             for row in range(1, 3):
-                for col, button in enumerate(
-                    self.shop_message.components[row].children
-                ):
+                for col, button in enumerate(message.components[row].children):
                     if item in button.label.lower():
-                        await self.bot.click(self.shop_message, row, col)
+                        await self.bot.click(message, row, col)
 
                         modal = await self.bot.wait_for("modal")
                         modal.components[0].children[0].answer(str(count))
@@ -29,7 +33,7 @@ class Autobuy(commands.Cog):
                         await modal.submit()
                         return
 
-            await self.bot.click(self.shop_message, 3, 2)
+            await self.bot.click(message, 3, 2)
             await asyncio.sleep(0.3)
 
     @commands.Cog.listener()
@@ -80,10 +84,6 @@ class Autobuy(commands.Cog):
 
         if message.channel.id != self.bot.channel_id or not self.bot.state:
             return
-
-        if message.interaction and message.interaction.name == "shop view":
-            print("new message")
-            self.shop_message = message
 
         for embed in message.embeds:
             embed = embed.to_dict()
