@@ -6,7 +6,7 @@ attrs==23.1.0
 Brotli==1.0.9
 certifi==2023.5.7
 cffi==1.15.1
-charset-normalizer==3.1.0
+charset-normalizer==3.2.0
 coloredlogs==15.0.1
 discord-protos==0.0.2
 discord.py-self @ git+https://github.com/dolfies/discord.py-self@master
