@@ -176,10 +176,8 @@ class Captcha(commands.Cog):
                 await self.bot.click(message, 0, best_match_index)
 
                 self.bot.log(
-                    (
-                        f"Clicked best matching emoji {best_match_index + 1} with"
-                        f" similarity {color_similarity[best_match_index]}"
-                    ),
+                    f"Clicked best matching emoji {best_match_index + 1} with"
+                    f" similarity {color_similarity[best_match_index]}",
                     "green",
                 )
 

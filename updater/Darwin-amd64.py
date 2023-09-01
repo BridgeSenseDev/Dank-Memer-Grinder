@@ -22,10 +22,8 @@ spinner = Halo(
 spinner.start()
 
 r = requests.get(
-    (
-        "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/releases/download/v"
-        f"{version}/Dank-Memer-Grinder-v{version}-Darwin-amd64.zip"
-    ),
+    "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/releases/download/v"
+    f"{version}/Dank-Memer-Grinder-v{version}-Darwin-amd64.zip",
     stream=True,
 )
 

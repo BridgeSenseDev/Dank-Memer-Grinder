@@ -323,10 +323,8 @@ class UpdaterWindow(QMainWindow):
         match platform.system():
             case "Windows":
                 r = requests.get(
-                    (
-                        "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/blob/"
-                        "main/updater/Windows-amd64.exe?raw=true"
-                    ),
+                    "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/blob/"
+                    "main/updater/Windows-amd64.exe?raw=true",
                     stream=True,
                 )
                 temp_file = os.path.join(tempfile.gettempdir(), "Windows-amd64.exe")
@@ -342,10 +340,8 @@ class UpdaterWindow(QMainWindow):
             case "Darwin":
                 arch = "Darwin-amd64"
         r = requests.get(
-            (
-                "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/blob/main/"
-                f"updater/{arch}?raw=true"
-            ),
+            "https://github.com/BridgeSenseDev/Dank-Memer-Grinder/blob/main/"
+            f"updater/{arch}?raw=true",
             stream=True,
         )
         temp_file = os.path.join(tempfile.gettempdir(), arch)
