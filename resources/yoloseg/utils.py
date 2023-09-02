@@ -5,23 +5,24 @@ def nms(boxes, scores, iou_threshold, top_k=3):
     # Sort by score
     sorted_indices = np.argsort(scores)[::-1]
 
-    # Only keep top_k scores
-    if top_k > 0 and top_k < sorted_indices.size:
-        sorted_indices = sorted_indices[:top_k]
-
     keep_boxes = []
     while sorted_indices.size > 0:
         # Pick the last box
         box_id = sorted_indices[0]
-        keep_boxes.append(box_id)
 
         # Compute IoU of the picked box with the rest
         ious = compute_iou(boxes[box_id, :], boxes[sorted_indices[1:], :])
 
         # Remove boxes with IoU over the threshold
         keep_indices = np.where(ious < iou_threshold)[0]
-
         sorted_indices = sorted_indices[keep_indices + 1]
+
+        # Append the box to the list of kept boxes
+        keep_boxes.append(box_id)
+
+    # Only keep top_k scores
+    if top_k > 0 and top_k < len(keep_boxes):
+        keep_boxes = keep_boxes[:top_k]
 
     return keep_boxes
 

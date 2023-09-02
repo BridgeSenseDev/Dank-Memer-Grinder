@@ -9,10 +9,11 @@ from .utils import nms, sigmoid, xywh2xyxy
 
 
 class yolo_seg:
-    def __init__(self, path, conf_thres=0.7, iou_thres=0.5, num_masks=32):
+    def __init__(self, path, conf_thres=0.7, iou_thres=0.5, num_masks=32, top_k=3):
         self.conf_threshold = conf_thres
         self.iou_threshold = iou_thres
         self.num_masks = num_masks
+        self.top_k = top_k
 
         # Initialize model
         self.initialize_model(path)
@@ -69,11 +70,13 @@ class yolo_seg:
 
         # Filter out object confidence scores below threshold
         scores = np.max(predictions[:, 4 : 4 + num_classes], axis=1)
-        predictions = predictions[scores > self.conf_threshold, :]
-        scores = scores[scores > self.conf_threshold]
-
-        if len(scores) == 0:
-            return [], [], [], np.array([])
+        if len(predictions[scores > self.conf_threshold, :]) == 0:
+            max_ids = np.argsort(predictions[:, 4])[-3:]
+            predictions = predictions[[max_ids[0], max_ids[1], max_ids[2]], :]
+            scores = scores[[max_ids[0], max_ids[1], max_ids[2]]]
+        else:
+            predictions = predictions[scores > self.conf_threshold, :]
+            scores = scores[scores > self.conf_threshold]
 
         box_predictions = predictions[..., : num_classes + 4]
         mask_predictions = predictions[..., num_classes + 4 :]
@@ -85,7 +88,7 @@ class yolo_seg:
         boxes = self.extract_boxes(box_predictions)
 
         # Apply non-maxima suppression to suppress weak, overlapping bounding boxes
-        indices = nms(boxes, scores, self.iou_threshold)
+        indices = nms(boxes, scores, iou_threshold=self.iou_threshold, top_k=self.top_k)
 
         return boxes[indices], mask_predictions[indices]
 

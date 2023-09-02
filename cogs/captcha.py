@@ -1,14 +1,15 @@
+import contextlib
 import io
-import json
 import os
 import sys
 
 import cv2
+import numpy
 import numpy as np
+import onnxruntime
 import requests
-from discord.ext import commands
 from PIL import Image
-from PyQt5.QtGui import QColor
+from discord.ext import commands
 from unidecode import unidecode
 
 from resources.yoloseg import yolo_seg
@@ -23,39 +24,38 @@ def resource_path(relative_path):
 yolo_seg = yolo_seg(
     resource_path("./resources/yoloseg/best.onnx"), conf_thres=0.5, iou_thres=0.3
 )
+ort_session = onnxruntime.InferenceSession(resource_path("./resources/siamese.onnx"))
 
 
-def similarity(answer_emoji, captcha_emoji):
-    answer_emoji_with_alpha = cv2.cvtColor(answer_emoji, cv2.COLOR_BGR2BGRA)
-    mask = (answer_emoji_with_alpha[..., 3] > 0).astype(np.uint8) * 255
-    answer_emoji_with_alpha = cv2.merge([answer_emoji_with_alpha[..., 0:3], mask])
+def download_image(url):
+    response = requests.get(url)
+    image_data = io.BytesIO(response.content)
 
-    downscaled_answer_emoji = cv2.resize(
-        answer_emoji_with_alpha,
-        (captcha_emoji.shape[1], captcha_emoji.shape[0]),
-        interpolation=cv2.INTER_AREA,
-    )
+    if url.endswith("captcha.webp"):
+        image_pil = Image.open(image_data)
+        image_np = cv2.cvtColor(numpy.array(image_pil), cv2.COLOR_RGB2BGR)
 
-    image1_lab = cv2.cvtColor(downscaled_answer_emoji, cv2.COLOR_BGR2LAB)
-    image2_lab = cv2.cvtColor(captcha_emoji, cv2.COLOR_BGR2LAB)
+        return {"pil": image_pil, "np": image_np}
+    elif url[-3:] == "png":
+        image_pil = Image.open(image_data).convert("RGBA")
+    else:
+        image_pil = extract_gif(image_data)
+    image_np = cv2.cvtColor(numpy.array(image_pil), cv2.COLOR_RGBA2BGRA)
 
-    hist1 = cv2.calcHist(
-        [image1_lab], [0, 1, 2], None, [8, 8, 8], [0, 256, 0, 256, 0, 256]
-    )
-    hist2 = cv2.calcHist(
-        [image2_lab], [0, 1, 2], None, [8, 8, 8], [0, 256, 0, 256, 0, 256]
-    )
-
-    hist1 = cv2.normalize(hist1, hist1).flatten()
-    hist2 = cv2.normalize(hist2, hist2).flatten()
-
-    return cv2.compareHist(hist1, hist2, cv2.HISTCMP_INTERSECT)
+    return {"pil": image_pil, "np": image_np}
 
 
-def resource_path(relative_path):
-    if hasattr(sys, "_MEIPASS"):
-        return os.path.join(sys._MEIPASS, relative_path)
-    return os.path.join(os.path.abspath("."), relative_path)
+def extract_gif(image_data):
+    gif_pil = Image.open(image_data)
+    gif_pil.seek(0)
+
+    # Extract the alpha channel
+    alpha = gif_pil.convert("RGBA").split()[-1]
+    gif_pil.load()
+    result = Image.new("RGBA", gif_pil.size)
+    result.paste(gif_pil, mask=alpha)
+
+    return result
 
 
 def crop_images(img_np, boxes, masks):
@@ -70,7 +70,7 @@ def crop_images(img_np, boxes, masks):
 
     cropped_images = []
 
-    for idx, box in enumerate(boxes):
+    for box in boxes:
         x1, y1, x2, y2 = box
         x1, y1, x2, y2 = map(
             int, (x1.item(), y1.item(), x2.item(), y2.item())
@@ -82,6 +82,100 @@ def crop_images(img_np, boxes, masks):
     return cropped_images
 
 
+def color_similarity(answer_emoji, segmented_emoji):
+    mask = (answer_emoji[..., 3] > 0).astype(np.uint8) * 255
+    answer_emoji_with_alpha = cv2.merge([answer_emoji[..., 0:3], mask])
+
+    downscaled_answer_emoji = cv2.resize(
+        answer_emoji_with_alpha,
+        (segmented_emoji.shape[1], segmented_emoji.shape[0]),
+        interpolation=cv2.INTER_AREA,
+    )
+
+    image1_lab = cv2.cvtColor(downscaled_answer_emoji, cv2.COLOR_BGR2LAB)
+    image2_lab = cv2.cvtColor(segmented_emoji, cv2.COLOR_BGR2LAB)
+
+    hist1 = cv2.calcHist(
+        [image1_lab], [0, 1, 2], None, [8, 8, 8], [0, 256, 0, 256, 0, 256]
+    )
+    hist2 = cv2.calcHist(
+        [image2_lab], [0, 1, 2], None, [8, 8, 8], [0, 256, 0, 256, 0, 256]
+    )
+
+    hist1 = cv2.normalize(hist1, hist1).flatten()
+    hist2 = cv2.normalize(hist2, hist2).flatten()
+
+    return cv2.compareHist(hist1, hist2, cv2.HISTCMP_INTERSECT)
+
+
+def transformation(image):
+    image = np.array(image)
+    image = image.astype(np.float32) / 255.0  # Convert to float and scale values
+    image = np.expand_dims(image, axis=0)
+    image = np.expand_dims(image, axis=0)
+
+    return image
+
+
+def resize_image(img_pil):
+    return img_pil.resize((100, 100))
+
+
+def process_segmented_emoji(img_np):
+    img_np = cv2.cvtColor(img_np, cv2.COLOR_BGRA2RGBA)
+    kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
+    img_np = cv2.filter2D(img_np, -1, kernel)
+    img_np = cv2.convertScaleAbs(img_np, alpha=1.5, beta=10)
+    img_np[img_np[..., 3] < 128] = [0, 0, 0, 255]
+    img_pil = Image.fromarray(cv2.cvtColor(img_np, cv2.COLOR_RGBA2GRAY))
+    return resize_image(img_pil)
+
+
+def get_euclidean_distance(input1, input2):
+    ort_inputs = {
+        ort_session.get_inputs()[0].name: input1,
+        ort_session.get_inputs()[1].name: input2,
+    }
+
+    output1, output2 = ort_session.run(None, ort_inputs)
+    return np.linalg.norm(output1 - output2)
+
+
+def get_emoji_tensors(message, top_3_indices):
+    input_images = [
+        (
+            resize_image(
+                Image.fromarray(download_image(button.emoji.url)["np"]).convert("L")
+            ),
+            button_idx,
+        )
+        for button_idx, button in enumerate(message.components[0].children)
+        if button_idx in top_3_indices
+    ]
+
+    return [(transformation(img), idx) for img, idx in input_images]
+
+
+def get_dissimilarity_scores(captcha_img, final_boxes, final_masks, input_tensors):
+    dissimilarity_scores = []
+
+    for segmented_emoji in crop_images(captcha_img["np"], final_boxes, final_masks)[:3]:
+        segmented_dissimilarity_scores = []
+
+        image = process_segmented_emoji(segmented_emoji)
+        x0 = transformation(image)
+
+        for x1, idx in input_tensors:
+            euclidean_distance = get_euclidean_distance(x0, x1)
+
+            # Store both euclidean_distance and idx
+            segmented_dissimilarity_scores.append((euclidean_distance.item(), idx))
+
+        dissimilarity_scores.append(segmented_dissimilarity_scores)
+
+    return np.array(dissimilarity_scores)
+
+
 class Captcha(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -91,178 +185,62 @@ class Captcha(commands.Cog):
         if not self.bot.state:
             return
 
-        try:
+        with contextlib.suppress(KeyError):
             embed = message.embeds[0].to_dict()
             embed["title"] = unidecode(embed["title"])
 
-            if "we're under maintenance!" in embed["title"].lower():
-                with open("config.json", "r+") as config_file:
-                    config_dict = json.load(config_file)
-                    for account_id in (str(i) for i in range(1, len(config_dict))):
-                        config_dict[account_id]["state"] = False
-                        self.bot.window.output.emit(
-                            [
-                                f"output_text_{account_id}",
-                                (
-                                    "All bots have been disabled because of a dank"
-                                    " memer maintenance\nPlease check if the update is"
-                                    " safe before continuing to grind"
-                                ),
-                                QColor(216, 60, 62),
-                            ]
-                        )
-                    config_file.seek(0)
-                    json.dump(config_dict, config_file, indent=4)
-                    config_file.truncate()
-
-                self.bot.window.ui.toggle.setStyleSheet("background-color : #d83c3e")
-                account = self.bot.window.ui.accounts.currentText()
-                self.bot.window.ui.toggle.setText(
-                    " ".join(account.split()[:-1] + ["Disabled"])
-                )
-                return
-
-            if "captcha" not in unidecode(embed["title"]).lower():
+            if "captcha" not in embed["title"].lower():
                 return
 
             # Matching image captcha
             if (
-                "**click the button with matching image.**\nfailing the captcha might"
-                " result in a temporary ban."
-                in embed["description"].lower()
+                "click the button with matching image" in embed["description"].lower()
                 and f"<@{self.bot.user.id}>" in message.content
             ):
-                self.bot.log(
-                    f"Matching Image Captcha",
-                    "red",
-                )
+                self.bot.log("Matching Image Captcha", "red")
 
-                response = requests.get(embed["image"]["url"], stream=True).raw
-                img_data = np.asarray(bytearray(response.read()), dtype="uint8")
-                img_np = cv2.imdecode(img_data, cv2.IMREAD_COLOR)
+                captcha_img = download_image(message.embeds[0].image.url)
+                final_boxes, final_masks = yolo_seg(captcha_img["np"])
 
-                final_boxes, final_masks = yolo_seg(img_np)
-                segmented_emojis = crop_images(img_np, final_boxes, final_masks)
-
-                color_similarity = [0] * 5
+                # Get the indices of the top three elements in descending order
+                color_similarities = [0] * 5
 
                 for button_idx, button in enumerate(message.components[0].children):
-                    emoji = button.emoji.url
-                    response = requests.get(emoji)
-                    emoji_data = io.BytesIO(response.content)
+                    emoji_img = download_image(button.emoji.url)
 
-                    if emoji[-3:] == "png":
-                        emoji_pil = Image.open(emoji_data)
-                    elif emoji[-3:] == "gif":
-                        gif_pil = Image.open(emoji_data)
-                        gif_pil.seek(0)
-                        alpha = gif_pil.convert("RGBA").split()[
-                            -1
-                        ]  # extract the alpha channel
-                        gif_pil.load()  # make sure PIL has loaded the file
-                        emoji_pil = Image.new("RGBA", gif_pil.size)
-                        emoji_pil.paste(
-                            gif_pil, mask=alpha
-                        )  # paste the gif using alpha mask
+                    for segmented_emoji in crop_images(
+                        captcha_img["np"], final_boxes, final_masks
+                    )[:3]:
+                        similarities = color_similarity(
+                            emoji_img["np"], segmented_emoji
+                        )
+                        color_similarities[button_idx] += similarities
 
-                    emoji_np = np.asarray(emoji_pil)
-                    emoji_bgr = cv2.cvtColor(emoji_np, cv2.COLOR_RGB2BGR)
+                top_3_indices = sorted(
+                    range(len(color_similarities)),
+                    key=lambda i: color_similarities[i],
+                    reverse=True,
+                )[:3]
 
-                    for segmented_emoji in segmented_emojis:
-                        similarities = similarity(emoji_bgr, segmented_emoji)
-                        color_similarity[button_idx] += similarities
+                emoji_tensors = get_emoji_tensors(message, top_3_indices)
+                dissimilarity_scores = get_dissimilarity_scores(
+                    captcha_img, final_boxes, final_masks, emoji_tensors
+                )
 
-                best_match_index = color_similarity.index(max(color_similarity))
-                await self.bot.click(message, 0, best_match_index)
+                average_dissimilarity_scores = np.mean(dissimilarity_scores, axis=0)
+                min_score_idx = int(
+                    average_dissimilarity_scores[
+                        np.argmin(average_dissimilarity_scores[:, 0]), 1
+                    ]
+                )
+
+                await self.bot.click(message, 0, min_score_idx)
 
                 self.bot.log(
-                    f"Clicked best matching emoji {best_match_index + 1} with"
-                    f" similarity {color_similarity[best_match_index]}",
+                    f"Clicked best matching emoji {min_score_idx + 1} with"
+                    f" similarity {average_dissimilarity_scores[min_score_idx, 0]}",
                     "green",
                 )
-
-            # Pepe captcha
-            if (
-                "**click all buttons with a pepe (green frog) in it.**\nfailing the"
-                " captcha might result in a temporary ban."
-                in embed["description"].lower()
-            ):
-                self.bot.log(
-                    f"Pepe Captcha",
-                    "red",
-                )
-                for row, i in enumerate(message.components):
-                    for column, button in enumerate(i.children):
-                        if not button.emoji:
-                            await self.bot.click(message, row, column)
-                            await self.bot.click(message, row, column)
-                            self.bot.log(
-                                f"Pepe Captcha Solved",
-                                "red",
-                            )
-                            return
-                        if button.emoji.id in [
-                            819014822867894304,
-                            796765883120353280,
-                            860602697942040596,
-                            860602923665588284,
-                            860603013063507998,
-                            936007340736536626,
-                            933194488241864704,
-                            680105017532743700,
-                        ]:
-                            await self.bot.click(message, row, column)
-                            continue
-
-            # Reverse images captcha
-            if "pick any of the three wrong images" in embed["description"].lower():
-                self.bot.log(
-                    f"Wrong Images Captcha",
-                    "red",
-                )
-                captcha_url = embed["image"]["url"]
-                for count, button in enumerate(message.components[0].children):
-                    if button.emoji.url not in captcha_url:
-                        await self.bot.click(message, 0, count)
-                self.bot.log(
-                    f"Wrong Images Captcha Solved",
-                    "green",
-                )
-                return
-
-            # Reverse pepe captcha
-            if (
-                "click all buttons without a pepe in them!"
-                in embed["description"].lower()
-            ):
-                self.bot.log(
-                    f"Reverse Pepe Captcha",
-                    "red",
-                )
-                for row, i in enumerate(message.components):
-                    for column, button in enumerate(i.children):
-                        if not button.emoji:
-                            await self.bot.click(message, row, column)
-                            await self.bot.click(message, row, column)
-                            self.bot.log(
-                                f"Pepe Captcha Solved",
-                                "red",
-                            )
-                            return
-                        if button.emoji.id not in [
-                            819014822867894304,
-                            796765883120353280,
-                            860602697942040596,
-                            860602923665588284,
-                            860603013063507998,
-                            936007340736536626,
-                            933194488241864704,
-                            680105017532743700,
-                        ]:
-                            await self.bot.click(message, row, column)
-                            continue
-        except KeyError:
-            pass
 
 
 async def setup(bot):
