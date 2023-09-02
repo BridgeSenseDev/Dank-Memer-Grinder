@@ -1,4 +1,5 @@
 import asyncio
+import contextlib
 import re
 
 from discord.ext import commands
@@ -42,7 +43,7 @@ class Autobuy(commands.Cog):
             for embed in message.embeds:
                 embed = embed.to_dict()
                 # Buy lifesavers
-                try:
+                with contextlib.suppress(KeyError):
                     if (
                         embed["title"] == "Your lifesaver protected you!"
                         and self.bot.config_dict["autobuy"]["lifesavers"]["state"]
@@ -51,7 +52,7 @@ class Autobuy(commands.Cog):
                             re.search(
                                 "have (.*?)x Life Saver",
                                 message.components[0].children[0].label,
-                            ).group(1)
+                            )[1]
                         )
                         required = int(
                             self.bot.config_dict["autobuy"]["lifesavers"]["amount"]
@@ -69,26 +70,20 @@ class Autobuy(commands.Cog):
                                 "yellow",
                             )
                             return
-                except KeyError:
-                    pass
-
                 # Confirm purchase
-                try:
+                with contextlib.suppress(KeyError):
                     if (
                         embed["title"] == "Pending Confirmation"
                         and self.bot.config_dict["autobuy"]["lifesavers"]["state"]
                     ):
                         await self.bot.click(message, 0, 1)
-                except KeyError:
-                    pass
-
         if message.channel.id != self.bot.channel_id or not self.bot.state:
             return
 
         for embed in message.embeds:
             embed = embed.to_dict()
             # Shovel
-            try:
+            with contextlib.suppress(KeyError):
                 if (
                     "You don't have a shovel, you need to go buy one."
                     in embed["description"]
@@ -96,15 +91,9 @@ class Autobuy(commands.Cog):
                 ):
                     await self.bot.send("withdraw", amount="35k")
                     await self.shop_buy("shovel", 1)
-                    self.bot.log(
-                        f"Bought Shovel",
-                        "yellow",
-                    )
-            except KeyError:
-                pass
-
+                    self.bot.log("Bought Shovel", "yellow")
             # Fishing pole
-            try:
+            with contextlib.suppress(KeyError):
                 if (
                     "You don't have a fishing pole, you need to go buy one"
                     in embed["description"]
@@ -112,15 +101,9 @@ class Autobuy(commands.Cog):
                 ):
                     await self.bot.send("withdraw", amount="35k")
                     await self.shop_buy("pole", 1)
-                    self.bot.log(
-                        f"Bought Shovel",
-                        "yellow",
-                    )
-            except KeyError:
-                pass
-
+                    self.bot.log("Bought Shovel", "yellow")
             # Hunting rifle
-            try:
+            with contextlib.suppress(KeyError):
                 if (
                     "You don't have a hunting rifle, you need to go buy one."
                     in embed["description"]
@@ -128,12 +111,7 @@ class Autobuy(commands.Cog):
                 ):
                     await self.bot.send("withdraw", amount="35k")
                     await self.shop_buy("rifle", 1)
-                    self.bot.log(
-                        f"Bought Shovel",
-                        "yellow",
-                    )
-            except KeyError:
-                pass
+                    self.bot.log("Bought Shovel", "yellow")
 
 
 async def setup(bot):

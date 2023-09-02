@@ -34,7 +34,7 @@ class Trivia(commands.Cog):
 
         embed = message.embeds[0].to_dict()
         category = embed["fields"][1]["value"]
-        question = re.search("\*\*(.*?)\*\*", embed["description"]).group(1)
+        question = re.search(r"\*\*(.*?)\*\*", embed["description"])[1]
         try:
             answer = trivia_dict[category][question]
         except KeyError:
@@ -47,18 +47,19 @@ class Trivia(commands.Cog):
                         resource_path("resources/trivia.json"),
                         "w",
                         encoding="utf-8",
-                    ) as file:
-                        json.dump(trivia_dict, file, indent=4)
+                    ) as trivia_file:
+                        json.dump(trivia_dict, trivia_file, indent=4)
                     return
+
         if random.random() <= self.chance:
             for count, i in enumerate(message.components[0].children):
                 if i.label == answer:
                     await self.bot.click(message, 0, count)
+        elif message.components[0].children[0].label == answer:
+            await self.bot.click(message, 0, 1)
+
         else:
-            if message.components[0].children[0].label != answer:
-                await self.bot.click(message, 0, 0)
-            else:
-                await self.bot.click(message, 0, 1)
+            await self.bot.click(message, 0, 0)
 
 
 async def setup(bot):

@@ -1,7 +1,7 @@
-import asyncio
+import contextlib
 import json
 
-from discord.ext import commands, tasks
+from discord.ext import commands
 
 
 class Adventure(commands.Cog):
@@ -28,7 +28,7 @@ class Adventure(commands.Cog):
         if not await self.bot.is_valid_command(after, "adventure"):
             return
 
-        try:
+        with contextlib.suppress(KeyError):
             embed = after.embeds[0].to_dict()
             if embed["author"]["name"] == "Adventure Summary":
                 self.bot.last_ran = {
@@ -36,31 +36,22 @@ class Adventure(commands.Cog):
                     for k, v in self.bot.last_ran.items()
                 }
                 return
-        except KeyError:
-            pass
-
-        try:
+        with contextlib.suppress(KeyError):
             embed = after.embeds[0].to_dict()
             if "choose items you want to take with you" in embed["title"]:
                 await self.bot.click(after, 2, 0)
                 return
-        except KeyError:
-            pass
-
-        try:
+        with contextlib.suppress(KeyError):
             embed = after.embeds[0].to_dict()
             if "You can start another adventure at" in embed["description"]:
                 return
 
             for i in range(2):
-                try:
+                with contextlib.suppress(AttributeError):
                     button = after.components[i].children[1]
                     if not button.disabled and button.emoji.id == 1067941108568567818:
                         await self.bot.click(after, i, 1)
                         return
-                except AttributeError:
-                    pass
-
             if "Catch one of em!" in embed["description"]:
                 await self.bot.click(after, 0, 2)
                 await self.bot.click(after, 1, 1)
@@ -74,15 +65,13 @@ class Adventure(commands.Cog):
                     for count, button in enumerate(after.components[0].children):
                         if button.label.lower() == answer.lower():
                             await self.bot.click(after, 0, count)
-        except KeyError:
-            pass
 
     @commands.Cog.listener()
     async def on_message(self, message):
         if not await self.bot.is_valid_command(message, "adventure"):
             return
 
-        try:
+        with contextlib.suppress(KeyError):
             embed = message.embeds[0].to_dict()
             if embed["author"]["name"] == "Choose an Adventure":
                 for count, i in enumerate(message.components[0].children[0].options):
@@ -94,9 +83,6 @@ class Adventure(commands.Cog):
                                 k: v + 100 if v != 0 else float("inf")
                                 for k, v in self.bot.last_ran.items()
                             }
-
-        except KeyError:
-            pass
 
 
 async def setup(bot):

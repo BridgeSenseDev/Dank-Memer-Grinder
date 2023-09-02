@@ -1,8 +1,5 @@
+import contextlib
 import json
-import os
-import random
-import re
-import sys
 
 import discord
 from PyQt5.QtGui import QColor
@@ -20,17 +17,14 @@ class Others(commands.Cog):
             return
         for embed in message.embeds:
             embed = embed.to_dict()
-            try:
+            with contextlib.suppress(KeyError):
                 if (
                     "You have an unread alert!" in embed["title"]
                     and f"<@{self.bot.user.id}>" in message.content
                     and self.bot.config_dict["alerts"]
                 ):
                     await self.bot.send("alert")
-            except KeyError:
-                pass
-
-            try:
+            with contextlib.suppress(KeyError):
                 if "we're under maintenance!" in embed["title"].lower():
                     with open("config.json", "r+") as config_file:
                         config_dict = json.load(config_file)
@@ -58,8 +52,6 @@ class Others(commands.Cog):
                     self.bot.window.ui.toggle.setText(
                         " ".join(account.split()[:-1] + ["Disabled"])
                     )
-            except KeyError:
-                pass
 
     @tasks.loop(seconds=15)
     async def presence(self):

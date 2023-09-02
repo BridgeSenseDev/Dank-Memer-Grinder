@@ -1,4 +1,5 @@
 import asyncio
+import contextlib
 import re
 
 from discord.ext import commands
@@ -21,7 +22,7 @@ class Pets(commands.Cog):
             k: v + 100 if v != 0 else float("inf") for k, v in self.bot.last_ran.items()
         }
 
-        try:
+        with contextlib.suppress(AttributeError):
             for pet in message.components[0].children[0].options:
                 await self.bot.send("withdraw", amount="40k")
                 await message.components[0].children[0].choose(pet)
@@ -31,9 +32,8 @@ class Pets(commands.Cog):
                 embed = message.embeds[0].to_dict()
                 for count, i in enumerate(embed["fields"]):
                     percentage = 100
-                    match = re.search(r"\((\d{1,3})%\)", i["value"])
-                    if match:
-                        percentage = int(match.group(1))
+                    if match := re.search(r"\((\d{1,3})%\)", i["value"]):
+                        percentage = int(match[1])
                     while percentage < 90:
                         await self.bot.click(message, 1, count)
                         if count == 2:
@@ -43,16 +43,16 @@ class Pets(commands.Cog):
                             break
                         await asyncio.sleep(0.5)
                         embed = message.embeds[0].to_dict()
-                        match = re.search(
-                            r"\((\d{1,3})%\)", embed["fields"][count]["value"]
+                        percentage = (
+                            int(match.group(1))
+                            if (
+                                match := re.search(
+                                    r"\((\d{1,3})%\)",
+                                    embed["fields"][count]["value"],
+                                )
+                            )
+                            else 100
                         )
-                        if match:
-                            percentage = int(match.group(1))
-                        else:
-                            percentage = 100
-        except AttributeError:
-            pass
-
         self.bot.last_ran = {
             k: v - 100 if v != float("inf") else 0 for k, v in self.bot.last_ran.items()
         }

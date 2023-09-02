@@ -1,4 +1,5 @@
 import asyncio
+import contextlib
 import ctypes
 import io
 import json
@@ -11,27 +12,33 @@ import tempfile
 import threading
 from collections import OrderedDict
 
+# noinspection PyUnresolvedReferences
 import cv2
 import discord.errors
+
+# noinspection PyUnresolvedReferences
 import onnxruntime
 import requests
+
+# noinspection PyUnresolvedReferences
 import unidecode
 from discord.ext import commands, tasks
 from PIL import Image, ImageDraw
 from PyQt5.QtCore import pyqtSignal
+
+# noinspection PyUnresolvedReferences
 from PyQt5.QtGui import QColor, QFontDatabase, QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from qasync import QEventLoop, asyncSlot
 
+# noinspection PyUnresolvedReferences
 import resources.icons
 from resources.interface import *
 from resources.load_account import load_account
 from resources.updater import *
 
-try:
+with contextlib.suppress(AttributeError):
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("dankmemergrinder")
-except AttributeError:
-    pass
 
 commands_dict = {
     "trivia": "trivia",
@@ -56,7 +63,6 @@ config_example = {
     "channel_id": "",
     "discord_token": "",
     "offline": False,
-    "auto_vote": False,
     "alerts": False,
     "autobuy": {
         "lifesavers": {"state": True, "amount": 5},
@@ -333,10 +339,9 @@ class UpdaterWindow(QMainWindow):
                 subprocess.Popen(temp_file)
                 sys.exit(os._exit(0))
             case "Linux":
-                if platform.machine() == "aarch64":
-                    arch = "Linux-arm64"
-                else:
-                    arch = "Linux-amd64"
+                arch = (
+                    "Linux-arm64" if platform.machine() == "aarch64" else "Linux-amd64"
+                )
             case "Darwin":
                 arch = "Darwin-amd64"
         r = requests.get(

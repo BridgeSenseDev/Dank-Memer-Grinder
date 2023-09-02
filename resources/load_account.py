@@ -449,14 +449,6 @@ def load_account(self, account_id, config_example):
     setattr(self.ui, f"offline_checkbox_{account_id}", offline_checkbox)
 
     self.vertical_layout_15.addWidget(offline_checkbox)
-
-    auto_vote_checkbox = QtWidgets.QCheckBox(toggles_left_frame_2)
-    auto_vote_checkbox.setFont(create_font(15, True))
-    auto_vote_checkbox.setCursor(QtGui.QCursor(Qt.PointingHandCursor))
-    auto_vote_checkbox.setObjectName(f"auto_vote_checkbox_{account_id}")
-    setattr(self.ui, f"auto_vote_checkbox_{account_id}", auto_vote_checkbox)
-
-    self.vertical_layout_15.addWidget(auto_vote_checkbox)
     self.vertical_layout_10.addWidget(toggles_left_frame_2, 0, Qt.AlignHCenter)
     self.horizontal_layout_6.addWidget(toggles_left_frame)
 
@@ -1218,7 +1210,6 @@ def load_account(self, account_id, config_example):
     for i in ["space", "west", "brazil", "vacation"]:
         adventure_box.addItem(i)
     offline_checkbox.setText("Appear Offline")
-    auto_vote_checkbox.setText("Auto Vote")
     alerts_checkbox.setText("Read Alerts")
     commands_label.setText("Commands")
 
@@ -1287,7 +1278,6 @@ def load_account(self, account_id, config_example):
                 with open("config.json", "w") as file:
                     json.dump(config_dict, file, ensure_ascii=False, indent=4)
             offline_checkbox.setChecked(config_dict[account_id]["offline"])
-            auto_vote_checkbox.setChecked(config_dict[account_id]["auto_vote"])
             alerts_checkbox.setChecked(config_dict[account_id]["alerts"])
 
             for command in commands:
@@ -1438,12 +1428,6 @@ def load_account(self, account_id, config_example):
         lambda checked, clicked_account_id=account_id: self.settings(
             "offline",
             getattr(self.ui, f"offline_checkbox_{clicked_account_id}").isChecked(),
-        )
-    )
-    auto_vote_checkbox.clicked.connect(
-        lambda checked, clicked_account_id=account_id: self.settings(
-            "auto_vote",
-            getattr(self.ui, f"auto_vote_checkbox_{clicked_account_id}").isChecked(),
         )
     )
     alerts_checkbox.clicked.connect(

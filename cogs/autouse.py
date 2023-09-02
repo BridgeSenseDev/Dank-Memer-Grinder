@@ -1,5 +1,5 @@
 import asyncio
-import re
+import contextlib
 import time
 
 from discord.ext import commands, tasks
@@ -63,34 +63,33 @@ class Autouse(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         if (
-            message.guild is None
-            and message.author.id == 270904126974590976
-            and self.bot.state is True
+            message.guild is not None
+            or message.author.id != 270904126974590976
+            or self.bot.state is not True
         ):
-            for embed in message.embeds:
-                embed = embed.to_dict()
-                # Buy lifesavers
-                try:
-                    if embed["title"] == "Item Expiration":
-                        for autouse in self.bot.config_dict["autouse"]:
-                            if (
-                                autouse.replace("_", " ")
-                                in embed["description"].lower()
-                                and self.bot.config_dict["autouse"][autouse]["state"]
-                            ):
-                                channel = await message.author.create_dm()
-                                await self.bot.send(
-                                    "use",
-                                    channel,
-                                    item=autouse.replace("_", " ").title(),
-                                )
-                                self.bot.log(
-                                    f"Used {autouse.replace('_', '' '').title()}",
-                                    "yellow",
-                                )
-                                return
-                except KeyError:
-                    pass
+            return
+
+        for embed in message.embeds:
+            embed = embed.to_dict()
+
+            with contextlib.suppress(KeyError):
+                if embed["title"] == "Item Expiration":
+                    for autouse in self.bot.config_dict["autouse"]:
+                        if (
+                            autouse.replace("_", " ") in embed["description"].lower()
+                            and self.bot.config_dict["autouse"][autouse]["state"]
+                        ):
+                            channel = await message.author.create_dm()
+                            await self.bot.send(
+                                "use",
+                                channel,
+                                item=autouse.replace("_", " ").title(),
+                            )
+                            self.bot.log(
+                                f"Used {autouse.replace('_', '' '').title()}",
+                                "yellow",
+                            )
+                            return
 
 
 async def setup(bot):

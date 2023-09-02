@@ -1,4 +1,5 @@
 import asyncio
+import contextlib
 import json
 import random
 
@@ -26,7 +27,7 @@ class Stream(commands.Cog):
             return
 
         # Go live
-        try:
+        with contextlib.suppress(KeyError, IndexError):
             embed = message.embeds[0].to_dict()
             if embed["fields"][1]["name"] == "Last Live":
                 await self.bot.click(message, 0, 0)
@@ -36,18 +37,13 @@ class Stream(commands.Cog):
                 await self.bot.click(message, 1, 0)
                 await asyncio.sleep(0.7)
                 self.click_counter = 0
-        except (KeyError, IndexError):
-            pass
-
         # Read chat
-        try:
+        with contextlib.suppress(KeyError, IndexError):
             embed = message.embeds[0].to_dict()
             if embed["fields"][1]["name"] == "Live Since":
                 click_value = self.order[self.click_counter % len(self.order)]
                 await self.bot.click(message, 0, click_value)
                 self.click_counter += 1
-        except (KeyError, IndexError):
-            pass
 
 
 async def setup(bot):

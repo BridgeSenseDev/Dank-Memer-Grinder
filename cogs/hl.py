@@ -13,7 +13,7 @@ class Hl(commands.Cog):
             return
 
         embed = message.embeds[0].to_dict()
-        num = int((re.search("\*\*(.*?)\*\*", embed["description"]).group(1)).title())
+        num = int(re.search(r"\*\*(.*?)\*\*", embed["description"])[1].title())
         if num >= 50:
             await self.bot.click(message, 0, 0)
         else:

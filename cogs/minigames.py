@@ -371,7 +371,7 @@ class Minigames(commands.Cog):
                     )
                     await self.bot.click(message, 0, 0)
                     self.bot.log(
-                        f"Solvedg F In The Chat Minigame",
+                        f"Solved F In The Chat Minigame",
                         "green",
                     )
                     return
