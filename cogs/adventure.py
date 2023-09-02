@@ -38,7 +38,7 @@ class Adventure(commands.Cog):
                 return
         with contextlib.suppress(KeyError):
             embed = after.embeds[0].to_dict()
-            if "choose items you want to take with you" in embed["title"]:
+            if "choose items you want to" in embed["title"]:
                 await self.bot.click(after, 2, 0)
                 return
         with contextlib.suppress(KeyError):
