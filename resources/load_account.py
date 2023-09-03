@@ -1188,7 +1188,7 @@ def load_account(self, account_id, config_example):
     self.ui.commands_btn.setText("Commands")
     self.ui.auto_buy_btn.setText("Auto Buy")
     self.ui.auto_use_btn.setText("Auto Use")
-    self.ui.home_btn.setStyleSheet("background-color: #5865f2;")
+
     home_label.setText("Home")
     output_text.setHtml(
         '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN"'

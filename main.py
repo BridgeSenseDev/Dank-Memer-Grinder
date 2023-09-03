@@ -660,6 +660,7 @@ class MainWindow(QMainWindow):
                     json.dump(config_dict, file, ensure_ascii=False, indent=4)
                 continue
             load_account(self, str(account_id), config_example)
+            self.ui.home_btn.setStyleSheet("background-color: #5865f2;")
         # noinspection PyArgumentList
         sys.stdout = Stream(new_text=self.on_update_text)
         # noinspection PyArgumentList
@@ -768,7 +769,8 @@ class MainWindow(QMainWindow):
             self.ui, f"main_menu_widget_{self.account_id}"
         ).currentWidget()
         await self.sidebar(
-            getattr(self.ui, f"{current_widget.objectName()[:-9]}_btn"), current_widget
+            getattr(self.ui, f"{current_widget.objectName().rsplit('_', 2)[0]}_btn"),
+            current_widget,
         )
 
     @asyncSlot()
