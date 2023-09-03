@@ -1350,7 +1350,7 @@ def load_account(self, account_id, config_example):
         )
         getattr(self.ui, f"{button}_spinbox_{account_id}").valueChanged.connect(
             lambda checked, clicked_account_id=account_id, clicked_button=button: self.commands(
-                button,
+                clicked_button,
                 {
                     "delay": getattr(
                         self.ui, f"{clicked_button}_spinbox_{clicked_account_id}"
