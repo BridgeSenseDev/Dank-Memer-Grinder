@@ -153,7 +153,7 @@ global_config_example = {
     "min_click_delay": 400,
     "max_click_delay": 600,
     "min_commands_delay": 2500,
-    "autoheist": []
+    "autoheist": [],
     "adventure": {
         "space": {
             "A friendly alien approached you slowly. What do you do?": "Attack",
