@@ -26,10 +26,9 @@ class AutoHeist(commands.Cog):
                 embed = message.embeds[0].to_dict()
                 if (
                     " is starting a bank robbery" in embed["title"]
-                  #  and str(self.bot.user) not in embed["title"]
+                    and str(self.bot.user) not in embed["title"]
                     and not message.components[0].children[0].disabled
                 ):
-                    self.bot.log("k", "green")
                     await asyncio.sleep(random.uniform(0.6, 1.2))
                     await self.bot.click(message, 0, 0)
                     self.bot.log(
