@@ -19,7 +19,7 @@ multidict==6.0.4
 numpy==1.25.2
 onnxruntime==1.15.1
 opencv-python==4.8.0.74
-orjson==3.9.2
+orjson==3.9.5
 packaging==23.1
 Pillow==10.0.0
 protobuf==4.23.4
