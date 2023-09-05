@@ -1,6 +1,7 @@
 import asyncio
 import contextlib
 import random
+import re
 
 from discord.ext import commands
 
@@ -35,6 +36,16 @@ class AutoHeist(commands.Cog):
                         f"Joined heist in {message.channel.guild.name}", "green"
                     )
                     return
+                elif "bankrob result" in embed["title"]:
+                    if "#4caf50" in str(embed.colour):
+                        self.findint = re.findall(r'\d+', embed.description.splitlines()[0])
+                        self.bot.log(f"{self.user.name} earned ⏣{self.findint} joining heist", "green")
+                        return
+                    else:
+                        self.findint = re.findall(r'\d+', embed.description.splitlines()[0])
+                        self.bot.log(f"{self.user.name} lost ⏣{self.findint} joining heist", "red")
+                        return
+                    
 
 
 async def setup(bot):
