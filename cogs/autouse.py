@@ -26,11 +26,8 @@ class Autouse(commands.Cog):
                     self.bot.config_dict["autouse"]["state"]
                     and self.bot.config_dict["autouse"][autouse]["state"]
                 ):
-                    user = await self.bot.fetch_user(270904126974590976)
-                    channel = await user.create_dm()
                     await self.bot.send(
                         "use",
-                        channel,
                         item=autouse.replace("_", " ").title(),
                     )
                     self.last_ran[autouse] = time.time()
@@ -50,11 +47,8 @@ class Autouse(commands.Cog):
                 await asyncio.sleep(5)
                 continue
             self.last_ran[autouse] = time.time()
-            user = await self.bot.fetch_user(270904126974590976)
-            channel = await user.create_dm()
             await self.bot.send(
                 "use",
-                channel,
                 item=autouse.replace("_", " ").title(),
             )
             self.bot.log(f"Used {autouse.replace('_', '' '').title()}", "yellow")
@@ -79,10 +73,8 @@ class Autouse(commands.Cog):
                             autouse.replace("_", " ") in embed["description"].lower()
                             and self.bot.config_dict["autouse"][autouse]["state"]
                         ):
-                            channel = await message.author.create_dm()
                             await self.bot.send(
                                 "use",
-                                channel,
                                 item=autouse.replace("_", " ").title(),
                             )
                             self.bot.log(

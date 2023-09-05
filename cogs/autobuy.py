@@ -58,10 +58,8 @@ class Autobuy(commands.Cog):
                             self.bot.config_dict["autobuy"]["lifesavers"]["amount"]
                         )
                         if remaining < required:
-                            channel = await message.author.create_dm()
                             await self.bot.send(
                                 "withdraw",
-                                channel,
                                 amount=str((required - remaining) * 200000),
                             )
                             await self.shop_buy("saver", required - remaining)
