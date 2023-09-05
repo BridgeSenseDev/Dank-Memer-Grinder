@@ -234,13 +234,13 @@ class Captcha(commands.Cog):
                     ]
                 )
 
-                await self.bot.click(message, 0, min_score_idx)
-
                 self.bot.log(
                     f"Clicked best matching emoji {min_score_idx + 1} with"
                     f" similarity {average_dissimilarity_scores[min_score_idx, 0]}",
                     "green",
                 )
+
+                await self.bot.click(message, 0, min_score_idx)
 
 
 async def setup(bot):

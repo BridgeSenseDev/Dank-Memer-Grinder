@@ -1,4 +1,5 @@
 import asyncio
+import contextlib
 import re
 
 from discord.ext import commands
@@ -41,15 +42,29 @@ class Minigames(commands.Cog):
         ):
             return
 
+        for embed in before.embeds:
+            embed = embed.to_dict()
+            after_embed = after.embeds[0].to_dict()
+
+            # Moleman
+            with contextlib.suppress(KeyError):
+                if (
+                    "Dodge the Worms!" in embed["description"]
+                    and "Mole Man" in after_embed["description"]
+                ):
+                    self.bot.log("Solved Dodge Worms Minigame", "green")
+                elif (
+                    "Dodge the Worms!" in embed["description"]
+                    and "Dodge the Worms!" not in after_embed["description"]
+                ):
+                    self.bot.log("Failed Dodge Worms Minigame", "red")
+
         for embed in after.embeds:
             embed = embed.to_dict()
+
             # MoleMan
-            try:
+            with contextlib.suppress(KeyError):
                 if "Dodge the Worms!" in embed["description"]:
-                    self.bot.log(
-                        f"Solving Dodge Worms Minigame",
-                        "yellow",
-                    )
                     moleman = embed["description"].splitlines()[5]
                     for i in reversed(embed["description"].splitlines()):
                         if i not in worms_loc:
@@ -77,149 +92,107 @@ class Minigames(commands.Cog):
                                 if moleman_loc[moleman] == 1:
                                     await self.bot.click(after, 0, 1)
                                 break
-                    self.bot.log(
-                        f"Solved Dodge Worms Minigame",
-                        "green",
-                    )
                     return
-            except KeyError:
-                pass
-
             # Football
-            try:
+            with contextlib.suppress(KeyError):
                 if "Hit the ball!" in embed["description"]:
-                    self.bot.log(
-                        f"Solving Football Minigame",
-                        "yellow",
-                    )
-                    if ":levitate:" == embed["description"].splitlines()[2]:
+                    self.bot.log("Solving Football Minigame", "yellow")
+                    if embed["description"].splitlines()[2] == ":levitate:":
                         await self.bot.click(after, 0, 2, [0, 0])
                     elif (
-                        "<:emptyspace:827651824739156030>:levitate:"
-                        == embed["description"].splitlines()[2]
+                        embed["description"].splitlines()[2]
+                        == "<:emptyspace:827651824739156030>:levitate:"
                     ):
                         await self.bot.click(after, 0, 0, [0, 0])
                     if (
-                        "<:emptyspace:827651824739156030>"
+                        embed["description"].splitlines()[2]
+                        == "<:emptyspace:827651824739156030>"
                         "<:emptyspace:827651824739156030>:levitate:"
-                        == embed["description"].splitlines()[2]
                     ):
                         await self.bot.click(after, 0, 1, [0, 0])
-                    self.bot.log(
-                        f"Solved Football Minigame",
-                        "green",
-                    )
+                    self.bot.log("Solved Football Minigame", "green")
                     return
-            except KeyError:
-                pass
-
             # Basketball
-            try:
+            with contextlib.suppress(KeyError):
                 if "Dunk the ball!" in embed["description"]:
-                    self.bot.log(
-                        f"Solving Basketball Minigame",
-                        "yellow",
-                    )
+                    self.bot.log("Solving Basketball Minigame", "yellow")
                     if (
-                        "<:emptyspace:827651824739156030>"
+                        embed["description"].splitlines()[2]
+                        == "<:emptyspace:827651824739156030>"
                         "<:emptyspace:827651824739156030>:basketball:"
-                        == embed["description"].splitlines()[2]
                     ):
                         await self.bot.click(after, 0, 2, [0, 0])
                     elif (
-                        "<:emptyspace:827651824739156030>:basketball:"
-                        == embed["description"].splitlines()[2]
+                        embed["description"].splitlines()[2]
+                        == "<:emptyspace:827651824739156030>:basketball:"
                     ):
                         await self.bot.click(after, 0, 1)
-                    elif ":basketball:" == embed["description"].splitlines()[2]:
+                    elif embed["description"].splitlines()[2] == ":basketball:":
                         await self.bot.click(after, 0, 0, [0, 0])
-                    self.bot.log(
-                        f"Solved Basketball Minigame",
-                        "green",
-                    )
+                    self.bot.log("Solved Basketball Minigame", "green")
                     return
-            except KeyError:
-                pass
-
             # Dragon
-            try:
+            with contextlib.suppress(KeyError):
                 if "Dodge the Fireball" in embed["description"]:
-                    self.bot.log(
-                        f"Solving Dragon Minigame",
-                        "yellow",
-                    )
+                    self.bot.log("Solving Dragon Minigame", "yellow")
                     if (
-                        "<:emptyspace:827651824739156030>"
+                        embed["description"].splitlines()[2]
+                        == "<:emptyspace:827651824739156030>"
                         "<:emptyspace:827651824739156030><:FireBall:883714770748964864>"
-                        == embed["description"].splitlines()[2]
                     ):
                         await self.bot.click(after, 0, 1)
                     elif (
-                        "<:emptyspace:827651824739156030><:FireBall:883714770748964864>"
-                        == embed["description"].splitlines()[2]
+                        embed["description"].splitlines()[2]
+                        == "<:emptyspace:827651824739156030><:FireBall:883714770748964864>"
                     ):
                         await self.bot.click(after, 0, 0)
                     elif (
-                        "<:FireBall:883714770748964864>"
-                        == embed["description"].splitlines()[2]
+                        embed["description"].splitlines()[2]
+                        == "<:FireBall:883714770748964864>"
                     ):
                         await self.bot.click(after, 0, 2)
-                    self.bot.log(
-                        f"Solved Dragon Minigame",
-                        "green",
-                    )
+                    self.bot.log("Solved Dragon Minigame", "green")
                     return
-            except KeyError:
-                pass
-
             # Catch the fish
-            try:
+            with contextlib.suppress(KeyError):
                 if "Catch the fish!" in embed["description"]:
-                    self.bot.log(
-                        f"Solving Fish Minigame",
-                        "yellow",
-                    )
+                    self.bot.log("Solving Fish Minigame", "yellow")
                     if (
-                        "<:emptyspace:827651824739156030>"
+                        embed["description"].splitlines()[1]
+                        == "<:emptyspace:827651824739156030>"
                         "<:emptyspace:827651824739156030>"
                         "<a:LegendaryFish:971430841211322408>"
-                        == embed["description"].splitlines()[1]
                     ):
                         await self.bot.click(after, 0, 2)
                     elif (
-                        "<:emptyspace:827651824739156030>"
+                        embed["description"].splitlines()[1]
+                        == "<:emptyspace:827651824739156030>"
                         "<a:LegendaryFish:971430841211322408>"
-                        == embed["description"].splitlines()[1]
                     ):
                         await self.bot.click(after, 0, 1)
                     elif (
-                        "<a:LegendaryFish:971430841211322408>"
-                        == embed["description"].splitlines()[1]
+                        embed["description"].splitlines()[1]
+                        == "<a:LegendaryFish:971430841211322408>"
                     ):
                         await self.bot.click(after, 0, 0)
                     if (
-                        "<:emptyspace:827651824739156030>"
+                        embed["description"].splitlines()[1]
+                        == "<:emptyspace:827651824739156030>"
                         "<:emptyspace:827651824739156030><:Kraken:860228238956429313>"
-                        == embed["description"].splitlines()[1]
                     ):
                         await self.bot.click(after, 0, 2)
                     elif (
-                        "<:emptyspace:827651824739156030><:Kraken:860228238956429313>"
-                        == embed["description"].splitlines()[1]
+                        embed["description"].splitlines()[1]
+                        == "<:emptyspace:827651824739156030><:Kraken:860228238956429313>"
                     ):
                         await self.bot.click(after, 0, 1)
                     elif (
-                        "<:Kraken:860228238956429313>"
-                        == embed["description"].splitlines()[1]
+                        embed["description"].splitlines()[1]
+                        == "<:Kraken:860228238956429313>"
                     ):
                         await self.bot.click(after, 0, 0)
-                    self.bot.log(
-                        f"Solved Fish Minigame",
-                        "green",
-                    )
+                    self.bot.log("Solved Fish Minigame", "green")
                     return
-            except KeyError:
-                pass
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -232,16 +205,17 @@ class Minigames(commands.Cog):
 
         for embed in message.embeds:
             embed = embed.to_dict()
+            with contextlib.suppress(KeyError):
+                if "Dodge the Worms!" in embed["description"]:
+                    self.bot.log("Solving Dodge Worms Minigame", "yellow")
+
             # Color match
-            try:
+            with contextlib.suppress(KeyError):
                 if (
                     "Look at each color next to the words closely!"
                     in embed["description"]
                 ):
-                    self.bot.log(
-                        f"Solving Color Match Minigame",
-                        "yellow",
-                    )
+                    self.bot.log("Solving Color Match Minigame", "yellow")
                     self.bot.last_ran = {
                         k: v + 100 if v != 0 else float("inf")
                         for k, v in self.bot.last_ran.items()
@@ -251,10 +225,10 @@ class Minigames(commands.Cog):
                         match_word = re.search("`(.+?)`", line)
                         match_color = re.search(":([^:]+):", line)
                         if match_word and match_color:
-                            options[match_word.group(1)] = match_color.group(1)
+                            options[match_word[1]] = match_color[1]
                     await asyncio.sleep(6)
                     embed = message.embeds[0].to_dict()
-                    word = re.search("`(.+?)`", embed["description"]).group(1)
+                    word = re.search("`(.+?)`", embed["description"])[1]
                     color = options[word]
                     for count, button in enumerate(message.components[0].children):
                         if button.label == color:
@@ -263,21 +237,13 @@ class Minigames(commands.Cog):
                         k: v - 100 if v != float("inf") else 0
                         for k, v in self.bot.last_ran.items()
                     }
-                    self.bot.log(
-                        f"Solved Color Match Minigame",
-                        "green",
-                    )
+                    self.bot.log("Solved Color Match Minigame", "green")
                     return
-            except KeyError:
-                pass
 
             # Emoji
-            try:
+            with contextlib.suppress(KeyError):
                 if "Look at the emoji closely!" in embed["description"]:
-                    self.bot.log(
-                        f"Solving Emoji Minigame",
-                        "yellow",
-                    )
+                    self.bot.log("Solving Emoji Minigame", "yellow")
                     self.bot.last_ran = {
                         k: v + 100 if v != 0 else float("inf")
                         for k, v in self.bot.last_ran.items()
@@ -292,24 +258,15 @@ class Minigames(commands.Cog):
                         k: v - 100 if v != float("inf") else 0
                         for k, v in self.bot.last_ran.items()
                     }
-                    self.bot.log(
-                        f"Solved Emoji Minigame",
-                        "green",
-                    )
+                    self.bot.log("Solved Emoji Minigame", "green")
                     return
-            except KeyError:
-                pass
-
             # Repeat order
-            try:
+            with contextlib.suppress(KeyError):
                 if any(
                     i in embed["description"]
                     for i in ["Repeat Order", "word order.", "words order"]
                 ):
-                    self.bot.log(
-                        f"Solving Repeat Order Minigame",
-                        "yellow",
-                    )
+                    self.bot.log("Solving Repeat Order Minigame", "yellow")
                     self.bot.last_ran = {
                         k: v + 100 if v != 0 else float("inf")
                         for k, v in self.bot.last_ran.items()
@@ -329,21 +286,12 @@ class Minigames(commands.Cog):
                         k: v - 100 if v != float("inf") else 0
                         for k, v in self.bot.last_ran.items()
                     }
-                    self.bot.log(
-                        f"Solved Repeat Order Minigame",
-                        "green",
-                    )
+                    self.bot.log("Solved Repeat Order Minigame", "green")
                     return
-            except KeyError:
-                pass
-
             # Attack boss
-            try:
+            with contextlib.suppress(KeyError):
                 if "Attack the boss by clicking" in embed["description"]:
-                    self.bot.log(
-                        f"Solving Attack Boss Minigame",
-                        "yellow",
-                    )
+                    self.bot.log("Solving Attack Boss Minigame", "yellow")
                     self.bot.last_ran = {
                         k: v + 100 if v != 0 else float("inf")
                         for k, v in self.bot.last_ran.items()
@@ -354,45 +302,26 @@ class Minigames(commands.Cog):
                         k: v - 100 if v != float("inf") else 0
                         for k, v in self.bot.last_ran.items()
                     }
-                    self.bot.log(
-                        f"Solved Attack Boss Minigame",
-                        "green",
-                    )
+                    self.bot.log("Solved Attack Boss Minigame", "green")
                     return
-            except KeyError:
-                pass
-
             # F in the chat
-            try:
+            with contextlib.suppress(KeyError):
                 if embed["description"] == "F":
-                    self.bot.log(
-                        f"Solving F In The Chat Minigame",
-                        "yellow",
-                    )
+                    self.bot.log("Solving F In The Chat Minigame", "yellow")
                     await self.bot.click(message, 0, 0)
-                    self.bot.log(
-                        f"Solved F In The Chat Minigame",
-                        "green",
-                    )
+                    self.bot.log("Solved F In The Chat Minigame", "green")
                     return
-            except KeyError:
-                pass
-
             # HighLow
-            try:
+            with contextlib.suppress(KeyError):
                 if "I just chose a secret number" in embed["description"]:
                     num = int(
-                        (
-                            re.search("\*\*(.*?)\*\*", embed["description"]).group(1)
-                        ).title()
+                        re.search("\*\*(.*?)\*\*", embed["description"])[1].title()
                     )
                     if num >= 50:
                         await self.bot.click(message, 0, 0)
                     else:
                         await self.bot.click(message, 0, 2)
                     return
-            except KeyError:
-                pass
 
 
 async def setup(bot):

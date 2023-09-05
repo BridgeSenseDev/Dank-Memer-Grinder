@@ -414,18 +414,28 @@ async def start_bot(token, account_id):
                 ] != str(self.channel_id):
                     sys.exit()
 
-        @staticmethod
-        async def click(message, component, children, delay=None):
+        async def click(self, message, component, children, delay=None):
             min_delay, max_delay = delay or (
                 config_dict["global"]["min_click_delay"],
                 config_dict["global"]["max_click_delay"],
             )
             await asyncio.sleep(random.randint(min_delay, max_delay) / 1000)
 
-            try:
-                await message.components[component].children[children].click()
-            except (discord.errors.HTTPException, discord.errors.InvalidData):
-                pass
+            retries = 0
+            while retries <= 3:
+                try:
+                    click = (
+                        await message.components[component].children[children].click()
+                    )
+                    if click.successful:
+                        return True
+                    else:
+                        retries += 1
+                except (discord.errors.HTTPException, discord.errors.InvalidData):
+                    retries += 1
+
+            self.log("Error: Failed to click button after 3 retries", "red")
+            return False
 
         @staticmethod
         async def select(message, component, children, option, delay=None):

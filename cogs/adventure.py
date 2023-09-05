@@ -36,11 +36,13 @@ class Adventure(commands.Cog):
                     for k, v in self.bot.last_ran.items()
                 }
                 return
+
         with contextlib.suppress(KeyError):
             embed = after.embeds[0].to_dict()
             if "choose items you want to" in embed["title"]:
                 await self.bot.click(after, 2, 0)
                 return
+
         with contextlib.suppress(KeyError):
             embed = after.embeds[0].to_dict()
             if "You can start another adventure at" in embed["description"]:
@@ -52,6 +54,7 @@ class Adventure(commands.Cog):
                     if not button.disabled and button.emoji.id == 1067941108568567818:
                         await self.bot.click(after, i, 1)
                         return
+
             if "Catch one of em!" in embed["description"]:
                 await self.bot.click(after, 0, 2)
                 await self.bot.click(after, 1, 1)
@@ -78,11 +81,11 @@ class Adventure(commands.Cog):
                     if i.value == self.adventure:
                         await self.bot.select(message, 0, 0, count)
                         if not message.components[1].children[0].disabled:
-                            await self.bot.click(message, 1, 0)
                             self.bot.last_ran = {
                                 k: v + 100 if v != 0 else float("inf")
                                 for k, v in self.bot.last_ran.items()
                             }
+                            await self.bot.click(message, 1, 0)
 
 
 async def setup(bot):
