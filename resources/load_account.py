@@ -1408,7 +1408,7 @@ def load_account(self, account_id, config_example):
     auto_use_checkbox.clicked.connect(
         lambda: self.autouse(
             "state",
-            autouse_checkbox.isChecked(),
+            auto_use_checkbox.isChecked(),
         )
     )
     search_input.textChanged.connect(

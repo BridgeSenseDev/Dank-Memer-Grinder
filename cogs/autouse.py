@@ -11,9 +11,9 @@ class Autouse(commands.Cog):
         self.last_ran = {}
         self.autouse.start()
 
-    @tasks.loop(seconds=0.05)
+    @tasks.loop(seconds=1)
     async def autouse(self):
-        if not self.bot.state:
+        if not self.bot.state or not self.bot.config_dict["autouse"]["state"]:
             await asyncio.sleep(1)
             return
 
@@ -22,10 +22,7 @@ class Autouse(commands.Cog):
                 continue
 
             if autouse not in self.last_ran:
-                if (
-                    self.bot.config_dict["autouse"]["state"]
-                    and self.bot.config_dict["autouse"][autouse]["state"]
-                ):
+                if self.bot.config_dict["autouse"][autouse]["state"]:
                     await self.bot.send(
                         "use",
                         item=autouse.replace("_", " ").title(),
