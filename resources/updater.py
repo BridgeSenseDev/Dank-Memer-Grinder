@@ -1,5 +1,5 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import Qt
+from PyQt6 import QtCore, QtGui, QtWidgets
+from PyQt6.QtCore import Qt
 
 
 def create_font(font_size):
@@ -63,7 +63,7 @@ class UiUpdater(object):
         self.vertical_layout.setObjectName("vertical_layout")
         self.header_frame = QtWidgets.QFrame(self.central_widget)
         size_policy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum
+            QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Minimum
         )
         size_policy.setHorizontalStretch(0)
         size_policy.setVerticalStretch(0)
@@ -71,14 +71,15 @@ class UiUpdater(object):
             self.header_frame.sizePolicy().hasHeightForWidth()
         )
         self.header_frame.setSizePolicy(size_policy)
-        self.header_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.header_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.header_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.header_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.header_frame.setObjectName("header_frame")
         self.horizontal_layout = QtWidgets.QHBoxLayout(self.header_frame)
         self.horizontal_layout.setObjectName("horizontal_layout")
         self.label = QtWidgets.QLabel(self.header_frame)
         size_policy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
+            QtWidgets.QSizePolicy.Policy.Preferred,
+            QtWidgets.QSizePolicy.Policy.Preferred,
         )
         size_policy.setHorizontalStretch(0)
         size_policy.setVerticalStretch(0)
@@ -91,20 +92,21 @@ class UiUpdater(object):
             "    border-radius: 20px;\n"
             "}"
         )
-        self.label.setAlignment(Qt.AlignCenter)
+        self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label.setObjectName("label")
         self.horizontal_layout.addWidget(self.label)
         self.vertical_layout.addWidget(self.header_frame)
         self.main_frame = QtWidgets.QFrame(self.central_widget)
         size_policy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding
+            QtWidgets.QSizePolicy.Policy.Preferred,
+            QtWidgets.QSizePolicy.Policy.Expanding,
         )
         size_policy.setHorizontalStretch(0)
         size_policy.setVerticalStretch(0)
         size_policy.setHeightForWidth(self.main_frame.sizePolicy().hasHeightForWidth())
         self.main_frame.setSizePolicy(size_policy)
-        self.main_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.main_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.main_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.main_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.main_frame.setObjectName("main_frame")
         self.horizontal_layout_2 = QtWidgets.QHBoxLayout(self.main_frame)
         self.horizontal_layout_2.setContentsMargins(0, 0, 0, 0)
@@ -125,12 +127,12 @@ class UiUpdater(object):
         self.label_2.setText("")
         self.label_2.setPixmap(QtGui.QPixmap(":/icons/icon.ico"))
         self.label_2.setScaledContents(True)
-        self.label_2.setAlignment(Qt.AlignCenter)
+        self.label_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label_2.setObjectName("label_2")
         self.vertical_layout_2.addWidget(self.label_2)
         self.buttons_frame = QtWidgets.QFrame(self.side_menu_widget)
-        self.buttons_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.buttons_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.buttons_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.buttons_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.buttons_frame.setObjectName("buttons_frame")
         self.vertical_layout_3 = QtWidgets.QVBoxLayout(self.buttons_frame)
         self.vertical_layout_3.setContentsMargins(0, 0, 0, 0)
@@ -138,7 +140,7 @@ class UiUpdater(object):
         self.update_btn = QtWidgets.QPushButton(self.buttons_frame)
         self.update_btn.setEnabled(True)
         size_policy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed
+            QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed
         )
         size_policy.setHorizontalStretch(0)
         size_policy.setVerticalStretch(0)
@@ -147,14 +149,14 @@ class UiUpdater(object):
         self.update_btn.setMinimumSize(QtCore.QSize(100, 45))
         self.update_btn.setMaximumSize(QtCore.QSize(100, 45))
         self.update_btn.setFont(create_font(12))
-        self.update_btn.setCursor(QtGui.QCursor(Qt.PointingHandCursor))
+        self.update_btn.setCursor(QtGui.QCursor(Qt.CursorShape.PointingHandCursor))
         self.update_btn.setStyleSheet("background-color : #2d7d46")
         self.update_btn.setObjectName("update_btn")
         self.vertical_layout_3.addWidget(self.update_btn)
         self.skip_btn = QtWidgets.QPushButton(self.buttons_frame)
         self.skip_btn.setEnabled(True)
         size_policy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed
+            QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed
         )
         size_policy.setHorizontalStretch(0)
         size_policy.setVerticalStretch(0)
@@ -163,16 +165,18 @@ class UiUpdater(object):
         self.skip_btn.setMinimumSize(QtCore.QSize(100, 45))
         self.skip_btn.setMaximumSize(QtCore.QSize(100, 45))
         self.skip_btn.setFont(create_font(12))
-        self.skip_btn.setCursor(QtGui.QCursor(Qt.PointingHandCursor))
+        self.skip_btn.setCursor(QtGui.QCursor(Qt.CursorShape.PointingHandCursor))
         self.skip_btn.setStyleSheet("background-color : #d83c3e")
         self.skip_btn.setObjectName("skip_btn")
         self.vertical_layout_3.addWidget(self.skip_btn)
-        self.vertical_layout_2.addWidget(self.buttons_frame, 0, Qt.AlignBottom)
+        self.vertical_layout_2.addWidget(
+            self.buttons_frame, 0, Qt.AlignmentFlag.AlignBottom
+        )
         self.horizontal_layout_2.addWidget(self.side_menu_widget)
         self.changelog_frame = QtWidgets.QFrame(self.main_frame)
         self.changelog_frame.setStyleSheet("")
-        self.changelog_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.changelog_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.changelog_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.changelog_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.changelog_frame.setObjectName("changelog_frame")
         self.horizontal_layout_3 = QtWidgets.QHBoxLayout(self.changelog_frame)
         self.horizontal_layout_3.setObjectName("horizontal_layout_3")
@@ -182,7 +186,9 @@ class UiUpdater(object):
         font.setPointSize(12)
         self.changelog_label.setFont(font)
         self.changelog_label.setText("")
-        self.changelog_label.setAlignment(Qt.AlignLeading | Qt.AlignLeft | Qt.AlignTop)
+        self.changelog_label.setAlignment(
+            Qt.AlignLeading | Qt.AlignLeft | Qt.AlignmentFlag.AlignTop
+        )
         self.changelog_label.setTextInteractionFlags(
             Qt.LinksAccessibleByMouse
             | Qt.TextSelectableByKeyboard

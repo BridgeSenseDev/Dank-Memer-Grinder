@@ -1,6 +1,6 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon
+from PyQt6 import QtCore, QtGui, QtWidgets
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QIcon
 
 
 def create_font(font_size):
@@ -173,7 +173,8 @@ class UiDankMemerGrinder(object):
         self.vertical_layout.setObjectName("vertical_layout")
         self.header_frame = QtWidgets.QFrame(self.central_widget)
         size_policy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+            QtWidgets.QSizePolicy.Policy.Expanding,
+            QtWidgets.QSizePolicy.Policy.Expanding,
         )
         size_policy.setHorizontalStretch(0)
         size_policy.setVerticalStretch(0)
@@ -189,8 +190,8 @@ class UiDankMemerGrinder(object):
             "    border-radius: 20px;\n"
             "}"
         )
-        self.header_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.header_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.header_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.header_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.header_frame.setObjectName("header_frame")
         self.horizontal_layout_3 = QtWidgets.QHBoxLayout(self.header_frame)
         self.horizontal_layout_3.setContentsMargins(6, 0, 6, 0)
@@ -213,7 +214,7 @@ class UiDankMemerGrinder(object):
         self.horizontal_layout_3.addWidget(self.scrollArea)
         self.add_account_frame = QtWidgets.QFrame(self.header_frame)
         size_policy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred
+            QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Preferred
         )
         size_policy.setHorizontalStretch(0)
         size_policy.setVerticalStretch(0)
@@ -221,15 +222,16 @@ class UiDankMemerGrinder(object):
             self.add_account_frame.sizePolicy().hasHeightForWidth()
         )
         self.add_account_frame.setSizePolicy(size_policy)
-        self.add_account_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.add_account_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.add_account_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.add_account_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.add_account_frame.setObjectName("add_account_frame")
         self.vertical_layout_85 = QtWidgets.QVBoxLayout(self.add_account_frame)
         self.vertical_layout_85.setContentsMargins(0, 0, 0, 0)
         self.vertical_layout_85.setObjectName("vertical_layout_85")
         self.add_account_btn = QtWidgets.QPushButton(self.add_account_frame)
         size_policy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+            QtWidgets.QSizePolicy.Policy.Expanding,
+            QtWidgets.QSizePolicy.Policy.Expanding,
         )
         size_policy.setHorizontalStretch(0)
         size_policy.setVerticalStretch(0)
@@ -237,18 +239,21 @@ class UiDankMemerGrinder(object):
             self.add_account_btn.sizePolicy().hasHeightForWidth()
         )
         self.add_account_btn.setSizePolicy(size_policy)
-        self.add_account_btn.setCursor(QtGui.QCursor(Qt.PointingHandCursor))
+        self.add_account_btn.setCursor(QtGui.QCursor(Qt.CursorShape.PointingHandCursor))
         self.add_account_btn.setStyleSheet("background-color : #00FFFFFF;")
         self.add_account_btn.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(":/icons/icons/plus.png"), QIcon.Active, QIcon.On)
+        icon1.addPixmap(
+            QtGui.QPixmap(":/icons/icons/plus.png"), QIcon.Mode.Active, QIcon.State.On
+        )
         self.add_account_btn.setIcon(icon1)
         self.add_account_btn.setIconSize(QtCore.QSize(25, 25))
         self.add_account_btn.setObjectName("add_account_btn")
         self.vertical_layout_85.addWidget(self.add_account_btn)
         self.minus_account_btn = QtWidgets.QPushButton(self.add_account_frame)
         size_policy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+            QtWidgets.QSizePolicy.Policy.Expanding,
+            QtWidgets.QSizePolicy.Policy.Expanding,
         )
         size_policy.setHorizontalStretch(0)
         size_policy.setVerticalStretch(0)
@@ -256,27 +261,30 @@ class UiDankMemerGrinder(object):
             self.minus_account_btn.sizePolicy().hasHeightForWidth()
         )
         self.minus_account_btn.setSizePolicy(size_policy)
-        self.minus_account_btn.setCursor(QtGui.QCursor(Qt.PointingHandCursor))
+        self.minus_account_btn.setCursor(
+            QtGui.QCursor(Qt.CursorShape.PointingHandCursor)
+        )
         self.minus_account_btn.setStyleSheet("background-color : #00FFFFFF;")
         self.minus_account_btn.setText("")
         icon2 = QtGui.QIcon()
         icon2.addPixmap(
-            QtGui.QPixmap(":/icons/icons/minus.png"), QIcon.Active, QIcon.On
+            QtGui.QPixmap(":/icons/icons/minus.png"), QIcon.Mode.Active, QIcon.State.On
         )
         icon2.addPixmap(
             QtGui.QPixmap(":/icons/icons/minus.svg"),
-            QIcon.Selected,
-            QIcon.Off,
+            QIcon.Mode.Selected,
+            QIcon.State.Off,
         )
         self.minus_account_btn.setIcon(icon2)
         self.minus_account_btn.setIconSize(QtCore.QSize(25, 25))
         self.minus_account_btn.setObjectName("minus_account_btn")
         self.vertical_layout_85.addWidget(self.minus_account_btn)
         self.horizontal_layout_3.addWidget(self.add_account_frame)
-        self.vertical_layout.addWidget(self.header_frame, 0, Qt.AlignTop)
+        self.vertical_layout.addWidget(self.header_frame, 0, Qt.AlignmentFlag.AlignTop)
         self.main_frame = QtWidgets.QFrame(self.central_widget)
         size_policy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+            QtWidgets.QSizePolicy.Policy.Expanding,
+            QtWidgets.QSizePolicy.Policy.Expanding,
         )
         size_policy.setHorizontalStretch(0)
         size_policy.setVerticalStretch(0)
@@ -284,8 +292,8 @@ class UiDankMemerGrinder(object):
         self.main_frame.setSizePolicy(size_policy)
         self.main_frame.setMinimumSize(QtCore.QSize(850, 0))
         self.main_frame.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        self.main_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.main_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.main_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.main_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.main_frame.setObjectName("main_frame")
         self.horizontal_layout = QtWidgets.QHBoxLayout(self.main_frame)
         self.horizontal_layout.setContentsMargins(0, 0, 0, 0)
@@ -306,8 +314,8 @@ class UiDankMemerGrinder(object):
         self.buttons = QtWidgets.QFrame(self.side_menu_widget)
         self.buttons.setMinimumSize(QtCore.QSize(150, 0))
         self.buttons.setMaximumSize(QtCore.QSize(150, 16777215))
-        self.buttons.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.buttons.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.buttons.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.buttons.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.buttons.setObjectName("buttons")
         self.vertical_layout_3 = QtWidgets.QVBoxLayout(self.buttons)
         self.vertical_layout_3.setContentsMargins(0, 0, 0, 0)
@@ -320,23 +328,23 @@ class UiDankMemerGrinder(object):
             getattr(self, f"{button}_btn").setMaximumSize(QtCore.QSize(16777215, 45))
             getattr(self, f"{button}_btn").setFont(create_font(12))
             getattr(self, f"{button}_btn").setCursor(
-                QtGui.QCursor(Qt.PointingHandCursor)
+                QtGui.QCursor(Qt.CursorShape.PointingHandCursor)
             )
             icon = QtGui.QIcon()
             icon.addPixmap(
                 QtGui.QPixmap(f":/icons/icons/{button}.png"),
-                QIcon.Normal,
-                QIcon.Off,
+                QIcon.Mode.Normal,
+                QIcon.State.Off,
             )
             getattr(self, f"{button}_btn").setIcon(icon)
             getattr(self, f"{button}_btn").setIconSize(QtCore.QSize(20, 20))
             getattr(self, f"{button}_btn").setObjectName(f"{button}_btn")
             self.vertical_layout_3.addWidget(getattr(self, f"{button}_btn"))
-        self.vertical_layout_2.addWidget(self.buttons, 0, Qt.AlignTop)
+        self.vertical_layout_2.addWidget(self.buttons, 0, Qt.AlignmentFlag.AlignTop)
         self.toggle = QtWidgets.QPushButton(self.side_menu_widget)
         self.toggle.setEnabled(True)
         size_policy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed
+            QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed
         )
         size_policy.setHorizontalStretch(0)
         size_policy.setVerticalStretch(0)
@@ -345,7 +353,7 @@ class UiDankMemerGrinder(object):
         self.toggle.setMinimumSize(QtCore.QSize(0, 45))
         self.toggle.setMaximumSize(QtCore.QSize(16777215, 45))
         self.toggle.setFont(create_font(12))
-        self.toggle.setCursor(QtGui.QCursor(Qt.PointingHandCursor))
+        self.toggle.setCursor(QtGui.QCursor(Qt.CursorShape.PointingHandCursor))
         self.toggle.setStyleSheet("background-color : #d83c3e")
         self.toggle.setObjectName("toggle")
         self.vertical_layout_2.addWidget(self.toggle)

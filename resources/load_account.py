@@ -1,9 +1,9 @@
 import json
 import math
 
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon
+from PyQt6 import QtCore, QtGui, QtWidgets
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QIcon
 
 
 def set_and_get_attr(obj, name, value):
@@ -33,7 +33,7 @@ def load_account(self, account_id, config_example):
         QtWidgets.QPushButton(self.ui.scrollAreaWidgetContents),
     )
     size_policy = QtWidgets.QSizePolicy(
-        QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed
+        QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed
     )
     size_policy.setHorizontalStretch(0)
     size_policy.setVerticalStretch(0)
@@ -42,12 +42,12 @@ def load_account(self, account_id, config_example):
     account_btn.setMinimumSize(QtCore.QSize(0, 45))
     account_btn.setMaximumSize(QtCore.QSize(150, 45))
     account_btn.setFont(create_font(12, True))
-    account_btn.setCursor(QtGui.QCursor(Qt.PointingHandCursor))
+    account_btn.setCursor(QtGui.QCursor(Qt.CursorShape.PointingHandCursor))
     icon = QtGui.QIcon()
     icon.addPixmap(
         QtGui.QPixmap(":/icons/icons/user.png"),
-        QIcon.Normal,
-        QIcon.Off,
+        QIcon.Mode.Normal,
+        QIcon.State.Off,
     )
     account_btn.setIcon(icon)
     account_btn.setIconSize(QtCore.QSize(22, 22))
@@ -67,14 +67,14 @@ def load_account(self, account_id, config_example):
         QtWidgets.QFrame(account_widget),
     )
     size_policy = QtWidgets.QSizePolicy(
-        QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred
+        QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Preferred
     )
     size_policy.setHorizontalStretch(0)
     size_policy.setVerticalStretch(0)
     size_policy.setHeightForWidth(main_menu_frame.sizePolicy().hasHeightForWidth())
     main_menu_frame.setSizePolicy(size_policy)
-    main_menu_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    main_menu_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    main_menu_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    main_menu_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     main_menu_frame.setObjectName(f"main_menu_frame_{account_id}")
     self.ui.vertical_layout_4 = QtWidgets.QVBoxLayout(main_menu_frame)
     self.ui.vertical_layout_4.setContentsMargins(0, 0, 0, 0)
@@ -102,23 +102,23 @@ def load_account(self, account_id, config_example):
     home_label.setMinimumSize(QtCore.QSize(0, 50))
     home_label.setMaximumSize(QtCore.QSize(16777215, 50))
     home_label.setFont(create_font(25, True))
-    home_label.setAlignment(Qt.AlignCenter)
+    home_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
     home_label.setObjectName(f"home_label_{account_id}")
 
-    self.ui.vertical_layout_6.addWidget(home_label, 0, Qt.AlignTop)
+    self.ui.vertical_layout_6.addWidget(home_label, 0, Qt.AlignmentFlag.AlignTop)
 
     home_frame = set_and_get_attr(
         self.ui, f"home_frame_{account_id}", QtWidgets.QFrame(home_widget)
     )
     size_policy = QtWidgets.QSizePolicy(
-        QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding
+        QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Expanding
     )
     size_policy.setHorizontalStretch(0)
     size_policy.setVerticalStretch(0)
     size_policy.setHeightForWidth(home_frame.sizePolicy().hasHeightForWidth())
     home_frame.setSizePolicy(size_policy)
-    home_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    home_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    home_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    home_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     home_frame.setObjectName(f"home_frame_{account_id}")
 
     self.ui.horizontal_layout_2 = QtWidgets.QHBoxLayout(home_frame)
@@ -128,8 +128,8 @@ def load_account(self, account_id, config_example):
         self.ui, f"output_frame_{account_id}", QtWidgets.QFrame(home_frame)
     )
     output_frame.setStyleSheet("background-color: #40444b; border-radius: 20px;")
-    output_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    output_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    output_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    output_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     output_frame.setObjectName(f"output_frame_{account_id}")
 
     self.ui.vertical_layout_11 = QtWidgets.QVBoxLayout(output_frame)
@@ -148,7 +148,7 @@ def load_account(self, account_id, config_example):
     output_scrollbar = set_and_get_attr(
         self.ui, f"output_scrollbar_{account_id}", QtWidgets.QScrollBar(home_frame)
     )
-    output_scrollbar.setOrientation(Qt.Vertical)
+    output_scrollbar.setOrientation(Qt.Orientation.Vertical)
     output_scrollbar.setObjectName(f"output_scrollbar_{account_id}")
 
     self.ui.horizontal_layout_2.addWidget(output_scrollbar)
@@ -174,21 +174,21 @@ def load_account(self, account_id, config_example):
     settings_label.setMinimumSize(QtCore.QSize(0, 50))
     settings_label.setMaximumSize(QtCore.QSize(16777215, 50))
     settings_label.setFont(create_font(25, True))
-    settings_label.setAlignment(Qt.AlignCenter)
+    settings_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
     settings_label.setObjectName(f"settings_label_{account_id}")
 
-    self.ui.vertical_layout_7.addWidget(settings_label, 0, Qt.AlignTop)
+    self.ui.vertical_layout_7.addWidget(settings_label, 0, Qt.AlignmentFlag.AlignTop)
 
     settings_frame = QtWidgets.QFrame(settings_widget)
     size_policy = QtWidgets.QSizePolicy(
-        QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding
+        QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Expanding
     )
     size_policy.setHorizontalStretch(0)
     size_policy.setVerticalStretch(0)
     size_policy.setHeightForWidth(settings_frame.sizePolicy().hasHeightForWidth())
     settings_frame.setSizePolicy(size_policy)
-    settings_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    settings_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    settings_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    settings_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     settings_frame.setObjectName(f"settings_frame_{account_id}")
     setattr(self.ui, f"settings_frame_{account_id}", settings_frame)
 
@@ -198,8 +198,8 @@ def load_account(self, account_id, config_example):
     # Token
     token_frame = QtWidgets.QFrame(settings_frame)
     setattr(self.ui, f"token_frame_{account_id}", token_frame)
-    token_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    token_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    token_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    token_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     token_frame.setObjectName(f"token_frame_{account_id}")
 
     horizontal_layout_17 = QtWidgets.QHBoxLayout(token_frame)
@@ -207,8 +207,8 @@ def load_account(self, account_id, config_example):
 
     token_frame_2 = QtWidgets.QFrame(token_frame)
     setattr(self.ui, f"token_frame_2_{account_id}", token_frame_2)
-    token_frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    token_frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
+    token_frame_2.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    token_frame_2.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     token_frame_2.setObjectName(f"token_frame_2_{account_id}")
 
     horizontal_layout_19 = QtWidgets.QHBoxLayout(token_frame_2)
@@ -216,7 +216,7 @@ def load_account(self, account_id, config_example):
 
     token_label = QtWidgets.QLabel(token_frame_2)
     size_policy = QtWidgets.QSizePolicy(
-        QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred
+        QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Preferred
     )
     size_policy.setHorizontalStretch(0)
     size_policy.setVerticalStretch(0)
@@ -230,7 +230,7 @@ def load_account(self, account_id, config_example):
 
     token_input = QtWidgets.QLineEdit(token_frame_2)
     size_policy = QtWidgets.QSizePolicy(
-        QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
+        QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Preferred
     )
     size_policy.setHorizontalStretch(0)
     size_policy.setVerticalStretch(0)
@@ -240,20 +240,22 @@ def load_account(self, account_id, config_example):
     token_input.setMaximumSize(QtCore.QSize(440, 16777215))
     token_input.setFont(create_font(12))
     token_input.setStyleSheet("background-color: #5c6066; border-radius: 10px;")
-    token_input.setAlignment(Qt.AlignCenter)
+    token_input.setAlignment(Qt.AlignmentFlag.AlignCenter)
     token_input.setObjectName(f"token_input_{account_id}")
 
     setattr(self.ui, f"token_input_{account_id}", token_input)
     horizontal_layout_19.addWidget(token_input)
 
     horizontal_layout_17.addWidget(token_frame_2)
-    self.ui.vertical_layout_19.addWidget(token_frame, 0, Qt.AlignHCenter | Qt.AlignTop)
+    self.ui.vertical_layout_19.addWidget(
+        token_frame, 0, Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop
+    )
 
     # Channel ID
     channel_frame = QtWidgets.QFrame(settings_frame)
     setattr(self.ui, f"channel_frame_{account_id}", channel_frame)
-    channel_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    channel_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    channel_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    channel_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     channel_frame.setObjectName(f"channel_frame_{account_id}")
 
     horizontal_layout_22 = QtWidgets.QHBoxLayout(channel_frame)
@@ -261,8 +263,8 @@ def load_account(self, account_id, config_example):
 
     channel_frame_2 = QtWidgets.QFrame(channel_frame)
     setattr(self.ui, f"channel_frame_2_{account_id}", channel_frame_2)
-    channel_frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    channel_frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
+    channel_frame_2.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    channel_frame_2.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     channel_frame_2.setObjectName(f"channel_frame_2_{account_id}")
 
     horizontal_layout_21 = QtWidgets.QHBoxLayout(channel_frame_2)
@@ -270,7 +272,7 @@ def load_account(self, account_id, config_example):
 
     channel_label = QtWidgets.QLabel(channel_frame_2)
     size_policy = QtWidgets.QSizePolicy(
-        QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred
+        QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Preferred
     )
     size_policy.setHorizontalStretch(0)
     size_policy.setVerticalStretch(0)
@@ -284,7 +286,7 @@ def load_account(self, account_id, config_example):
 
     channel_input = QtWidgets.QLineEdit(channel_frame_2)
     size_policy = QtWidgets.QSizePolicy(
-        QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
+        QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Preferred
     )
     size_policy.setHorizontalStretch(0)
     size_policy.setVerticalStretch(0)
@@ -294,30 +296,32 @@ def load_account(self, account_id, config_example):
     channel_input.setMaximumSize(QtCore.QSize(500, 200))
     channel_input.setFont(create_font(12))
     channel_input.setStyleSheet("background-color: #5c6066; border-radius: 10px;")
-    channel_input.setAlignment(Qt.AlignCenter)
+    channel_input.setAlignment(Qt.AlignmentFlag.AlignCenter)
     channel_input.setObjectName(f"channel_input_{account_id}")
 
     setattr(self.ui, f"channel_input_{account_id}", channel_input)
     horizontal_layout_21.addWidget(channel_input)
 
     horizontal_layout_22.addWidget(
-        channel_frame_2, 0, Qt.AlignHCenter | Qt.AlignVCenter
+        channel_frame_2,
+        0,
+        Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter,
     )
     self.ui.vertical_layout_19.addWidget(channel_frame)
 
     # Trivia correct chance
     trivia_correct_frame = QtWidgets.QFrame(settings_frame)
     setattr(self.ui, f"trivia_correct_frame_{account_id}", trivia_correct_frame)
-    trivia_correct_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    trivia_correct_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    trivia_correct_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    trivia_correct_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     trivia_correct_frame.setObjectName(f"trivia_correct_frame_{account_id}")
 
     horizontal_layout_25 = QtWidgets.QHBoxLayout(trivia_correct_frame)
     horizontal_layout_25.setObjectName("horizontal_layout_25")
 
     trivia_correct_frame_2 = QtWidgets.QFrame(trivia_correct_frame)
-    trivia_correct_frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    trivia_correct_frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
+    trivia_correct_frame_2.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    trivia_correct_frame_2.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     trivia_correct_frame_2.setObjectName(f"trivia_correct_frame_2_{account_id}")
     setattr(self.ui, f"trivia_correct_frame_2_{account_id}", trivia_correct_frame_2)
 
@@ -326,7 +330,7 @@ def load_account(self, account_id, config_example):
 
     trivia_correct_label = QtWidgets.QLabel(trivia_correct_frame_2)
     size_policy = QtWidgets.QSizePolicy(
-        QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred
+        QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Preferred
     )
     size_policy.setHorizontalStretch(0)
     size_policy.setVerticalStretch(0)
@@ -339,7 +343,7 @@ def load_account(self, account_id, config_example):
 
     trivia_correct_chance = QtWidgets.QSpinBox(trivia_correct_frame_2)
     size_policy = QtWidgets.QSizePolicy(
-        QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
+        QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed
     )
     size_policy.setHorizontalStretch(0)
     size_policy.setVerticalStretch(0)
@@ -354,30 +358,34 @@ def load_account(self, account_id, config_example):
     trivia_correct_chance.setStyleSheet("")
     trivia_correct_chance.setWrapping(False)
     trivia_correct_chance.setFrame(True)
-    trivia_correct_chance.setAlignment(Qt.AlignCenter)
+    trivia_correct_chance.setAlignment(Qt.AlignmentFlag.AlignCenter)
     trivia_correct_chance.setMinimum(25)
     trivia_correct_chance.setMaximum(100)
     trivia_correct_chance.setObjectName(f"trivia_correct_chance_{account_id}")
     setattr(self.ui, f"trivia_correct_chance_{account_id}", trivia_correct_chance)
     horizontal_layout_24.addWidget(trivia_correct_chance)
 
-    horizontal_layout_25.addWidget(trivia_correct_frame_2, 0, Qt.AlignHCenter)
-    self.ui.vertical_layout_19.addWidget(trivia_correct_frame, 0, Qt.AlignVCenter)
+    horizontal_layout_25.addWidget(
+        trivia_correct_frame_2, 0, Qt.AlignmentFlag.AlignHCenter
+    )
+    self.ui.vertical_layout_19.addWidget(
+        trivia_correct_frame, 0, Qt.AlignmentFlag.AlignVCenter
+    )
 
     # Adventure
     adventure_frame = QtWidgets.QFrame(settings_frame)
     setattr(self.ui, f"adventure_frame_{account_id}", adventure_frame)
 
-    adventure_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    adventure_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    adventure_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    adventure_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     adventure_frame.setObjectName(f"adventure_frame_{account_id}")
 
     horizontal_layout_85 = QtWidgets.QHBoxLayout(adventure_frame)
     horizontal_layout_85.setObjectName(f"horizontal_layout_85_{account_id}")
 
     adventure_frame_2_1 = QtWidgets.QFrame(adventure_frame)
-    adventure_frame_2_1.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    adventure_frame_2_1.setFrameShadow(QtWidgets.QFrame.Raised)
+    adventure_frame_2_1.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    adventure_frame_2_1.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     adventure_frame_2_1.setObjectName(f"adventure_frame_2_{account_id}")
 
     horizontal_layout_84 = QtWidgets.QHBoxLayout(adventure_frame_2_1)
@@ -385,7 +393,7 @@ def load_account(self, account_id, config_example):
 
     adventure_label = QtWidgets.QLabel(adventure_frame_2_1)
     size_policy = QtWidgets.QSizePolicy(
-        QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred
+        QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Preferred
     )
     size_policy.setHorizontalStretch(0)
     size_policy.setVerticalStretch(0)
@@ -399,20 +407,22 @@ def load_account(self, account_id, config_example):
     adventure_box.setMinimumSize(QtCore.QSize(80, 30))
     adventure_box.setMaximumSize(QtCore.QSize(100, 100))
     adventure_box.setFont(create_font(12))
-    adventure_box.setCursor(QtGui.QCursor(Qt.PointingHandCursor))
+    adventure_box.setCursor(QtGui.QCursor(Qt.CursorShape.PointingHandCursor))
     adventure_box.setStyleSheet("")
     adventure_box.setFrame(True)
     adventure_box.setObjectName(f"adventure_box_{account_id}")
     setattr(self.ui, f"adventure_box_{account_id}", adventure_box)
 
     horizontal_layout_84.addWidget(adventure_box)
-    horizontal_layout_85.addWidget(adventure_frame_2_1, 0, Qt.AlignHCenter)
+    horizontal_layout_85.addWidget(
+        adventure_frame_2_1, 0, Qt.AlignmentFlag.AlignHCenter
+    )
     self.ui.vertical_layout_19.addWidget(adventure_frame)
 
     # Toggles right
     toggles_frame = QtWidgets.QFrame(settings_frame)
-    toggles_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    toggles_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    toggles_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    toggles_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     toggles_frame.setObjectName(f"toggles_frame_{account_id}")
     setattr(self.ui, f"toggles_frame_{account_id}", toggles_frame)
 
@@ -422,8 +432,8 @@ def load_account(self, account_id, config_example):
     self.horizontal_layout_6.setObjectName("horizontal_layout_6")
 
     toggles_left_frame = QtWidgets.QFrame(toggles_frame)
-    toggles_left_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    toggles_left_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    toggles_left_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    toggles_left_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     toggles_left_frame.setObjectName(f"toggles_left_frame_{account_id}")
     setattr(self.ui, f"toggles_left_frame_{account_id}", toggles_left_frame)
 
@@ -432,8 +442,8 @@ def load_account(self, account_id, config_example):
     self.vertical_layout_10.setObjectName("vertical_layout_10")
 
     toggles_left_frame_2 = QtWidgets.QFrame(toggles_left_frame)
-    toggles_left_frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    toggles_left_frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
+    toggles_left_frame_2.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    toggles_left_frame_2.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     toggles_left_frame_2.setObjectName(f"toggles_left_frame_2_{account_id}")
     setattr(self.ui, f"toggles_left_frame_2_{account_id}", toggles_left_frame_2)
 
@@ -444,12 +454,14 @@ def load_account(self, account_id, config_example):
 
     offline_checkbox = QtWidgets.QCheckBox(toggles_left_frame_2)
     offline_checkbox.setFont(create_font(15, True))
-    offline_checkbox.setCursor(QtGui.QCursor(Qt.PointingHandCursor))
+    offline_checkbox.setCursor(QtGui.QCursor(Qt.CursorShape.PointingHandCursor))
     offline_checkbox.setObjectName(f"offline_checkbox_{account_id}")
     setattr(self.ui, f"offline_checkbox_{account_id}", offline_checkbox)
 
     self.vertical_layout_15.addWidget(offline_checkbox)
-    self.vertical_layout_10.addWidget(toggles_left_frame_2, 0, Qt.AlignHCenter)
+    self.vertical_layout_10.addWidget(
+        toggles_left_frame_2, 0, Qt.AlignmentFlag.AlignHCenter
+    )
     self.horizontal_layout_6.addWidget(toggles_left_frame)
 
     # Toggles left
@@ -459,8 +471,8 @@ def load_account(self, account_id, config_example):
     alerts_checkbox_name = f"alerts_checkbox_{account_id}"
 
     toggles_right_frame = QtWidgets.QFrame(getattr(self.ui, toggles_frame_name))
-    toggles_right_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    toggles_right_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    toggles_right_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    toggles_right_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     toggles_right_frame.setObjectName(toggles_right_frame_name)
     setattr(self.ui, toggles_right_frame_name, toggles_right_frame)
 
@@ -470,8 +482,8 @@ def load_account(self, account_id, config_example):
     self.vertical_layout_16.setObjectName("vertical_layout_16")
 
     toggles_right_frame_2 = QtWidgets.QFrame(toggles_right_frame)
-    toggles_right_frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    toggles_right_frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
+    toggles_right_frame_2.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    toggles_right_frame_2.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     toggles_right_frame_2.setObjectName(toggles_right_frame_2_name)
     setattr(self.ui, toggles_right_frame_2_name, toggles_right_frame_2)
 
@@ -482,11 +494,11 @@ def load_account(self, account_id, config_example):
 
     alerts_checkbox = QtWidgets.QCheckBox(toggles_right_frame_2)
     alerts_checkbox.setFont(create_font(15, True))
-    alerts_checkbox.setCursor(QtGui.QCursor(Qt.PointingHandCursor))
+    alerts_checkbox.setCursor(QtGui.QCursor(Qt.CursorShape.PointingHandCursor))
     alerts_checkbox.setObjectName(alerts_checkbox_name)
     setattr(self.ui, alerts_checkbox_name, alerts_checkbox)
 
-    self.vertical_layout_17.addWidget(alerts_checkbox, 0, Qt.AlignHCenter)
+    self.vertical_layout_17.addWidget(alerts_checkbox, 0, Qt.AlignmentFlag.AlignHCenter)
     self.vertical_layout_16.addWidget(toggles_right_frame_2)
     self.horizontal_layout_6.addWidget(toggles_right_frame)
     self.ui.vertical_layout_19.addWidget(getattr(self.ui, toggles_frame_name))
@@ -509,23 +521,23 @@ def load_account(self, account_id, config_example):
     commands_label.setMinimumSize(QtCore.QSize(0, 50))
     commands_label.setMaximumSize(QtCore.QSize(16777215, 50))
     commands_label.setFont(create_font(25, True))
-    commands_label.setAlignment(Qt.AlignCenter)
+    commands_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
     commands_label.setObjectName(f"commands_label_{account_id}")
 
-    self.ui.vertical_layout_8.addWidget(commands_label, 0, Qt.AlignTop)
+    self.ui.vertical_layout_8.addWidget(commands_label, 0, Qt.AlignmentFlag.AlignTop)
 
     commands_frame = set_and_get_attr(
         self.ui, f"commands_frame_{account_id}", QtWidgets.QFrame(commands_widget)
     )
     size_policy = QtWidgets.QSizePolicy(
-        QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding
+        QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Expanding
     )
     size_policy.setHorizontalStretch(0)
     size_policy.setVerticalStretch(0)
     size_policy.setHeightForWidth(commands_frame.sizePolicy().hasHeightForWidth())
     commands_frame.setSizePolicy(size_policy)
-    commands_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    commands_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    commands_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    commands_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     commands_frame.setObjectName(f"commands_frame_{account_id}")
 
     vertical_layout_12 = QtWidgets.QVBoxLayout(commands_frame)
@@ -549,7 +561,7 @@ def load_account(self, account_id, config_example):
         "}"
     )
     size_policy = QtWidgets.QSizePolicy(
-        QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding
+        QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Expanding
     )
     size_policy.setHorizontalStretch(0)
     size_policy.setVerticalStretch(0)
@@ -557,8 +569,8 @@ def load_account(self, account_id, config_example):
         commands_settings_frame.sizePolicy().hasHeightForWidth()
     )
     commands_settings_frame.setSizePolicy(size_policy)
-    commands_settings_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    commands_settings_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    commands_settings_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    commands_settings_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     commands_settings_frame.setObjectName(f"commands_settings_frame_{account_id}")
 
     horizontal_layout_4 = QtWidgets.QHBoxLayout(commands_settings_frame)
@@ -571,8 +583,8 @@ def load_account(self, account_id, config_example):
             f"commands_settings_{i}_frame_{account_id}",
             QtWidgets.QFrame(commands_settings_frame),
         )
-        commands_settings_frame_i.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        commands_settings_frame_i.setFrameShadow(QtWidgets.QFrame.Raised)
+        commands_settings_frame_i.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        commands_settings_frame_i.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         commands_settings_frame_i.setObjectName(
             f"commands_settings_{i}_frame_{account_id}"
         )
@@ -587,8 +599,8 @@ def load_account(self, account_id, config_example):
             f"commands_settings_{i}_frame_2_{account_id}",
             QtWidgets.QFrame(commands_settings_frame_i),
         )
-        commands_settings_frame_2_i.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        commands_settings_frame_2_i.setFrameShadow(QtWidgets.QFrame.Raised)
+        commands_settings_frame_2_i.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        commands_settings_frame_2_i.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         commands_settings_frame_2_i.setObjectName(
             f"commands_settings_{i}_frame_2_{account_id}"
         )
@@ -611,8 +623,8 @@ def load_account(self, account_id, config_example):
                     getattr(self.ui, f"commands_settings_{i}_frame_2_{account_id}")
                 ),
             )
-            frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-            frame.setFrameShadow(QtWidgets.QFrame.Raised)
+            frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+            frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
             frame.setObjectName(f"{command}_frame_{account_id}")
 
             horizontal_layout = QtWidgets.QHBoxLayout(frame)
@@ -626,8 +638,8 @@ def load_account(self, account_id, config_example):
             spinbox.setMaximumSize(QtCore.QSize(45, 25))
             spinbox.setFont(create_font(12))
             spinbox.setStyleSheet("")
-            spinbox.setAlignment(Qt.AlignCenter)
-            spinbox.setButtonSymbols(QtWidgets.QAbstractSpinBox.NoButtons)
+            spinbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            spinbox.setButtonSymbols(QtWidgets.QAbstractSpinBox.ButtonSymbols.NoButtons)
             spinbox.setMaximum(100000)
             spinbox.setProperty("value", 0)
             spinbox.setObjectName(f"{command}_spinbox_{account_id}")
@@ -641,7 +653,7 @@ def load_account(self, account_id, config_example):
                 ),
             )
             checkbox.setFont(create_font(15, True))
-            checkbox.setCursor(QtGui.QCursor(Qt.PointingHandCursor))
+            checkbox.setCursor(QtGui.QCursor(Qt.CursorShape.PointingHandCursor))
             checkbox.setObjectName(f"{command}_checkbox_{account_id}")
             horizontal_layout.addWidget(checkbox)
 
@@ -652,10 +664,12 @@ def load_account(self, account_id, config_example):
         horizontal_layout_4.addWidget(
             getattr(self.ui, f"commands_settings_{i}_frame_{account_id}"),
             0,
-            Qt.AlignRight,
+            Qt.AlignmentFlag.AlignRight,
         )
 
-    vertical_layout_12.addWidget(commands_settings_frame, 0, Qt.AlignHCenter)
+    vertical_layout_12.addWidget(
+        commands_settings_frame, 0, Qt.AlignmentFlag.AlignHCenter
+    )
 
     commands_toggle_frame = set_and_get_attr(
         self.ui,
@@ -664,8 +678,8 @@ def load_account(self, account_id, config_example):
     )
     commands_toggle_frame.setMinimumSize(QtCore.QSize(0, 50))
     commands_toggle_frame.setMaximumSize(QtCore.QSize(16777215, 50))
-    commands_toggle_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    commands_toggle_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    commands_toggle_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    commands_toggle_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     commands_toggle_frame.setObjectName(f"commands_toggle_frame_{account_id}")
 
     horizontal_layout_26 = QtWidgets.QHBoxLayout(commands_toggle_frame)
@@ -678,8 +692,8 @@ def load_account(self, account_id, config_example):
         f"commands_toggle_btn_{account_id}",
         QtWidgets.QFrame(commands_toggle_frame),
     )
-    commands_toggle_btn.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    commands_toggle_btn.setFrameShadow(QtWidgets.QFrame.Raised)
+    commands_toggle_btn.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    commands_toggle_btn.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     commands_toggle_btn.setObjectName(f"commands_toggle_btn_{account_id}")
 
     horizontal_layout_27 = QtWidgets.QHBoxLayout(commands_toggle_btn)
@@ -692,7 +706,7 @@ def load_account(self, account_id, config_example):
     )
     start_btn.setEnabled(True)
     size_policy = QtWidgets.QSizePolicy(
-        QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed
+        QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed
     )
     size_policy.setHorizontalStretch(0)
     size_policy.setVerticalStretch(0)
@@ -701,7 +715,7 @@ def load_account(self, account_id, config_example):
     start_btn.setMinimumSize(QtCore.QSize(140, 45))
     start_btn.setMaximumSize(QtCore.QSize(50, 45))
     start_btn.setFont(create_font(12, True))
-    start_btn.setCursor(QtGui.QCursor(Qt.PointingHandCursor))
+    start_btn.setCursor(QtGui.QCursor(Qt.CursorShape.PointingHandCursor))
     start_btn.setStyleSheet("background-color : #2d7d46")
     start_btn.setObjectName(f"start_btn_{account_id}")
 
@@ -712,7 +726,7 @@ def load_account(self, account_id, config_example):
     )
     stop_btn.setEnabled(True)
     size_policy = QtWidgets.QSizePolicy(
-        QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed
+        QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed
     )
     size_policy.setHorizontalStretch(0)
     size_policy.setVerticalStretch(0)
@@ -721,16 +735,18 @@ def load_account(self, account_id, config_example):
     stop_btn.setMinimumSize(QtCore.QSize(140, 45))
     stop_btn.setMaximumSize(QtCore.QSize(50, 45))
     stop_btn.setFont(create_font(12, True))
-    stop_btn.setCursor(QtGui.QCursor(Qt.PointingHandCursor))
+    stop_btn.setCursor(QtGui.QCursor(Qt.CursorShape.PointingHandCursor))
     stop_btn.setStyleSheet("background-color : #d83c3e")
     stop_btn.setObjectName(f"stop_btn_{account_id}")
 
     horizontal_layout_27.addWidget(stop_btn)
     horizontal_layout_26.addWidget(
-        commands_toggle_btn, 0, Qt.AlignHCenter | Qt.AlignVCenter
+        commands_toggle_btn,
+        0,
+        Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter,
     )
 
-    vertical_layout_12.addWidget(commands_toggle_frame, 0, Qt.AlignBottom)
+    vertical_layout_12.addWidget(commands_toggle_frame, 0, Qt.AlignmentFlag.AlignBottom)
 
     self.ui.vertical_layout_8.addWidget(commands_frame)
     main_menu_widget.addWidget(commands_widget)
@@ -750,7 +766,7 @@ def load_account(self, account_id, config_example):
     auto_buy_label.setMinimumSize(QtCore.QSize(0, 50))
     auto_buy_label.setMaximumSize(QtCore.QSize(16777215, 50))
     auto_buy_label.setFont(create_font(25, True))
-    auto_buy_label.setAlignment(Qt.AlignCenter)
+    auto_buy_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
     auto_buy_label.setObjectName(f"auto_buy_label_{account_id}")
 
     vertical_layout_9.addWidget(auto_buy_label)
@@ -759,14 +775,14 @@ def load_account(self, account_id, config_example):
         self.ui, f"auto_buy_frame_{account_id}", QtWidgets.QFrame(auto_buy_widget)
     )
     size_policy = QtWidgets.QSizePolicy(
-        QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding
+        QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Expanding
     )
     size_policy.setHorizontalStretch(0)
     size_policy.setVerticalStretch(0)
     size_policy.setHeightForWidth(auto_buy_frame.sizePolicy().hasHeightForWidth())
     auto_buy_frame.setSizePolicy(size_policy)
-    auto_buy_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    auto_buy_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    auto_buy_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    auto_buy_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     auto_buy_frame.setObjectName(f"auto_buy_frame_{account_id}")
 
     vertical_layout_18 = QtWidgets.QVBoxLayout(auto_buy_frame)
@@ -776,8 +792,8 @@ def load_account(self, account_id, config_example):
     lifesavers_frame = set_and_get_attr(
         self.ui, f"lifesavers_frame_{account_id}", QtWidgets.QFrame(auto_buy_frame)
     )
-    lifesavers_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    lifesavers_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    lifesavers_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    lifesavers_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     lifesavers_frame.setObjectName(f"lifesavers_frame_{account_id}")
 
     horizontal_layout_16 = QtWidgets.QHBoxLayout(lifesavers_frame)
@@ -786,8 +802,8 @@ def load_account(self, account_id, config_example):
     lifesavers_frame_2 = set_and_get_attr(
         self.ui, f"lifesavers_frame_2_{account_id}", QtWidgets.QFrame(lifesavers_frame)
     )
-    lifesavers_frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    lifesavers_frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
+    lifesavers_frame_2.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    lifesavers_frame_2.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     lifesavers_frame_2.setObjectName(f"lifesavers_frame_2_{account_id}")
 
     horizontal_layout_15 = QtWidgets.QHBoxLayout(lifesavers_frame_2)
@@ -799,14 +815,14 @@ def load_account(self, account_id, config_example):
         QtWidgets.QCheckBox(lifesavers_frame_2),
     )
     size_policy = QtWidgets.QSizePolicy(
-        QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
+        QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed
     )
     size_policy.setHorizontalStretch(0)
     size_policy.setVerticalStretch(0)
     size_policy.setHeightForWidth(lifesavers_checkbox.sizePolicy().hasHeightForWidth())
     lifesavers_checkbox.setSizePolicy(size_policy)
     lifesavers_checkbox.setFont(create_font(15, True))
-    lifesavers_checkbox.setCursor(QtGui.QCursor(Qt.PointingHandCursor))
+    lifesavers_checkbox.setCursor(QtGui.QCursor(Qt.CursorShape.PointingHandCursor))
     lifesavers_checkbox.setStyleSheet("")
     lifesavers_checkbox.setObjectName(f"lifesavers_checkbox_{account_id}")
 
@@ -818,7 +834,7 @@ def load_account(self, account_id, config_example):
         QtWidgets.QSpinBox(lifesavers_frame_2),
     )
     size_policy = QtWidgets.QSizePolicy(
-        QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
+        QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed
     )
     size_policy.setHorizontalStretch(0)
     size_policy.setVerticalStretch(0)
@@ -831,20 +847,24 @@ def load_account(self, account_id, config_example):
     lifesavers_amount.setStyleSheet("")
     lifesavers_amount.setWrapping(False)
     lifesavers_amount.setFrame(True)
-    lifesavers_amount.setAlignment(Qt.AlignCenter)
+    lifesavers_amount.setAlignment(Qt.AlignmentFlag.AlignCenter)
     lifesavers_amount.setMaximum(100)
     lifesavers_amount.setObjectName(f"lifesavers_amount_{account_id}")
 
     horizontal_layout_15.addWidget(lifesavers_amount)
     horizontal_layout_16.addWidget(lifesavers_frame_2)
-    vertical_layout_18.addWidget(lifesavers_frame, 0, Qt.AlignHCenter | Qt.AlignVCenter)
+    vertical_layout_18.addWidget(
+        lifesavers_frame,
+        0,
+        Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter,
+    )
 
     for autobuy in ["fishing", "shovel", "rifle"]:
         item_frame = set_and_get_attr(
             self.ui, f"{autobuy}_frame_{account_id}", QtWidgets.QFrame(auto_buy_frame)
         )
-        item_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        item_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        item_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        item_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         item_frame.setObjectName(f"{autobuy}_frame_{account_id}")
 
         horizontal_layout = QtWidgets.QHBoxLayout(item_frame)
@@ -854,14 +874,14 @@ def load_account(self, account_id, config_example):
             self.ui, f"{autobuy}_checkbox_{account_id}", QtWidgets.QCheckBox(item_frame)
         )
         size_policy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
+            QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed
         )
         size_policy.setHorizontalStretch(0)
         size_policy.setVerticalStretch(0)
         size_policy.setHeightForWidth(item_checkbox.sizePolicy().hasHeightForWidth())
         item_checkbox.setSizePolicy(size_policy)
         item_checkbox.setFont(create_font(15, True))
-        item_checkbox.setCursor(QtGui.QCursor(Qt.PointingHandCursor))
+        item_checkbox.setCursor(QtGui.QCursor(Qt.CursorShape.PointingHandCursor))
         item_checkbox.setStyleSheet("")
         item_checkbox.setObjectName(f"{autobuy}_checkbox_{account_id}")
 
@@ -890,7 +910,7 @@ def load_account(self, account_id, config_example):
     auto_use_label.setMinimumSize(QtCore.QSize(0, 50))
     auto_use_label.setMaximumSize(QtCore.QSize(16777215, 50))
     auto_use_label.setFont(create_font(25, True))
-    auto_use_label.setAlignment(Qt.AlignCenter)
+    auto_use_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
     auto_use_label.setObjectName(f"auto_use_label_{account_id}")
 
     vertical_layout.addWidget(auto_use_label)
@@ -899,14 +919,14 @@ def load_account(self, account_id, config_example):
         self.ui, f"auto_use_frame_{account_id}", QtWidgets.QFrame(auto_use_widget)
     )
     size_policy = QtWidgets.QSizePolicy(
-        QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding
+        QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Expanding
     )
     size_policy.setHorizontalStretch(0)
     size_policy.setVerticalStretch(0)
     size_policy.setHeightForWidth(auto_use_frame.sizePolicy().hasHeightForWidth())
     auto_use_frame.setSizePolicy(size_policy)
-    auto_use_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    auto_use_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    auto_use_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    auto_use_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     auto_use_frame.setObjectName(f"auto_use_frame_{account_id}")
 
     horizontal_layout = set_and_get_attr(
@@ -919,8 +939,8 @@ def load_account(self, account_id, config_example):
     auto_use_left_frame = set_and_get_attr(
         self.ui, f"auto_use_left_frame_{account_id}", QtWidgets.QFrame(auto_use_frame)
     )
-    auto_use_left_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    auto_use_left_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    auto_use_left_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    auto_use_left_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     auto_use_left_frame.setObjectName(f"auto_use_left_frame_{account_id}")
 
     vertical_layout_left = set_and_get_attr(
@@ -935,8 +955,8 @@ def load_account(self, account_id, config_example):
         f"auto_use_left_frame_2_{account_id}",
         QtWidgets.QFrame(auto_use_left_frame),
     )
-    auto_use_left_frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    auto_use_left_frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
+    auto_use_left_frame_2.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    auto_use_left_frame_2.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     auto_use_left_frame_2.setObjectName(f"auto_use_left_frame_2_{account_id}")
 
     vertical_layout_left_2 = set_and_get_attr(
@@ -951,8 +971,8 @@ def load_account(self, account_id, config_example):
         f"auto_use_btn_frame_{account_id}",
         QtWidgets.QFrame(auto_use_left_frame_2),
     )
-    auto_use_btn_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    auto_use_btn_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    auto_use_btn_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    auto_use_btn_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     auto_use_btn_frame.setObjectName(f"auto_use_btn_frame_{account_id}")
 
     vertical_layout_btn = set_and_get_attr(
@@ -968,7 +988,7 @@ def load_account(self, account_id, config_example):
         QtWidgets.QCheckBox(auto_use_btn_frame),
     )
     auto_use_checkbox.setFont(create_font(15, True))
-    auto_use_checkbox.setCursor(QtGui.QCursor(Qt.PointingHandCursor))
+    auto_use_checkbox.setCursor(QtGui.QCursor(Qt.CursorShape.PointingHandCursor))
     auto_use_checkbox.setObjectName(f"auto_use_checkbox_{account_id}")
 
     vertical_layout_btn.addWidget(auto_use_checkbox)
@@ -982,8 +1002,8 @@ def load_account(self, account_id, config_example):
         f"search_frame_{account_id}",
         QtWidgets.QFrame(auto_use_left_frame_2),
     )
-    search_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    search_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    search_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    search_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     search_frame.setObjectName(f"search_frame_{account_id}")
 
     vertical_layout = set_and_get_attr(
@@ -997,7 +1017,7 @@ def load_account(self, account_id, config_example):
         self.ui, f"search_label_{account_id}", QtWidgets.QLabel(search_frame)
     )
     search_label.setFont(create_font(15, True))
-    search_label.setAlignment(Qt.AlignCenter)
+    search_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
     search_label.setObjectName(f"search_label_{account_id}")
 
     vertical_layout.addWidget(search_label)
@@ -1006,7 +1026,7 @@ def load_account(self, account_id, config_example):
         self.ui, f"search_input_{account_id}", QtWidgets.QLineEdit(search_frame)
     )
     size_policy = QtWidgets.QSizePolicy(
-        QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed
+        QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Fixed
     )
     size_policy.setHorizontalStretch(0)
     size_policy.setVerticalStretch(0)
@@ -1016,7 +1036,7 @@ def load_account(self, account_id, config_example):
     search_input.setMaximumSize(QtCore.QSize(500, 30))
     search_input.setFont(create_font(15, True))
     search_input.setStyleSheet("background-color: #5c6066; border-radius: 10px;")
-    search_input.setAlignment(Qt.AlignCenter)
+    search_input.setAlignment(Qt.AlignmentFlag.AlignCenter)
     search_input.setObjectName(f"search_input_{account_id}")
 
     vertical_layout.addWidget(search_input)
@@ -1028,8 +1048,8 @@ def load_account(self, account_id, config_example):
         f"hide_disabled_frame_{account_id}",
         QtWidgets.QFrame(auto_use_left_frame_2),
     )
-    hide_disabled_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    hide_disabled_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    hide_disabled_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    hide_disabled_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     hide_disabled_frame.setObjectName(f"hide_disabled_frame_{account_id}")
 
     vertical_layout_hide_disabled = set_and_get_attr(
@@ -1047,7 +1067,7 @@ def load_account(self, account_id, config_example):
         QtWidgets.QCheckBox(hide_disabled_frame),
     )
     hide_disabled_checkbox.setFont(create_font(15, True))
-    hide_disabled_checkbox.setCursor(QtGui.QCursor(Qt.PointingHandCursor))
+    hide_disabled_checkbox.setCursor(QtGui.QCursor(Qt.CursorShape.PointingHandCursor))
     hide_disabled_checkbox.setObjectName(f"hide_disabled_checkbox_{account_id}")
 
     vertical_layout_hide_disabled.addWidget(hide_disabled_checkbox)
@@ -1057,7 +1077,7 @@ def load_account(self, account_id, config_example):
     )
 
     getattr(self.ui, f"vertical_layout_{int(account_id) + 101}").addWidget(
-        auto_use_left_frame_2, 0, Qt.AlignHCenter
+        auto_use_left_frame_2, 0, Qt.AlignmentFlag.AlignHCenter
     )
     getattr(self.ui, f"horizontal_layout_{int(account_id) + 102}").addWidget(
         getattr(self.ui, f"auto_use_left_frame_{account_id}")
@@ -1066,8 +1086,8 @@ def load_account(self, account_id, config_example):
     auto_use_right_frame = set_and_get_attr(
         self.ui, f"auto_use_right_frame_{account_id}", QtWidgets.QFrame(auto_use_frame)
     )
-    auto_use_right_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    auto_use_right_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    auto_use_right_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+    auto_use_right_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
     auto_use_right_frame.setObjectName(f"auto_use_right_frame_{account_id}")
 
     horizontal_layout = set_and_get_attr(
@@ -1085,7 +1105,7 @@ def load_account(self, account_id, config_example):
         QtWidgets.QScrollArea(auto_use_right_frame),
     )
     size_policy = QtWidgets.QSizePolicy(
-        QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
+        QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Preferred
     )
     size_policy.setHorizontalStretch(0)
     size_policy.setVerticalStretch(0)
@@ -1133,7 +1153,8 @@ def load_account(self, account_id, config_example):
             QtWidgets.QFrame(auto_use_right_widget),
         )
         size_policy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred
+            QtWidgets.QSizePolicy.Policy.Preferred,
+            QtWidgets.QSizePolicy.Policy.Preferred,
         )
         size_policy.setHorizontalStretch(0)
         size_policy.setVerticalStretch(0)
@@ -1141,8 +1162,8 @@ def load_account(self, account_id, config_example):
         autouse_frame.setSizePolicy(size_policy)
         autouse_frame.setMinimumSize(QtCore.QSize(0, 50))
         autouse_frame.setMaximumSize(QtCore.QSize(16777215, 50))
-        autouse_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        autouse_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        autouse_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        autouse_frame.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         autouse_frame.setObjectName(f"{autouse}_frame_{account_id}")
 
         horizontal_layout_autouse = set_and_get_attr(
@@ -1160,7 +1181,7 @@ def load_account(self, account_id, config_example):
             QtWidgets.QCheckBox(autouse_frame),
         )
         autouse_checkbox.setFont(create_font(15, True))
-        autouse_checkbox.setCursor(QtGui.QCursor(Qt.PointingHandCursor))
+        autouse_checkbox.setCursor(QtGui.QCursor(Qt.CursorShape.PointingHandCursor))
         autouse_checkbox.setText(autouse.replace("_", " ").title())
         autouse_checkbox.setObjectName(f"{autouse}_checkbox_{account_id}")
 
@@ -1168,7 +1189,9 @@ def load_account(self, account_id, config_example):
         vertical_layout.addWidget(autouse_frame)
 
     auto_use_right_frame_2.setWidget(auto_use_right_widget)
-    horizontal_layout.addWidget(auto_use_right_frame_2, 0, Qt.AlignHCenter)
+    horizontal_layout.addWidget(
+        auto_use_right_frame_2, 0, Qt.AlignmentFlag.AlignHCenter
+    )
     getattr(self.ui, f"horizontal_layout_{int(account_id) + 102}").addWidget(
         auto_use_right_frame
     )
@@ -1415,7 +1438,7 @@ def load_account(self, account_id, config_example):
     )
     channel_input.textChanged.connect(
         lambda checked, clicked_account_id=account_id: self.settings(
-            "channel", getattr(self.ui, f"channel_input_{clicked_account_id}").text()
+            "channel_id", getattr(self.ui, f"channel_input_{clicked_account_id}").text()
         )
     )
     trivia_correct_chance.valueChanged.connect(

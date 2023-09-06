@@ -24,11 +24,11 @@ import requests
 import unidecode
 from discord.ext import commands, tasks
 from PIL import Image, ImageDraw
-from PyQt5.QtCore import pyqtSignal
+from PyQt6.QtCore import pyqtSignal
 
 # noinspection PyUnresolvedReferences
-from PyQt5.QtGui import QColor, QFontDatabase, QIcon
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt6.QtGui import QColor, QFontDatabase, QIcon, QPixmap
+from PyQt6.QtWidgets import QApplication, QMainWindow
 from qasync import QEventLoop, asyncSlot
 
 # noinspection PyUnresolvedReferences
@@ -710,7 +710,7 @@ class MainWindow(QMainWindow):
             )
             cursor = getattr(self.ui, f"output_text_{account_id}").textCursor()
             cursor.insertText("‎")
-            cursor.movePosition(QtGui.QTextCursor.End)
+            cursor.movePosition(QtGui.QTextCursor.MoveOperation.End)
             cursor.insertText(text)
             getattr(self.ui, f"output_text_{account_id}").setTextCursor(cursor)
             getattr(self.ui, f"output_text_{account_id}").ensureCursorVisible()
@@ -933,7 +933,7 @@ class MainWindow(QMainWindow):
         getattr(self.ui, data[0]).setTextColor(data[2])
         cursor = getattr(self.ui, data[0]).textCursor()
         cursor.insertText("‎")
-        cursor.movePosition(QtGui.QTextCursor.End)
+        cursor.movePosition(QtGui.QTextCursor.MoveOperation.End)
         cursor.insertText(data[1] + "\n")
         getattr(self.ui, data[0]).setTextCursor(cursor)
         getattr(self.ui, data[0]).ensureCursorVisible()
