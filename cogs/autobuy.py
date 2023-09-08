@@ -14,7 +14,10 @@ class Autobuy(commands.Cog):
         await self.bot.sub_send("shop", "view")
 
         def check(msg):
-            return msg.embeds[0].to_dict()["title"] == "Dank Memer Shop"
+            try:
+                return msg.embeds[0].to_dict()["title"] == "Dank Memer Shop"
+            except (KeyError, IndexError):
+                return False
 
         message = await self.bot.wait_for("message", check=check)
         if message.components[3].children[1].emoji.id == 1105833876032606350:
@@ -26,6 +29,8 @@ class Autobuy(commands.Cog):
             for row in range(1, 3):
                 for col, button in enumerate(message.components[row].children):
                     if item in button.label.lower():
+                        if message.components[row].children[col].disabled:
+                            return False
                         await self.bot.click(message, row, col)
 
                         modal = await self.bot.wait_for("modal")
@@ -60,7 +65,7 @@ class Autobuy(commands.Cog):
                         if remaining < required:
                             await self.bot.send(
                                 "withdraw",
-                                amount=str((required - remaining) * 200000),
+                                amount=str((required - remaining) * 250000),
                             )
                             await self.shop_buy("saver", required - remaining)
                             self.bot.log(
@@ -87,7 +92,7 @@ class Autobuy(commands.Cog):
                     in embed["description"]
                     and self.bot.config_dict["autobuy"]["shovel"]
                 ):
-                    await self.bot.send("withdraw", amount="35k")
+                    await self.bot.send("withdraw", amount="45k")
                     await self.shop_buy("shovel", 1)
                     self.bot.log("Bought Shovel", "yellow")
             # Fishing pole
@@ -107,7 +112,7 @@ class Autobuy(commands.Cog):
                     in embed["description"]
                     and self.bot.config_dict["autobuy"]["rifle"]
                 ):
-                    await self.bot.send("withdraw", amount="35k")
+                    await self.bot.send("withdraw", amount="45k")
                     await self.shop_buy("rifle", 1)
                     self.bot.log("Bought Shovel", "yellow")
 
