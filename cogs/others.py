@@ -25,6 +25,15 @@ class Others(commands.Cog):
                 ):
                     await self.bot.send("alert")
             with contextlib.suppress(KeyError):
+                if (
+                    "unable to interact with this due to an ongoing command"
+                    in embed["description"]
+                ):
+                    self.bot.last_ran = {
+                        k: v + 30 if v != float("inf") else 0
+                        for k, v in self.bot.last_ran.items()
+                    }
+            with contextlib.suppress(KeyError):
                 if "we're under maintenance!" in embed["title"].lower():
                     with open("config.json", "r+") as config_file:
                         config_dict = json.load(config_file)
