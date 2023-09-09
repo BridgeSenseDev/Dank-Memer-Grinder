@@ -23,6 +23,11 @@ class Pets(commands.Cog):
         }
 
         with contextlib.suppress(AttributeError):
+            await self.bot.send(
+                "withdraw",
+                amount=f"{10 * len(message.components[0].children[0].options)}k",
+            )
+
             for pet in message.components[0].children[0].options:
                 await self.bot.send("withdraw", amount="40k")
                 await message.components[0].children[0].choose(pet)
