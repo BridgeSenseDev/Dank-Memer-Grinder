@@ -20,11 +20,9 @@ class Scratch(commands.Cog):
             await asyncio.sleep(random.uniform(0.4, 0.9))
             await self.bot.click(message, random.randint(0, 4), random.randint(0, 2))
             await asyncio.sleep(random.uniform(0.1, 0.2))
-            self.bot.log("end", "yellow")
 
-        self.bot.log("end bttn", "yellow")
         await self.bot.click(message, 4, 3)
-        self.bot.log("end bttn(2)", "yellow")
+        self.bot.log("finished scratch", "green")
         self.bot.state = True
 
 
