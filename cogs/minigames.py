@@ -65,17 +65,15 @@ class Minigames(commands.Cog):
             # MoleMan
             with contextlib.suppress(KeyError):
                 if "Dodge the Worms!" in embed["description"]:
+                    await asyncio.sleep(0.3)
                     moleman = embed["description"].splitlines()[5]
+
                     for i in reversed(embed["description"].splitlines()):
                         if i not in worms_loc:
                             continue
                         match worms_loc[i]:
                             case 0:
-                                if moleman_loc[moleman] == 1:
-                                    await self.bot.click(after, 0, 0)
-                                elif moleman_loc[moleman] == 2:
-                                    await self.bot.click(after, 0, 0)
-                                    await asyncio.sleep(0.2)
+                                if moleman_loc[moleman] != 0:
                                     await self.bot.click(after, 0, 0)
                                 break
                             case 1:
@@ -85,14 +83,11 @@ class Minigames(commands.Cog):
                                     await self.bot.click(after, 0, 0)
                                 break
                             case 2:
-                                if moleman_loc[moleman] == 0:
-                                    await self.bot.click(after, 0, 1)
-                                    await asyncio.sleep(0.2)
-                                    await self.bot.click(after, 0, 1)
-                                if moleman_loc[moleman] == 1:
+                                if moleman_loc[moleman] != 2:
                                     await self.bot.click(after, 0, 1)
                                 break
                     return
+
             # Football
             with contextlib.suppress(KeyError):
                 if "Hit the ball!" in embed["description"]:
