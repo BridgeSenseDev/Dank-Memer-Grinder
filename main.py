@@ -48,6 +48,7 @@ commands_dict = {
     "pm": "postmemes",
     "beg": "beg",
     "pet": "pets",
+    "scratch": "scratch",
     "hl": "highlow",
     "search": "search",
     "dep_all": "deposit",
@@ -78,6 +79,7 @@ config_example = {
         "pm": {"state": False, "delay": 20},
         "beg": {"state": False, "delay": 40},
         "pet": {"state": False, "delay": 1800},
+        "scratch": {"state": False, "delay": 10800},
         "hl": {"state": False, "delay": 20},
         "search": {
             "state": False,
