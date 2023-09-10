@@ -52,11 +52,13 @@ class Minigames(commands.Cog):
                     "Dodge the Worms!" in embed["description"]
                     and "Mole Man" in after_embed["description"]
                 ):
+                    self.bot.pause = False
                     self.bot.log("Solved Dodge Worms Minigame", "green")
                 elif (
                     "Dodge the Worms!" in embed["description"]
                     and "Dodge the Worms!" not in after_embed["description"]
                 ):
+                    self.bot.pause = False
                     self.bot.log("Failed Dodge Worms Minigame", "red")
 
         for embed in after.embeds:
@@ -202,6 +204,7 @@ class Minigames(commands.Cog):
             embed = embed.to_dict()
             with contextlib.suppress(KeyError):
                 if "Dodge the Worms!" in embed["description"]:
+                    self.bot.pause = True
                     self.bot.log("Solving Dodge Worms Minigame", "yellow")
 
             # Color match
@@ -211,10 +214,7 @@ class Minigames(commands.Cog):
                     in embed["description"]
                 ):
                     self.bot.log("Solving Color Match Minigame", "yellow")
-                    self.bot.last_ran = {
-                        k: v + 100 if v != 0 else float("inf")
-                        for k, v in self.bot.last_ran.items()
-                    }
+                    self.bot.pause = True
                     options = {}
                     for line in embed["description"].splitlines()[1:]:
                         match_word = re.search("`(.+?)`", line)
@@ -228,10 +228,7 @@ class Minigames(commands.Cog):
                     for count, button in enumerate(message.components[0].children):
                         if button.label == color:
                             await self.bot.click(message, 0, count)
-                    self.bot.last_ran = {
-                        k: v - 100 if v != float("inf") else 0
-                        for k, v in self.bot.last_ran.items()
-                    }
+                    self.bot.pause = False
                     self.bot.log("Solved Color Match Minigame", "green")
                     return
 
@@ -239,20 +236,14 @@ class Minigames(commands.Cog):
             with contextlib.suppress(KeyError):
                 if "Look at the emoji closely!" in embed["description"]:
                     self.bot.log("Solving Emoji Minigame", "yellow")
-                    self.bot.last_ran = {
-                        k: v + 100 if v != 0 else float("inf")
-                        for k, v in self.bot.last_ran.items()
-                    }
+                    self.bot.pause = True
                     emoji = str(embed["description"].splitlines()[1])
                     await asyncio.sleep(4)
                     for row, i in enumerate(message.components):
                         for column, button in enumerate(i.children):
                             if str(button.emoji) == emoji:
                                 await self.bot.click(message, row, column)
-                    self.bot.last_ran = {
-                        k: v - 100 if v != float("inf") else 0
-                        for k, v in self.bot.last_ran.items()
-                    }
+                    self.bot.pause = False
                     self.bot.log("Solved Emoji Minigame", "green")
                     return
             # Repeat order
@@ -262,10 +253,7 @@ class Minigames(commands.Cog):
                     for i in ["Repeat Order", "word order.", "words order"]
                 ):
                     self.bot.log("Solving Repeat Order Minigame", "yellow")
-                    self.bot.last_ran = {
-                        k: v + 100 if v != 0 else float("inf")
-                        for k, v in self.bot.last_ran.items()
-                    }
+                    self.bot.pause = True
                     order = [
                         line[1:-1]
                         for line in message.embeds[0].description.splitlines()[1:6]
@@ -277,26 +265,17 @@ class Minigames(commands.Cog):
                     }
                     for choice in order:
                         await self.bot.click(message, 0, answers[choice])
-                    self.bot.last_ran = {
-                        k: v - 100 if v != float("inf") else 0
-                        for k, v in self.bot.last_ran.items()
-                    }
+                    self.bot.pause = False
                     self.bot.log("Solved Repeat Order Minigame", "green")
                     return
             # Attack boss
             with contextlib.suppress(KeyError):
                 if "Attack the boss by clicking" in embed["description"]:
                     self.bot.log("Solving Attack Boss Minigame", "yellow")
-                    self.bot.last_ran = {
-                        k: v + 100 if v != 0 else float("inf")
-                        for k, v in self.bot.last_ran.items()
-                    }
+                    self.bot.pause = True
                     while not message.components[0].children[0].disabled:
                         await self.bot.click(message, 0, 0)
-                    self.bot.last_ran = {
-                        k: v - 100 if v != float("inf") else 0
-                        for k, v in self.bot.last_ran.items()
-                    }
+                    self.bot.pause = False
                     self.bot.log("Solved Attack Boss Minigame", "green")
                     return
             # F in the chat
@@ -308,7 +287,9 @@ class Minigames(commands.Cog):
                     return
             # HighLow
             with contextlib.suppress(KeyError):
-                if "I just chose a secret number" in embed["description"]:
+                if "I just chose a secret number" in embed["description"] and (
+                    message.interaction and message.interaction.name != "highlow"
+                ):
                     num = int(
                         re.search("\*\*(.*?)\*\*", embed["description"])[1].title()
                     )

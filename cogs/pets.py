@@ -18,9 +18,7 @@ class Pets(commands.Cog):
         if not await self.bot.is_valid_command(message, "pet", "care"):
             return
 
-        self.bot.last_ran = {
-            k: v + 100 if v != 0 else float("inf") for k, v in self.bot.last_ran.items()
-        }
+        self.bot.pause = True
 
         with contextlib.suppress(AttributeError):
             await self.bot.send(
@@ -29,7 +27,6 @@ class Pets(commands.Cog):
             )
 
             for pet in message.components[0].children[0].options:
-                await self.bot.send("withdraw", amount="40k")
                 await message.components[0].children[0].choose(pet)
                 await asyncio.sleep(0.5)
                 if message.components[1].children[0].disabled:
@@ -58,9 +55,7 @@ class Pets(commands.Cog):
                             )
                             else 100
                         )
-        self.bot.last_ran = {
-            k: v - 100 if v != float("inf") else 0 for k, v in self.bot.last_ran.items()
-        }
+        self.bot.pause = False
 
 
 async def setup(bot):

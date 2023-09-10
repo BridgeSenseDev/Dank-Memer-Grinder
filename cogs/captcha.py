@@ -182,10 +182,12 @@ class Captcha(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if not self.bot.state:
+        if not self.bot.state or message.channel.id != self.bot.channel_id:
             return
 
         with contextlib.suppress(KeyError):
+            if not message.embeds:
+                return
             embed = message.embeds[0].to_dict()
             embed["title"] = unidecode(embed["title"])
 

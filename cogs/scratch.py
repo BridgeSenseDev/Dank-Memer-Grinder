@@ -13,6 +13,7 @@ class Scratch(commands.Cog):
         if not await self.bot.is_valid_command(message, "scratch"):
             return
 
+        self.bot.pause = True
         self.bot.log("Solving Scratch", "yellow")
 
         for _ in range(4):
@@ -22,6 +23,7 @@ class Scratch(commands.Cog):
         await asyncio.sleep(0.5)
         await self.bot.click(message, 4, 3)
         self.bot.log("Solved Scratch", "green")
+        self.bot.pause = False
 
 
 async def setup(bot):

@@ -3,6 +3,7 @@ import contextlib
 import ctypes
 import io
 import json
+import logging
 import os
 import platform
 import random
@@ -39,6 +40,8 @@ from resources.updater import *
 
 with contextlib.suppress(AttributeError):
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("dankmemergrinder")
+
+logging.basicConfig(level=logging.ERROR)
 
 commands_dict = {
     "trivia": "trivia",
@@ -393,6 +396,7 @@ async def start_bot(token, account_id):
             self.config_dict = config_dict[self.account_id]
             self.config_example = config_example
             self.state = self.config_dict["state"]
+            self.pause = False
             if config_dict[account_id]["channel_id"]:
                 self.channel_id = int(config_dict[account_id]["channel_id"])
             else:
@@ -424,20 +428,16 @@ async def start_bot(token, account_id):
             )
             await asyncio.sleep(random.randint(min_delay, max_delay) / 1000)
 
-            retries = 0
-            while retries <= 3:
-                try:
-                    click = (
-                        await message.components[component].children[children].click()
-                    )
-                    if click.successful:
-                        return True
-                    else:
-                        retries += 1
-                except (discord.errors.HTTPException, discord.errors.InvalidData):
-                    retries += 1
+            try:
+                click = await message.components[component].children[children].click()
+                if click.successful:
+                    return True
+                else:
+                    self.log("Error: Click Unsuccessful", "red")
+                    return False
+            except (discord.errors.HTTPException, discord.errors.InvalidData) as e:
+                self.log(f"Error: Click Unsuccessful\n{type(e).__name__}: {e}", "red")
 
-            self.log("Error: Failed to click button after 3 retries", "red")
             return False
 
         @staticmethod
@@ -455,6 +455,9 @@ async def start_bot(token, account_id):
                 pass
 
         async def send(self, command_name, channel=None, **kwargs):
+            if self.pause and command_name != "withdraw":
+                return
+
             if channel is None:
                 channel = self.channel
 
@@ -469,12 +472,18 @@ async def start_bot(token, account_id):
                     discord.errors.DiscordServerError,
                     KeyError,
                     discord.errors.InvalidData,
-                ):
+                ) as e:
+                    self.log(
+                        f"Error: Command Unsuccessful\n{type(e).__name__}: {e}", "red"
+                    )
                     pass
 
         async def sub_send(
             self, command_name, sub_command_name, channel=None, **kwargs
         ):
+            if self.pause and command_name != "shop":
+                return
+
             if channel is None:
                 channel = self.channel
             try:
@@ -489,7 +498,8 @@ async def start_bot(token, account_id):
                 discord.errors.DiscordServerError,
                 KeyError,
                 discord.errors.InvalidData,
-            ):
+            ) as e:
+                self.log(f"Error: Command Unsuccessful\n{type(e).__name__}: {e}", "red")
                 pass
 
         def log(self, text, color=QColor(232, 230, 227)):
@@ -937,7 +947,7 @@ class MainWindow(QMainWindow):
         cursor = getattr(self.ui, data[0]).textCursor()
         cursor.insertText("‎")
         cursor.movePosition(QtGui.QTextCursor.MoveOperation.End)
-        cursor.insertText(data[1] + "\n")
+        cursor.insertText(str(data[1] + "\n"))
         getattr(self.ui, data[0]).setTextCursor(cursor)
         getattr(self.ui, data[0]).ensureCursorVisible()
 
