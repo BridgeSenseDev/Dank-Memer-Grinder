@@ -16,11 +16,15 @@ class Scratch(commands.Cog):
         self.bot.pause = True
         self.bot.log("Solving Scratch", "yellow")
 
+        coordinates = [(x, y) for x in range(5) for y in range(3)]
+        random.shuffle(coordinates)
+
         for _ in range(4):
             await asyncio.sleep(random.uniform(0.4, 0.9))
-            await self.bot.click(message, random.randint(0, 4), random.randint(0, 2))
+            x, y = coordinates.pop()
+            await self.bot.click(message, x, y)
 
-        await asyncio.sleep(0.5)
+        await asyncio.sleep(0.3)
         await self.bot.click(message, 4, 3)
         self.bot.log("Solved Scratch", "green")
         self.bot.pause = False
