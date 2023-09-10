@@ -20,13 +20,14 @@ class AutoHeist(commands.Cog):
     async def on_message(self, message):
         if not self.bot.state:
             return
+
         for autoheist in self.bot.global_config_dict["autoheist"]:
             if message.channel.id != int(autoheist):
                 continue
             with contextlib.suppress(KeyError):
                 embed = message.embeds[0].to_dict()
                 if (
-                    " is starting a bank robbery" in embed["title"]
+                    "is starting a bank robbery" in embed["title"]
                     and str(self.bot.user) not in embed["title"]
                     and not message.components[0].children[0].disabled
                 ):
@@ -35,17 +36,19 @@ class AutoHeist(commands.Cog):
                     self.bot.log(
                         f"Joined heist in {message.channel.guild.name}", "green"
                     )
-                    return
-                elif "bankrob result" in embed["title"]:
+                elif "bankrob result" in embed["title"].lower():
                     if "#4caf50" in str(embed.colour):
-                        self.findint = re.findall(r'\d+', embed.description.splitlines()[0])
-                        self.bot.log(f"{self.user.name} earned ⏣{self.findint} joining heist", "green")
-                        return
+                        coins = re.findall(r"\d+", embed.description.splitlines()[0])
+                        self.bot.log(
+                            f"Earned ⏣{coins} joining heist",
+                            "green",
+                        )
                     else:
-                        self.findint = re.findall(r'\d+', embed.description.splitlines()[0])
-                        self.bot.log(f"{self.user.name} lost ⏣{self.findint} joining heist", "red")
-                        return
-                    
+                        coins = re.findall(r"\d+", embed.description.splitlines()[0])
+                        self.bot.log(
+                            f"Lost ⏣{coins} joining heist",
+                            "red",
+                        )
 
 
 async def setup(bot):
