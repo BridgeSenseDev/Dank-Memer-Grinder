@@ -2,6 +2,7 @@ import asyncio
 import contextlib
 import re
 
+import discord
 from discord.ext import commands
 
 
@@ -44,77 +45,100 @@ class Autobuy(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if not message.guild and self.bot.state:
-            for embed in message.embeds:
-                embed = embed.to_dict()
-                # Buy lifesavers
-                with contextlib.suppress(KeyError):
-                    if (
-                        embed["title"] == "Your lifesaver protected you!"
-                        and self.bot.config_dict["autobuy"]["lifesavers"]["state"]
-                    ):
-                        remaining = int(
-                            re.search(
-                                "have (.*?)x Life Saver",
-                                message.components[0].children[0].label,
-                            )[1]
-                        )
-                        required = int(
-                            self.bot.config_dict["autobuy"]["lifesavers"]["amount"]
-                        )
-                        if remaining < required:
-                            await self.bot.send(
-                                "withdraw",
-                                amount=str((required - remaining) * 250000),
-                            )
-                            await self.shop_buy("saver", required - remaining)
-                            self.bot.log(
-                                f"Bought {required - remaining} Lifesavers",
-                                "yellow",
-                            )
-                            return
-                # Confirm purchase
-                with contextlib.suppress(KeyError):
-                    if (
-                        embed["title"] == "Pending Confirmation"
-                        and self.bot.config_dict["autobuy"]["lifesavers"]["state"]
-                    ):
-                        await self.bot.click(message, 0, 1)
-        if message.channel.id != self.bot.channel_id or not self.bot.state:
+        if not self.bot.state or (
+            message.channel.id != self.bot.channel_id and message.guild
+        ):
             return
 
         for embed in message.embeds:
             embed = embed.to_dict()
-            # Shovel
+            # Buy lifesavers
             with contextlib.suppress(KeyError):
                 if (
-                    "You don't have a shovel, you need to go buy one."
-                    in embed["description"]
-                    and self.bot.config_dict["autobuy"]["shovel"]
+                    embed["title"] == "Your lifesaver protected you!"
+                    and self.bot.config_dict["autobuy"]["lifesavers"]["state"]
                 ):
-                    await self.bot.send("withdraw", amount="45k")
-                    await self.shop_buy("shovel", 1)
-                    self.bot.log("Bought Shovel", "yellow")
-            # Fishing pole
+                    remaining = int(
+                        re.search(
+                            "have (.*?)x Life Saver",
+                            message.components[0].children[0].label,
+                        )[1]
+                    )
+                    required = int(
+                        self.bot.config_dict["autobuy"]["lifesavers"]["amount"]
+                    )
+                    if remaining < required:
+                        await self.bot.send(
+                            "withdraw",
+                            amount=str((required - remaining) * 250000),
+                        )
+                        await self.shop_buy("saver", required - remaining)
+                        self.bot.log(
+                            f"Bought {required - remaining} Lifesavers",
+                            "yellow",
+                        )
+                        return
+
+            # Confirm purchase
             with contextlib.suppress(KeyError):
                 if (
-                    "You don't have a fishing pole, you need to go buy one"
-                    in embed["description"]
-                    and self.bot.config_dict["autobuy"]["fishing"]
+                    embed["title"] == "Pending Confirmation"
+                    and self.bot.config_dict["autobuy"]["lifesavers"]["state"]
                 ):
-                    await self.bot.send("withdraw", amount="35k")
-                    await self.shop_buy("pole", 1)
-                    self.bot.log("Bought Shovel", "yellow")
-            # Hunting rifle
-            with contextlib.suppress(KeyError):
-                if (
-                    "You don't have a hunting rifle, you need to go buy one."
-                    in embed["description"]
-                    and self.bot.config_dict["autobuy"]["rifle"]
-                ):
-                    await self.bot.send("withdraw", amount="45k")
-                    await self.shop_buy("rifle", 1)
-                    self.bot.log("Bought Shovel", "yellow")
+                    await self.bot.click(message, 0, 1)
+
+        items = {
+            "shovel": {
+                "internal_name": "shovel",
+                "message": "You don't have a shovel, you need to go buy one",
+                "cost": "45k",
+            },
+            "pole": {
+                "internal_name": "fishing",
+                "message": "You don't have a fishing pole, you need to go buy one",
+                "cost": "35k",
+            },
+            "rifle": {
+                "internal_name": "rifle",
+                "message": "You don't have a hunting rifle, you need to go buy one",
+                "cost": "45k",
+            },
+        }
+
+        for embed in message.embeds:
+            embed = embed.to_dict()
+
+            for item, details in items.items():
+                with contextlib.suppress(KeyError):
+                    if (
+                        details["message"] in embed["description"]
+                        and self.bot.config_dict["autobuy"][details["internal_name"]]
+                    ):
+                        self.bot.pause = True
+                        await asyncio.sleep(0.3)
+                        await self.bot.send("withdraw", amount=details["cost"])
+                        await asyncio.sleep(0.3)
+                        try:
+                            await self.shop_buy(item, 1)
+                        except (
+                            discord.errors.HTTPException,
+                            discord.errors.InvalidData,
+                        ):
+                            self.bot.log(f"Failed to buy {item.capitalize()}", "red")
+                        self.bot.pause = False
+                        self.bot.log(f"Bought {item.capitalize()}", "green")
+
+                        def check(msg):
+                            try:
+                                return (
+                                    msg.embeds[0].to_dict()["title"]
+                                    == "Pending Confirmation"
+                                )
+                            except (KeyError, IndexError):
+                                return False
+
+                        message = await self.bot.wait_for("message", check=check)
+                        await self.bot.click(message, 0, 0)
 
 
 async def setup(bot):
