@@ -34,7 +34,7 @@ class Others(commands.Cog):
                         for k, v in self.bot.last_ran.items()
                     }
             with contextlib.suppress(KeyError):
-                if "we're under maintenance!" in embed["title"].lower():
+                if "maintenance" in embed["title"].lower():
                     with open("config.json", "r+") as config_file:
                         config_dict = json.load(config_file)
                         for account_id in (str(i) for i in range(1, len(config_dict))):
