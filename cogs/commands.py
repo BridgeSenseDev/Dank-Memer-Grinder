@@ -19,6 +19,7 @@ class Commands(commands.Cog):
     @tasks.loop(seconds=config_dict["global"]["min_commands_delay"] / 1000)
     async def commands(self):
         if not self.bot.state:
+            await asyncio.sleep(0.5)
             return
 
         shuffled_commands = list(self.bot.commands_dict)[:]
@@ -29,25 +30,26 @@ class Commands(commands.Cog):
                 time.time() - self.bot.last_ran[command]
                 < self.bot.config_dict["commands"][command]["delay"]
                 or not self.bot.config_dict["commands"][command]["state"]
+                or not self.bot.state
             ):
                 await asyncio.sleep(0.1)
                 continue
-            self.bot.last_ran[command] = time.time()
+            self.bot.last_ran[command] = time.time() + 2
             if command == "dep_all":
-                await self.bot.send(self.bot.commands_dict[command], amount="max")
                 await asyncio.sleep(random.randint(2, 4))
+                await self.bot.send(self.bot.commands_dict[command], amount="max")
                 continue
             elif command == "work":
-                await self.bot.sub_send(self.bot.commands_dict[command], "shift")
                 await asyncio.sleep(random.randint(2, 4))
+                await self.bot.sub_send(self.bot.commands_dict[command], "shift")
                 continue
             elif command == "pet":
-                await self.bot.sub_send(self.bot.commands_dict[command], "care")
                 await asyncio.sleep(random.randint(2, 4))
+                await self.bot.sub_send(self.bot.commands_dict[command], "care")
                 continue
-            await self.bot.send(self.bot.commands_dict[command])
             await asyncio.sleep(random.randint(2, 4))
-            return
+            await self.bot.send(self.bot.commands_dict[command])
+            continue
 
 
 async def setup(bot):

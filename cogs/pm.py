@@ -1,5 +1,6 @@
 import asyncio
 import random
+import time
 
 from discord.ext import commands
 
@@ -18,6 +19,7 @@ class Pm(commands.Cog):
         await self.bot.select(message, 1, 0, random.randint(0, 4))
         await asyncio.sleep(0.3)
         await self.bot.click(message, 2, 0)
+        self.bot.last_ran["pm"] = time.time()
 
         await asyncio.sleep(1)
         embed = message.embeds[0].to_dict()

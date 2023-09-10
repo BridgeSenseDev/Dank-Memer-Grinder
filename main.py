@@ -523,10 +523,7 @@ async def start_bot(token, account_id):
                 return False
 
             try:
-                if (
-                    "[premium](https://www.patreon.com/dankmemerbot) cooldown is"
-                    in message.embeds[0].to_dict()["description"]
-                ):
+                if "cooldown is" in message.embeds[0].to_dict()["description"]:
                     return False
             except (IndexError, KeyError):
                 pass

@@ -1,4 +1,5 @@
 import re
+import time
 
 from discord.ext import commands
 
@@ -18,6 +19,7 @@ class Hl(commands.Cog):
             await self.bot.click(message, 0, 0)
         else:
             await self.bot.click(message, 0, 2)
+        self.bot.last_ran["hl"] = time.time()
 
 
 async def setup(bot):
