@@ -70,16 +70,12 @@ class Others(commands.Cog):
             self.bot.config_dict["offline"]
             and self.bot.status != discord.Status.invisible
         ):
-            await self.bot.change_presence(
-                status=discord.Status.invisible, activity=self.bot.activity
-            )
+            await self.bot.change_presence(status=discord.Status.invisible)
         elif (
             not self.bot.config_dict["offline"]
             and self.bot.status == discord.Status.invisible
         ):
-            await self.bot.change_presence(
-                status=discord.Status.online, activity=self.bot.activity
-            )
+            await self.bot.change_presence(status=discord.Status.online)
 
     @presence.before_loop
     async def before_presence(self):

@@ -1,6 +1,7 @@
 import asyncio
 import contextlib
 import re
+import time
 
 from discord.ext import commands
 
@@ -52,13 +53,13 @@ class Minigames(commands.Cog):
                     "Dodge the Worms!" in embed["description"]
                     and "Mole Man" in after_embed["description"]
                 ):
-                    self.bot.pause = False
+                    self.bot.pause_commands = False
                     self.bot.log("Solved Dodge Worms Minigame", "green")
                 elif (
                     "Dodge the Worms!" in embed["description"]
                     and "Dodge the Worms!" not in after_embed["description"]
                 ):
-                    self.bot.pause = False
+                    self.bot.pause_commands = False
                     self.bot.log("Failed Dodge Worms Minigame", "red")
 
         for embed in after.embeds:
@@ -73,22 +74,20 @@ class Minigames(commands.Cog):
                     for i in reversed(embed["description"].splitlines()):
                         if i not in worms_loc:
                             continue
+
                         match worms_loc[i]:
                             case 0:
                                 if moleman_loc[moleman] != 0:
                                     await self.bot.click(after, 0, 0)
-                                break
                             case 1:
                                 if moleman_loc[moleman] == 0:
                                     await self.bot.click(after, 0, 1)
                                 elif moleman_loc[moleman] == 2:
                                     await self.bot.click(after, 0, 0)
-                                break
                             case 2:
                                 if moleman_loc[moleman] != 2:
                                     await self.bot.click(after, 0, 1)
-                                break
-                    return
+                        return
 
             # Football
             with contextlib.suppress(KeyError):
@@ -109,6 +108,7 @@ class Minigames(commands.Cog):
                         await self.bot.click(after, 0, 1, [0, 0])
                     self.bot.log("Solved Football Minigame", "green")
                     return
+
             # Basketball
             with contextlib.suppress(KeyError):
                 if "Dunk the ball!" in embed["description"]:
@@ -128,6 +128,7 @@ class Minigames(commands.Cog):
                         await self.bot.click(after, 0, 0, [0, 0])
                     self.bot.log("Solved Basketball Minigame", "green")
                     return
+
             # Dragon
             with contextlib.suppress(KeyError):
                 if "Dodge the Fireball" in embed["description"]:
@@ -191,6 +192,17 @@ class Minigames(commands.Cog):
                     self.bot.log("Solved Fish Minigame", "green")
                     return
 
+            # Attack boss
+            with contextlib.suppress(KeyError):
+                if "Attack the boss by clicking" in embed["description"]:
+                    if not after.components[0].children[0].disabled:
+                        await asyncio.sleep(0.3)
+                        await self.bot.click(after, 0, 0)
+                    else:
+                        self.bot.log("Solved Attack Boss Minigame", "green")
+                        self.bot.pause_commands = False
+                        return
+
     @commands.Cog.listener()
     async def on_message(self, message):
         if (
@@ -204,7 +216,8 @@ class Minigames(commands.Cog):
             embed = embed.to_dict()
             with contextlib.suppress(KeyError):
                 if "Dodge the Worms!" in embed["description"]:
-                    self.bot.pause = True
+                    self.bot.pause_commands = True
+                    self.bot.pause_commands_timestamp = time.time()
                     self.bot.log("Solving Dodge Worms Minigame", "yellow")
 
             # Color match
@@ -214,7 +227,8 @@ class Minigames(commands.Cog):
                     in embed["description"]
                 ):
                     self.bot.log("Solving Color Match Minigame", "yellow")
-                    self.bot.pause = True
+                    self.bot.pause_commands = True
+                    self.bot.pause_commands_timestamp = time.time()
                     options = {}
                     for line in embed["description"].splitlines()[1:]:
                         match_word = re.search("`(.+?)`", line)
@@ -228,7 +242,7 @@ class Minigames(commands.Cog):
                     for count, button in enumerate(message.components[0].children):
                         if button.label == color:
                             await self.bot.click(message, 0, count)
-                    self.bot.pause = False
+                    self.bot.pause_commands = False
                     self.bot.log("Solved Color Match Minigame", "green")
                     return
 
@@ -236,16 +250,18 @@ class Minigames(commands.Cog):
             with contextlib.suppress(KeyError):
                 if "Look at the emoji closely!" in embed["description"]:
                     self.bot.log("Solving Emoji Minigame", "yellow")
-                    self.bot.pause = True
+                    self.bot.pause_commands = True
+                    self.bot.pause_commands_timestamp = time.time()
                     emoji = str(embed["description"].splitlines()[1])
                     await asyncio.sleep(4)
                     for row, i in enumerate(message.components):
                         for column, button in enumerate(i.children):
                             if str(button.emoji) == emoji:
                                 await self.bot.click(message, row, column)
-                    self.bot.pause = False
+                    self.bot.pause_commands = False
                     self.bot.log("Solved Emoji Minigame", "green")
                     return
+
             # Repeat order
             with contextlib.suppress(KeyError):
                 if any(
@@ -253,7 +269,8 @@ class Minigames(commands.Cog):
                     for i in ["Repeat Order", "word order.", "words order"]
                 ):
                     self.bot.log("Solving Repeat Order Minigame", "yellow")
-                    self.bot.pause = True
+                    self.bot.pause_commands = True
+                    self.bot.pause_commands_timestamp = time.time()
                     order = [
                         line[1:-1]
                         for line in message.embeds[0].description.splitlines()[1:6]
@@ -265,19 +282,19 @@ class Minigames(commands.Cog):
                     }
                     for choice in order:
                         await self.bot.click(message, 0, answers[choice])
-                    self.bot.pause = False
+                        self.bot.pause_commands = False
                     self.bot.log("Solved Repeat Order Minigame", "green")
                     return
+
             # Attack boss
             with contextlib.suppress(KeyError):
                 if "Attack the boss by clicking" in embed["description"]:
                     self.bot.log("Solving Attack Boss Minigame", "yellow")
-                    self.bot.pause = True
-                    while not message.components[0].children[0].disabled:
-                        await self.bot.click(message, 0, 0)
-                    self.bot.pause = False
-                    self.bot.log("Solved Attack Boss Minigame", "green")
+                    self.bot.pause_commands = True
+                    self.bot.pause_commands_timestamp = time.time()
+                    await self.bot.click(message, 0, 0)
                     return
+
             # F in the chat
             with contextlib.suppress(KeyError):
                 if embed["description"] == "F":
@@ -285,6 +302,7 @@ class Minigames(commands.Cog):
                     await self.bot.click(message, 0, 0)
                     self.bot.log("Solved F In The Chat Minigame", "green")
                     return
+
             # HighLow
             with contextlib.suppress(KeyError):
                 if "I just chose a secret number" in embed["description"] and (

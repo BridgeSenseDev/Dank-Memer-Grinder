@@ -32,7 +32,7 @@ class Adventure(commands.Cog):
         with contextlib.suppress(KeyError):
             embed = after.embeds[0].to_dict()
             if embed["author"]["name"] == "Adventure Summary":
-                self.bot.pause = False
+                self.bot.pause_commands = False
 
         with contextlib.suppress(KeyError):
             embed = after.embeds[0].to_dict()
@@ -78,9 +78,10 @@ class Adventure(commands.Cog):
                     if i.value == self.adventure:
                         await self.bot.select(message, 0, 0, count)
                         if not message.components[1].children[0].disabled:
-                            self.bot.pause = True
                             await asyncio.sleep(0.5)
                             await self.bot.click(message, 1, 0)
+                        else:
+                            self.bot.pause_commands = False
 
 
 async def setup(bot):

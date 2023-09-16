@@ -1,5 +1,6 @@
 import json
 import random
+import time
 
 from discord.ext import commands
 
@@ -37,14 +38,17 @@ class Search(commands.Cog):
         for count, button in enumerate(children):
             if button.label.lower() in self.priority:
                 await self.bot.click(message, 0, count)
+                self.bot.last_ran["search"] = time.time()
                 return
         for count, button in enumerate(children):
             if button.label.lower() in self.second_priority:
                 await self.bot.click(message, 0, count)
+                self.bot.last_ran["search"] = time.time()
                 return
         for count, button in enumerate(children):
             if button.label.lower() not in self.avoid:
                 await self.bot.click(message, 0, count)
+                self.bot.last_ran["search"] = time.time()
                 return
 
 

@@ -9,7 +9,6 @@ cffi==1.15.1
 charset-normalizer==3.2.0
 coloredlogs==15.0.1
 discord-protos==0.0.2
-discord.py-self @ git+https://github.com/dolfies/discord.py-self@master
 flatbuffers==23.5.26
 frozenlist==1.4.0
 humanfriendly==10.0
@@ -19,15 +18,15 @@ multidict==6.0.4
 numpy==1.25.2
 onnxruntime==1.15.1
 opencv-python==4.8.0.76
-orjson==3.9.7
+orjson==3.9.6
 packaging==23.1
 Pillow==10.0.0
 protobuf==4.24.3
 pycares==4.3.0
 pycparser==2.21
-PyQt6==6.5.2
-PyQt6-Qt6==6.5.2
-PyQt6-sip==13.5.2
+PyQt5==5.15.9
+PyQt5-Qt5==5.15.2
+PyQt5-sip==12.12.2
 pyreadline3==3.4.1
 qasync==0.24.0
 requests==2.31.0

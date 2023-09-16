@@ -11,6 +11,7 @@ import subprocess
 import sys
 import tempfile
 import threading
+import time
 from collections import OrderedDict
 
 # noinspection PyUnresolvedReferences
@@ -396,7 +397,8 @@ async def start_bot(token, account_id):
             self.config_dict = config_dict[self.account_id]
             self.config_example = config_example
             self.state = self.config_dict["state"]
-            self.pause = False
+            self.pause_commands = False
+            self.pause_commands_timestamp = time.time()
             if config_dict[account_id]["channel_id"]:
                 self.channel_id = int(config_dict[account_id]["channel_id"])
             else:
@@ -437,8 +439,7 @@ async def start_bot(token, account_id):
                     return False
             except (discord.errors.HTTPException, discord.errors.InvalidData) as e:
                 self.log(f"Error: Click Unsuccessful\n{type(e).__name__}: {e}", "red")
-
-            return False
+                return False
 
         @staticmethod
         async def select(message, component, children, option, delay=None):
@@ -455,9 +456,6 @@ async def start_bot(token, account_id):
                 pass
 
         async def send(self, command_name, channel=None, **kwargs):
-            if self.pause and command_name != "withdraw":
-                return
-
             if channel is None:
                 channel = self.channel
 
@@ -481,9 +479,6 @@ async def start_bot(token, account_id):
         async def sub_send(
             self, command_name, sub_command_name, channel=None, **kwargs
         ):
-            if self.pause and command_name != "shop":
-                return
-
             if channel is None:
                 channel = self.channel
             try:

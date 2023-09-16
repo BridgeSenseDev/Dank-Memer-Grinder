@@ -18,8 +18,6 @@ class Pets(commands.Cog):
         if not await self.bot.is_valid_command(message, "pet", "care"):
             return
 
-        self.bot.pause = True
-
         with contextlib.suppress(AttributeError):
             await self.bot.send(
                 "withdraw",
@@ -55,7 +53,7 @@ class Pets(commands.Cog):
                             )
                             else 100
                         )
-        self.bot.pause = False
+        self.bot.pause_commands = False
 
 
 async def setup(bot):

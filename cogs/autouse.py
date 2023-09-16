@@ -13,12 +13,16 @@ class Autouse(commands.Cog):
 
     @tasks.loop(seconds=1)
     async def autouse(self):
-        if not self.bot.state or not self.bot.config_dict["autouse"]["state"]:
+        if (
+            not self.bot.state
+            or not self.bot.config_dict["autouse"]["state"]
+            or self.bot.pause_commands
+        ):
             await asyncio.sleep(1)
             return
 
         for autouse in self.bot.config_dict["autouse"]:
-            if autouse in ["state", "hide_disabled"]:
+            if autouse in ["state", "hide_disabled"] or self.bot.pause_commands:
                 continue
 
             if autouse not in self.last_ran:
@@ -28,9 +32,7 @@ class Autouse(commands.Cog):
                         item=autouse.replace("_", " ").title(),
                     )
                     self.last_ran[autouse] = time.time()
-                    self.bot.log(
-                        f"Used {autouse.replace('_', '' '').title()}", "yellow"
-                    )
+                    self.bot.log(f"Used {autouse.replace('_', ' ').title()}", "yellow")
                     await asyncio.sleep(10)
                     continue
                 self.last_ran[autouse] = 0
@@ -48,7 +50,7 @@ class Autouse(commands.Cog):
                 "use",
                 item=autouse.replace("_", " ").title(),
             )
-            self.bot.log(f"Used {autouse.replace('_', '' '').title()}", "yellow")
+            self.bot.log(f"Used {autouse.replace('_', ' ').title()}", "yellow")
             await asyncio.sleep(10)
 
     @commands.Cog.listener()
@@ -57,6 +59,7 @@ class Autouse(commands.Cog):
             message.guild is not None
             or message.author.id != 270904126974590976
             or self.bot.state is not True
+            or self.bot.pause_commands
         ):
             return
 
@@ -70,15 +73,13 @@ class Autouse(commands.Cog):
                             autouse.replace("_", " ") in embed["description"].lower()
                             and self.bot.config_dict["autouse"][autouse]["state"]
                         ):
-                            await self.bot.send(
-                                "use",
-                                item=autouse.replace("_", " ").title(),
-                            )
-                            self.bot.log(
-                                f"Used {autouse.replace('_', '' '').title()}",
-                                "yellow",
-                            )
-                            return
+                            if message.components[0].children[0].label == "Use Again":
+                                await self.bot.click(message, 0, 0)
+                                self.bot.last_ran[autouse] = time.time()
+                                self.bot.log(
+                                    f"Used {autouse.replace('_', ' ').title()}",
+                                    "yellow",
+                                )
 
 
 async def setup(bot):

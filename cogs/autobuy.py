@@ -1,9 +1,31 @@
 import asyncio
 import contextlib
 import re
+import time
 
-import discord
+import discord.errors
 from discord.ext import commands
+
+items = {
+    "shovel": {
+        "name": "Shovel",
+        "internal_name": "shovel",
+        "message": "You don't have a shovel, you need to go buy one",
+        "cost": "45k",
+    },
+    "pole": {
+        "name": "Fishing Pole",
+        "internal_name": "fishing",
+        "message": "You don't have a fishing pole, you need to go buy one",
+        "cost": "35k",
+    },
+    "rifle": {
+        "name": "Hunting Rifle",
+        "internal_name": "rifle",
+        "message": "You don't have a hunting rifle, you need to go buy one",
+        "cost": "45k",
+    },
+}
 
 
 class Autobuy(commands.Cog):
@@ -25,8 +47,10 @@ class Autobuy(commands.Cog):
             await self.bot.click(message, 3, 1)
             await asyncio.sleep(0.5)
 
-        found = False
-        while not found:
+        embed = message.embeds[0].to_dict()
+        pages = int(re.search(r"Page \d+ of (\d+)", embed["footer"]["text"]).group(1))
+
+        for i in range(pages):
             for row in range(1, 3):
                 for col, button in enumerate(message.components[row].children):
                     if item in button.label.lower():
@@ -37,7 +61,13 @@ class Autobuy(commands.Cog):
                         modal = await self.bot.wait_for("modal")
                         modal.components[0].children[0].answer(str(count))
 
-                        await modal.submit()
+                        try:
+                            await modal.submit()
+                        except (
+                            discord.errors.HTTPException,
+                            discord.errors.InvalidData,
+                        ):
+                            pass
                         return
 
             await self.bot.click(message, 3, 2)
@@ -52,6 +82,29 @@ class Autobuy(commands.Cog):
 
         for embed in message.embeds:
             embed = embed.to_dict()
+
+            # Successful Purchase
+            with contextlib.suppress(KeyError):
+                if embed["title"] == "Successful Purchase":
+                    for item, details in items.items():
+                        if item in embed["description"].lower():
+                            items_bought = int(
+                                re.search(r"(\d+)x", embed["description"]).group(1)
+                            )
+                            amount_paid = re.search(
+                                r"You paid:\*\*\n- ⏣ (\d{1,3}(,\d{3})*(\.\d+)?)",
+                                embed["description"],
+                            ).group(1)
+                            self.bot.log(
+                                f"Bought {items_bought}x {details['name']} for "
+                                f"⏣ {amount_paid}",
+                                "green",
+                            )
+                            return
+                elif "don't have enough coins in your wallet" in embed["description"]:
+                    self.bot.log("Not enough coins in wallet to buy that much", "red")
+                    return
+
             # Buy lifesavers
             with contextlib.suppress(KeyError):
                 if (
@@ -68,15 +121,18 @@ class Autobuy(commands.Cog):
                         self.bot.config_dict["autobuy"]["lifesavers"]["amount"]
                     )
                     if remaining < required:
+                        self.bot.pause_commands = True
+                        self.bot.pause_commands_timestamp = time.time()
+
                         await self.bot.send(
                             "withdraw",
                             amount=str((required - remaining) * 250000),
                         )
+
+                        await asyncio.sleep(0.3)
                         await self.shop_buy("saver", required - remaining)
-                        self.bot.log(
-                            f"Bought {required - remaining} Lifesavers",
-                            "yellow",
-                        )
+
+                        self.bot.pause_commands = False
                         return
 
             # Confirm purchase
@@ -87,24 +143,6 @@ class Autobuy(commands.Cog):
                 ):
                     await self.bot.click(message, 0, 1)
 
-        items = {
-            "shovel": {
-                "internal_name": "shovel",
-                "message": "You don't have a shovel, you need to go buy one",
-                "cost": "45k",
-            },
-            "pole": {
-                "internal_name": "fishing",
-                "message": "You don't have a fishing pole, you need to go buy one",
-                "cost": "35k",
-            },
-            "rifle": {
-                "internal_name": "rifle",
-                "message": "You don't have a hunting rifle, you need to go buy one",
-                "cost": "45k",
-            },
-        }
-
         for embed in message.embeds:
             embed = embed.to_dict()
 
@@ -114,19 +152,15 @@ class Autobuy(commands.Cog):
                         details["message"] in embed["description"]
                         and self.bot.config_dict["autobuy"][details["internal_name"]]
                     ):
-                        self.bot.pause = True
+                        self.bot.pause_commands = True
+                        self.bot.pause_commands_timestamp = time.time()
+
                         await asyncio.sleep(0.3)
                         await self.bot.send("withdraw", amount=details["cost"])
                         await asyncio.sleep(0.3)
-                        try:
-                            await self.shop_buy(item, 1)
-                        except (
-                            discord.errors.HTTPException,
-                            discord.errors.InvalidData,
-                        ):
-                            self.bot.log(f"Failed to buy {item.capitalize()}", "red")
-                        self.bot.pause = False
-                        self.bot.log(f"Bought {item.capitalize()}", "green")
+                        await self.shop_buy(item, 1)
+
+                        self.bot.pause_commands = False
 
                         def check(msg):
                             try:

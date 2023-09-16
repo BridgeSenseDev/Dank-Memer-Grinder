@@ -1,5 +1,6 @@
 import asyncio
 import random
+import time
 
 from discord.ext import commands
 
@@ -13,7 +14,8 @@ class Scratch(commands.Cog):
         if not await self.bot.is_valid_command(message, "scratch"):
             return
 
-        self.bot.pause = True
+        self.bot.pause_commands = True
+        self.bot.pause_commands_timestamp = time.time()
         self.bot.log("Solving Scratch", "yellow")
 
         coordinates = [(x, y) for x in range(5) for y in range(3)]
@@ -27,7 +29,7 @@ class Scratch(commands.Cog):
         await asyncio.sleep(0.3)
         await self.bot.click(message, 4, 3)
         self.bot.log("Solved Scratch", "green")
-        self.bot.pause = False
+        self.bot.pause_commands = False
 
 
 async def setup(bot):
