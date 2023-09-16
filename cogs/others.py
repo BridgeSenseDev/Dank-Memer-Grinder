@@ -2,7 +2,7 @@ import contextlib
 import json
 
 import discord
-from PyQt6.QtGui import QColor
+from PyQt5.QtGui import QColor
 from discord.ext import commands, tasks
 
 

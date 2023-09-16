@@ -26,11 +26,11 @@ import requests
 import unidecode
 from discord.ext import commands, tasks
 from PIL import Image, ImageDraw
-from PyQt6.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal
 
 # noinspection PyUnresolvedReferences
-from PyQt6.QtGui import QColor, QFontDatabase, QIcon, QPixmap
-from PyQt6.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtGui import QColor, QFontDatabase, QIcon, QPixmap
+from PyQt5.QtWidgets import QApplication, QMainWindow
 from qasync import QEventLoop, asyncSlot
 
 # noinspection PyUnresolvedReferences

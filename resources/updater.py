@@ -1,5 +1,5 @@
-from PyQt6 import QtCore, QtGui, QtWidgets
-from PyQt6.QtCore import Qt
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import Qt
 
 
 def create_font(font_size):
