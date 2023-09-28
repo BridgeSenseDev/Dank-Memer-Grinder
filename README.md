@@ -72,4 +72,4 @@ Find a detailed breakdown of all the features in our [**<u>documentation</u>**](
 - [Documentation](https://docs.dankmemer.tools)
 - [Discord Server](https://discord.gg/KTrmQnhCHb)
 
-<a href="https://www.buymeacoffee.com/app/bridgesense"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=bridgesense&button_colour=199532&font_colour=ffffff&font_family=Arial&outline_colour=ffffff&coffee_colour=FFDD00" /></a>
+<a href="https://www.buymeacoffee.com/bridgesense"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=bridgesense&button_colour=199532&font_colour=ffffff&font_family=Arial&outline_colour=ffffff&coffee_colour=FFDD00" /></a>
