@@ -500,7 +500,7 @@ async def start_bot(token, account_id):
         def log(self, text, color=QColor(232, 230, 227)):
             match color:
                 case "red":
-                    color = QColor(216, 60, 62)
+                    color = QColor(255, 146, 137)
                 case "green":
                     color = QColor(38, 254, 0)
                 case "yellow":
@@ -548,9 +548,7 @@ async def start_bot(token, account_id):
                 != "Logging In"
             ):
                 return
-            self.window.output.emit(
-                [f"output_text_{self.account_id}", f"Logged in as {self.user}"]
-            )
+            self.log(f"Logged in as {self.user}", "green")
             getattr(window.ui, f"account_btn_{account_id}").setText(
                 f"{self.user.name}\n#{self.user.discriminator}"
             )
@@ -689,7 +687,11 @@ class MainWindow(QMainWindow):
             self.ui.toggle.setStyleSheet("background-color : #2d7d46")
             self.ui.toggle.setText(f"Bot {self.account_id} Enabled")
             self.output.emit(
-                [f"output_text_{self.account_id}", f"Started Bot {self.account_id}"]
+                [
+                    f"output_text_{self.account_id}",
+                    f"Started Bot {self.account_id}",
+                    QColor(38, 254, 0),
+                ]
             )
         self.ui.toggle.clicked.connect(lambda: self.check())
 
@@ -730,7 +732,11 @@ class MainWindow(QMainWindow):
             self.ui.toggle.setStyleSheet("background-color : #2d7d46")
             self.ui.toggle.setText(f"Bot {self.account_id} Enabled")
             self.output.emit(
-                [f"output_text_{self.account_id}", f"Started Bot {self.account_id}"]
+                [
+                    f"output_text_{self.account_id}",
+                    f"Started Bot {self.account_id}",
+                    QColor(38, 254, 0),
+                ]
             )
         else:
             config_dict[self.account_id].update({"state": False})
@@ -739,7 +745,11 @@ class MainWindow(QMainWindow):
             self.ui.toggle.setStyleSheet("background-color : #d83c3e")
             self.ui.toggle.setText(f"Bot {self.account_id} Disabled")
             self.output.emit(
-                [f"output_text_{self.account_id}", f"Stopped Bot {self.account_id}"]
+                [
+                    f"output_text_{self.account_id}",
+                    f"Stopped Bot {self.account_id}",
+                    QColor(255, 146, 137),
+                ]
             )
 
     @asyncSlot()
