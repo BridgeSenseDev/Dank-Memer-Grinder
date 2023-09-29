@@ -12,7 +12,235 @@ from PIL import Image
 from discord.ext import commands
 from unidecode import unidecode
 
-from resources.yoloseg import yolo_seg
+classes = {
+    0: "APlus",
+    1: "AdventureBoxOpen",
+    2: "AdventureTicket",
+    3: "AdventureVoucher",
+    4: "AhaPitcherPlant",
+    5: "AipheysGemstone",
+    6: "Alcohol",
+    7: "AlexasMegaphone",
+    8: "AlienSample",
+    9: "Amathinesbutterfly",
+    10: "Ant",
+    11: "AntiRobPack",
+    12: "Apple",
+    13: "ArmpitHair",
+    14: "Baby",
+    15: "BadoszCard2",
+    16: "Baguette",
+    17: "BakeggCake",
+    18: "BanHammer",
+    19: "Banana",
+    20: "BeakerOfSusFluid",
+    21: "Bean",
+    22: "BeanPlayer",
+    23: "BeanSeeds",
+    24: "BerriesAndCream",
+    25: "BirthdayCake",
+    26: "BlackHole",
+    27: "BluesPlane",
+    28: "Boar",
+    29: "BoltCutters",
+    30: "BottleOfWhiskey",
+    31: "BoxceptionClosed",
+    32: "BoxxoChoccy",
+    33: "Broccoli",
+    34: "BroccoliSeeds",
+    35: "Bullet",
+    36: "BunnysApron",
+    37: "Cactus",
+    38: "Candy",
+    39: "CandyCane",
+    40: "CandyCorn",
+    41: "Capybara",
+    42: "Carrot",
+    43: "ChillPill",
+    44: "ChristmasPresent",
+    45: "ChristmasTree",
+    46: "ChristmasTreeDeco",
+    47: "CoinBomb",
+    48: "CoinVoucher",
+    49: "CommonFish",
+    50: "Compass",
+    51: "Cookie",
+    52: "Corn",
+    53: "CornBag",
+    54: "Coupon",
+    55: "CowBoyHat",
+    56: "CreditCard",
+    57: "CupidToe",
+    58: "DailyBoxClosed",
+    59: "DankBoxClosed",
+    60: "DarkusHoodie",
+    61: "Deer",
+    62: "DevBoxClosed",
+    63: "Diaper",
+    64: "DiggingTrophy",
+    65: "Duck",
+    66: "DuctTape",
+    67: "Ectoplasm",
+    68: "ElfOnTheShelf",
+    69: "EmpoweredFartBottle",
+    70: "EnergyDrink",
+    71: "ExclusiveWebsiteBoxClosed",
+    72: "ExoticFish",
+    73: "FakeID",
+    74: "FartInABottle",
+    75: "FertilizerBag",
+    76: "FidgetSpinner",
+    77: "FishingBait",
+    78: "FishingTrophy",
+    79: "FoolsNotif",
+    80: "Fossil",
+    81: "GenericPetFeces",
+    82: "GenericPetFood",
+    83: "GiftBox",
+    84: "GodBoxClosed",
+    85: "GoldenCorndog",
+    86: "Grass",
+    87: "GraveStone",
+    88: "GreenScreen",
+    89: "GrindPack",
+    90: "Hanukkahcandles",
+    91: "Headphones",
+    92: "Hoe",
+    93: "HolyBread",
+    94: "HolyWater",
+    95: "HorseSaddle",
+    96: "Hotdog",
+    97: "HuntingTrophy",
+    98: "IronShovel",
+    99: "JackyOLanty",
+    100: "JarOfSingularity",
+    101: "JellyFish",
+    102: "Junk",
+    103: "KablesSunglasses",
+    104: "Karen",
+    105: "Keyboard",
+    106: "King",
+    107: "Kraken",
+    108: "Ladybug",
+    109: "Landmine",
+    110: "Lasso",
+    111: "LawDegree",
+    112: "LegendaryFish",
+    113: "Letter",
+    114: "LifeSaver",
+    115: "LikeButton",
+    116: "LowRifle",
+    117: "LuckyHorseshoe",
+    118: "MedFishingPole",
+    119: "MelmsiesBeard",
+    120: "MemeBoxClosed",
+    121: "MemePills",
+    122: "Meteorite",
+    123: "Microphone",
+    124: "MoleMan",
+    125: "MotivationalPoster",
+    126: "Mouse",
+    127: "NewPlayerPack",
+    128: "NormalPotato",
+    129: "NormieBoxClosed",
+    130: "Note",
+    131: "OddEye",
+    132: "OldCowboyRevolver",
+    133: "Ornament",
+    134: "PatreonBoxClosed",
+    135: "PatreonPack",
+    136: "PepeBoxClosed",
+    137: "PepeCoin",
+    138: "PepeCrown",
+    139: "PepeMedal",
+    140: "PepeRibbon",
+    141: "PepeRing",
+    142: "PepeStatue",
+    143: "PepeSus",
+    144: "PepeTrophy",
+    145: "PetCollar",
+    146: "PinkRubberDucky",
+    147: "PinkSludgeMonster",
+    148: "Pizza",
+    149: "PlasticBag",
+    150: "PlasticsBoxClosed",
+    151: "PoliceBadge",
+    152: "Postcard",
+    153: "PotatoCrate",
+    154: "PrestigeCoin",
+    155: "PrestigePack",
+    156: "PuzzleKey",
+    157: "RareFish",
+    158: "ReversalCard",
+    159: "Ring",
+    160: "RingLight",
+    161: "RobbersMask",
+    162: "RobbersWishlist",
+    163: "RotsevnisStonkCoin",
+    164: "RoyalBoxClosed",
+    165: "RustyMachine",
+    166: "SantasBag",
+    167: "SantasHat",
+    168: "ScaryMask",
+    169: "Scepter",
+    170: "SeaWeed",
+    171: "ShootingStar",
+    172: "Skunk",
+    173: "SludgeBarrel",
+    174: "SnowBall",
+    175: "SoundCard",
+    176: "Spider",
+    177: "SpurBoots",
+    178: "StackOfCash",
+    179: "StarFragment",
+    180: "StickBug",
+    181: "Stocking",
+    182: "StolenAmulet",
+    183: "StonksMachine",
+    184: "StreakFreeze",
+    185: "SugarSkull",
+    186: "SunbearD20",
+    187: "Taco",
+    188: "Tidepod",
+    189: "TipJar",
+    190: "ToiletPaper",
+    191: "TowniesEyes",
+    192: "Trash",
+    193: "TreasureMap",
+    194: "TriviaTrophy",
+    195: "TumbleWeed",
+    196: "Urinal",
+    197: "Vaccine",
+    198: "VoodooDoll",
+    199: "VotePack",
+    200: "WaterBucket",
+    201: "WateringCan",
+    202: "Watermelon",
+    203: "WatermelonSeeds",
+    204: "WeddingGift",
+    205: "WeetsDonut",
+    206: "WiltedFlower",
+    207: "WinningLotteryTicket",
+    208: "WoodBoxClosed",
+    209: "WorkBoxClosed",
+    210: "Worm",
+    211: "YengsPaw",
+    212: "banknote",
+    213: "blob",
+    214: "caipirinha",
+    215: "laptop",
+    216: "legacyBunny",
+    217: "lotusflower",
+    218: "lotusseed",
+    219: "padlock",
+    220: "partypopper",
+    221: "phone",
+    222: "rarepepe",
+    223: "sand",
+    224: "shreddedcheese",
+    225: "strawberrycreamshake",
+    226: "zombees",
+}
 
 
 def resource_path(relative_path):
@@ -21,159 +249,35 @@ def resource_path(relative_path):
     return os.path.join(os.path.abspath("."), relative_path)
 
 
-yolo_seg = yolo_seg(
-    resource_path("./resources/yoloseg/best.onnx"), conf_thres=0.5, iou_thres=0.3
+ort_session = onnxruntime.InferenceSession(
+    resource_path("./resources/model.onnx"), providers=["CPUExecutionProvider"]
 )
-ort_session = onnxruntime.InferenceSession(resource_path("./resources/siamese.onnx"))
+
+
+def predict_classes(image_pil):
+    image = image_pil.resize((416, 416))
+    image = np.array(image).astype(np.float32) / 255.0
+    image = np.transpose(image, (2, 0, 1))
+    image = np.expand_dims(image, axis=0)
+
+    input_name = ort_session.get_inputs()[
+        0
+    ].name  # Assuming 'images' is the first input
+    output_name = ort_session.get_outputs()[0].name
+    input_data = {input_name: image}  # Use the correct input name here
+    output = ort_session.run([output_name], input_data)
+
+    return output[0][0]
 
 
 def download_image(url):
     response = requests.get(url)
     image_data = io.BytesIO(response.content)
 
-    if url.endswith("captcha.webp"):
-        image_pil = Image.open(image_data)
-        image_np = cv2.cvtColor(numpy.array(image_pil), cv2.COLOR_RGB2BGR)
-
-        return {"pil": image_pil, "np": image_np}
-    elif url[-3:] == "png":
-        image_pil = Image.open(image_data).convert("RGBA")
-    else:
-        image_pil = extract_gif(image_data)
-    image_np = cv2.cvtColor(numpy.array(image_pil), cv2.COLOR_RGBA2BGRA)
+    image_pil = Image.open(image_data)
+    image_np = cv2.cvtColor(numpy.array(image_pil), cv2.COLOR_RGB2BGR)
 
     return {"pil": image_pil, "np": image_np}
-
-
-def extract_gif(image_data):
-    gif_pil = Image.open(image_data)
-    gif_pil.seek(0)
-
-    # Extract the alpha channel
-    alpha = gif_pil.convert("RGBA").split()[-1]
-    gif_pil.load()
-    result = Image.new("RGBA", gif_pil.size)
-    result.paste(gif_pil, mask=alpha)
-
-    return result
-
-
-def crop_images(img_np, boxes, masks):
-    img_pil = Image.fromarray(img_np)
-    masks = np.any(masks, axis=0)
-    masks = masks.astype(int) * 255
-
-    pil_mask = Image.fromarray(masks).convert("L")
-    img_pil = img_pil.convert("RGBA")
-    pil_mask_resized = pil_mask.resize(img_pil.size, Image.LANCZOS)
-    img_pil.putalpha(pil_mask_resized)
-
-    cropped_images = []
-
-    for box in boxes:
-        x1, y1, x2, y2 = box
-        x1, y1, x2, y2 = map(
-            int, (x1.item(), y1.item(), x2.item(), y2.item())
-        )  # Convert tensor coordinates to integers
-        cropped = img_pil.crop((x1, y1, x2, y2))
-        cropped_cv2 = np.array(cropped)
-        cropped_images.append(cropped_cv2)
-
-    return cropped_images
-
-
-def color_similarity(answer_emoji, segmented_emoji):
-    mask = (answer_emoji[..., 3] > 0).astype(np.uint8) * 255
-    answer_emoji_with_alpha = cv2.merge([answer_emoji[..., 0:3], mask])
-
-    downscaled_answer_emoji = cv2.resize(
-        answer_emoji_with_alpha,
-        (segmented_emoji.shape[1], segmented_emoji.shape[0]),
-        interpolation=cv2.INTER_AREA,
-    )
-
-    image1_lab = cv2.cvtColor(downscaled_answer_emoji, cv2.COLOR_BGR2LAB)
-    image2_lab = cv2.cvtColor(segmented_emoji, cv2.COLOR_BGR2LAB)
-
-    hist1 = cv2.calcHist(
-        [image1_lab], [0, 1, 2], None, [8, 8, 8], [0, 256, 0, 256, 0, 256]
-    )
-    hist2 = cv2.calcHist(
-        [image2_lab], [0, 1, 2], None, [8, 8, 8], [0, 256, 0, 256, 0, 256]
-    )
-
-    hist1 = cv2.normalize(hist1, hist1).flatten()
-    hist2 = cv2.normalize(hist2, hist2).flatten()
-
-    return cv2.compareHist(hist1, hist2, cv2.HISTCMP_INTERSECT)
-
-
-def transformation(image):
-    image = np.array(image)
-    image = image.astype(np.float32) / 255.0  # Convert to float and scale values
-    image = np.expand_dims(image, axis=0)
-    image = np.expand_dims(image, axis=0)
-
-    return image
-
-
-def resize_image(img_pil):
-    return img_pil.resize((100, 100))
-
-
-def process_segmented_emoji(img_np):
-    img_np = cv2.cvtColor(img_np, cv2.COLOR_BGRA2RGBA)
-    kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
-    img_np = cv2.filter2D(img_np, -1, kernel)
-    img_np = cv2.convertScaleAbs(img_np, alpha=1.5, beta=10)
-    img_np[img_np[..., 3] < 128] = [0, 0, 0, 255]
-    img_pil = Image.fromarray(cv2.cvtColor(img_np, cv2.COLOR_RGBA2GRAY))
-    return resize_image(img_pil)
-
-
-def get_euclidean_distance(input1, input2):
-    ort_inputs = {
-        ort_session.get_inputs()[0].name: input1,
-        ort_session.get_inputs()[1].name: input2,
-    }
-
-    output1, output2 = ort_session.run(None, ort_inputs)
-    return np.linalg.norm(output1 - output2)
-
-
-def get_emoji_tensors(message, top_3_indices):
-    input_images = [
-        (
-            resize_image(
-                Image.fromarray(download_image(button.emoji.url)["np"]).convert("L")
-            ),
-            button_idx,
-        )
-        for button_idx, button in enumerate(message.components[0].children)
-        if button_idx in top_3_indices
-    ]
-
-    return [(transformation(img), idx) for img, idx in input_images]
-
-
-def get_dissimilarity_scores(captcha_img, final_boxes, final_masks, input_tensors):
-    dissimilarity_scores = []
-
-    for segmented_emoji in crop_images(captcha_img["np"], final_boxes, final_masks)[:3]:
-        segmented_dissimilarity_scores = []
-
-        image = process_segmented_emoji(segmented_emoji)
-        x0 = transformation(image)
-
-        for x1, idx in input_tensors:
-            euclidean_distance = get_euclidean_distance(x0, x1)
-
-            # Store both euclidean_distance and idx
-            segmented_dissimilarity_scores.append((euclidean_distance.item(), idx))
-
-        dissimilarity_scores.append(segmented_dissimilarity_scores)
-
-    return np.array(dissimilarity_scores)
 
 
 class Captcha(commands.Cog):
@@ -199,50 +303,33 @@ class Captcha(commands.Cog):
                 "click the button with matching image" in embed["description"].lower()
                 and f"<@{self.bot.user.id}>" in message.content
             ):
-                self.bot.log("Matching Image Captcha", "red")
+                self.bot.log(f"Matching Image Captcha URL: {message.jump_url}", "red")
 
                 captcha_img = download_image(message.embeds[0].image.url)
-                final_boxes, final_masks = yolo_seg(captcha_img["np"])
 
-                # Get the indices of the top three elements in descending order
-                color_similarities = [0] * 5
+                class_probabilities = predict_classes(captcha_img["pil"])
+                highest_prob = -1
 
                 for button_idx, button in enumerate(message.components[0].children):
-                    emoji_img = download_image(button.emoji.url)
+                    emoji_name = button.emoji.name
 
-                    for segmented_emoji in crop_images(
-                        captcha_img["np"], final_boxes, final_masks
-                    )[:3]:
-                        similarities = color_similarity(
-                            emoji_img["np"], segmented_emoji
-                        )
-                        color_similarities[button_idx] += similarities
-
-                top_3_indices = sorted(
-                    range(len(color_similarities)),
-                    key=lambda i: color_similarities[i],
-                    reverse=True,
-                )[:3]
-
-                emoji_tensors = get_emoji_tensors(message, top_3_indices)
-                dissimilarity_scores = get_dissimilarity_scores(
-                    captcha_img, final_boxes, final_masks, emoji_tensors
-                )
-
-                average_dissimilarity_scores = np.mean(dissimilarity_scores, axis=0)
-                min_score_idx = int(
-                    average_dissimilarity_scores[
-                        np.argmin(average_dissimilarity_scores[:, 0]), 1
+                    if emoji_name not in list(classes.values()):
+                        continue
+                    probability = class_probabilities[
+                        list(classes.values()).index(emoji_name)
                     ]
-                )
+                    if probability > highest_prob:
+                        highest_prob = probability
+                        predicted_emoji_index = button_idx
+                        predicted_answer_prob = probability * 100
 
                 self.bot.log(
-                    f"Clicked best matching emoji {min_score_idx + 1} with"
-                    f" similarity {average_dissimilarity_scores[min_score_idx, 0]}",
+                    f"Clicked best matching emoji {predicted_emoji_index + 1} with"
+                    f" probability {predicted_answer_prob:.2f}%",
                     "green",
                 )
 
-                await self.bot.click(message, 0, min_score_idx)
+                await self.bot.click(message, 0, predicted_emoji_index)
 
 
 async def setup(bot):

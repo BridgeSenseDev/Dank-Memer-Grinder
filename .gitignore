@@ -1,3 +1,4 @@
+./resources/model.onnx
 config.json
 .idea
 build
