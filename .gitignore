@@ -1,5 +1,5 @@
-./resources/model.onnx
 config.json
 .idea
 build
 venv
+/resources/model.onnx
