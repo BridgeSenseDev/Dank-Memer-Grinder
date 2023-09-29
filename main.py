@@ -534,12 +534,6 @@ async def start_bot(token, account_id):
             )
 
         async def setup_hook(self):
-            if not self.channel_id:
-                dank_memer_channel = await (
-                    await self.fetch_user(270904126974590976)
-                ).create_dm()
-                self.channel_id = dank_memer_channel.id
-
             self.channel = await self.fetch_channel(self.channel_id)
 
             self.update.start()
@@ -870,7 +864,7 @@ class MainWindow(QMainWindow):
     @asyncSlot()
     async def settings(self, command, state):
         config_dict = get_config()
-        if command == "channel":
+        if command == "channel_id":
             config_dict[self.account_id].update({"channel_id": state})
             with open("config.json", "w") as file:
                 json.dump(config_dict, file, ensure_ascii=False, indent=4)
