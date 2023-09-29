@@ -26,11 +26,11 @@ import requests
 import unidecode
 from discord.ext import commands, tasks
 from PIL import Image, ImageDraw
-from PyQt5.QtCore import pyqtSignal
+from PyQt6.QtCore import pyqtSignal
 
 # noinspection PyUnresolvedReferences
-from PyQt5.QtGui import QColor, QFontDatabase, QIcon, QPixmap
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt6.QtGui import QColor, QFontDatabase, QIcon, QPixmap
+from PyQt6.QtWidgets import QApplication, QMainWindow
 from qasync import QEventLoop, asyncSlot
 
 # noinspection PyUnresolvedReferences
@@ -707,7 +707,7 @@ class MainWindow(QMainWindow):
         config_dict = get_config()
         for account_id in map(str, range(1, len(config_dict))):
             getattr(self.ui, f"output_text_{account_id}").setTextColor(
-                QColor(216, 60, 62)
+                QColor(255, 146, 137)
             )
             cursor = getattr(self.ui, f"output_text_{account_id}").textCursor()
             cursor.insertText("‎")
