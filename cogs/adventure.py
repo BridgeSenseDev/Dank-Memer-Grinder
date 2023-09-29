@@ -37,7 +37,10 @@ class Adventure(commands.Cog):
         with contextlib.suppress(KeyError):
             embed = after.embeds[0].to_dict()
             if "choose items you want to" in embed["title"]:
-                await self.bot.click(after, 2, 0)
+                for count, component in enumerate(after.components):
+                    if component.children[0].label == "Start":
+                        await self.bot.click(after, count, 0)
+                        return
                 return
 
         with contextlib.suppress(KeyError):

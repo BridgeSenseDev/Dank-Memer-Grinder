@@ -26,11 +26,11 @@ import requests
 import unidecode
 from discord.ext import commands, tasks
 from PIL import Image, ImageDraw
-from PyQt5.QtCore import pyqtSignal
+from PyQt6.QtCore import pyqtSignal
 
 # noinspection PyUnresolvedReferences
-from PyQt5.QtGui import QColor, QFontDatabase, QIcon, QPixmap
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt6.QtGui import QColor, QFontDatabase, QIcon, QPixmap
+from PyQt6.QtWidgets import QApplication, QMainWindow
 from qasync import QEventLoop, asyncSlot
 
 # noinspection PyUnresolvedReferences
@@ -500,7 +500,7 @@ async def start_bot(token, account_id):
         def log(self, text, color=QColor(232, 230, 227)):
             match color:
                 case "red":
-                    color = QColor(216, 60, 62)
+                    color = QColor(255, 146, 137)
                 case "green":
                     color = QColor(38, 254, 0)
                 case "yellow":
@@ -534,12 +534,6 @@ async def start_bot(token, account_id):
             )
 
         async def setup_hook(self):
-            if not self.channel_id:
-                dank_memer_channel = await (
-                    await self.fetch_user(270904126974590976)
-                ).create_dm()
-                self.channel_id = dank_memer_channel.id
-
             self.channel = await self.fetch_channel(self.channel_id)
 
             self.update.start()
@@ -548,9 +542,7 @@ async def start_bot(token, account_id):
                 != "Logging In"
             ):
                 return
-            self.window.output.emit(
-                [f"output_text_{self.account_id}", f"Logged in as {self.user}"]
-            )
+            self.log(f"Logged in as {self.user}", "green")
             getattr(window.ui, f"account_btn_{account_id}").setText(
                 f"{self.user.name}\n#{self.user.discriminator}"
             )
@@ -689,7 +681,11 @@ class MainWindow(QMainWindow):
             self.ui.toggle.setStyleSheet("background-color : #2d7d46")
             self.ui.toggle.setText(f"Bot {self.account_id} Enabled")
             self.output.emit(
-                [f"output_text_{self.account_id}", f"Started Bot {self.account_id}"]
+                [
+                    f"output_text_{self.account_id}",
+                    f"Started Bot {self.account_id}",
+                    QColor(38, 254, 0),
+                ]
             )
         self.ui.toggle.clicked.connect(lambda: self.check())
 
@@ -711,7 +707,7 @@ class MainWindow(QMainWindow):
         config_dict = get_config()
         for account_id in map(str, range(1, len(config_dict))):
             getattr(self.ui, f"output_text_{account_id}").setTextColor(
-                QColor(216, 60, 62)
+                QColor(255, 146, 137)
             )
             cursor = getattr(self.ui, f"output_text_{account_id}").textCursor()
             cursor.insertText("‎")
@@ -730,7 +726,11 @@ class MainWindow(QMainWindow):
             self.ui.toggle.setStyleSheet("background-color : #2d7d46")
             self.ui.toggle.setText(f"Bot {self.account_id} Enabled")
             self.output.emit(
-                [f"output_text_{self.account_id}", f"Started Bot {self.account_id}"]
+                [
+                    f"output_text_{self.account_id}",
+                    f"Started Bot {self.account_id}",
+                    QColor(38, 254, 0),
+                ]
             )
         else:
             config_dict[self.account_id].update({"state": False})
@@ -739,7 +739,11 @@ class MainWindow(QMainWindow):
             self.ui.toggle.setStyleSheet("background-color : #d83c3e")
             self.ui.toggle.setText(f"Bot {self.account_id} Disabled")
             self.output.emit(
-                [f"output_text_{self.account_id}", f"Stopped Bot {self.account_id}"]
+                [
+                    f"output_text_{self.account_id}",
+                    f"Stopped Bot {self.account_id}",
+                    QColor(255, 146, 137),
+                ]
             )
 
     @asyncSlot()
@@ -860,7 +864,7 @@ class MainWindow(QMainWindow):
     @asyncSlot()
     async def settings(self, command, state):
         config_dict = get_config()
-        if command == "channel":
+        if command == "channel_id":
             config_dict[self.account_id].update({"channel_id": state})
             with open("config.json", "w") as file:
                 json.dump(config_dict, file, ensure_ascii=False, indent=4)

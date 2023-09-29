@@ -2,7 +2,7 @@ import contextlib
 import json
 
 import discord
-from PyQt5.QtGui import QColor
+from PyQt6.QtGui import QColor
 from discord.ext import commands, tasks
 
 
@@ -47,7 +47,7 @@ class Others(commands.Cog):
                                         " memer maintenance\nPlease check if the update"
                                         " is safe before continuing to grind"
                                     ),
-                                    QColor(216, 60, 62),
+                                    QColor(255, 146, 137),
                                 ]
                             )
                         config_file.seek(0)
