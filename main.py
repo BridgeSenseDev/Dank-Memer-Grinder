@@ -461,7 +461,7 @@ async def start_bot(token, account_id):
 
             async for cmd in channel.slash_commands(query=command_name, limit=None):
                 try:
-                    if cmd.application.id == 270904126974590976:
+                    if cmd.application.id == 270904126974590976 and not cmd.is_group():
                         await cmd(**kwargs)
                         return
                 except discord.errors.Forbidden:
