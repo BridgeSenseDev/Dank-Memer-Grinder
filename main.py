@@ -143,6 +143,7 @@ config_example = {
     "autouse": {
         "state": False,
         "hide_disabled": False,
+        "stolen_amulet": {"state": False},
         "pizza_slice": {"state": False},
         "cowboy_boots": {"state": False},
         "lucky_horseshoe": {"state": False},
