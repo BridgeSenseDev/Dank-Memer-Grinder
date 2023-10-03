@@ -14,10 +14,12 @@ class Pm(commands.Cog):
         if not await self.bot.is_valid_command(message, "pm"):
             return
 
-        await self.bot.select(message, 0, 0, random.randint(0, 3))
-        await asyncio.sleep(0.3)
-        await self.bot.select(message, 1, 0, random.randint(0, 4))
-        await asyncio.sleep(0.3)
+        platforms = self.bot.config_dict["commands"]["pm"]["platforms"]
+        platform = random.choice(platforms)
+
+        if not message.components[0].children[0].options[platform].default:
+            await self.bot.select(message, 0, 0, platform)
+            await asyncio.sleep(0.3)
         await self.bot.click(message, 2, 0)
         self.bot.last_ran["pm"] = time.time()
 

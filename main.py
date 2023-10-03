@@ -80,7 +80,7 @@ config_example = {
         "dig": {"state": False, "delay": 30},
         "fish": {"state": False, "delay": 30},
         "hunt": {"state": False, "delay": 30},
-        "pm": {"state": False, "delay": 20},
+        "pm": {"state": False, "delay": 20, "platforms": [0]},
         "beg": {"state": False, "delay": 40},
         "pet": {"state": False, "delay": 1800},
         "scratch": {"state": False, "delay": 10800},
