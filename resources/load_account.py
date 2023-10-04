@@ -1132,21 +1132,7 @@ def load_account(self, account_id, config_example):
     )
     vertical_layout.setObjectName(f"vertical_layout_{int(account_id) + 104}")
 
-    if "autouse" not in list(config_dict[account_id]):
-        config_dict[account_id]["autouse"] = config_example["autouse"]
-        with open("config.json", "w") as file:
-            json.dump(config_dict, file, ensure_ascii=False, indent=4)
-
-    for autouse in sorted(list(config_example["autouse"])):
-        if autouse not in config_dict[account_id]["autouse"]:
-            config_dict[account_id]["autouse"].update(
-                {autouse: config_example["autouse"][autouse]}
-            )
-            with open("config.json", "w") as file:
-                json.dump(config_dict, file, ensure_ascii=False, indent=4)
-        if autouse in ["state", "hide_disabled"]:
-            continue
-
+    for autouse in sorted(config_dict[account_id]["autouse"]):
         autouse_frame = set_and_get_attr(
             self.ui,
             f"{autouse}_frame_{account_id}",
@@ -1274,90 +1260,50 @@ def load_account(self, account_id, config_example):
     output_text.setVerticalScrollBar(output_scrollbar)
 
     # Initialize settings
-    while True:
-        try:
-            lifesavers_checkbox.setChecked(
-                config_dict[account_id]["autobuy"]["lifesavers"]["state"]
-            )
-            lifesavers_amount.setValue(
-                config_dict[account_id]["autobuy"]["lifesavers"]["amount"]
-            )
-            token_input.setText(config_dict[account_id]["discord_token"])
-            channel_input.setText(config_dict[account_id]["channel_id"])
-            try:
-                trivia_correct_chance.setValue(
-                    int(
-                        config_dict[account_id]["commands"]["trivia"][
-                            "trivia_correct_chance"
-                        ]
-                        * 100
-                    )
-                )
-            except KeyError:
-                trivia_correct_chance.setValue(75)
-                config_dict[account_id]["commands"]["trivia"][
-                    "trivia_correct_chance"
-                ] = 0.75
-                with open("config.json", "w") as file:
-                    json.dump(config_dict, file, ensure_ascii=False, indent=4)
-            offline_checkbox.setChecked(config_dict[account_id]["offline"])
-            alerts_checkbox.setChecked(config_dict[account_id]["alerts"])
+    lifesavers_checkbox.setChecked(
+        config_dict[account_id]["autobuy"]["lifesavers"]["state"]
+    )
+    lifesavers_amount.setValue(
+        config_dict[account_id]["autobuy"]["lifesavers"]["amount"]
+    )
+    token_input.setText(config_dict[account_id]["discord_token"])
+    channel_input.setText(config_dict[account_id]["channel_id"])
 
-            for command in commands:
-                try:
-                    getattr(self.ui, f"{command}_checkbox_{account_id}").setChecked(
-                        config_dict[account_id]["commands"][command]["state"]
-                    )
-                    getattr(self.ui, f"{command}_spinbox_{account_id}").setProperty(
-                        "value", config_dict[account_id]["commands"][command]["delay"]
-                    )
-                except KeyError as e:
-                    config_dict[account_id]["commands"][str(e).split("'")[1]] = {
-                        "state": False,
-                        "delay": config_example["commands"][command]["delay"],
-                    }
-                    with open("config.json", "w") as file:
-                        json.dump(config_dict, file, ensure_ascii=False, indent=4)
-                    getattr(self.ui, f"{command}_spinbox_{account_id}").setProperty(
-                        "value", config_dict[account_id]["commands"][command]["delay"]
-                    )
-                except TypeError:
-                    config_dict[account_id]["commands"][command] = {
-                        "state": config_dict[account_id]["commands"][command],
-                        "delay": config_example["commands"][command]["delay"],
-                    }
-                    with open("config.json", "w") as file:
-                        json.dump(config_dict, file, ensure_ascii=False, indent=4)
-                    getattr(self.ui, f"{command}_spinbox_{account_id}").setProperty(
-                        "value", config_dict[account_id]["commands"][command]["delay"]
-                    )
+    trivia_correct_chance.setValue(
+        int(
+            config_dict[account_id]["commands"]["trivia"][
+                "trivia_correct_chance"
+            ]
+            * 100
+        )
+    )
 
-            for autobuy in config_dict[account_id]["autobuy"]:
-                try:
-                    getattr(self.ui, f"{autobuy}_checkbox_{account_id}").setChecked(
-                        config_dict[account_id]["autobuy"][autobuy]
-                    )
-                except (TypeError, AttributeError):
-                    pass
+    offline_checkbox.setChecked(config_dict[account_id]["offline"])
+    alerts_checkbox.setChecked(config_dict[account_id]["alerts"])
 
-            auto_use_checkbox.setChecked(config_dict[account_id]["autouse"]["state"])
-            hide_disabled_checkbox.setChecked(
-                config_dict[account_id]["autouse"]["hide_disabled"]
-            )
-            for autouse in config_dict[account_id]["autouse"]:
-                try:
-                    getattr(self.ui, f"{autouse}_checkbox_{account_id}").setChecked(
-                        config_dict[account_id]["autouse"][autouse]["state"]
-                    )
-                except (TypeError, AttributeError):
-                    pass
-            break
-        except KeyError as e:
-            if e not in config_dict[account_id]:
-                value = config_example[str(e).split("'")[1]]
-                config_dict[account_id].update({str(e).split("'")[1]: value})
-                with open("config.json", "w") as file:
-                    json.dump(config_dict, file, ensure_ascii=False, indent=4)
+    for command in commands:
+        getattr(self.ui, f"{command}_checkbox_{account_id}").setChecked(
+            config_dict[account_id]["commands"][command]["state"]
+        )
+        getattr(self.ui, f"{command}_spinbox_{account_id}").setProperty(
+            "value", config_dict[account_id]["commands"][command]["delay"]
+        )
+
+    for autobuy in config_dict[account_id]["autobuy"]:
+        getattr(self.ui, f"{autobuy}_checkbox_{account_id}").setChecked(
+            config_dict[account_id]["autobuy"][autobuy]["state"]
+        )
+
+    auto_use_checkbox.setChecked(config_dict[account_id]["autouse"]["state"])
+    hide_disabled_checkbox.setChecked(
+        config_dict[account_id]["autouse"]["hide_disabled"]
+    )
+    for autouse in config_dict[account_id]["autouse"]:
+        if autouse in ["state", "hide_disabled"]:
+            continue
+        getattr(self.ui, f"{autouse}_checkbox_{account_id}").setChecked(
+            config_dict[account_id]["autouse"][autouse]["state"]
+        )
 
     # Commands
     for button in commands:

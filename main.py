@@ -71,16 +71,16 @@ config_example = {
     "alerts": False,
     "autobuy": {
         "lifesavers": {"state": True, "amount": 5},
-        "fishing": False,
-        "shovel": False,
-        "rifle": False,
+        "fishing": {"state": True},
+        "shovel": {"state": True},
+        "rifle": {"state": True},
     },
     "commands": {
         "trivia": {"state": False, "delay": 5, "trivia_correct_chance": 0.75},
         "dig": {"state": False, "delay": 30},
         "fish": {"state": False, "delay": 30},
         "hunt": {"state": False, "delay": 30},
-        "pm": {"state": False, "delay": 20},
+        "pm": {"state": False, "delay": 20, "platforms": [0]},
         "beg": {"state": False, "delay": 40},
         "pet": {"state": False, "delay": 1800},
         "scratch": {"state": False, "delay": 10800},
@@ -143,6 +143,7 @@ config_example = {
     "autouse": {
         "state": False,
         "hide_disabled": False,
+        "stolen_amulet": {"state": False},
         "pizza_slice": {"state": False},
         "cowboy_boots": {"state": False},
         "lucky_horseshoe": {"state": False},
@@ -368,6 +369,22 @@ class UpdaterWindow(QMainWindow):
         window.show()
 
 
+def update_config(config, example_config):
+    updated_config = {}
+    for key, value in example_config.items():
+        if key in config:
+            if isinstance(value, dict) and isinstance(config[key], dict):
+                updated_config[key] = update_config(config[key], value)
+            else:
+                if isinstance(config[key], type(value)):
+                    updated_config[key] = config[key]
+                else:
+                    updated_config[key] = value
+        else:
+            updated_config[key] = value
+
+    return updated_config
+
 def get_config():
     try:
         with open("config.json", "r") as config_file:
@@ -461,7 +478,7 @@ async def start_bot(token, account_id):
 
             async for cmd in channel.slash_commands(query=command_name, limit=None):
                 try:
-                    if cmd.application.id == 270904126974590976:
+                    if cmd.application.id == 270904126974590976 and not cmd.is_group():
                         await cmd(**kwargs)
                         return
                 except discord.errors.Forbidden:
@@ -656,6 +673,10 @@ class MainWindow(QMainWindow):
 
         # Initialize settings
         for account_id in range(1, len(config_dict)):
+            config_dict[str(account_id)] = update_config(config_dict[str(account_id)], config_example)
+            with open("config.json", "w") as config_file:
+                json.dump(config_dict, config_file, indent=4)
+
             if str(account_id) not in config_dict:
                 config_dict = get_config()
                 config_dict = {
@@ -666,8 +687,10 @@ class MainWindow(QMainWindow):
                 with open("config.json", "w") as file:
                     json.dump(config_dict, file, ensure_ascii=False, indent=4)
                 continue
+
             load_account(self, str(account_id), config_example)
-            self.ui.home_btn.setStyleSheet("background-color: #5865f2;")
+
+        self.ui.home_btn.setStyleSheet("background-color: #5865f2;")
         # noinspection PyArgumentList
         sys.stdout = Stream(new_text=self.on_update_text)
         # noinspection PyArgumentList
@@ -980,6 +1003,7 @@ if __name__ == "__main__":
         window.show()
 
     config_dict = get_config()
+
     for account in map(str, range(1, len(config_dict))):
         if config_dict[account]["discord_token"] != "":
             threading.Thread(
