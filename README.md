@@ -1,5 +1,7 @@
 <br>
 
+## Dank Memer Grinder is discontinued and will no longer be updated or maintained. Thanks to everyone who helped with this from the Discord server and made PRs or Issues
+
 <div align="center">
   <img src=".github/assets/img/icon.png" width="100">
 
@@ -13,7 +15,6 @@
 
   [![Discord Server Invite](https://invidget.switchblade.xyz/KTrmQnhCHb)](https://discord.gg/KTrmQnhCHb)
 </div>
-
 
 > 🚨 WARNING: USE AT YOUR OWN RISK. This is a self-bot and is in violation of Discord's and Dank Memer's rules and TOS. By using this software, you acknowledge that we take no responsibility for any action taken against your account, whether by Discord or Dank Memer.
 >
