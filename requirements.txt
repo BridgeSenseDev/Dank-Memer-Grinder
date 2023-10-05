@@ -21,7 +21,7 @@ opencv-python==4.8.1.78
 orjson==3.9.7
 packaging==23.1
 Pillow==10.0.1
-protobuf==4.24.3
+protobuf==4.24.4
 pycares==4.3.0
 pycparser==2.21
 PyQt6==6.5.2
