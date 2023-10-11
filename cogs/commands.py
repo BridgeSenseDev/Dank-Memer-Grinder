@@ -14,10 +14,10 @@ class Commands(commands.Cog):
         self.bot = bot
 
     async def cog_load(self):
-        self.commands.start()
+        self.commands_loop.start()
 
     @tasks.loop(seconds=config_dict["global"]["min_commands_delay"] / 1000)
-    async def commands(self):
+    async def commands_loop(self):
         if not self.bot.state:
             await asyncio.sleep(1)
             return
@@ -65,6 +65,14 @@ class Commands(commands.Cog):
             await asyncio.sleep(random.randint(2, 4))
             await self.bot.send(self.bot.commands_dict[command])
             continue
+
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if await self.bot.is_valid_command(message, "work", "shift"):
+            embed = message.embeds[0].to_dict()
+            if "You don't currently have a job to work at" in embed["description"]:
+                await asyncio.sleep(0.3)
+                await self.bot.sub_send("work", "apply", job="House Wife")
 
 
 async def setup(bot):
