@@ -612,7 +612,7 @@ async def start_bot(token, account_id):
         getattr(window.ui, f"account_btn_{account_id}").setIconSize(
             QtCore.QSize(22, 22)
         )
-    except (discord.errors.NotFound, ValueError):
+    except (discord.errors.NotFound, discord.errors.Forbidden, ValueError):
         getattr(window.ui, f"account_btn_{account_id}").setText("Invalid Channel")
         icon = QtGui.QIcon()
         icon.addPixmap(
