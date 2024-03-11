@@ -19,7 +19,7 @@ numpy==1.26.0
 onnxruntime==1.16.0
 opencv-python==4.8.1.78
 orjson==3.9.7
-packaging==23.1
+packaging==24.0
 Pillow==10.0.1
 protobuf==4.24.3
 pycares==4.3.0
