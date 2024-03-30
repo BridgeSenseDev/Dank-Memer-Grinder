@@ -137,7 +137,7 @@ func (in *Instance) Adventure(message *types.MessageEventData) {
 	for q, ans := range adventureMap {
 		if strings.EqualFold(question, q) {
 			for columnIndex, button := range message.Components[0].(*types.ActionsRow).Components {
-				if button.(*types.Button).Label == ans {
+				if strings.EqualFold(button.(*types.Button).Label, ans) {
 					err := in.Client.ClickButton(message.MessageData, 0, columnIndex)
 					if err != nil {
 						in.Log("discord", "ERR", fmt.Sprintf("Failed to click adventure answer button: %s", err.Error()))
