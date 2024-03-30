@@ -1,5 +1,14 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+.history
+Dank Memer Grinder.code-workspace
 config.json
-.idea
-build
-venv
-/resources/model.onnx
+build/bin
+node_modules
+frontend/dist
+instance/captcha.go

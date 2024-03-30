@@ -1,7 +1,5 @@
 <br>
 
-## Dank Memer Grinder is discontinued and will no longer be updated or maintained. Thanks to everyone who helped with this from the Discord server and made PRs or Issues
-
 <div align="center">
   <img src=".github/assets/img/icon.png" width="100">
 
