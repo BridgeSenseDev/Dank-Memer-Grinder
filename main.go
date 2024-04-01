@@ -2,8 +2,11 @@ package main
 
 import (
 	"embed"
+	"fmt"
 	"log"
+	"os"
 
+	"github.com/mitchellh/panicwrap"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/logger"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -20,9 +23,18 @@ var assets embed.FS
 var icon []byte
 
 func main() {
+	exitStatus, err := panicwrap.BasicWrap(panicHandler)
+	if err != nil {
+		panic(err)
+	}
+
+	if exitStatus >= 0 {
+		os.Exit(exitStatus)
+	}
+
 	app := NewApp()
 
-	err := wails.Run(&options.App{
+	err = wails.Run(&options.App{
 		Title:             "Dank Memer Grinder",
 		Width:             1024,
 		Height:            768,
@@ -83,4 +95,18 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func panicHandler(output string) {
+	file, err := os.OpenFile("error.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		os.Exit(1)
+	}
+	defer file.Close()
+
+	if _, err := file.WriteString(fmt.Sprintf("The child panicked:\n\n%s\n", output)); err != nil {
+		os.Exit(1)
+	}
+
+	os.Exit(1)
 }
