@@ -127,6 +127,12 @@ func (in *Instance) AutoBuyMessageCreate(message *types.MessageEventData) {
 		in.setAutoBuyState(0, 1, 1, "IronShovel")
 	} else if strings.Contains(embed.Description, "You don't have a hunting rifle") && in.Cfg.AutoBuy.HuntingRifle {
 		in.setAutoBuyState(0, 1, 1, "LowRifle")
+	} else if embed.Title == "Pending Confirmation" {
+		if strings.Contains(embed.Description, "Would you like to use your **<:Coupon:977969734307971132> Shop Coupon**") {
+			in.Client.ClickButton(message.MessageData, 0, 0)
+		} else if strings.Contains(embed.Description, "Are you sure you want to buy") {
+			in.Client.ClickButton(message.MessageData, 0, 1)
+		}
 	} else {
 		in.shopBuy(message)
 		return
