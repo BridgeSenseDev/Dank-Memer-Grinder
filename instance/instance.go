@@ -39,9 +39,9 @@ func (in *Instance) Log(level LogLevel, logType LogType, msg string) {
 
 	switch logType {
 	case Info:
-		log.Info().Msg(fmt.Sprintf("%s %s", in.User.Username, msg))
+		log.Info().Msg(fmt.Sprintf("%s %s %s", level, in.User.Username, msg))
 	case Error:
-		log.Error().Msg(fmt.Sprintf("%s %s", in.User.Username, msg))
+		log.Error().Msg(fmt.Sprintf("%s %s %s", level, in.User.Username, msg))
 	}
 }
 
@@ -153,6 +153,7 @@ var messageCreateHandlers = map[string]MessageHandler{
 
 var messageUpdateHandlers = map[string]MessageHandler{
 	"adventure": (*Instance).AdventureMessageUpdate,
+	"scratch":   (*Instance).ScratchMessageUpdate,
 	"postmemes": (*Instance).PostMemesMessageUpdate,
 }
 
@@ -163,7 +164,7 @@ func (in *Instance) shouldHandleMessage(message *types.MessageEventData) bool {
 }
 
 func (in *Instance) handleInteraction(message *types.MessageEventData, handlers map[string]MessageHandler) {
-	if message.Interaction != (types.MessageInteraction{}) && message.Interaction.User.ID == in.User.ID {
+	if message.Interaction != (types.MessageInteraction{}) && message.Interaction.User.ID == in.User.ID && message.Flags != 64 {
 		if handler, ok := handlers[message.Interaction.Name]; ok {
 			handler(in, message)
 		}
