@@ -57,12 +57,12 @@
 
 	$: title = ($page.url.pathname.split('/')[1] || 'logs')
 		.split(' ')
-		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+		.map((word) => (word ? word.charAt(0).toUpperCase() + word.slice(1) : ''))
 		.join(' ');
 </script>
 
-<div class="flex flex-row sticky top-0 w-full border-b border-border backdrop-blur z-30">
-	<div class="flex px-2 border-b border-border items-center h-14 border-r-2 max-w-48">
+<div class="border-border sticky top-0 z-30 flex w-full flex-row border-b backdrop-blur">
+	<div class="border-border flex h-14 max-w-48 items-center border-b border-r-2 px-2">
 		<Select.Root>
 			<Select.Trigger class="w-[180px]">
 				<Select.Value placeholder="config.json" />
@@ -72,7 +72,7 @@
 			</Select.Content>
 		</Select.Root>
 	</div>
-	<div class="px-4 flex flex-row justify-between w-full">
+	<div class="flex w-full flex-row justify-between px-4">
 		<h1 class="flex items-center">{title}</h1>
 		{#if title === 'Commands' || theme}
 			<div class="flex flex-row items-center space-x-2">

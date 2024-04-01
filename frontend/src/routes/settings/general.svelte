@@ -8,7 +8,9 @@
 	import { UpdateDiscordStatus } from '$lib/wailsjs/go/main/App';
 
 	function statusLabel(input: string): string {
-		if (input == 'dnd') {
+		if (!input) {
+			return '';
+		} else if (input == 'dnd') {
 			return 'Do Not Disturb';
 		} else {
 			return input.charAt(0).toUpperCase() + input.slice(1);
