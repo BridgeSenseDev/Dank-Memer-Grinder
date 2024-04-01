@@ -27,9 +27,10 @@ func (in *Instance) Adventure(message *types.MessageEventData) {
 			now := time.Now()
 			timeLeft := cooldownTime.Sub(now).Seconds()
 
-			in.LastRan["Adventure"] = time.Unix(now.Unix()+int64(timeLeft)-in.Cfg.Commands.Adventure.Delay, 0)
+			in.LastRan["Adventure"] = time.Unix(now.Unix()+int64(timeLeft)+int64(time.Minute.Seconds()), 0)
 
 			in.Log("others", "INF", fmt.Sprintf("Time until next adventure: %.2f seconds", timeLeft))
+			return
 		}
 	}
 
@@ -72,7 +73,7 @@ func (in *Instance) Adventure(message *types.MessageEventData) {
 				return
 			}
 
-			in.LastRan["Adventure"] = time.Unix(time.Now().Unix()+int64(cooldownMinutes*60)-in.Cfg.Commands.Adventure.Delay, 0)
+			in.LastRan["Adventure"] = time.Unix(time.Now().Unix()+int64(cooldownMinutes*60)+int64(time.Minute.Seconds()), 0)
 
 			in.Log("others", "INF", fmt.Sprintf("Time until next adventure: %d minutes", cooldownMinutes))
 		}
@@ -135,17 +136,18 @@ func (in *Instance) Adventure(message *types.MessageEventData) {
 
 	question := strings.Split(embed.Description, "\n")[0]
 	for q, ans := range adventureMap {
-		if strings.EqualFold(question, q) {
+		if strings.Contains(strings.ToLower(question), strings.ToLower(q)) {
 			for columnIndex, button := range message.Components[0].(*types.ActionsRow).Components {
 				if strings.EqualFold(button.(*types.Button).Label, ans) {
 					err := in.Client.ClickButton(message.MessageData, 0, columnIndex)
 					if err != nil {
 						in.Log("discord", "ERR", fmt.Sprintf("Failed to click adventure answer button: %s", err.Error()))
 					}
-
 					return
 				}
 			}
+			in.Client.ClickButton(message.MessageData, 0, 0)
+			in.Log("important", "ERR", fmt.Sprintf("Failed to find answer in config.json for adventure question: %s", q))
 		}
 	}
 }
