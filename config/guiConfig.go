@@ -5,7 +5,7 @@ type Theme string
 const (
 	System Theme = "system"
 	Dark   Theme = "dark"
-	Light Theme = "light"
+	Light  Theme = "light"
 )
 
 type GuiConfig struct {

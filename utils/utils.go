@@ -39,8 +39,8 @@ func Sleep(duration time.Duration) <-chan bool {
 	done := make(chan bool)
 
 	go func() {
-			time.Sleep(duration)
-			done <- true
+		time.Sleep(duration)
+		done <- true
 	}()
 
 	return done
