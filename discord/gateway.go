@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 	"sync"
 	"time"
 
@@ -420,6 +421,18 @@ func (gateway *Gateway) startHandler() {
 				gateway.Log("ERR", fmt.Sprintf("Discord gateway: Error reading message: %v", err.Error()))
 
 				if err.Error() == "gateway connection is closed" {
+					select {
+					case <-gateway.CloseChan:
+						return
+					default:
+						gateway.Log("ERR", "Reconnecting to discord gateway")
+						go gateway.reconnect()
+						return
+					}
+
+				} else if strings.Contains(err.Error(), "connection reset by peer") {
+					gateway.Log("ERR", "Reconnecting to discord gateway")
+					go gateway.reconnect()
 					return
 				} else {
 					continue
