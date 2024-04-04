@@ -39,8 +39,8 @@ func (c *CommandsConfig) GetCommandsMap() map[string]GeneralCommandConfig {
 }
 
 type GeneralCommandConfig struct {
-	State bool `json:"state"`
-	Delay int64  `json:"delay"`
+	State bool  `json:"state"`
+	Delay int64 `json:"delay"`
 }
 
 type Adventure string
@@ -78,7 +78,7 @@ type SearchCommandConfig struct {
 
 type PostMemesCommandConfig struct {
 	GeneralCommandConfig
-	Platform int `json:"platform"`
+	Platform []int `json:"platform"`
 }
 
 type TriviaCommandConfig struct {

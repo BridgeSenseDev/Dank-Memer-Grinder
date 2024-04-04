@@ -12,10 +12,11 @@ import (
 func (in *Instance) PostMemesMessageCreate(message *types.MessageEventData) {
 	platformOptions := message.Components[0].(*types.ActionsRow).Components[0].(*types.SelectMenu).Options
 	memeTypeOptions := message.Components[1].(*types.ActionsRow).Components[0].(*types.SelectMenu).Options
-	configOption := in.Cfg.Commands.PostMemes.Platform
+	configOptions := in.Cfg.Commands.PostMemes.Platform
+	option := configOptions[utils.Rng.Intn(len(configOptions))]
 
-	if !platformOptions[configOption].Default {
-		err := in.Client.ChooseSelectMenu(message.MessageData, 0, 0, []string{platformOptions[configOption].Value})
+	if !platformOptions[option].Default {
+		err := in.Client.ChooseSelectMenu(message.MessageData, 0, 0, []string{platformOptions[option].Value})
 		if err != nil {
 			in.Log("discord", "ERR", fmt.Sprintf("Failed to choose postmemes platform select menu: %s", err.Error()))
 		}
