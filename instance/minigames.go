@@ -32,8 +32,8 @@ const (
 func generateEmojiActions(emojis []string) map[string]int {
 	emojiActions := make(map[string]int)
 	for _, emoji := range emojis {
-		if emoji == levitate {
-			// Miss the goalkeeper
+		if emoji == levitate || emoji == fireBall {
+			// Miss the goalkeeper / dodge the fireball
 			emojiActions[emoji] = 2
 			emojiActions[emptyspace+emoji] = 2
 			emojiActions[emptyspace+emptyspace+emoji] = 0
@@ -184,7 +184,7 @@ func (in *Instance) MinigamesMessageCreate(message *types.MessageEventData) {
 		in.PauseCommands(false)
 
 		lines := strings.Split(embed.Description, "\n")[1:6]
-		repeatOrder := make([]string, len(lines))
+		repeatOrder = make([]string, len(lines))
 		for i, line := range lines {
 			repeatOrder[i] = strings.Trim(line, "`")
 		}
@@ -246,7 +246,7 @@ func (in *Instance) MinigamesMessageUpdate(message *types.MessageEventData) {
 	in.solveMinigame(message.MessageData, "Basketball", "Dunk the ball!", []string{basketball})
 
 	// Dragon
-	in.solveMinigame(message.MessageData, "Dragon", "Dodge the Fireball", []string{fireBall})
+	in.solveMinigame(message.MessageData, "Dragon", "Dodge the Fireball!", []string{fireBall})
 
 	// Attack boss
 	if strings.Contains(embed.Description, "Attack the boss by clicking") {
