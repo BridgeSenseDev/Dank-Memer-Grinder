@@ -16,6 +16,8 @@
 	}
 
 	function setTheme(theme: string) {
+		$cfg.gui.theme = theme;
+
 		let isDark = theme === 'dark';
 		if (theme === 'system') {
 			isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
