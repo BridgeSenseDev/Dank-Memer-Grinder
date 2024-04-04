@@ -1,6 +1,12 @@
 package config
 
+type GeneralAutobuyConfig struct {
+	State  bool `json:"state"`
+	Amount int  `json:"amount"`
+}
+
 type AutoBuyConfig struct {
-	HuntingRifle bool `json:"huntingRifle"`
-	Shovel       bool `json:"shovel"`
+	HuntingRifle GeneralAutobuyConfig `json:"huntingRifle"`
+	Shovel       GeneralAutobuyConfig `json:"shovel"`
+	LifeSavers   GeneralAutobuyConfig `json:"lifeSavers"`
 }

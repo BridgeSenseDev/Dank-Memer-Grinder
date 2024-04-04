@@ -14,8 +14,18 @@
     }
   ],
   "autoBuy": {
-    "huntingRifle": true,
-    "shovel": true
+    "huntingRifle": {
+      "state": true,
+      "amount": 1
+    },
+    "shovel": {
+      "state": true,
+      "amount": 1
+    },
+    "lifeSavers": {
+      "state": true,
+      "amount": 1
+    }
   },
   "commands": {
     "adventure": {
@@ -24,7 +34,7 @@
       "adventureOption": "west"
     },
     "beg": {
-      "state": true,
+      "state": false,
       "delay": 40
     },
     "crime": {
@@ -48,23 +58,23 @@
       ]
     },
     "daily": {
-      "state": true,
+      "state": false,
       "delay": 86400
     },
     "deposit": {
-      "state": true,
+      "state": false,
       "delay": 30
     },
     "dig": {
-      "state": true,
+      "state": false,
       "delay": 30
     },
     "highlow": {
-      "state": true,
+      "state": false,
       "delay": 20
     },
     "hunt": {
-      "state": true,
+      "state": false,
       "delay": 30
     },
     "pet": {
@@ -72,7 +82,7 @@
       "delay": 1800
     },
     "postmemes": {
-      "state": true,
+      "state": false,
       "delay": 30,
       "platform": [4]
     },
@@ -139,7 +149,7 @@
       "triviaCorrectChance": 0.5
     },
     "work": {
-      "state": true,
+      "state": false,
       "delay": 3600
     }
   },
