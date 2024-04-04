@@ -7,12 +7,16 @@
 	import { cfg, instances, layoutEventListenersSet } from '$lib/store';
 	import { GetConfig, GetInstances } from '$lib/wailsjs/go/main/App';
 	import { EventsOn } from '$lib/wailsjs/runtime/runtime';
-	import { main } from '$lib/wailsjs/go/models';
+	import { config, main } from '$lib/wailsjs/go/models';
 
 	onMount(async () => {
 		if (!$layoutEventListenersSet) {
 			cfg.set(await GetConfig());
 			instances.set(await GetInstances());
+
+			EventsOn('configUpdate', (newCfg: config.Config) => {
+				cfg.set(newCfg);
+			});
 
 			EventsOn('instancesUpdate', (newInstances: main.InstanceView[]) => {
 				instances.set(newInstances);
