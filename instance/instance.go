@@ -158,9 +158,19 @@ var messageUpdateHandlers = map[string]MessageHandler{
 }
 
 func (in *Instance) shouldHandleMessage(message *types.MessageEventData) bool {
-	return message.ChannelID == in.ChannelID &&
+	return message.Author.ID == "270904126974590976" &&
 		len(message.Embeds) > 0 &&
 		!strings.Contains(message.Embeds[0].Description, "cooldown is")
+}
+
+func (in *Instance) getMessageType(message *types.MessageEventData) string {
+	if message.ChannelID == in.ChannelID {
+		return "channel"
+	} else if message.GuildID == "" {
+		return "dm"
+	} else {
+		return "global"
+	}
 }
 
 func (in *Instance) handleInteraction(message *types.MessageEventData, handlers map[string]MessageHandler) {
@@ -172,30 +182,41 @@ func (in *Instance) handleInteraction(message *types.MessageEventData, handlers 
 }
 
 func (in *Instance) HandleMessageCreate(message *types.MessageEventData) {
-	if message.Author.ID != "270904126974590976" {
-		return
-	}
-
 	if in.shouldHandleMessage(message) {
+		// Apply to all messages
 		if in.Captcha(message) {
 			return
 		}
-		in.handleInteraction(message, messageCreateHandlers)
-		in.MinigamesMessageCreate(message)
-		in.AutoBuyMessageCreate(message)
+
 		in.Others(message)
+
+		messageType := in.getMessageType(message)
+
+		if messageType == "channel" {
+			// Only apply to channel_id channel
+			in.handleInteraction(message, messageCreateHandlers)
+			in.MinigamesMessageCreate(message)
+			in.AutoBuyMessageCreate(message)
+		} else if messageType == "dm" {
+			// Only apply to dank dm's
+			in.AutoBuyMessageCreate(message)
+		}
 	}
 }
 
 func (in *Instance) HandleMessageUpdate(message *types.MessageEventData) {
-	if message.Author.ID != "270904126974590976" {
-		return
-	}
-
 	if in.shouldHandleMessage(message) {
-		in.handleInteraction(message, messageUpdateHandlers)
-		in.MinigamesMessageUpdate(message)
-		in.AutoBuyMessageUpdate(message)
+		messageType := in.getMessageType(message)
+
+		if messageType == "channel" {
+			// Only apply to channel_id channel
+			in.handleInteraction(message, messageUpdateHandlers)
+			in.MinigamesMessageUpdate(message)
+			in.AutoBuyMessageUpdate(message)
+		} else if messageType == "dm" {
+			// Only apply to dank dm's
+			in.AutoBuyMessageUpdate(message)
+		}
 	}
 }
 
