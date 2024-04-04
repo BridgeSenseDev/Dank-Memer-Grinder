@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"os"
 	"sync"
 
@@ -10,6 +11,7 @@ import (
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/instance"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 type App struct {
@@ -35,14 +37,21 @@ func (a *App) startup(ctx context.Context) {
 	configFile := "./config.json"
 	cfg, err := config.ReadConfig(configFile)
 	if err != nil {
-		log.Fatal().Msgf("Failed to read config file: %v", err)
+		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+			Type:    runtime.ErrorDialog,
+			Title:   "A fatal error occured!",
+			Message: fmt.Sprintf("Failed to read config file: %s", err.Error()),
+		})
+		panic(fmt.Sprintf("Failed to read config file: %s", err.Error()))
 	}
 
 	a.cfg = &cfg
 }
 
 func (a *App) domReady(ctx context.Context) {
-	a.StartInstances()
+	if a.cfg != nil {
+		a.StartInstances()
+	}
 }
 
 func (a *App) beforeClose(ctx context.Context) (prevent bool) {
