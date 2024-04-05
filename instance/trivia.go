@@ -54,7 +54,7 @@ func (in *Instance) clickButtonBasedOnCondition(buttons []types.MessageComponent
 	}
 	if len(buttonIndices) > 0 {
 		randomIndex := buttonIndices[utils.Rng.Intn(len(buttonIndices))]
-		err := in.Client.ClickButton(message.MessageData, 0, randomIndex)
+		err := in.ClickButton(message.MessageData, 0, randomIndex)
 		if err != nil {
 			in.Log("discord", "ERR", fmt.Sprintf("Failed to click trivia answer button: %s", err.Error()))
 		}

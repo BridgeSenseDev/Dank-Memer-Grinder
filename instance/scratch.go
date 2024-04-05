@@ -21,7 +21,7 @@ func (in *Instance) ScratchMessageCreate(message *types.MessageEventData) {
 		in.PauseCommands(false)
 		in.Log("others", "INF", "Solving scratch command")
 
-		err := in.Client.ClickButton(message.MessageData, utils.Rng.Intn(2), utils.Rng.Intn(4))
+		err := in.ClickButton(message.MessageData, utils.Rng.Intn(2), utils.Rng.Intn(4))
 		if err != nil {
 			in.Log("discord", "ERR", fmt.Sprintf("Failed to click scratch answer button: %s", err.Error()))
 		}
@@ -56,7 +56,7 @@ func (in *Instance) ScratchMessageUpdate(message *types.MessageEventData) {
 		}
 
 		if attemptsLeft == 0 {
-			err := in.Client.ClickButton(message.MessageData, 4, 3)
+			err := in.ClickButton(message.MessageData, 4, 3)
 			if err != nil {
 				in.Log("discord", "ERR", fmt.Sprintf("Failed to click end scratch button: %s", err.Error()))
 			}
@@ -87,7 +87,7 @@ func (in *Instance) ScratchMessageUpdate(message *types.MessageEventData) {
 				actionRow := message.Components[y].(*types.ActionsRow)
 				button := actionRow.Components[x].(*types.Button)
 				if !button.Disabled {
-					err := in.Client.ClickButton(message.MessageData, y, x)
+					err := in.ClickButton(message.MessageData, y, x)
 					if err != nil {
 						in.Log("discord", "ERR", fmt.Sprintf("Failed to click scratch button: %s", err.Error()))
 					} else {

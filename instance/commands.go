@@ -29,18 +29,16 @@ func (in *Instance) CommandsLoop() {
 						in.LastRan[command] = time.Now().Add(2 * time.Second)
 						var err error
 						if command == "Work" {
-							err = in.Client.SendSubCommand("work", "shift", nil)
+							err = in.SendSubCommand("work", "shift", nil)
 						} else if command == "Deposit" {
-							err = in.Client.SendCommand("deposit", map[string]string{"amount": "max"})
+							err = in.SendCommand("deposit", map[string]string{"amount": "max"})
 						} else {
-							err = in.Client.SendCommand(strings.ToLower(command), nil)
+							err = in.SendCommand(strings.ToLower(command), nil)
 						}
 
 						if err != nil {
 							in.Log("discord", "ERR", fmt.Sprintf("Failed to send %s command: %s", command, err.Error()))
 						}
-
-						<-utils.Sleep(time.Duration(2+utils.Rng.Intn(3)) * time.Second)
 					}
 				}
 			} else {

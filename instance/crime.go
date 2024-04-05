@@ -29,7 +29,7 @@ func (in *Instance) Crime(message *types.MessageEventData) {
 
 	maxPriority := utils.GetMaxPriority(buttonPriority)
 
-	err := in.Client.ClickButton(message.MessageData, 0, maxPriority)
+	err := in.ClickButton(message.MessageData, 0, maxPriority)
 	if err != nil {
 		in.Log("discord", "ERR", fmt.Sprintf("Failed to click crime button: %s", err.Error()))
 	}

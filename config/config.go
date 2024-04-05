@@ -14,12 +14,23 @@ const (
 	Invisible DiscordStatus = "invisible"
 )
 
+type Delays struct {
+	MinDelay int `json:"minDelay"`
+	MaxDelay int `json:"maxDelay"`
+}
+
+type Cooldowns struct {
+	ButtonClickDelay Delays `json:"buttonClickDelay"`
+	CommandInterval  Delays `json:"commandInterval"`
+}
+
 type Config struct {
 	State         bool             `json:"state"`
 	ApiKey        string           `json:"apiKey"`
 	Gui           GuiConfig        `json:"gui"`
 	ReadAlerts    bool             `json:"readAlerts"`
 	DiscordStatus DiscordStatus    `json:"discordStatus"`
+	Cooldowns     Cooldowns        `json:"cooldowns"`
 	Accounts      []AccountsConfig `json:"accounts"`
 	AutoBuy       AutoBuyConfig    `json:"autoBuy"`
 	Commands      CommandsConfig   `json:"commands"`
