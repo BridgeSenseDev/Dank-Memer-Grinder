@@ -39,14 +39,14 @@ func (in *Instance) Adventure(message *types.MessageEventData) {
 		for _, option := range adventureOptions {
 			if option.Value == string(adventureOption) {
 				if !option.Default {
-					err := in.Client.ChooseSelectMenu(message.MessageData, 0, 0, []string{string(adventureOption)})
+					err := in.ChooseSelectMenu(message.MessageData, 0, 0, []string{string(adventureOption)})
 					if err != nil {
 						in.Log("discord", "ERR", fmt.Sprintf("Failed to choose adventure select menu: %s", err.Error()))
 					}
 					return
 				} else {
 					if !message.Components[1].(*types.ActionsRow).Components[0].(*types.Button).Disabled {
-						err := in.Client.ClickButton(message.MessageData, 1, 0)
+						err := in.ClickButton(message.MessageData, 1, 0)
 						if err != nil {
 							in.Log("discord", "ERR", fmt.Sprintf("Failed to click start adventure button: %s", err.Error()))
 						}
@@ -81,7 +81,7 @@ func (in *Instance) Adventure(message *types.MessageEventData) {
 	} else if strings.Contains(embed.Title, "choose items you want to bring along") {
 		if !message.Components[1].(*types.ActionsRow).Components[0].(*types.Button).Disabled {
 			in.PauseCommands(false)
-			err := in.Client.ClickButton(message.MessageData, 1, 0)
+			err := in.ClickButton(message.MessageData, 1, 0)
 			if err != nil {
 				in.Log("discord", "ERR", fmt.Sprintf("Failed to click start adventure button: %s", err.Error()))
 			} else {
@@ -98,7 +98,7 @@ func (in *Instance) Adventure(message *types.MessageEventData) {
 	for i := 0; i < 2; i++ {
 		if button, ok := message.Components[i].(*types.ActionsRow).Components[1].(*types.Button); ok {
 			if !button.Disabled && button.Emoji.ID == "1067941108568567818" {
-				err := in.Client.ClickButton(message.MessageData, i, 1)
+				err := in.ClickButton(message.MessageData, i, 1)
 				if err != nil {
 					in.Log("discord", "ERR", fmt.Sprintf("Failed to click next adventure page button: %s", err.Error()))
 				}
@@ -109,12 +109,12 @@ func (in *Instance) Adventure(message *types.MessageEventData) {
 	}
 
 	if strings.Contains(embed.Description, "Catch one of em!") {
-		err := in.Client.ClickButton(message.MessageData, 0, 2)
+		err := in.ClickButton(message.MessageData, 0, 2)
 		if err != nil {
 			in.Log("discord", "ERR", `failed to click "Catch one of em!" adventure button`)
 		}
 
-		err = in.Client.ClickButton(message.MessageData, 1, 1)
+		err = in.ClickButton(message.MessageData, 1, 1)
 		if err != nil {
 			in.Log("discord", "ERR", `failed to click "Catch one of em!" adventure button`)
 		}
@@ -139,14 +139,14 @@ func (in *Instance) Adventure(message *types.MessageEventData) {
 		if strings.Contains(strings.ToLower(question), strings.ToLower(q)) {
 			for columnIndex, button := range message.Components[0].(*types.ActionsRow).Components {
 				if strings.EqualFold(button.(*types.Button).Label, ans) {
-					err := in.Client.ClickButton(message.MessageData, 0, columnIndex)
+					err := in.ClickButton(message.MessageData, 0, columnIndex)
 					if err != nil {
 						in.Log("discord", "ERR", fmt.Sprintf("Failed to click adventure answer button: %s", err.Error()))
 					}
 					return
 				}
 			}
-			in.Client.ClickButton(message.MessageData, 0, 0)
+			in.ClickButton(message.MessageData, 0, 0)
 			in.Log("important", "ERR", fmt.Sprintf("Failed to find answer in config.json for adventure question: %s", q))
 		}
 	}

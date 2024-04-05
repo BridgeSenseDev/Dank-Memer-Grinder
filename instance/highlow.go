@@ -20,12 +20,12 @@ func (in *Instance) HighLow(message *types.MessageEventData) {
 	num, _ := strconv.Atoi(numStr)
 
 	if num >= 50 {
-		err := in.Client.ClickButton(message.MessageData, 0, 0)
+		err := in.ClickButton(message.MessageData, 0, 0)
 		if err != nil {
 			in.Log("discord", "ERR", fmt.Sprintf("Failed to click highlow button: %s", err.Error()))
 		}
 	} else {
-		err := in.Client.ClickButton(message.MessageData, 0, 2)
+		err := in.ClickButton(message.MessageData, 0, 2)
 		if err != nil {
 			in.Log("discord", "ERR", fmt.Sprintf("Failed to click highlow button: %s", err.Error()))
 		}

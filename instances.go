@@ -46,12 +46,7 @@ func (a *App) StartInstance(account config.AccountsConfig) {
 
 			commands, err := client.GetCommands(client.GuildID)
 			if err != nil {
-				runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
-					Type:    runtime.ErrorDialog,
-					Title:   "A fatal error occured!",
-					Message: fmt.Sprintf("Failed to get commands: %s", err.Error()),
-				})
-				panic(fmt.Sprintf("Failed to get commands: %s", err.Error()))
+				client.Log("ERR", fmt.Sprintf("Failed to get commands: %s", err.Error()))
 			}
 
 			commandDataSlice := make([]discord.CommandData, 0, len(commands))

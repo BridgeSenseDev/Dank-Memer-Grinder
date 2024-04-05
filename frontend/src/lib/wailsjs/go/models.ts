@@ -258,6 +258,52 @@ export namespace config {
 		    return a;
 		}
 	}
+	export class Delays {
+	    minDelay: number;
+	    maxDelay: number;
+	
+	    static createFrom(source: any = {}) {
+	        return new Delays(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.minDelay = source["minDelay"];
+	        this.maxDelay = source["maxDelay"];
+	    }
+	}
+	export class Cooldowns {
+	    buttonClickDelay: Delays;
+	    commandInterval: Delays;
+	
+	    static createFrom(source: any = {}) {
+	        return new Cooldowns(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.buttonClickDelay = this.convertValues(source["buttonClickDelay"], Delays);
+	        this.commandInterval = this.convertValues(source["commandInterval"], Delays);
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
 	export class GuiConfig {
 	    theme: string;
 	
@@ -276,6 +322,7 @@ export namespace config {
 	    gui: GuiConfig;
 	    readAlerts: boolean;
 	    discordStatus: string;
+	    cooldowns: Cooldowns;
 	    accounts: AccountsConfig[];
 	    autoBuy: AutoBuyConfig;
 	    commands: CommandsConfig;
@@ -292,6 +339,7 @@ export namespace config {
 	        this.gui = this.convertValues(source["gui"], GuiConfig);
 	        this.readAlerts = source["readAlerts"];
 	        this.discordStatus = source["discordStatus"];
+	        this.cooldowns = this.convertValues(source["cooldowns"], Cooldowns);
 	        this.accounts = this.convertValues(source["accounts"], AccountsConfig);
 	        this.autoBuy = this.convertValues(source["autoBuy"], AutoBuyConfig);
 	        this.commands = this.convertValues(source["commands"], CommandsConfig);
@@ -316,6 +364,8 @@ export namespace config {
 		    return a;
 		}
 	}
+	
+	
 	
 	
 	

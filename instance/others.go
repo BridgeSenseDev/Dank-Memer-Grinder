@@ -10,7 +10,7 @@ import (
 
 func (in *Instance) Others(message *types.MessageEventData) {
 	if message.Embeds[0].Title == "You have an unread alert!" && in.Cfg.ReadAlerts {
-		err := in.Client.SendCommand("alert", nil)
+		err := in.SendCommand("alert", nil)
 
 		if err != nil {
 			in.Log("discord", "ERR", fmt.Sprintf("Failed to send /alert command: %s", err.Error()))

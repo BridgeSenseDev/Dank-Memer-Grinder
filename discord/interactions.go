@@ -4,11 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/big"
-	"math/rand"
 	"time"
 
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"github.com/valyala/fasthttp"
 )
 
@@ -31,8 +29,6 @@ func (client *Client) GetCommandInfo(commandName string) *CommandData {
 }
 
 func (client *Client) sendRequest(url string, payload map[string]interface{}) error {
-	<-utils.Sleep(time.Duration(rand.Intn(201)+400) * time.Millisecond)
-
 	if payload["guild_id"] == "" {
 		payload["guild_id"] = nil
 	}
@@ -56,19 +52,36 @@ func (client *Client) sendRequest(url string, payload map[string]interface{}) er
 	req.SetBody(json_data)
 
 	err = fasthttp.Do(req, resp)
-	if err != nil || resp.StatusCode() != 204 {
+	if err != nil {
 		return err
+	} else if resp.StatusCode() != 204 {
+		return fmt.Errorf("request failed with status code %d: %s", resp.StatusCode(), string(resp.Body()))
 	}
 
 	return nil
 }
 
 func (client *Client) SendCommand(commandName string, options map[string]string) error {
-	url := "https://discord.com/api/v10/interactions"
+	url := "https://discord.com/api/v9/interactions"
 	commandInfo := client.GetCommandInfo(commandName)
 
 	if commandInfo == nil {
-		return fmt.Errorf("failed to send /%s command: Could not get command info", commandName)
+		commands, err := client.GetCommands(client.GuildID)
+		if err != nil {
+			client.Log("ERR", fmt.Sprintf("Failed to get commands: %s", err.Error()))
+		} else {
+			commandDataSlice := make([]CommandData, 0, len(commands))
+			for _, cmd := range commands {
+				commandDataSlice = append(commandDataSlice, cmd)
+			}
+
+			client.CommandsData = &commandDataSlice
+		}
+
+		commandInfo := client.GetCommandInfo(commandName)
+		if commandInfo == nil {
+			return fmt.Errorf("failed to send /%s command: Could not get command info", commandName)
+		}
 	}
 
 	var commandSendOptions = []CommandSendOptions{}
@@ -115,7 +128,7 @@ func (client *Client) SendCommand(commandName string, options map[string]string)
 }
 
 func (client *Client) SendSubCommand(commandName string, subCommandName string, options map[string]string) error {
-	url := "https://discord.com/api/v10/interactions"
+	url := "https://discord.com/api/v9/interactions"
 	commandInfo := client.GetCommandInfo(commandName)
 
 	if commandInfo == nil {
@@ -190,7 +203,7 @@ func (client *Client) ClickButton(message types.MessageData, row int, column int
 		},
 	}
 
-	return client.sendRequest("https://discord.com/api/v10/interactions", payload)
+	return client.sendRequest("https://discord.com/api/v9/interactions", payload)
 }
 
 func (client *Client) ChooseSelectMenu(message types.MessageData, row int, column int, values []string) error {
@@ -209,7 +222,7 @@ func (client *Client) ChooseSelectMenu(message types.MessageData, row int, colum
 		"type":       3,
 	}
 
-	return client.sendRequest("https://discord.com/api/v10/interactions", payload)
+	return client.sendRequest("https://discord.com/api/v9/interactions", payload)
 }
 
 func (client *Client) SubmitModal(modal types.ModalData) error {
@@ -227,5 +240,5 @@ func (client *Client) SubmitModal(modal types.ModalData) error {
 		"nonce":      generateNonce(),
 	}
 
-	return client.sendRequest("https://discord.com/api/v10/interactions", payload)
+	return client.sendRequest("https://discord.com/api/v9/interactions", payload)
 }

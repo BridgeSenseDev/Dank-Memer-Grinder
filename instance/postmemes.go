@@ -16,7 +16,7 @@ func (in *Instance) PostMemesMessageCreate(message *types.MessageEventData) {
 	option := configOptions[utils.Rng.Intn(len(configOptions))]
 
 	if !platformOptions[option].Default {
-		err := in.Client.ChooseSelectMenu(message.MessageData, 0, 0, []string{platformOptions[option].Value})
+		err := in.ChooseSelectMenu(message.MessageData, 0, 0, []string{platformOptions[option].Value})
 		if err != nil {
 			in.Log("discord", "ERR", fmt.Sprintf("Failed to choose postmemes platform select menu: %s", err.Error()))
 		}
@@ -32,13 +32,13 @@ func (in *Instance) PostMemesMessageCreate(message *types.MessageEventData) {
 
 	if !defaultOptionFound {
 		randomIndex := utils.Rng.Intn(len(memeTypeOptions))
-		err := in.Client.ChooseSelectMenu(message.MessageData, 1, 0, []string{memeTypeOptions[randomIndex].Value})
+		err := in.ChooseSelectMenu(message.MessageData, 1, 0, []string{memeTypeOptions[randomIndex].Value})
 		if err != nil {
 			in.Log("discord", "ERR", fmt.Sprintf("Failed to choose postmemes option select menu: %s", err.Error()))
 		}
 	}
 
-	err := in.Client.ClickButton(message.MessageData, 2, 0)
+	err := in.ClickButton(message.MessageData, 2, 0)
 	if err != nil {
 		in.Log("discord", "ERR", fmt.Sprintf("Failed to click postmemes button: %s", err.Error()))
 	}

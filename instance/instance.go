@@ -158,7 +158,7 @@ var messageUpdateHandlers = map[string]MessageHandler{
 }
 
 func (in *Instance) shouldHandleMessage(message *types.MessageEventData) bool {
-	return message.Author.ID == "270904126974590976" &&
+	return in.Cfg.State && in.AccountCfg.State && message.Author.ID == "270904126974590976" &&
 		len(message.Embeds) > 0 &&
 		!strings.Contains(message.Embeds[0].Description, "cooldown is")
 }
