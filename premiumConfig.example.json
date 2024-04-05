@@ -6,13 +6,11 @@
   },
   "readAlerts": true,
   "discordStatus": "online",
-  "accounts": [
-    {
-      "token": "",
-      "channelID": "",
-      "state": true
-    }
-  ],
+  "accounts": [{
+    "token": "",
+    "channelID": "",
+    "state": true
+  }],
   "autoBuy": {
     "huntingRifle": {
       "state": true,
@@ -31,15 +29,15 @@
     "adventure": {
       "state": false,
       "delay": 1800,
-      "adventureOption": "west"
+      "adventureOption": "brazil"
     },
     "beg": {
       "state": false,
-      "delay": 40
+      "delay": 10
     },
     "crime": {
       "state": false,
-      "delay": 40,
+      "delay": 2,
       "priority": [
         "hacking",
         "tax evasion",
@@ -68,15 +66,15 @@
     },
     "dig": {
       "state": false,
-      "delay": 30
+      "delay": 10
     },
     "highlow": {
       "state": false,
-      "delay": 20
+      "delay": 2
     },
     "hunt": {
       "state": false,
-      "delay": 30
+      "delay": 10
     },
     "pet": {
       "state": false,
@@ -84,7 +82,7 @@
     },
     "postmemes": {
       "state": false,
-      "delay": 30,
+      "delay": 2,
       "platform": [4]
     },
     "scratch": {
@@ -93,7 +91,7 @@
     },
     "search": {
       "state": false,
-      "delay": 25,
+      "delay": 2,
       "priority": [
         "phoenix pits",
         "aeradella's home",

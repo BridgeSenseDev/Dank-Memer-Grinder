@@ -14,6 +14,7 @@
 * [Getting Your Channel ID](configuration/getting-your-channel-id.md)
 * [General Settings](configuration/general-settings.md)
 * [Commands Settings](configuration/commands-settings.md)
+* [Config.json File](configuration/config-json.md)
 
 ## Features
 
