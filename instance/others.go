@@ -23,4 +23,10 @@ func (in *Instance) Others(message *types.MessageEventData) {
 		in.UpdateConfig(in.Cfg)
 		runtime.EventsEmit(in.Ctx, "configUpdate", in.Cfg)
 	}
+	if strings.Contains(strings.ToLower(message.Embeds[0].Title), "calm down!") {
+		in.Log("important", "INF", "Grinding has been paused as discord channel ratelimit has been reached. Please come back later to continue.")
+		in.Cfg.State = false
+		in.UpdateConfig(in.Cfg)
+		runtime.EventsEmit(in.Ctx, "configUpdate", in.Cfg)
+	}
 }
