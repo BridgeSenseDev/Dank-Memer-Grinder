@@ -5,7 +5,7 @@
     "theme": "system"
   },
   "readAlerts": true,
-  "discordStatus": "idle",
+  "discordStatus": "online",
   "accounts": [{
     "token": "",
     "channelID": "",
