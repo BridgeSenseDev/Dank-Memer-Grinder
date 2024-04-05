@@ -6,13 +6,11 @@
   },
   "readAlerts": true,
   "discordStatus": "idle",
-  "accounts": [
-    {
-      "token": "",
-      "channelID": "",
-      "state": true
-    }
-  ],
+  "accounts": [{
+    "token": "",
+    "channelID": "",
+    "state": true
+  }],
   "autoBuy": {
     "huntingRifle": {
       "state": true,
@@ -205,7 +203,10 @@
       "You decide to take an MMA class while visiting to learn from the best. Which style do you choose?": "Capoiera",
       "You stop at a local bakery for some of the Brazilian cheese bread you've heard so much about. What else do you try?": "Nothing",
       "You take a boat tour in Manaus to go down the Amazon River. At a fork in the path, the guide tells you to the right are piranhas and left anacondas. Which do you choose?": "Piranhas",
-      "You went to schedule a trip into the Amazon to see the animals. What sort of trip do you book?": "Private Tour"
+      "You went to schedule a trip into the Amazon to see the animals. What sort of trip do you book?": "Private Tour",
+            "You stop at a local bakery for some of the Brazilian cheese bread you've heard so much about. What else do you try?": "Nothing",
+      "You decide to hit the streets and check out the bands playing music during Carnaval. What do you do first?": "Get a Drink",
+      "You see a dog wandering the streets. (This is not the one at the beach)": "Pet it"
     },
     "vacation": {
       "A family road trip is a perfect getaway until you end up lost and without cell service. What do you do?": "Keep Driving",
