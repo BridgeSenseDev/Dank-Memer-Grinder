@@ -42,7 +42,7 @@ type CommandData struct {
 }
 
 func (client *Client) GetCommands(guildID string) (map[string]CommandData, error) {
-	url := fmt.Sprintf("https://discord.com/api/v10/guilds/%s/application-command-index", guildID)
+	url := fmt.Sprintf("https://discord.com/api/v9/guilds/%s/application-command-index", guildID)
 
 	req := fasthttp.AcquireRequest()
 	defer fasthttp.ReleaseRequest(req)
@@ -58,6 +58,8 @@ func (client *Client) GetCommands(guildID string) (map[string]CommandData, error
 	err := fasthttp.Do(req, resp)
 	if err != nil {
 		return nil, err
+	} else if resp.StatusCode() != 200 {
+		return nil, fmt.Errorf("request failed with status code %d: %s", resp.StatusCode(), string(resp.Body()))
 	}
 
 	body := resp.Body()
@@ -83,7 +85,7 @@ type Channel struct {
 }
 
 func (client *Client) GetGuildID(channelID string) string {
-	url := fmt.Sprintf("https://discord.com/api/v10/channels/%s", channelID)
+	url := fmt.Sprintf("https://discord.com/api/v9/channels/%s", channelID)
 
 	req := fasthttp.AcquireRequest()
 	defer fasthttp.ReleaseRequest(req)
