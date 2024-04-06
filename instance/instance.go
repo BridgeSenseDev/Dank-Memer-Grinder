@@ -34,6 +34,9 @@ func (in *Instance) Log(level LogLevel, logType LogType, msg string) {
 	case Others:
 		runtime.EventsEmit(in.Ctx, "logOthers", logType, in.User.Username, msg)
 	case Discord:
+		if strings.Contains(msg, "COMPONENT_VALIDATION_FAILED") {
+			return
+		}
 		runtime.EventsEmit(in.Ctx, "logDiscord", logType, in.User.Username, msg)
 	}
 
