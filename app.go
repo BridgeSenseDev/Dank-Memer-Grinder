@@ -100,6 +100,10 @@ func (a *App) UpdateDiscordStatus(status string) {
 	defer a.wsMutex.Unlock()
 
 	for _, in := range a.instances {
+		if in == nil || in.User.Status == status {
+			continue
+		}
+
 		payload := map[string]interface{}{
 			"op": 3,
 			"d": map[string]interface{}{
@@ -120,5 +124,7 @@ func (a *App) UpdateDiscordStatus(status string) {
 		if err != nil {
 			log.Error().Msgf("Error setting Discord status: %s", err)
 		}
+
+		in.User.Status = status
 	}
 }

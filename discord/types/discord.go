@@ -16,6 +16,7 @@ type User struct {
 	Flags         uint64 `json:"flag,omitempty"`
 	PremiumType   uint64 `json:"premium_type,omitempty"`
 	PublicFlags   uint64 `json:"public_flag,omitempty"`
+	Status        string `json:"status,omitempty"`
 }
 
 type Guild struct {
