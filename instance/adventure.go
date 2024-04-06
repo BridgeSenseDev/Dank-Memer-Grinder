@@ -111,12 +111,12 @@ func (in *Instance) Adventure(message *types.MessageEventData) {
 	if strings.Contains(embed.Description, "Catch one of em!") {
 		err := in.ClickButton(message.MessageData, 0, 2)
 		if err != nil {
-			in.Log("discord", "ERR", `failed to click "Catch one of em!" adventure button`)
+			in.Log("discord", "ERR", fmt.Sprintf(`Failed to click "Catch one of em!" adventure button: %s`, err.Error()))
 		}
 
 		err = in.ClickButton(message.MessageData, 1, 1)
 		if err != nil {
-			in.Log("discord", "ERR", `failed to click "Catch one of em!" adventure button`)
+			in.Log("discord", "ERR", fmt.Sprintf(`Failed to click adventure button: %s`, err.Error()))
 		}
 
 		return
