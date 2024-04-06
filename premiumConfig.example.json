@@ -6,6 +6,16 @@
   },
   "readAlerts": true,
   "discordStatus": "online",
+  "cooldowns": {
+    "buttonClickDelay": {
+      "minDelay": 300,
+      "maxDelay": 500
+    },
+    "commandInterval": {
+      "minDelay": 2000,
+      "maxDelay": 4000
+    }
+  },
   "accounts": [{
     "token": "",
     "channelID": "",
