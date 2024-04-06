@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
-	"github.com/valyala/fasthttp"
 )
 
 func generateNonce() string {
@@ -40,25 +39,12 @@ func (client *Client) sendRequest(url string, payload map[string]interface{}) er
 		return err
 	}
 
-	req := fasthttp.AcquireRequest()
-	resp := fasthttp.AcquireResponse()
-	defer fasthttp.ReleaseRequest(req)
-	defer fasthttp.ReleaseResponse(resp)
-
-	req.SetRequestURI(url)
-	req.Header.SetMethod("POST")
-	req.Header.Set("authorization", client.Selfbot.Token)
-	req.Header.Set("Content-Type", "application/json")
-	req.SetBody(json_data)
-
-	err = fasthttp.Do(req, resp)
+	err = client.RequestWithLockedBucket("POST", url, json_data, client.RateLimiter.LockBucket(url), 0)
 	if err != nil {
 		return err
-	} else if resp.StatusCode() != 204 {
-		return fmt.Errorf("request failed with status code %d: %s", resp.StatusCode(), string(resp.Body()))
 	}
 
-	return nil
+	return err
 }
 
 func (client *Client) SendCommand(commandName string, options map[string]string) error {

@@ -17,6 +17,7 @@ type Client struct {
 	ChannelID    string
 	GuildID      string
 	CommandsData *[]CommandData
+	RateLimiter  *RateLimiter
 }
 
 type CommandSendOptions struct {
@@ -30,7 +31,7 @@ func NewClient(ctx context.Context, token string, config *types.Config) *Client 
 	gateway := CreateGateway(ctx, &selfbot, config)
 	commandsData := make([]CommandData, 0)
 
-	return &Client{ctx, &selfbot, gateway, config, "", "", &commandsData}
+	return &Client{ctx, &selfbot, gateway, config, "", "", &commandsData, NewRatelimiter()}
 }
 
 func (client *Client) Connect() error {
