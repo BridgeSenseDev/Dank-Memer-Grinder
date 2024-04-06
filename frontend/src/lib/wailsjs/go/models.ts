@@ -443,6 +443,7 @@ export namespace types {
 	    flag?: number;
 	    premium_type?: number;
 	    public_flag?: number;
+	    status?: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new User(source);
@@ -465,6 +466,7 @@ export namespace types {
 	        this.flag = source["flag"];
 	        this.premium_type = source["premium_type"];
 	        this.public_flag = source["public_flag"];
+	        this.status = source["status"];
 	    }
 	}
 

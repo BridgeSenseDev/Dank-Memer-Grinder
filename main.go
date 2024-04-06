@@ -2,7 +2,11 @@ package main
 
 import (
 	"embed"
+	"os"
 
+	"github.com/grongor/panicwatch"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/logger"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -20,9 +24,23 @@ var assets embed.FS
 var icon []byte
 
 func main() {
+	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+
 	app := NewApp()
 
-	err := wails.Run(&options.App{
+	err := panicwatch.Start(panicwatch.Config{
+		OnPanic: func(p panicwatch.Panic) {
+			log.Error().Msgf("panic: %s, stack: %s", p.Message, p.Stack)
+		},
+		OnWatcherDied: func(err error) {
+			log.Fatal().Msg("panicwatch watcher process died")
+		},
+	})
+	if err != nil {
+		log.Fatal().Msgf("failed to start panicwatch: " + err.Error())
+	}
+
+	err = wails.Run(&options.App{
 		Title:             "Dank Memer Grinder",
 		Width:             1024,
 		Height:            768,

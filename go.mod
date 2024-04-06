@@ -7,10 +7,16 @@ toolchain go1.22.1
 require (
 	github.com/fasthttp/websocket v1.5.8
 	github.com/goccy/go-json v0.10.2
+	github.com/grongor/panicwatch v1.2.0
 	github.com/jeandeaual/go-locale v0.0.0-20240223122105-ce5225dcaa49
 	github.com/rs/zerolog v1.32.0
 	github.com/valyala/fasthttp v1.52.0
 	github.com/wailsapp/wails/v2 v2.8.0
+)
+
+require (
+	github.com/glycerine/rbuf v0.0.0-20190314090850-75b78581bebe // indirect
+	github.com/go-errors/errors v1.5.1 // indirect
 )
 
 require (
