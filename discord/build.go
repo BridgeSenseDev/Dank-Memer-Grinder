@@ -8,8 +8,8 @@ import (
 )
 
 var (
-	JS_FILE_REGEX    = regexp.MustCompile(`assets/(sentry\.\w+)\.js`)
-	BUILD_INFO_REGEX = regexp.MustCompile(`buildNumber\D+(\d+)"`)
+	JS_FILE_REGEX    = regexp.MustCompile(`<script src="(/assets/\d{4,5}\.[^"]+\.js)" defer></script>`)
+	BUILD_INFO_REGEX = regexp.MustCompile(`Build Number: "\).concat\("(\d+)"`)
 )
 
 func getLatestBuild() (string, error) {
@@ -19,35 +19,45 @@ func getLatestBuild() (string, error) {
 	defer fasthttp.ReleaseResponse(resp)
 
 	req.Header.SetMethod(fasthttp.MethodGet)
-	req.SetRequestURI("https://discord.com/login")
+	req.SetRequestURI("https://discord.com/app")
 
 	if err := requestClient.Do(req, resp); err != nil {
 		return "", err
 	}
 
-	matches := JS_FILE_REGEX.FindStringSubmatch(string(resp.Body()))
-	if len(matches) < 2 {
-		return "", fmt.Errorf("failed to find JavaScript file URL")
+	matches := JS_FILE_REGEX.FindAllStringSubmatch(string(resp.Body()), -1)
+	if len(matches) == 0 {
+		fmt.Println("build number not found, falling back to 9999")
+		return "9999", nil
 	}
-	asset := matches[1]
-
-	req.Header.SetMethod(fasthttp.MethodGet)
-	req.SetRequestURI(fmt.Sprintf("https://discord.com/assets/%s.js", asset))
-
-	if err := requestClient.Do(req, resp); err != nil {
-		return "", err
+	for _, match := range matches {
+		fmt.Println(match)
+		if len(match) < 2 {
+			continue
+		}
+		asset := match[1]
+		if asset == "" {
+			continue
+		}
+		req.Header.SetMethod(fasthttp.MethodGet)
+		req.SetRequestURI(fmt.Sprintf("https://discord.com%s", asset))
+		if err := requestClient.Do(req, resp); err != nil {
+			continue
+		}
+		match := BUILD_INFO_REGEX.FindStringSubmatch(string(resp.Body()))
+		if len(match) < 2 {
+			continue
+		}
+		return match[1], nil
 	}
 
-	match := BUILD_INFO_REGEX.FindStringSubmatch(string(resp.Body()))
-	if len(match) < 2 {
-		return "", fmt.Errorf("failed to find build number")
-	}
-	return match[1], nil
+	fmt.Println("build number not found, falling back to 9999")
+	return "9999", nil
 }
 
 func mustGetLatestBuild() string {
 	if build, err := getLatestBuild(); err != nil {
-		return "279382"
+		panic(err)
 	} else {
 		return build
 	}

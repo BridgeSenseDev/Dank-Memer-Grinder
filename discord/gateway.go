@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"strings"
 	"sync"
 	"time"
 
@@ -22,16 +21,17 @@ var (
 )
 
 type Gateway struct {
-	CloseChan  chan struct{}
-	Closed     bool
-	Config     *types.Config
-	Connection *websocket.Conn
-	GatewayURL string
-	Handlers   Handlers
-	LastSeq    int
-	Selfbot    *Selfbot
-	SessionID  string
-	Ctx        context.Context
+	CloseChan         chan struct{}
+	Closed            bool
+	Config            *types.Config
+	Connection        *websocket.Conn
+	GatewayURL        string
+	Handlers          Handlers
+	LastSeq           int
+	Selfbot           *Selfbot
+	SessionID         string
+	ClientBuildNumber string
+	Ctx               context.Context
 
 	heartbeatInterval time.Duration
 }
@@ -43,7 +43,7 @@ func CreateGateway(ctx context.Context, selfbot *Selfbot, config *types.Config) 
 		headers.Set("User-Agent", config.UserAgent)
 	}
 	mu.Unlock()
-	return &Gateway{CloseChan: make(chan struct{}), Selfbot: selfbot, GatewayURL: "wss://gateway.discord.gg/?encoding=json&v=" + config.ApiVersion, Config: config, Ctx: ctx}
+	return &Gateway{CloseChan: make(chan struct{}), Selfbot: selfbot, GatewayURL: "wss://gateway.discord.gg/?encoding=json&v=" + config.ApiVersion, Config: config, ClientBuildNumber: clientBuildNumber, Ctx: ctx}
 }
 
 func (gateway *Gateway) Log(logType LogType, msg string) {
@@ -420,19 +420,9 @@ func (gateway *Gateway) startHandler() {
 			if err != nil {
 				gateway.Log("ERR", fmt.Sprintf("Discord gateway: Error reading message: %v", err.Error()))
 
-				if err.Error() == "gateway connection is closed" {
-					if !gateway.Closed {
-						gateway.Log("ERR", "Reconnecting to discord gateway")
-						go gateway.reconnect()
-					}
-
-					return
-				} else if strings.Contains(err.Error(), "connection reset by peer") {
+				if !gateway.Closed {
 					gateway.Log("ERR", "Reconnecting to discord gateway")
 					go gateway.reconnect()
-					return
-				} else {
-					continue
 				}
 			}
 
