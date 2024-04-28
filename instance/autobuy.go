@@ -181,7 +181,7 @@ func (in *Instance) AutoBuyMessageCreate(message *types.MessageEventData) {
 
 func (in *Instance) AutoBuyModalCreate(modal *types.ModalData) {
 	if modal.Title == "Dank Memer Shop" {
-		modal.Components[0].(*types.ActionsRow).Components[0].(*types.TextInput).Label = strconv.Itoa(globalAutoBuyState.count)
+		modal.Components[0].(*types.ActionsRow).Components[0].(*types.TextInput).Value = strconv.Itoa(globalAutoBuyState.count)
 		err := in.SubmitModal(*modal)
 		if err != nil {
 			in.Log("discord", "ERR", fmt.Sprintf("Failed to submit autobuy modal: %s", err.Error()))
