@@ -79,9 +79,9 @@ func (in *Instance) Adventure(message *types.MessageEventData) {
 		}
 		return
 	} else if strings.Contains(embed.Title, "choose items you want to bring along") {
-		if !message.Components[1].(*types.ActionsRow).Components[0].(*types.Button).Disabled {
+		if !message.Components[len(message.Components)-1].(*types.ActionsRow).Components[0].(*types.Button).Disabled {
 			in.PauseCommands(false)
-			err := in.ClickButton(message.MessageData, 1, 0)
+			err := in.ClickButton(message.MessageData, len(message.Components)-1, 0)
 			if err != nil {
 				in.Log("discord", "ERR", fmt.Sprintf("Failed to click start adventure button: %s", err.Error()))
 			} else {
