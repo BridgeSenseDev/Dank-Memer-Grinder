@@ -12,3 +12,4 @@ build/bin
 node_modules
 frontend/dist
 instance/captcha.go
+.idea
