@@ -10,23 +10,22 @@ import (
 )
 
 var (
-	emoji             = ""
-	colorMatchOptions = make(map[string]string)
-	repeatOrder       []string
-	wordRegex         = regexp.MustCompile(`(.+?)`)
-	colorRegex        = regexp.MustCompile(`:([^:]+):`)
-	highlowRegex      = regexp.MustCompile(`\*\*(.*?)\*\*`)
+	emoji                       = ""
+	colorMatchOptions           = make(map[string]string)
+	repeatOrder                 []string
+	repeatOrderLastClickedIndex int
+	wordRegex                   = regexp.MustCompile(`(.+?)`)
+	colorRegex                  = regexp.MustCompile(`:([^:]+):`)
+	highlowRegex                = regexp.MustCompile(`\*\*(.*?)\*\*`)
 )
 
 const (
-	emptyspace    = "<:emptyspace:827651824739156030>"
-	levitate      = ":levitate:"
-	basketball    = ":basketball:"
-	fireBall      = "<:FireBall:883714770748964864>"
-	legendaryFish = "<a:LegendaryFish:971430841211322408>"
-	kraken        = "<:Kraken:860228238956429313>"
-	worm          = "<:Worm:864261394920898600>"
-	moleman       = "<a:MoleMan:1022972147175526441>"
+	emptyspace = "<:emptyspace:827651824739156030>"
+	levitate   = ":levitate:"
+	basketball = ":basketball:"
+	fireBall   = "<:FireBall:883714770748964864>"
+	worm       = "<:Worm:864261394920898600>"
+	moleman    = "<a:MoleMan:1022972147175526441>"
 )
 
 func generateEmojiActions(emojis []string) map[string]int {
@@ -48,7 +47,6 @@ func generateEmojiActions(emojis []string) map[string]int {
 
 func (in *Instance) solveMoleman(message types.MessageData) {
 	embed := message.Embeds[0]
-	moleman := strings.Split(embed.Description, "\n")[5]
 
 	molemanLoc := map[string]int{
 		moleman + emptyspace + emptyspace: 0,
@@ -309,13 +307,18 @@ func (in *Instance) MinigamesMessageUpdate(message *types.MessageEventData) {
 			answers[button.(*types.Button).Label] = i
 		}
 
-		for _, choice := range repeatOrder {
+		if repeatOrderLastClickedIndex < len(repeatOrder) {
+			choice := repeatOrder[repeatOrderLastClickedIndex]
 			err := in.ClickButton(message.MessageData, 0, answers[choice])
 			if err != nil {
 				in.Log("discord", "ERR", fmt.Sprintf("Failed to click repeat order minigame button: %s", err.Error()))
+			} else {
+				repeatOrderLastClickedIndex++
+				if repeatOrderLastClickedIndex >= len(repeatOrder) {
+					in.Log("others", "INF", "Solved repeat order minigame")
+					in.UnpauseCommands()
+				}
 			}
 		}
-		in.Log("others", "INF", "Solved repeat order minigame")
-		in.UnpauseCommands()
 	}
 }
