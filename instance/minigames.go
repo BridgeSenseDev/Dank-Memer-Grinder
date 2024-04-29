@@ -186,6 +186,7 @@ func (in *Instance) MinigamesMessageCreate(message *types.MessageEventData) {
 		for i, line := range lines {
 			repeatOrder[i] = strings.Trim(line, "`")
 		}
+		repeatOrderLastClickedIndex = 0
 	}
 
 	// F in the chat
