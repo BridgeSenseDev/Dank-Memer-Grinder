@@ -146,7 +146,11 @@ func (in *Instance) Adventure(message *types.MessageEventData) {
 					return
 				}
 			}
-			in.ClickButton(message.MessageData, 0, 0)
+			in.Log("important", "ERR", fmt.Sprintf("Failed to find adventure answer button for %s", q))
+			err := in.ClickButton(message.MessageData, 0, 0)
+			if err != nil {
+				in.Log("discord", "ERR", fmt.Sprintf("Failed to click default adventure answer button: %s", err.Error()))
+			}
 			in.Log("important", "ERR", fmt.Sprintf("Failed to find answer in config.json for adventure question: %s", q))
 		}
 	}

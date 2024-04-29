@@ -43,7 +43,10 @@ func (client *Client) AddHandler(event string, function any) error {
 }
 
 func (client *Client) Close() {
-	client.Gateway.Close()
+	err := client.Gateway.Close()
+	if err != nil {
+		return
+	}
 }
 
 func (client *Client) SendMessage(payload []byte) error {

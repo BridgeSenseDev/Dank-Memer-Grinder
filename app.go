@@ -39,7 +39,7 @@ func (a *App) startup(ctx context.Context) {
 	if err != nil {
 		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
 			Type:    runtime.ErrorDialog,
-			Title:   "A fatal error occured!",
+			Title:   "A fatal error occurred!",
 			Message: fmt.Sprintf("Failed to read config file: %s", err.Error()),
 		})
 		panic(fmt.Sprintf("Failed to read config file: %s", err.Error()))
@@ -79,8 +79,8 @@ func (a *App) UpdateConfig(newCfg *config.Config) error {
 		return err
 	}
 
-	for _, instance := range a.instances {
-		instance.UpdateConfig(*newCfg)
+	for _, i := range a.instances {
+		i.UpdateConfig(*newCfg)
 	}
 
 	return nil

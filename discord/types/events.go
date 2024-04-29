@@ -70,7 +70,7 @@ type SuperProperties struct {
 	ClientEventSource      any    `json:"client_event_source"`
 }
 
-// https://discord.com/developers/docs/topics/gateway-events#payload-structure
+// DefaultEvent https://discord.com/developers/docs/topics/gateway-events#payload-structure
 type DefaultEvent struct {
 	Op int    `json:"op"`
 	T  string `json:"t,omitempty"`

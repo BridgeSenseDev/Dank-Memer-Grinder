@@ -75,7 +75,10 @@ func (a *App) StartInstance(account config.AccountsConfig) {
 
 			a.UpdateDiscordStatus(string(a.cfg.DiscordStatus))
 
-			in.Start()
+			err = in.Start()
+			if err != nil {
+				return
+			}
 			in.Log("important", "INF", fmt.Sprintf("Logged in as %s", e.User.Username))
 		})
 
@@ -160,16 +163,16 @@ func (a *App) GetInstances() []*InstanceView {
 
 	var instanceViews []*InstanceView
 
-	for _, instance := range a.instances {
+	for _, i := range a.instances {
 		instanceView := &InstanceView{
-			User:       instance.User,
-			ChannelID:  instance.ChannelID,
-			GuildID:    instance.GuildID,
-			Cfg:        instance.Cfg,
-			AccountCfg: instance.AccountCfg,
-			LastRan:    instance.LastRan,
-			Pause:      instance.Pause,
-			Error:      instance.Error,
+			User:       i.User,
+			ChannelID:  i.ChannelID,
+			GuildID:    i.GuildID,
+			Cfg:        i.Cfg,
+			AccountCfg: i.AccountCfg,
+			LastRan:    i.LastRan,
+			Pause:      i.Pause,
+			Error:      i.Error,
 		}
 		instanceViews = append(instanceViews, instanceView)
 	}

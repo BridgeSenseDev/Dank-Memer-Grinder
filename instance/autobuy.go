@@ -59,6 +59,7 @@ func (in *Instance) findAndClickButton(message *types.MessageEventData, targetEm
 		}
 		for columnIndex, button := range component.(*types.ActionsRow).Components {
 			if button.(*types.Button).Emoji.Name == targetEmojiName {
+				in.Log("others", "INF", "Found autobuy button")
 				err := in.ClickButton(message.MessageData, rowIndex, columnIndex)
 				if err != nil {
 					in.Log("discord", "ERR", fmt.Sprintf("Failed to click autobuy button: %s", err.Error()))
@@ -67,6 +68,10 @@ func (in *Instance) findAndClickButton(message *types.MessageEventData, targetEm
 			}
 		}
 	}
+
+	in.Log("others", "ERR", "Failed to find autobuy button")
+	in.setAutoBuyState(0, 0, 0, "", 0)
+	in.UnpauseCommands()
 	return false
 }
 
@@ -101,6 +106,7 @@ func (in *Instance) shopBuy(shopMsg *types.MessageEventData) {
 		}
 
 		if currentPage == globalAutoBuyState.shopPage {
+			in.Log("others", "INF", fmt.Sprintf("Find and clicking button for %d, %d, %d, %s, %d", globalAutoBuyState.shopTypeIndex, globalAutoBuyState.shopPage, globalAutoBuyState.count, globalAutoBuyState.itemEmojiName, globalAutoBuyState.price))
 			if !in.findAndClickButton(shopMsg, globalAutoBuyState.itemEmojiName) {
 				if err != nil {
 					in.Log("others", "ERR", fmt.Sprintf("Failed to buy %s: Could not find button in page %d", globalAutoBuyState.itemEmojiName, globalAutoBuyState.shopPage))
@@ -149,9 +155,15 @@ func (in *Instance) AutoBuyMessageCreate(message *types.MessageEventData) {
 		in.setAutoBuyState(0, 1, in.Cfg.AutoBuy.LifeSavers.Amount, "LifeSaver", in.Cfg.AutoBuy.LifeSavers.Amount*250000)
 	} else if embed.Title == "Pending Confirmation" {
 		if strings.Contains(embed.Description, "Would you like to use your **<:Coupon:977969734307971132> Shop Coupon**") {
-			in.ClickButton(message.MessageData, 0, 0)
+			err := in.ClickButton(message.MessageData, 0, 0)
+			if err != nil {
+				in.Log("important", "ERR", "Failed to click decline shop coupon button")
+			}
 		} else if strings.Contains(embed.Description, "Are you sure you want to buy") {
-			in.ClickButton(message.MessageData, 0, 1)
+			err := in.ClickButton(message.MessageData, 0, 1)
+			if err != nil {
+				in.Log("important", "ERR", "Failed to click shop buy confirmation button")
+			}
 		}
 		return
 	} else if message.Embeds[0].Title == "Dank Memer Shop" && globalAutoBuyState.itemEmojiName != "" {

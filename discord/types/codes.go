@@ -1,17 +1,14 @@
 package types
 
 const (
-	OpcodeDispatch            = 0
-	OpcodeHeartbeat           = 1
-	OpcodeIdentify            = 2
-	OpcodePresenceUpdate      = 3
-	OpcodeVoiceStateUpdate    = 4
-	OpcodeResume              = 6
-	OpcodeReconnect           = 7
-	OpcodeRequestGuildMembers = 8
-	OpcodeInvalidSession      = 9
-	OpcodeHello               = 10
-	OpcodeHeartbeatACK        = 11
+	OpcodeDispatch       = 0
+	OpcodeHeartbeat      = 1
+	OpcodeIdentify       = 2
+	OpcodeResume         = 6
+	OpcodeReconnect      = 7
+	OpcodeInvalidSession = 9
+	OpcodeHello          = 10
+	OpcodeHeartbeatACK   = 11
 )
 
 var (

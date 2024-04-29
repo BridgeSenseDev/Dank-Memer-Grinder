@@ -34,12 +34,12 @@ func (client *Client) sendRequest(url string, payload map[string]interface{}) er
 
 	payload["nonce"] = generateNonce()
 
-	json_data, err := json.Marshal(payload)
+	jsonData, err := json.Marshal(payload)
 	if err != nil {
 		return err
 	}
 
-	err = client.RequestWithLockedBucket("POST", url, json_data, client.RateLimiter.LockBucket(url), 0)
+	err = client.RequestWithLockedBucket("POST", url, jsonData, client.RateLimiter.LockBucket(url), 0)
 	if err != nil {
 		return err
 	}
@@ -70,7 +70,7 @@ func (client *Client) SendCommand(commandName string, options map[string]string)
 		}
 	}
 
-	var commandSendOptions = []CommandSendOptions{}
+	var commandSendOptions []CommandSendOptions
 	if options != nil {
 		commandSendOptions = make([]CommandSendOptions, 0, len(options))
 		for k, v := range options {
@@ -121,7 +121,7 @@ func (client *Client) SendSubCommand(commandName string, subCommandName string, 
 		return fmt.Errorf("failed to send /%s %s command: Could not get command info", commandName, subCommandName)
 	}
 
-	var commandSendOptions = []CommandSendOptions{}
+	var commandSendOptions []CommandSendOptions
 	if options != nil {
 		commandSendOptions = make([]CommandSendOptions, 0, len(options))
 		for k, v := range options {

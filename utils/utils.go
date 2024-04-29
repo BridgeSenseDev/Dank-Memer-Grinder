@@ -18,14 +18,14 @@ func Contains(slice []string, item string) bool {
 }
 
 func GetMaxPriority(buttonPriority map[int]int) int {
-	var max = -2
+	var m = -2
 	var maxIndices []int
 
 	for i, priority := range buttonPriority {
-		if priority > max {
-			max = priority
+		if priority > m {
+			m = priority
 			maxIndices = []int{i}
-		} else if priority == max {
+		} else if priority == m {
 			maxIndices = append(maxIndices, i)
 		}
 	}

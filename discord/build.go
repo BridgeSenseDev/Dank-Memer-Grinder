@@ -8,8 +8,8 @@ import (
 )
 
 var (
-	JS_FILE_REGEX    = regexp.MustCompile(`<script src="(/assets/\d{4,5}\.[^"]+\.js)" defer></script>`)
-	BUILD_INFO_REGEX = regexp.MustCompile(`Build Number: "\).concat\("(\d+)"`)
+	JsFileRegex    = regexp.MustCompile(`<script src="(/assets/\d{4,5}\.[^"]+\.js)" defer></script>`)
+	BuildInfoRegex = regexp.MustCompile(`Build Number: "\).concat\("(\d+)"`)
 )
 
 func getLatestBuild() (string, error) {
@@ -25,13 +25,12 @@ func getLatestBuild() (string, error) {
 		return "", err
 	}
 
-	matches := JS_FILE_REGEX.FindAllStringSubmatch(string(resp.Body()), -1)
+	matches := JsFileRegex.FindAllStringSubmatch(string(resp.Body()), -1)
 	if len(matches) == 0 {
 		fmt.Println("build number not found, falling back to 9999")
 		return "9999", nil
 	}
 	for _, match := range matches {
-		fmt.Println(match)
 		if len(match) < 2 {
 			continue
 		}
@@ -44,7 +43,7 @@ func getLatestBuild() (string, error) {
 		if err := requestClient.Do(req, resp); err != nil {
 			continue
 		}
-		match := BUILD_INFO_REGEX.FindStringSubmatch(string(resp.Body()))
+		match := BuildInfoRegex.FindStringSubmatch(string(resp.Body()))
 		if len(match) < 2 {
 			continue
 		}

@@ -61,7 +61,7 @@ func MessageComponentFromJSON(b []byte) (MessageComponent, error) {
 	var u unmarshalableMessageComponent
 	err := u.UnmarshalJSON(b)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to unmarshal into MessageComponent: %w", err)
+		return nil, fmt.Errorf("failed to unmarshal into MessageComponent: %w", err)
 	}
 	return u.MessageComponent, nil
 }

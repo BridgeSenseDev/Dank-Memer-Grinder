@@ -18,7 +18,7 @@ var triviaJson []byte
 var trivia map[string]interface{}
 
 func init() {
-	err := json.Unmarshal([]byte(triviaJson), &trivia)
+	err := json.Unmarshal(triviaJson, &trivia)
 	if err != nil {
 		log.Error().Msgf("Failed to unmarshal trivia data: %v", err)
 	}

@@ -135,7 +135,10 @@ func (client *Client) RequestWithLockedBucket(method, urlStr string, b []byte, b
 
 	err := fasthttp.Do(req, resp)
 	if err != nil {
-		bucket.Release(nil)
+		err := bucket.Release(nil)
+		if err != nil {
+			return err
+		}
 		return err
 	}
 
