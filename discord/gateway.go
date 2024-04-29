@@ -59,10 +59,12 @@ func (gateway *Gateway) Log(logType LogType, msg string) {
 func (gateway *Gateway) Connect() error {
 	conn, resp, err := websocket.DefaultDialer.Dial(gateway.GatewayURL, headers)
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode == 404 {
 		return fmt.Errorf("gateway not found")
-	} else if err != nil {
-		return err
 	}
 
 	gateway.Closed = false
@@ -287,13 +289,26 @@ func (gateway *Gateway) sendMessage(payload []byte) error {
 
 		switch closeError.Code {
 		case websocket.CloseNormalClosure, websocket.CloseGoingAway, websocket.CloseNoStatusReceived:
-			go gateway.reset()
+			go func() {
+				err := gateway.reset()
+				if err != nil {
+					gateway.Log("ERR", fmt.Sprintf("Error resetting discord gateway: %s", err.Error()))
+				}
+			}()
 			return err
 		default:
 			closeEvent, ok := types.CloseEventCodes[closeError.Code]
 
 			if ok && closeEvent.Reconnect {
-				go gateway.reconnect()
+				go func() {
+					err := gateway.reconnect()
+					if err != nil {
+						gateway.Log("ERR", fmt.Sprintf("Error reconnecting to discord gateway: %s", err.Error()))
+					} else {
+						gateway.Log("INF", "Successfully reconnected to discord gateway")
+					}
+				}()
+				time.Sleep(2 * time.Second)
 			}
 
 			return fmt.Errorf("gateway closed with code %d: %s - %s", closeEvent.Code, closeEvent.Description, closeEvent.Explanation)
@@ -311,33 +326,49 @@ func (gateway *Gateway) readMessage() ([]byte, error) {
 
 	if err != nil {
 		var closeError *websocket.CloseError
-
-		switch err := err.(type) {
-		case *websocket.CloseError:
-			closeError = err
-		default:
-			return nil, err // assume close
-		}
-
-		switch closeError.Code {
-		case websocket.CloseNormalClosure, websocket.CloseGoingAway, websocket.CloseNoStatusReceived: // Websocket closed without any close code.
-			go gateway.reset()
-
-			return nil, err
-		default:
-			if closeEvent, ok := types.CloseEventCodes[closeError.Code]; ok {
-				if closeEvent.Reconnect { // If the session is re-connectable.
-					go gateway.reconnect()
-				} else {
-					gateway.Close()
-
-					return nil, fmt.Errorf("gateway closed with code %d: %s - %s", closeEvent.Code, closeEvent.Description, closeEvent.Explanation)
-				}
-			} else {
-				gateway.Close()
+		if errors.As(err, &closeError) {
+			switch closeError.Code {
+			case websocket.CloseNormalClosure, websocket.CloseGoingAway, websocket.CloseNoStatusReceived: // Websocket closed without any close code.
+				go func() {
+					err := gateway.reset()
+					if err != nil {
+						gateway.Log("ERR", fmt.Sprintf("Error resetting discord gateway: %s", err.Error()))
+					}
+				}()
 
 				return nil, err
+			default:
+				if closeEvent, ok := types.CloseEventCodes[closeError.Code]; ok {
+					if closeEvent.Reconnect { // If the session is re-connectable.
+						go func() {
+							err := gateway.reconnect()
+							if err != nil {
+								gateway.Log("ERR", fmt.Sprintf("Error reconnecting to discord gateway: %s", err.Error()))
+							} else {
+								gateway.Log("INF", "Successfully reconnected to discord gateway")
+							}
+						}()
+						time.Sleep(2 * time.Second)
+					} else {
+						err := gateway.Close()
+						if err != nil {
+							return nil, err
+						}
+
+						return nil, fmt.Errorf("gateway closed with code %d: %s - %s", closeEvent.Code, closeEvent.Description, closeEvent.Explanation)
+					}
+				} else {
+					err := gateway.Close()
+					if err != nil {
+						return nil, err
+					}
+
+					return nil, err
+				}
 			}
+		} else {
+			// Handle the case where err is not a *websocket.CloseError
+			return nil, err
 		}
 	}
 
@@ -389,17 +420,26 @@ func (gateway *Gateway) callHandlers(msg []byte, event types.DefaultEvent) error
 			}
 		}
 	case types.OpcodeHeartbeat:
-		gateway.sendHeartbeat()
+		err := gateway.sendHeartbeat()
+		if err != nil {
+			return err
+		}
 	case types.OpcodeHeartbeatACK:
 
 	case types.OpcodeReconnect:
-		gateway.reconnect()
+		err := gateway.reconnect()
+		if err != nil {
+			return err
+		}
 
 		for _, handler := range gateway.Handlers.OnReconnect {
 			handler()
 		}
 	case types.OpcodeInvalidSession:
-		gateway.reconnect()
+		err := gateway.reconnect()
+		if err != nil {
+			return err
+		}
 
 		for _, handler := range gateway.Handlers.OnInvalidated {
 			handler()
@@ -418,18 +458,37 @@ func (gateway *Gateway) startHandler() {
 			msg, err := gateway.readMessage()
 
 			if err != nil {
-				gateway.Log("ERR", fmt.Sprintf("Discord gateway: Error reading message: %v", err.Error()))
-
 				if !gateway.Closed {
-					gateway.Log("ERR", "Reconnecting to discord gateway")
-					go gateway.reconnect()
+					gateway.Log("ERR", fmt.Sprintf("Reconnecting to discord gateway: Error reading message: %v", err.Error()))
+					go func() {
+						err := gateway.reset()
+						if err != nil {
+							gateway.Log("ERR", fmt.Sprintf("Failed to reconnect to gateway: %s", err.Error()))
+						}
+					}()
+
+					time.Sleep(2 * time.Second)
+
+					continue
 				}
 			}
 
 			var event types.DefaultEvent
 
 			if err = json.Unmarshal(msg, &event); err != nil {
-				gateway.Log("ERR", fmt.Sprintf("Discord gateway: Error unmarshalling message: %v", err.Error()))
+				if !gateway.Closed {
+					gateway.Log("ERR", fmt.Sprintf("Reconnecting to discord gateway: Error unmarshalling message: %v", err.Error()))
+					go func() {
+						err := gateway.reset()
+						if err != nil {
+							gateway.Log("ERR", fmt.Sprintf("Failed to reconnect to gateway: %s", err.Error()))
+						}
+					}()
+
+					time.Sleep(2 * time.Second)
+
+					continue
+				}
 				continue
 			}
 
@@ -459,7 +518,10 @@ func (gateway *Gateway) Close() error {
 	}
 
 	gateway.CloseChan <- struct{}{}
-	gateway.Connection.Close()
+	err = gateway.Connection.Close()
+	if err != nil {
+		return err
+	}
 	gateway.Connection = nil
 
 	return nil
