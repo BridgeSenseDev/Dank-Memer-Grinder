@@ -30,56 +30,59 @@ func (a *App) StartInstance(account config.AccountsConfig) {
 		defer a.wg.Done()
 		client := discord.NewClient(a.ctx, account.Token, &types.DefaultConfig)
 
+		var readyOnce sync.Once
 		client.AddHandler(types.GatewayEventReady, func(e *types.ReadyEventData) {
-			client.ChannelID = account.ChannelID
-			client.GuildID = client.GetGuildID(account.ChannelID)
-			if client.GuildID == "" {
-				log.Error().Msgf("Failed to fetch GuildID from channelID: %v", account.ChannelID)
-				in := &instance.Instance{
-					AccountCfg: account,
-					Error:      "invalidChannelID",
+			readyOnce.Do(func() {
+				client.ChannelID = account.ChannelID
+				client.GuildID = client.GetGuildID(account.ChannelID)
+				if client.GuildID == "" {
+					log.Error().Msgf("Failed to fetch GuildID from channelID: %v", account.ChannelID)
+					in := &instance.Instance{
+						AccountCfg: account,
+						Error:      "invalidChannelID",
+					}
+					a.instances = append(a.instances, in)
+					runtime.EventsEmit(a.ctx, "instancesUpdate", a.GetInstances())
+					return
 				}
+
+				commands, err := client.GetCommands(client.GuildID)
+				if err != nil {
+					client.Log("ERR", fmt.Sprintf("Failed to get commands: %s", err.Error()))
+				}
+
+				commandDataSlice := make([]discord.CommandData, 0, len(commands))
+				for _, cmd := range commands {
+					commandDataSlice = append(commandDataSlice, cmd)
+				}
+
+				client.CommandsData = &commandDataSlice
+
+				in := &instance.Instance{
+					User:       client.Selfbot.User,
+					Client:     client,
+					ChannelID:  account.ChannelID,
+					GuildID:    client.GetGuildID(account.ChannelID),
+					Cfg:        *a.cfg,
+					AccountCfg: account,
+					LastRan:    make(map[string]time.Time),
+					Pause:      false,
+					StopChan:   make(chan struct{}),
+					Error:      "healthy",
+					Ctx:        a.ctx,
+				}
+
 				a.instances = append(a.instances, in)
 				runtime.EventsEmit(a.ctx, "instancesUpdate", a.GetInstances())
-				return
-			}
 
-			commands, err := client.GetCommands(client.GuildID)
-			if err != nil {
-				client.Log("ERR", fmt.Sprintf("Failed to get commands: %s", err.Error()))
-			}
+				a.UpdateDiscordStatus(string(a.cfg.DiscordStatus))
 
-			commandDataSlice := make([]discord.CommandData, 0, len(commands))
-			for _, cmd := range commands {
-				commandDataSlice = append(commandDataSlice, cmd)
-			}
-
-			client.CommandsData = &commandDataSlice
-
-			in := &instance.Instance{
-				User:       client.Selfbot.User,
-				Client:     client,
-				ChannelID:  account.ChannelID,
-				GuildID:    client.GetGuildID(account.ChannelID),
-				Cfg:        *a.cfg,
-				AccountCfg: account,
-				LastRan:    make(map[string]time.Time),
-				Pause:      false,
-				StopChan:   make(chan struct{}),
-				Error:      "healthy",
-				Ctx:        a.ctx,
-			}
-
-			a.instances = append(a.instances, in)
-			runtime.EventsEmit(a.ctx, "instancesUpdate", a.GetInstances())
-
-			a.UpdateDiscordStatus(string(a.cfg.DiscordStatus))
-
-			err = in.Start()
-			if err != nil {
-				return
-			}
-			in.Log("important", "INF", fmt.Sprintf("Logged in as %s", e.User.Username))
+				err = in.Start()
+				if err != nil {
+					return
+				}
+				in.Log("important", "INF", fmt.Sprintf("Logged in as %s", e.User.Username))
+			})
 		})
 
 		err := client.Connect()

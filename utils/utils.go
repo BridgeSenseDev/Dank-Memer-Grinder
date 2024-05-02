@@ -45,3 +45,13 @@ func Sleep(duration time.Duration) <-chan bool {
 
 	return done
 }
+
+func ExponentialBackoff(attempt int) time.Duration {
+	if attempt == 0 {
+		return time.Second
+	} else if attempt < 5 {
+		return time.Duration(2<<uint(attempt-1)) * time.Second
+	} else {
+		return 30 * time.Second
+	}
+}

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"net/http"
 	"sync"
 	"time"
@@ -32,8 +33,10 @@ type Gateway struct {
 	SessionID         string
 	ClientBuildNumber string
 	Ctx               context.Context
+	GatewayParams     string
 
 	heartbeatInterval time.Duration
+	reconnectAttempts int
 }
 
 func CreateGateway(ctx context.Context, selfbot *Selfbot, config *types.Config) *Gateway {
@@ -43,7 +46,7 @@ func CreateGateway(ctx context.Context, selfbot *Selfbot, config *types.Config) 
 		headers.Set("User-Agent", config.UserAgent)
 	}
 	mu.Unlock()
-	return &Gateway{CloseChan: make(chan struct{}), Selfbot: selfbot, GatewayURL: "wss://gateway.discord.gg/?encoding=json&v=" + config.ApiVersion, Config: config, ClientBuildNumber: clientBuildNumber, Ctx: ctx}
+	return &Gateway{CloseChan: make(chan struct{}), Selfbot: selfbot, GatewayURL: "wss://gateway.discord.gg", Config: config, ClientBuildNumber: clientBuildNumber, Ctx: ctx, GatewayParams: "/?encoding=json&v=" + config.ApiVersion, reconnectAttempts: 0}
 }
 
 func (gateway *Gateway) Log(logType LogType, msg string) {
@@ -57,7 +60,7 @@ func (gateway *Gateway) Log(logType LogType, msg string) {
 }
 
 func (gateway *Gateway) Connect() error {
-	conn, resp, err := websocket.DefaultDialer.Dial(gateway.GatewayURL, headers)
+	conn, resp, err := websocket.DefaultDialer.Dial(gateway.GatewayURL+gateway.GatewayParams, headers)
 
 	if err != nil {
 		return err
@@ -81,6 +84,8 @@ func (gateway *Gateway) Connect() error {
 	if err = gateway.ready(); err != nil {
 		return err
 	}
+
+	gateway.Log("INF", "Connected to gateway")
 
 	gateway.startHandler()
 	return nil
@@ -110,89 +115,45 @@ func (gateway *Gateway) hello() error {
 }
 
 func (gateway *Gateway) identify() error {
-	var err error
-	var payload []byte
-
-	if gateway.canReconnect() {
-		payload, err = json.Marshal(types.ResumePayload{
-			Op: types.OpcodeResume,
-			D: types.ResumePayloadData{
-				Token:     gateway.Selfbot.Token,
-				SessionID: gateway.SessionID,
-				Seq:       gateway.LastSeq,
+	payload, err := json.Marshal(types.IdentifyPayload{
+		Op: types.OpcodeIdentify,
+		D: types.IdentifyPayloadData{
+			Token:        gateway.Selfbot.Token,
+			Capabilities: gateway.Config.Capabilities,
+			Properties: types.SuperProperties{
+				OS:                     gateway.Config.Os,
+				Browser:                gateway.Config.Browser,
+				Device:                 gateway.Config.Device,
+				SystemLocale:           clientLocale,
+				BrowserUserAgent:       gateway.Config.UserAgent,
+				BrowserVersion:         gateway.Config.BrowserVersion,
+				OSVersion:              gateway.Config.OsVersion,
+				Referrer:               "",
+				ReferringDomain:        "",
+				ReferrerCurrent:        "",
+				ReferringDomainCurrent: "",
+				ReleaseChannel:         "stable",
+				ClientBuildNumber:      clientBuildNumber,
+				ClientEventSource:      nil,
 			},
-		})
-
-		if err != nil {
-			return err
-		}
-
-		err = gateway.sendMessage(payload)
-
-		if err != nil {
-			return err
-		}
-
-		payload := map[string]interface{}{
-			"op": 3,
-			"d": map[string]interface{}{
-				"since":      0,
-				"activities": []map[string]interface{}{},
-				"status":     gateway.Config.Presence,
-				"afk":        false,
+			Compress: false,
+			ClientState: types.ClientState{
+				GuildVersions:            types.GuildVersions{},
+				HighestLastMessageID:     "0",
+				ReadStateVersion:         0,
+				UserGuildSettingsVersion: -1,
+				UserSettingsVersion:      -1,
+				PrivateChannelsVersion:   "0",
+				APICodeVersion:           0,
 			},
-		}
+		},
+	})
 
-		payloadJSON, err := json.Marshal(payload)
-		if err != nil {
-			return err
-		}
-
-		err = gateway.sendMessage(payloadJSON)
-		if err != nil {
-			gateway.Log("ERR", fmt.Sprintf("Error setting Discord status: %s", err.Error()))
-		}
-	} else {
-		payload, err = json.Marshal(types.IdentifyPayload{
-			Op: types.OpcodeIdentify,
-			D: types.IdentifyPayloadData{
-				Token:        gateway.Selfbot.Token,
-				Capabilities: gateway.Config.Capabilities,
-				Properties: types.SuperProperties{
-					OS:                     gateway.Config.Os,
-					Browser:                gateway.Config.Browser,
-					Device:                 gateway.Config.Device,
-					SystemLocale:           clientLocale,
-					BrowserUserAgent:       gateway.Config.UserAgent,
-					BrowserVersion:         gateway.Config.BrowserVersion,
-					OSVersion:              gateway.Config.OsVersion,
-					Referrer:               "",
-					ReferringDomain:        "",
-					ReferrerCurrent:        "",
-					ReferringDomainCurrent: "",
-					ReleaseChannel:         "stable",
-					ClientBuildNumber:      clientBuildNumber,
-					ClientEventSource:      nil,
-				},
-				Compress: false,
-				ClientState: types.ClientState{
-					GuildVersions:            types.GuildVersions{},
-					HighestLastMessageID:     "0",
-					ReadStateVersion:         0,
-					UserGuildSettingsVersion: -1,
-					UserSettingsVersion:      -1,
-					PrivateChannelsVersion:   "0",
-					APICodeVersion:           0,
-				},
-			},
-		})
-
-		if err != nil {
-			return err
-		}
-
-		err = gateway.sendMessage(payload)
+	if err != nil {
+		return err
 	}
+
+	err = gateway.sendMessage(payload)
 
 	if err != nil {
 		return err
@@ -216,8 +177,10 @@ func (gateway *Gateway) ready() error {
 	}
 
 	if event.Op == types.OpcodeInvalidSession {
-		<-gateway.CloseChan
-		return gateway.reconnect()
+		err := gateway.reset()
+		if err != nil {
+			return err
+		}
 	} else if event.Op != types.OpcodeDispatch {
 		return fmt.Errorf("unexpected opcode, expected %d, got %d", types.OpcodeDispatch, event.Op)
 	}
@@ -230,7 +193,8 @@ func (gateway *Gateway) ready() error {
 
 	gateway.Selfbot.User = ready.D.User
 	gateway.SessionID = ready.D.SessionID
-	gateway.GatewayURL = ready.D.ResumeGatewayURL
+	gateway.GatewayURL = ready.D.ResumeGatewayURL + gateway.GatewayParams
+	gateway.reconnectAttempts = 0
 
 	for _, handler := range gateway.Handlers.OnReady {
 		handler(&ready.D)
@@ -289,26 +253,21 @@ func (gateway *Gateway) sendMessage(payload []byte) error {
 
 		switch closeError.Code {
 		case websocket.CloseNormalClosure, websocket.CloseGoingAway, websocket.CloseNoStatusReceived:
-			go func() {
-				err := gateway.reset()
-				if err != nil {
-					gateway.Log("ERR", fmt.Sprintf("Error resetting discord gateway: %s", err.Error()))
-				}
-			}()
+			gateway.Log("ERR", fmt.Sprintf("Resetting discord gateway: %s", closeError.Error()))
+			err := gateway.reset()
+			if err != nil {
+				gateway.Log("ERR", fmt.Sprintf("Error resetting discord gateway: %s", err.Error()))
+			}
 			return err
 		default:
 			closeEvent, ok := types.CloseEventCodes[closeError.Code]
 
 			if ok && closeEvent.Reconnect {
-				go func() {
-					err := gateway.reconnect()
-					if err != nil {
-						gateway.Log("ERR", fmt.Sprintf("Error reconnecting to discord gateway: %s", err.Error()))
-					} else {
-						gateway.Log("INF", "Successfully reconnected to discord gateway")
-					}
-				}()
-				time.Sleep(2 * time.Second)
+				gateway.Log("ERR", "Attempting a reconnect")
+				err := gateway.reconnect()
+				if err != nil {
+					gateway.Log("ERR", fmt.Sprintf("Failed to reconnect to gateway: %s", err.Error()))
+				}
 			}
 
 			return fmt.Errorf("gateway closed with code %d: %s - %s", closeEvent.Code, closeEvent.Description, closeEvent.Explanation)
@@ -329,26 +288,21 @@ func (gateway *Gateway) readMessage() ([]byte, error) {
 		if errors.As(err, &closeError) {
 			switch closeError.Code {
 			case websocket.CloseNormalClosure, websocket.CloseGoingAway, websocket.CloseNoStatusReceived: // Websocket closed without any close code.
-				go func() {
-					err := gateway.reset()
-					if err != nil {
-						gateway.Log("ERR", fmt.Sprintf("Error resetting discord gateway: %s", err.Error()))
-					}
-				}()
+				gateway.Log("ERR", fmt.Sprintf("Resetting discord gateway: %s", closeError.Error()))
+				err := gateway.reset()
+				if err != nil {
+					gateway.Log("ERR", fmt.Sprintf("Error resetting discord gateway: %s", err.Error()))
+				}
 
 				return nil, err
 			default:
 				if closeEvent, ok := types.CloseEventCodes[closeError.Code]; ok {
 					if closeEvent.Reconnect { // If the session is re-connectable.
-						go func() {
-							err := gateway.reconnect()
-							if err != nil {
-								gateway.Log("ERR", fmt.Sprintf("Error reconnecting to discord gateway: %s", err.Error()))
-							} else {
-								gateway.Log("INF", "Successfully reconnected to discord gateway")
-							}
-						}()
-						time.Sleep(2 * time.Second)
+						gateway.Log("ERR", "Attempting a reconnect")
+						err := gateway.reconnect()
+						if err != nil {
+							gateway.Log("ERR", fmt.Sprintf("Failed to reconnect to gateway: %s", err.Error()))
+						}
 					} else {
 						err := gateway.Close()
 						if err != nil {
@@ -376,14 +330,55 @@ func (gateway *Gateway) readMessage() ([]byte, error) {
 }
 
 func (gateway *Gateway) reset() error {
+	err := gateway.Close()
+	if err != nil {
+		gateway.Log("ERR", fmt.Sprintf("Failed to close gateway: %s", err.Error()))
+	}
 	gateway.LastSeq = 0
 	gateway.SessionID = ""
+	gateway.GatewayURL = "wss://gateway.discord.gg"
 
-	return gateway.reconnect()
+	return gateway.Connect()
 }
 
 func (gateway *Gateway) reconnect() error {
-	return gateway.Connect()
+	conn, resp, err := websocket.DefaultDialer.Dial(gateway.GatewayURL, headers)
+
+	if err != nil {
+		return err
+	}
+
+	if resp.StatusCode == 404 {
+		return fmt.Errorf("gateway not found")
+	}
+
+	gateway.Closed = false
+	gateway.Connection = conn
+
+	payload, err := json.Marshal(types.ResumePayload{
+		Op: types.OpcodeResume,
+		D: types.ResumePayloadData{
+			Token:     gateway.Selfbot.Token,
+			SessionID: gateway.SessionID,
+			Seq:       gateway.LastSeq,
+		},
+	})
+
+	if err != nil {
+		return err
+	}
+
+	err = gateway.sendMessage(payload)
+
+	if err != nil {
+		return err
+	}
+
+	if err = gateway.hello(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (gateway *Gateway) callHandlers(msg []byte, event types.DefaultEvent) error {
@@ -391,6 +386,9 @@ func (gateway *Gateway) callHandlers(msg []byte, event types.DefaultEvent) error
 	case types.OpcodeDispatch:
 
 		switch event.T {
+		case types.EventNameResumed:
+			gateway.reconnectAttempts = 0
+			gateway.Log("INF", "Successfully resumed discord gateway")
 		case types.EventNameMessageCreate:
 			var data types.MessageEvent
 			err := json.Unmarshal(msg, &data)
@@ -436,7 +434,7 @@ func (gateway *Gateway) callHandlers(msg []byte, event types.DefaultEvent) error
 			handler()
 		}
 	case types.OpcodeInvalidSession:
-		err := gateway.reconnect()
+		err := gateway.reset()
 		if err != nil {
 			return err
 		}
@@ -459,16 +457,18 @@ func (gateway *Gateway) startHandler() {
 
 			if err != nil {
 				if !gateway.Closed {
-					gateway.Log("ERR", fmt.Sprintf("Reconnecting to discord gateway: Error reading message: %v", err.Error()))
-					go func() {
-						err := gateway.reset()
-						if err != nil {
-							gateway.Log("ERR", fmt.Sprintf("Failed to reconnect to gateway: %s", err.Error()))
-						}
-					}()
+					delay := utils.ExponentialBackoff(gateway.reconnectAttempts)
+					gateway.reconnectAttempts++
+					gateway.Log("ERR", fmt.Sprintf("Attempting a reconnect in %ds: %s", delay/time.Second, err.Error()))
+					time.Sleep(delay)
 
-					time.Sleep(2 * time.Second)
+					err := gateway.reconnect()
 
+					if err != nil {
+						gateway.Log("ERR", fmt.Sprintf("Failed to reconnect to gateway: %s", err.Error()))
+					} else {
+						gateway.Log("INF", "Sent resume request to gateway")
+					}
 					continue
 				}
 			}
@@ -477,28 +477,29 @@ func (gateway *Gateway) startHandler() {
 
 			if err = json.Unmarshal(msg, &event); err != nil {
 				if !gateway.Closed {
-					gateway.Log("ERR", fmt.Sprintf("Reconnecting to discord gateway: Error unmarshalling message: %v", err.Error()))
-					go func() {
-						err := gateway.reset()
-						if err != nil {
-							gateway.Log("ERR", fmt.Sprintf("Failed to reconnect to gateway: %s", err.Error()))
-						}
-					}()
+					delay := utils.ExponentialBackoff(gateway.reconnectAttempts)
+					gateway.reconnectAttempts++
+					gateway.Log("ERR", fmt.Sprintf("Attempting a reconnect in %ds: %s", delay/time.Second, err.Error()))
+					time.Sleep(delay)
 
-					time.Sleep(2 * time.Second)
+					err := gateway.reconnect()
 
+					if err != nil {
+						gateway.Log("ERR", fmt.Sprintf("Failed to reconnect to gateway: %s", err.Error()))
+					} else {
+						gateway.Log("INF", "Sent resume request to gateway")
+					}
 					continue
 				}
-				continue
+			}
+
+			if event.S != 0 { // Some payloads, for example the heartbeat ack, don't contribute to the sequence ID.
+				gateway.LastSeq = event.S
 			}
 
 			if err = gateway.callHandlers(msg, event); err != nil {
 				gateway.Log("ERR", fmt.Sprintf("Discord gateway: Error calling handlers: %v", err.Error()))
 				continue
-			}
-
-			if event.S == 0 { // Some payloads, for example the heartbeat ack, don't contribute to the sequence ID.
-				gateway.LastSeq = event.S
 			}
 		}
 	}
