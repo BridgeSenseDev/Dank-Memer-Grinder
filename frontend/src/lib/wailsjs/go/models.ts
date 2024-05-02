@@ -435,14 +435,9 @@ export namespace types {
 	    bot?: boolean;
 	    system?: boolean;
 	    mfa_enabled?: boolean;
-	    banner?: string;
-	    accent_color?: number;
 	    locale?: string;
 	    verified?: boolean;
 	    email?: string;
-	    flag?: number;
-	    premium_type?: number;
-	    public_flag?: number;
 	    status?: string;
 	
 	    static createFrom(source: any = {}) {
@@ -458,14 +453,9 @@ export namespace types {
 	        this.bot = source["bot"];
 	        this.system = source["system"];
 	        this.mfa_enabled = source["mfa_enabled"];
-	        this.banner = source["banner"];
-	        this.accent_color = source["accent_color"];
 	        this.locale = source["locale"];
 	        this.verified = source["verified"];
 	        this.email = source["email"];
-	        this.flag = source["flag"];
-	        this.premium_type = source["premium_type"];
-	        this.public_flag = source["public_flag"];
 	        this.status = source["status"];
 	    }
 	}

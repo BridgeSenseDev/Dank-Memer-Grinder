@@ -59,7 +59,6 @@ func (in *Instance) findAndClickButton(message *types.MessageEventData, targetEm
 		}
 		for columnIndex, button := range component.(*types.ActionsRow).Components {
 			if button.(*types.Button).Emoji.Name == targetEmojiName {
-				in.Log("others", "INF", "Found autobuy button")
 				err := in.ClickButton(message.MessageData, rowIndex, columnIndex)
 				if err != nil {
 					in.Log("discord", "ERR", fmt.Sprintf("Failed to click autobuy button: %s", err.Error()))
@@ -106,7 +105,6 @@ func (in *Instance) shopBuy(shopMsg *types.MessageEventData) {
 		}
 
 		if currentPage == globalAutoBuyState.shopPage {
-			in.Log("others", "INF", fmt.Sprintf("Find and clicking button for %d, %d, %d, %s, %d", globalAutoBuyState.shopTypeIndex, globalAutoBuyState.shopPage, globalAutoBuyState.count, globalAutoBuyState.itemEmojiName, globalAutoBuyState.price))
 			if !in.findAndClickButton(shopMsg, globalAutoBuyState.itemEmojiName) {
 				if err != nil {
 					in.Log("others", "ERR", fmt.Sprintf("Failed to buy %s: Could not find button in page %d", globalAutoBuyState.itemEmojiName, globalAutoBuyState.shopPage))

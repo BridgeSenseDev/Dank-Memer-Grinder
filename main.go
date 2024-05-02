@@ -101,7 +101,7 @@ func main() {
 	if err != nil {
 		runtime.MessageDialog(app.ctx, runtime.MessageDialogOptions{
 			Type:    runtime.ErrorDialog,
-			Title:   "A fatal error ocurred!",
+			Title:   "A fatal error occurred!",
 			Message: err.Error(),
 		})
 		panic(err.Error())

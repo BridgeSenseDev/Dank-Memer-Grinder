@@ -1,8 +1,8 @@
 package discord
 
 import (
+	"bytes"
 	"math"
-	"net/http"
 	"strconv"
 	"strings"
 	"sync"
@@ -117,6 +117,18 @@ type Bucket struct {
 	Userdata        interface{}
 }
 
+func getDateHeader(headers []byte) string {
+	lines := bytes.Split(headers, []byte("\n"))
+	for _, line := range lines {
+		parts := bytes.SplitN(line, []byte(": "), 2)
+		if len(parts) == 2 && bytes.Equal(parts[0], []byte("Date")) {
+			dateStr := strings.TrimSpace(string(parts[1]))
+			return dateStr
+		}
+	}
+	return ""
+}
+
 // Release unlocks the bucket and reads the headers to update the buckets ratelimit info
 // and locks up the whole thing in case if there's a global ratelimit.
 func (b *Bucket) Release(headers *fasthttp.ResponseHeader) error {
@@ -165,7 +177,7 @@ func (b *Bucket) Release(headers *fasthttp.ResponseHeader) error {
 		}
 	} else if reset != "" {
 		// Calculate the reset time by using the date header returned from discord
-		discordTime, err := http.ParseTime(string(headers.Peek("Date")))
+		discordTime, err := fasthttp.ParseHTTPDate([]byte(getDateHeader(headers.Header())))
 		if err != nil {
 			return err
 		}
