@@ -4,10 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"net/http"
 	"sync"
 	"time"
+
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
 	"github.com/fasthttp/websocket"
@@ -203,10 +204,6 @@ func (gateway *Gateway) ready() error {
 	return nil
 }
 
-func (gateway *Gateway) canReconnect() bool {
-	return gateway.SessionID != "" && gateway.LastSeq != 0 && gateway.GatewayURL != ""
-}
-
 func (gateway *Gateway) heartbeatSender() {
 	ticker := time.NewTicker(gateway.heartbeatInterval * time.Millisecond) // Every heartbeat interval (sent in milliseconds).
 	defer ticker.Stop()
@@ -236,8 +233,8 @@ func (gateway *Gateway) sendHeartbeat() error {
 	}
 
 	return gateway.sendMessage(payload)
-
 }
+
 func (gateway *Gateway) sendMessage(payload []byte) error {
 	err := gateway.Connection.WriteMessage(websocket.TextMessage, payload)
 
@@ -456,7 +453,9 @@ func (gateway *Gateway) startHandler() {
 			msg, err := gateway.readMessage()
 
 			if err != nil {
-				if !gateway.Closed {
+				if gateway.Closed {
+					return
+				} else {
 					delay := utils.ExponentialBackoff(gateway.reconnectAttempts)
 					gateway.reconnectAttempts++
 					gateway.Log("ERR", fmt.Sprintf("Attempting a reconnect in %ds: %s", delay/time.Second, err.Error()))
@@ -476,7 +475,9 @@ func (gateway *Gateway) startHandler() {
 			var event types.DefaultEvent
 
 			if err = json.Unmarshal(msg, &event); err != nil {
-				if !gateway.Closed {
+				if gateway.Closed {
+					return
+				} else {
 					delay := utils.ExponentialBackoff(gateway.reconnectAttempts)
 					gateway.reconnectAttempts++
 					gateway.Log("ERR", fmt.Sprintf("Attempting a reconnect in %ds: %s", delay/time.Second, err.Error()))
@@ -515,13 +516,13 @@ func (gateway *Gateway) Close() error {
 	err := gateway.Connection.WriteControl(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseGoingAway, "going away"), time.Now().Add(time.Second*10))
 
 	if err != nil {
-		return err
+		gateway.Log("ERR", fmt.Sprintf("Failed to close gateway: %s", err.Error()))
 	}
 
 	gateway.CloseChan <- struct{}{}
 	err = gateway.Connection.Close()
 	if err != nil {
-		return err
+		gateway.Log("ERR", fmt.Sprintf("Failed to close gateway: %s", err.Error()))
 	}
 	gateway.Connection = nil
 
