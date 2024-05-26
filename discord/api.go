@@ -8,19 +8,6 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-var (
-	clientBuildNumber = mustGetLatestBuild()
-	clientLocale      = mustGetLocale()
-	requestClient     = fasthttp.Client{
-		ReadBufferSize:                8192,
-		ReadTimeout:                   time.Second * 5,
-		WriteTimeout:                  time.Second * 5,
-		NoDefaultUserAgentHeader:      true,
-		DisableHeaderNamesNormalizing: true,
-		DisablePathNormalizing:        true,
-	}
-)
-
 type CommandOptions []struct {
 	Type        int    `json:"type"`
 	Name        string `json:"name"`
@@ -49,7 +36,7 @@ func (client *Client) GetCommands(guildID string) (map[string]CommandData, error
 
 	req.Header.SetMethod("GET")
 	req.SetRequestURI(url)
-	req.Header.Set("Authorization", client.Selfbot.Token)
+	req.Header.Set("Authorization", client.Token)
 	req.Header.Set("Content-type", "application/json")
 
 	resp := fasthttp.AcquireResponse()
@@ -92,7 +79,7 @@ func (client *Client) GetGuildID(channelID string) string {
 
 	req.Header.SetMethod("GET")
 	req.SetRequestURI(url)
-	req.Header.Set("Authorization", client.Selfbot.Token)
+	req.Header.Set("Authorization", client.Token)
 	req.Header.Set("Content-type", "application/json")
 
 	resp := fasthttp.AcquireResponse()
@@ -122,8 +109,8 @@ func (client *Client) RequestWithLockedBucket(method, urlStr string, b []byte, b
 	req.SetRequestURI(urlStr)
 	req.Header.SetMethod(method)
 
-	if client.Selfbot.Token != "" {
-		req.Header.Set("authorization", client.Selfbot.Token)
+	if client.Token != "" {
+		req.Header.Set("authorization", client.Token)
 	}
 
 	if b != nil {
@@ -131,7 +118,7 @@ func (client *Client) RequestWithLockedBucket(method, urlStr string, b []byte, b
 		req.SetBody(b)
 	}
 
-	req.Header.Set("User-Agent", client.Config.UserAgent)
+	req.Header.Set("User-Agent", client.Gateway.UserAgent())
 
 	err := fasthttp.Do(req, resp)
 	if err != nil {

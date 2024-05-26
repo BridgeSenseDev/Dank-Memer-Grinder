@@ -1,17 +1,19 @@
 package types
 
+import "errors"
+
 type User struct {
-	ID            string `json:"id"`
-	Username      string `json:"username"`
-	Discriminator string `json:"discriminator"`
-	Avatar        string `json:"avatar"`
-	Bot           bool   `json:"bot,omitempty"`
-	System        bool   `json:"system,omitempty"`
-	MFAEnabled    bool   `json:"mfa_enabled,omitempty"`
-	Locale        string `json:"locale,omitempty"`
-	Verified      bool   `json:"verified,omitempty"`
-	Email         string `json:"email,omitempty"`
-	Status        string `json:"status,omitempty"`
+	ID            string       `json:"id"`
+	Username      string       `json:"username"`
+	Discriminator string       `json:"discriminator"`
+	Avatar        string       `json:"avatar"`
+	Bot           bool         `json:"bot,omitempty"`
+	System        bool         `json:"system,omitempty"`
+	MFAEnabled    bool         `json:"mfa_enabled,omitempty"`
+	Locale        string       `json:"locale,omitempty"`
+	Verified      bool         `json:"verified,omitempty"`
+	Email         string       `json:"email,omitempty"`
+	Status        OnlineStatus `json:"status,omitempty"`
 }
 
 type Guild struct {
@@ -91,4 +93,25 @@ type Reaction struct {
 	Count  int   `json:"count,omitempty"`
 }
 
-type MessageCheckFunc func(*MessageEventData) bool
+// OnlineStatus (https://discord.com/developers/docs/topics/gateway#update-presence-status-types)
+type OnlineStatus string
+
+const (
+	OnlineStatusOnline    OnlineStatus = "online"
+	OnlineStatusDND       OnlineStatus = "dnd"
+	OnlineStatusIdle      OnlineStatus = "idle"
+	OnlineStatusInvisible OnlineStatus = "invisible"
+	OnlineStatusOffline   OnlineStatus = "offline"
+)
+
+// ClientStatus (https://discord.com/developers/docs/topics/gateway#client-status-object)
+type ClientStatus struct {
+	Desktop OnlineStatus `json:"desktop,omitempty"`
+	Mobile  OnlineStatus `json:"mobile,omitempty"`
+	Web     OnlineStatus `json:"web,omitempty"`
+}
+
+var (
+	ErrGatewayAlreadyConnected = errors.New("gateway is already connected")
+	ErrGatewayNotConnected     = errors.New("gateway is not connected")
+)

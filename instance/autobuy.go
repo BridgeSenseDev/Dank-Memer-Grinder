@@ -3,6 +3,7 @@ package instance
 import (
 	"errors"
 	"fmt"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"regexp"
 	"strconv"
 	"strings"
@@ -52,14 +53,14 @@ func determineDirection(currentPage, targetPage, totalPages int) int {
 	}
 }
 
-func (in *Instance) findAndClickButton(message *types.MessageEventData, targetEmojiName string) bool {
+func (in *Instance) findAndClickButton(message gateway.EventMessage, targetEmojiName string) bool {
 	for rowIndex, component := range message.Components {
 		if rowIndex == 0 || rowIndex == 3 {
 			continue
 		}
 		for columnIndex, button := range component.(*types.ActionsRow).Components {
 			if button.(*types.Button).Emoji.Name == targetEmojiName {
-				err := in.ClickButton(message.MessageData, rowIndex, columnIndex)
+				err := in.ClickButton(message, rowIndex, columnIndex)
 				if err != nil {
 					in.Log("discord", "ERR", fmt.Sprintf("Failed to click autobuy button: %s", err.Error()))
 				}
@@ -91,10 +92,10 @@ func parsePageInfo(footerText string) (currentPage, totalPages int, err error) {
 	return currentPage, totalPages, nil
 }
 
-func (in *Instance) shopBuy(shopMsg *types.MessageEventData) {
+func (in *Instance) shopBuy(shopMsg gateway.EventMessage) {
 	shopTypeOptions := shopMsg.Components[0].(*types.ActionsRow).Components[0].(*types.SelectMenu).Options
 	if !shopTypeOptions[globalAutoBuyState.shopTypeIndex].Default {
-		err := in.ChooseSelectMenu(shopMsg.MessageData, 0, 0, []string{shopTypeOptions[globalAutoBuyState.shopTypeIndex].Value})
+		err := in.ChooseSelectMenu(shopMsg, 0, 0, []string{shopTypeOptions[globalAutoBuyState.shopTypeIndex].Value})
 		if err != nil {
 			in.Log("discord", "ERR", fmt.Sprintf("Failed to choose shop view select menu: %s", err.Error()))
 		}
@@ -111,7 +112,7 @@ func (in *Instance) shopBuy(shopMsg *types.MessageEventData) {
 				}
 			}
 		} else {
-			err := in.ClickButton(shopMsg.MessageData, 3, determineDirection(currentPage, globalAutoBuyState.shopPage, totalPages))
+			err := in.ClickButton(shopMsg, 3, determineDirection(currentPage, globalAutoBuyState.shopPage, totalPages))
 			if err != nil {
 				in.Log("discord", "ERR", fmt.Sprintf("Failed to click next autobuy page button: %s", err.Error()))
 			}
@@ -119,13 +120,13 @@ func (in *Instance) shopBuy(shopMsg *types.MessageEventData) {
 	}
 }
 
-func (in *Instance) AutoBuyMessageUpdate(message *types.MessageEventData) {
+func (in *Instance) AutoBuyMessageUpdate(message gateway.EventMessage) {
 	if message.Embeds[0].Title == "Dank Memer Shop" && globalAutoBuyState.itemEmojiName != "" {
 		in.shopBuy(message)
 	}
 }
 
-func (in *Instance) AutoBuyMessageCreate(message *types.MessageEventData) {
+func (in *Instance) AutoBuyMessageCreate(message gateway.EventMessage) {
 	embed := message.Embeds[0]
 	if strings.Contains(embed.Description, "You don't have a shovel") && in.Cfg.AutoBuy.Shovel.State {
 		in.setAutoBuyState(0, 1, 1, "IronShovel", 50000)
@@ -153,12 +154,12 @@ func (in *Instance) AutoBuyMessageCreate(message *types.MessageEventData) {
 		in.setAutoBuyState(0, 1, in.Cfg.AutoBuy.LifeSavers.Amount, "LifeSaver", in.Cfg.AutoBuy.LifeSavers.Amount*250000)
 	} else if embed.Title == "Pending Confirmation" {
 		if strings.Contains(embed.Description, "Would you like to use your **<:Coupon:977969734307971132> Shop Coupon**") {
-			err := in.ClickButton(message.MessageData, 0, 0)
+			err := in.ClickButton(message, 0, 0)
 			if err != nil {
 				in.Log("important", "ERR", "Failed to click decline shop coupon button")
 			}
 		} else if strings.Contains(embed.Description, "Are you sure you want to buy") {
-			err := in.ClickButton(message.MessageData, 0, 1)
+			err := in.ClickButton(message, 0, 1)
 			if err != nil {
 				in.Log("important", "ERR", "Failed to click shop buy confirmation button")
 			}
@@ -189,10 +190,10 @@ func (in *Instance) AutoBuyMessageCreate(message *types.MessageEventData) {
 	}
 }
 
-func (in *Instance) AutoBuyModalCreate(modal *types.ModalData) {
+func (in *Instance) AutoBuyModalCreate(modal gateway.EventModalCreate) {
 	if modal.Title == "Dank Memer Shop" {
 		modal.Components[0].(*types.ActionsRow).Components[0].(*types.TextInput).Value = strconv.Itoa(globalAutoBuyState.count)
-		err := in.SubmitModal(*modal)
+		err := in.SubmitModal(modal)
 		if err != nil {
 			in.Log("discord", "ERR", fmt.Sprintf("Failed to submit autobuy modal: %s", err.Error()))
 		}

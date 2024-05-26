@@ -3,17 +3,16 @@ package discord
 import (
 	"context"
 	"fmt"
-
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"github.com/rs/zerolog/log"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 type Client struct {
 	Ctx          context.Context
-	Selfbot      *Selfbot
-	Gateway      *Gateway
-	Config       *types.Config
+	Token        string
+	Handlers     Handlers
+	Gateway      gateway.Gateway
 	ChannelID    string
 	GuildID      string
 	CommandsData *[]CommandData
@@ -26,31 +25,52 @@ type CommandSendOptions struct {
 	Value string `json:"value"`
 }
 
-func NewClient(ctx context.Context, token string, config *types.Config) *Client {
-	selfbot := Selfbot{Token: token}
-	gateway := CreateGateway(ctx, &selfbot, config)
+func NewClient(ctx context.Context, token string) *Client {
 	commandsData := make([]CommandData, 0)
 
-	return &Client{ctx, &selfbot, gateway, config, "", "", &commandsData, NewRatelimiter()}
+	client := &Client{Ctx: ctx, Token: token, CommandsData: &commandsData, RateLimiter: NewRatelimiter()}
+	client.Gateway = gateway.New(ctx, token, client.gatewayHandlers)
+
+	return client
 }
 
-func (client *Client) Connect() error {
-	return client.Gateway.Connect()
-}
-
-func (client *Client) AddHandler(event string, function any) error {
-	return client.Gateway.Handlers.Add(event, function)
-}
-
-func (client *Client) Close() {
-	err := client.Gateway.Close()
-	if err != nil {
-		return
+func (client *Client) gatewayHandlers(gatewayEventType gateway.EventType, event gateway.EventData) {
+	switch gatewayEventType {
+	case gateway.EventTypeReady:
+		for _, handler := range client.Handlers.OnReady {
+			handler(event.(gateway.EventReady))
+		}
+	case gateway.EventTypeResumed:
+		client.Log("INF", "Successfully resumed discord gateway")
+	case gateway.EventTypeMessageCreate:
+		for _, handler := range client.Handlers.OnMessageCreate {
+			handler(event.(gateway.EventMessage))
+		}
+	case gateway.EventTypeMessageUpdate:
+		for _, handler := range client.Handlers.OnMessageUpdate {
+			handler(event.(gateway.EventMessage))
+		}
+	case gateway.EventTypeModalCreate:
+		for _, handler := range client.Handlers.OnModalCreate {
+			handler(event.(gateway.EventModalCreate))
+		}
 	}
 }
 
-func (client *Client) SendMessage(payload []byte) error {
-	return client.Gateway.sendMessage(payload)
+func (client *Client) Connect() error {
+	return client.Gateway.Open(client.Ctx)
+}
+
+func (client *Client) AddHandler(event gateway.EventType, function any) error {
+	return client.Handlers.Add(event, function)
+}
+
+func (client *Client) Close() {
+	client.Gateway.Close(client.Ctx)
+}
+
+func (client *Client) SendMessage(op gateway.Opcode, data gateway.MessageData) error {
+	return client.Gateway.Send(client.Ctx, op, data)
 }
 
 type LogType string
@@ -61,11 +81,11 @@ const (
 )
 
 func (client *Client) Log(logType LogType, msg string) {
-	runtime.EventsEmit(client.Ctx, "logDiscord", logType, client.Selfbot.User.Username, msg)
+	runtime.EventsEmit(client.Ctx, "logDiscord", logType, client.Gateway.User().Username, msg)
 	switch logType {
 	case Info:
-		log.Info().Msg(fmt.Sprintf("%s %s", client.Selfbot.User.Username, msg))
+		log.Info().Msg(fmt.Sprintf("discord %s %s", client.Gateway.User().Username, msg))
 	case Error:
-		log.Error().Msg(fmt.Sprintf("%s %s", client.Selfbot.User.Username, msg))
+		log.Error().Msg(fmt.Sprintf("discord %s %s", client.Gateway.User().Username, msg))
 	}
 }

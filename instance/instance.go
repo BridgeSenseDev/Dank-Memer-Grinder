@@ -3,6 +3,7 @@ package instance
 import (
 	"context"
 	"fmt"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"strings"
 	"time"
 
@@ -49,18 +50,18 @@ func (in *Instance) Log(level LogLevel, logType LogType, msg string) {
 }
 
 type Client interface {
-	SendMessage(payload []byte) error
+	SendMessage(op gateway.Opcode, data gateway.MessageData) error
 	Close()
-	AddHandler(event string, handler interface{}) error
+	AddHandler(event gateway.EventType, handler interface{}) error
 	SendCommand(name string, options map[string]string) error
 	SendSubCommand(name string, subCommandName string, options map[string]string) error
-	ClickButton(message types.MessageData, row int, column int) error
-	ChooseSelectMenu(message types.MessageData, row int, column int, values []string) error
-	SubmitModal(modal types.ModalData) error
+	ClickButton(message gateway.EventMessage, row int, column int) error
+	ChooseSelectMenu(message gateway.EventMessage, row int, column int, values []string) error
+	SubmitModal(modal gateway.EventModalCreate) error
 }
 
 type Instance struct {
-	User       types.User            `json:"user"`
+	User       *types.User           `json:"user"`
 	Client     Client                `json:"client"`
 	ChannelID  string                `json:"channelID"`
 	GuildID    string                `json:"guildID"`
@@ -81,15 +82,15 @@ func (in *Instance) Start() error {
 
 	go in.CommandsLoop()
 
-	in.Client.AddHandler(types.GatewayEventMessageCreate, func(event *types.MessageEventData) {
+	in.Client.AddHandler(gateway.EventTypeMessageCreate, func(event gateway.EventMessage) {
 		in.HandleMessageCreate(event)
 	})
 
-	in.Client.AddHandler(types.GatewayEventMessageUpdate, func(event *types.MessageEventData) {
+	in.Client.AddHandler(gateway.EventTypeMessageUpdate, func(event gateway.EventMessage) {
 		in.HandleMessageUpdate(event)
 	})
 
-	in.Client.AddHandler(types.GatewayEventModalCreate, func(event *types.ModalData) {
+	in.Client.AddHandler(gateway.EventTypeModalCreate, func(event gateway.EventModalCreate) {
 		in.HandleModalCreate(event)
 	})
 
@@ -142,7 +143,7 @@ func (in *Instance) UpdateConfig(newConfig config.Config) {
 	}
 }
 
-type MessageHandler func(*Instance, *types.MessageEventData)
+type MessageHandler func(*Instance, gateway.EventMessage)
 
 var messageCreateHandlers = map[string]MessageHandler{
 	"adventure": (*Instance).AdventureMessageCreate,
@@ -160,13 +161,13 @@ var messageUpdateHandlers = map[string]MessageHandler{
 	"postmemes": (*Instance).PostMemesMessageUpdate,
 }
 
-func (in *Instance) shouldHandleMessage(message *types.MessageEventData) bool {
+func (in *Instance) shouldHandleMessage(message gateway.EventMessage) bool {
 	return in.Cfg.State && in.AccountCfg.State && message.Author.ID == "270904126974590976" &&
 		len(message.Embeds) > 0 &&
 		!strings.Contains(message.Embeds[0].Description, "cooldown is")
 }
 
-func (in *Instance) getMessageType(message *types.MessageEventData) string {
+func (in *Instance) getMessageType(message gateway.EventMessage) string {
 	if message.ChannelID == in.ChannelID {
 		return "channel"
 	} else if message.GuildID == "" {
@@ -176,7 +177,7 @@ func (in *Instance) getMessageType(message *types.MessageEventData) string {
 	}
 }
 
-func (in *Instance) handleInteraction(message *types.MessageEventData, handlers map[string]MessageHandler) {
+func (in *Instance) handleInteraction(message gateway.EventMessage, handlers map[string]MessageHandler) {
 	if message.Interaction != (types.MessageInteraction{}) && message.Interaction.User.ID == in.User.ID && message.Flags != 64 {
 		if handler, ok := handlers[message.Interaction.Name]; ok {
 			handler(in, message)
@@ -184,7 +185,7 @@ func (in *Instance) handleInteraction(message *types.MessageEventData, handlers 
 	}
 }
 
-func (in *Instance) HandleMessageCreate(message *types.MessageEventData) {
+func (in *Instance) HandleMessageCreate(message gateway.EventMessage) {
 	if in.shouldHandleMessage(message) {
 		// Apply to all messages
 		if in.Captcha(message) {
@@ -207,7 +208,7 @@ func (in *Instance) HandleMessageCreate(message *types.MessageEventData) {
 	}
 }
 
-func (in *Instance) HandleMessageUpdate(message *types.MessageEventData) {
+func (in *Instance) HandleMessageUpdate(message gateway.EventMessage) {
 	if in.shouldHandleMessage(message) {
 		messageType := in.getMessageType(message)
 
@@ -223,6 +224,6 @@ func (in *Instance) HandleMessageUpdate(message *types.MessageEventData) {
 	}
 }
 
-func (in *Instance) HandleModalCreate(modal *types.ModalData) {
+func (in *Instance) HandleModalCreate(modal gateway.EventModalCreate) {
 	in.AutoBuyModalCreate(modal)
 }

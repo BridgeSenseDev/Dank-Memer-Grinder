@@ -2,13 +2,12 @@ package instance
 
 import (
 	"fmt"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"regexp"
 	"strconv"
-
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
 )
 
-func (in *Instance) HighLow(message *types.MessageEventData) {
+func (in *Instance) HighLow(message gateway.EventMessage) {
 	embed := message.Embeds[0]
 
 	matches := regexp.MustCompile(`\*\*(.*?)\*\*`).FindStringSubmatch(embed.Description)
@@ -20,12 +19,12 @@ func (in *Instance) HighLow(message *types.MessageEventData) {
 	num, _ := strconv.Atoi(numStr)
 
 	if num >= 50 {
-		err := in.ClickButton(message.MessageData, 0, 0)
+		err := in.ClickButton(message, 0, 0)
 		if err != nil {
 			in.Log("discord", "ERR", fmt.Sprintf("Failed to click highlow button: %s", err.Error()))
 		}
 	} else {
-		err := in.ClickButton(message.MessageData, 0, 2)
+		err := in.ClickButton(message, 0, 2)
 		if err != nil {
 			in.Log("discord", "ERR", fmt.Sprintf("Failed to click highlow button: %s", err.Error()))
 		}

@@ -4,6 +4,7 @@ import (
 	_ "embed"
 	"encoding/json"
 	"fmt"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"regexp"
 	"strings"
 
@@ -24,7 +25,7 @@ func init() {
 	}
 }
 
-func (in *Instance) Trivia(message *types.MessageEventData) {
+func (in *Instance) Trivia(message gateway.EventMessage) {
 	buttons := message.Components[0].(*types.ActionsRow).Components
 	embed := message.Embeds[0]
 
@@ -45,7 +46,7 @@ func (in *Instance) Trivia(message *types.MessageEventData) {
 	in.clickButtonBasedOnCondition(buttons, message, answer.(string), condition)
 }
 
-func (in *Instance) clickButtonBasedOnCondition(buttons []types.MessageComponent, message *types.MessageEventData, answer string, condition bool) {
+func (in *Instance) clickButtonBasedOnCondition(buttons []types.MessageComponent, message gateway.EventMessage, answer string, condition bool) {
 	buttonIndices := make([]int, 0)
 	for i, button := range buttons {
 		if button.(*types.Button).Label == answer == condition {
@@ -54,7 +55,7 @@ func (in *Instance) clickButtonBasedOnCondition(buttons []types.MessageComponent
 	}
 	if len(buttonIndices) > 0 {
 		randomIndex := buttonIndices[utils.Rng.Intn(len(buttonIndices))]
-		err := in.ClickButton(message.MessageData, 0, randomIndex)
+		err := in.ClickButton(message, 0, randomIndex)
 		if err != nil {
 			in.Log("discord", "ERR", fmt.Sprintf("Failed to click trivia answer button: %s", err.Error()))
 		}

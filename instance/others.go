@@ -2,13 +2,13 @@ package instance
 
 import (
 	"fmt"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"strings"
 
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
-func (in *Instance) Others(message *types.MessageEventData) {
+func (in *Instance) Others(message gateway.EventMessage) {
 	if message.Embeds[0].Title == "You have an unread alert!" && in.Cfg.ReadAlerts {
 		err := in.SendCommand("alert", nil)
 

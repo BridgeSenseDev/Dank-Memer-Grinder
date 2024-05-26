@@ -379,7 +379,7 @@ export namespace config {
 export namespace main {
 	
 	export class InstanceView {
-	    user: types.User;
+	    user?: types.User;
 	    channelID: string;
 	    guildID: string;
 	    config: config.Config;

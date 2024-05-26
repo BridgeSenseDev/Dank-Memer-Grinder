@@ -2,13 +2,14 @@ package instance
 
 import (
 	"fmt"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"strings"
 
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 )
 
-func (in *Instance) Search(message *types.MessageEventData) {
+func (in *Instance) Search(message gateway.EventMessage) {
 	buttons := message.Components[0].(*types.ActionsRow).Components
 
 	buttonPriority := make(map[int]int)
@@ -29,7 +30,7 @@ func (in *Instance) Search(message *types.MessageEventData) {
 
 	maxPriority := utils.GetMaxPriority(buttonPriority)
 
-	err := in.ClickButton(message.MessageData, 0, maxPriority)
+	err := in.ClickButton(message, 0, maxPriority)
 	if err != nil {
 		in.Log("discord", "ERR", fmt.Sprintf("Failed to click search button: %s", err.Error()))
 	}

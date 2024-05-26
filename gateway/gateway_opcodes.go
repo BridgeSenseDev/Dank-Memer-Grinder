@@ -1,15 +1,30 @@
-package types
+package gateway
 
+// Opcode are opcodes used by discord
+type Opcode int
+
+// https://discord.com/developers/docs/topics/opcodes-and-status-codes#gateway-gateway-opcodes
 const (
-	OpcodeDispatch       = 0
-	OpcodeHeartbeat      = 1
-	OpcodeIdentify       = 2
-	OpcodeResume         = 6
-	OpcodeReconnect      = 7
-	OpcodeInvalidSession = 9
-	OpcodeHello          = 10
-	OpcodeHeartbeatACK   = 11
+	OpcodeDispatch Opcode = iota
+	OpcodeHeartbeat
+	OpcodeIdentify
+	OpcodePresenceUpdate
+	OpcodeVoiceStateUpdate
+	_
+	OpcodeResume
+	OpcodeReconnect
+	OpcodeRequestGuildMembers
+	OpcodeInvalidSession
+	OpcodeHello
+	OpcodeHeartbeatACK
 )
+
+type CloseEventCode struct {
+	Code        int
+	Description string
+	Explanation string
+	Reconnect   bool
+}
 
 var (
 	CloseEventCodeUnknownError = CloseEventCode{
@@ -29,7 +44,7 @@ var (
 	CloseEventCodeDecodeError = CloseEventCode{
 		Code:        4002,
 		Description: "Decode error",
-		Explanation: "You sent an invalid payload to us. Don't do that!",
+		Explanation: "You sent an invalid payload to Discord. Don't do that!",
 		Reconnect:   true,
 	}
 
@@ -82,6 +97,13 @@ var (
 		Reconnect:   false,
 	}
 
+	CloseEventCodeShardingRequired = CloseEventCode{
+		Code:        4011,
+		Description: "Sharding required",
+		Explanation: "The session would have handled too many guilds - you are required to shard your connection in order to connect.",
+		Reconnect:   false,
+	}
+
 	CloseEventCodeInvalidAPIVersion = CloseEventCode{
 		Code:        4012,
 		Description: "Invalid API version",
@@ -103,26 +125,34 @@ var (
 		Reconnect:   false,
 	}
 
-	CloseEventCodes = map[int]*CloseEventCode{
-		CloseEventCodeUnknownError.Code:         &CloseEventCodeUnknownError,
-		CloseEventCodeUnknownOpcode.Code:        &CloseEventCodeUnknownOpcode,
-		CloseEventCodeDecodeError.Code:          &CloseEventCodeDecodeError,
-		CloseEventCodeNotAuthenticated.Code:     &CloseEventCodeNotAuthenticated,
-		CloseEventCodeAuthenticationFailed.Code: &CloseEventCodeAuthenticationFailed,
-		CloseEventCodeAlreadyAuthenticated.Code: &CloseEventCodeAlreadyAuthenticated,
-		CloseEventCodeInvalidSeq.Code:           &CloseEventCodeInvalidSeq,
-		CloseEventCodeRateLimited.Code:          &CloseEventCodeRateLimited,
-		CloseEventCodeSessionTimed.Code:         &CloseEventCodeSessionTimed,
-		CloseEventCodeInvalidShard.Code:         &CloseEventCodeInvalidShard,
-		CloseEventCodeInvalidAPIVersion.Code:    &CloseEventCodeInvalidAPIVersion,
-		CloseEventCodeInvalidIntent.Code:        &CloseEventCodeInvalidIntent,
-		CloseEventCodeDisallowedIntent.Code:     &CloseEventCodeDisallowedIntent,
+	CloseEventCodeUnknown = CloseEventCode{
+		Code:        0,
+		Description: "Unknown",
+		Explanation: "Unknown Gateway Close Event Code",
+		Reconnect:   true,
+	}
+
+	CloseEventCodes = map[int]CloseEventCode{
+		CloseEventCodeUnknownError.Code:         CloseEventCodeUnknownError,
+		CloseEventCodeUnknownOpcode.Code:        CloseEventCodeUnknownOpcode,
+		CloseEventCodeDecodeError.Code:          CloseEventCodeDecodeError,
+		CloseEventCodeNotAuthenticated.Code:     CloseEventCodeNotAuthenticated,
+		CloseEventCodeAuthenticationFailed.Code: CloseEventCodeAuthenticationFailed,
+		CloseEventCodeAlreadyAuthenticated.Code: CloseEventCodeAlreadyAuthenticated,
+		CloseEventCodeInvalidSeq.Code:           CloseEventCodeInvalidSeq,
+		CloseEventCodeRateLimited.Code:          CloseEventCodeRateLimited,
+		CloseEventCodeSessionTimed.Code:         CloseEventCodeSessionTimed,
+		CloseEventCodeInvalidShard.Code:         CloseEventCodeInvalidShard,
+		CloseEventCodeInvalidAPIVersion.Code:    CloseEventCodeInvalidAPIVersion,
+		CloseEventCodeInvalidIntent.Code:        CloseEventCodeInvalidIntent,
+		CloseEventCodeDisallowedIntent.Code:     CloseEventCodeDisallowedIntent,
 	}
 )
 
-type CloseEventCode struct {
-	Code        int
-	Description string
-	Explanation string
-	Reconnect   bool
+func CloseEventCodeByCode(code int) CloseEventCode {
+	closeCode, ok := CloseEventCodes[code]
+	if !ok {
+		return CloseEventCodeUnknown
+	}
+	return closeCode
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"sync"
 	"time"
 
@@ -14,7 +15,7 @@ import (
 )
 
 type InstanceView struct {
-	User       types.User            `json:"user"`
+	User       *types.User           `json:"user"`
 	ChannelID  string                `json:"channelID"`
 	GuildID    string                `json:"guildID"`
 	Cfg        config.Config         `json:"config"`
@@ -28,10 +29,10 @@ func (a *App) StartInstance(account config.AccountsConfig) {
 	a.wg.Add(1)
 	go func() {
 		defer a.wg.Done()
-		client := discord.NewClient(a.ctx, account.Token, &types.DefaultConfig)
+		client := discord.NewClient(a.ctx, account.Token)
 
 		var readyOnce sync.Once
-		client.AddHandler(types.GatewayEventReady, func(e *types.ReadyEventData) {
+		client.AddHandler(gateway.EventTypeReady, func(e gateway.EventReady) {
 			readyOnce.Do(func() {
 				client.ChannelID = account.ChannelID
 				client.GuildID = client.GetGuildID(account.ChannelID)
@@ -59,7 +60,7 @@ func (a *App) StartInstance(account config.AccountsConfig) {
 				client.CommandsData = &commandDataSlice
 
 				in := &instance.Instance{
-					User:       client.Selfbot.User,
+					User:       client.Gateway.User(),
 					Client:     client,
 					ChannelID:  account.ChannelID,
 					GuildID:    client.GetGuildID(account.ChannelID),
@@ -75,7 +76,7 @@ func (a *App) StartInstance(account config.AccountsConfig) {
 				a.instances = append(a.instances, in)
 				runtime.EventsEmit(a.ctx, "instancesUpdate", a.GetInstances())
 
-				a.UpdateDiscordStatus(string(a.cfg.DiscordStatus))
+				a.UpdateDiscordStatus(a.cfg.DiscordStatus)
 
 				err = in.Start()
 				if err != nil {

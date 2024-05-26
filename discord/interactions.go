@@ -3,6 +3,7 @@ package discord
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"math/big"
 	"time"
 
@@ -87,7 +88,7 @@ func (client *Client) SendCommand(commandName string, options map[string]string)
 		"application_id": "270904126974590976",
 		"guild_id":       client.GuildID,
 		"channel_id":     client.ChannelID,
-		"session_id":     client.Gateway.SessionID,
+		"session_id":     client.Gateway.SessionID(),
 		"data": map[string]interface{}{
 			"version": commandInfo.Version,
 			"id":      commandInfo.ID,
@@ -138,7 +139,7 @@ func (client *Client) SendSubCommand(commandName string, subCommandName string, 
 		"application_id": "270904126974590976",
 		"guild_id":       client.GuildID,
 		"channel_id":     client.ChannelID,
-		"session_id":     client.Gateway.SessionID,
+		"session_id":     client.Gateway.SessionID(),
 		"data": map[string]interface{}{
 			"version": commandInfo.Version,
 			"id":      commandInfo.ID,
@@ -170,7 +171,7 @@ func (client *Client) SendSubCommand(commandName string, subCommandName string, 
 	return client.sendRequest(url, payload)
 }
 
-func (client *Client) ClickButton(message types.MessageData, row int, column int) error {
+func (client *Client) ClickButton(message gateway.EventMessage, row int, column int) error {
 	if message.GuildID == "" {
 		message.GuildID = client.GuildID
 	}
@@ -181,7 +182,7 @@ func (client *Client) ClickButton(message types.MessageData, row int, column int
 		"guild_id":       message.GuildID,
 		"channel_id":     message.ChannelID,
 		"message_id":     message.MessageID,
-		"session_id":     client.Gateway.SessionID,
+		"session_id":     client.Gateway.SessionID(),
 		"message_flags":  message.Flags,
 		"data": map[string]interface{}{
 			"component_type": 2,
@@ -192,7 +193,7 @@ func (client *Client) ClickButton(message types.MessageData, row int, column int
 	return client.sendRequest("https://discord.com/api/v9/interactions", payload)
 }
 
-func (client *Client) ChooseSelectMenu(message types.MessageData, row int, column int, values []string) error {
+func (client *Client) ChooseSelectMenu(message gateway.EventMessage, row int, column int, values []string) error {
 	payload := map[string]interface{}{
 		"application_id": "270904126974590976",
 		"channel_id":     message.ChannelID,
@@ -204,14 +205,14 @@ func (client *Client) ChooseSelectMenu(message types.MessageData, row int, colum
 		},
 		"guild_id":   message.GuildID,
 		"message_id": message.MessageID,
-		"session_id": client.Gateway.SessionID,
+		"session_id": client.Gateway.SessionID(),
 		"type":       3,
 	}
 
 	return client.sendRequest("https://discord.com/api/v9/interactions", payload)
 }
 
-func (client *Client) SubmitModal(modal types.ModalData) error {
+func (client *Client) SubmitModal(modal gateway.EventModalCreate) error {
 	payload := map[string]interface{}{
 		"type":           5,
 		"application_id": "270904126974590976",
@@ -222,7 +223,7 @@ func (client *Client) SubmitModal(modal types.ModalData) error {
 			"custom_id":  modal.CustomID,
 			"components": modal.Components,
 		},
-		"session_id": client.Gateway.SessionID,
+		"session_id": client.Gateway.SessionID(),
 		"nonce":      generateNonce(),
 	}
 

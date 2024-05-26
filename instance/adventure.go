@@ -2,6 +2,7 @@ package instance
 
 import (
 	"fmt"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"regexp"
 	"strconv"
 	"strings"
@@ -10,7 +11,7 @@ import (
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
 )
 
-func (in *Instance) Adventure(message *types.MessageEventData) {
+func (in *Instance) Adventure(message gateway.EventMessage) {
 	embed := message.Embeds[0]
 	adventureOption := in.Cfg.Commands.Adventure.AdventureOption
 
@@ -39,14 +40,14 @@ func (in *Instance) Adventure(message *types.MessageEventData) {
 		for _, option := range adventureOptions {
 			if option.Value == string(adventureOption) {
 				if !option.Default {
-					err := in.ChooseSelectMenu(message.MessageData, 0, 0, []string{string(adventureOption)})
+					err := in.ChooseSelectMenu(message, 0, 0, []string{string(adventureOption)})
 					if err != nil {
 						in.Log("discord", "ERR", fmt.Sprintf("Failed to choose adventure select menu: %s", err.Error()))
 					}
 					return
 				} else {
 					if !message.Components[1].(*types.ActionsRow).Components[0].(*types.Button).Disabled {
-						err := in.ClickButton(message.MessageData, 1, 0)
+						err := in.ClickButton(message, 1, 0)
 						if err != nil {
 							in.Log("discord", "ERR", fmt.Sprintf("Failed to click start adventure button: %s", err.Error()))
 						}
@@ -81,7 +82,7 @@ func (in *Instance) Adventure(message *types.MessageEventData) {
 	} else if strings.Contains(embed.Title, "choose items you want to bring along") {
 		if !message.Components[len(message.Components)-1].(*types.ActionsRow).Components[0].(*types.Button).Disabled {
 			in.PauseCommands(false)
-			err := in.ClickButton(message.MessageData, len(message.Components)-1, 0)
+			err := in.ClickButton(message, len(message.Components)-1, 0)
 			if err != nil {
 				in.Log("discord", "ERR", fmt.Sprintf("Failed to click start adventure button: %s", err.Error()))
 			} else {
@@ -98,7 +99,7 @@ func (in *Instance) Adventure(message *types.MessageEventData) {
 	for i := 0; i < 2; i++ {
 		if button, ok := message.Components[i].(*types.ActionsRow).Components[1].(*types.Button); ok {
 			if !button.Disabled && button.Emoji.ID == "1067941108568567818" {
-				err := in.ClickButton(message.MessageData, i, 1)
+				err := in.ClickButton(message, i, 1)
 				if err != nil {
 					in.Log("discord", "ERR", fmt.Sprintf("Failed to click next adventure page button: %s", err.Error()))
 				}
@@ -109,12 +110,12 @@ func (in *Instance) Adventure(message *types.MessageEventData) {
 	}
 
 	if strings.Contains(embed.Description, "Catch one of em!") {
-		err := in.ClickButton(message.MessageData, 0, 2)
+		err := in.ClickButton(message, 0, 2)
 		if err != nil {
 			in.Log("discord", "ERR", fmt.Sprintf(`Failed to click "Catch one of em!" adventure button: %s`, err.Error()))
 		}
 
-		err = in.ClickButton(message.MessageData, 1, 1)
+		err = in.ClickButton(message, 1, 1)
 		if err != nil {
 			in.Log("discord", "ERR", fmt.Sprintf(`Failed to click adventure button: %s`, err.Error()))
 		}
@@ -139,7 +140,7 @@ func (in *Instance) Adventure(message *types.MessageEventData) {
 		if strings.Contains(strings.ToLower(question), strings.ToLower(q)) {
 			for columnIndex, button := range message.Components[0].(*types.ActionsRow).Components {
 				if strings.EqualFold(button.(*types.Button).Label, ans) {
-					err := in.ClickButton(message.MessageData, 0, columnIndex)
+					err := in.ClickButton(message, 0, columnIndex)
 					if err != nil {
 						in.Log("discord", "ERR", fmt.Sprintf("Failed to click adventure answer button: %s", err.Error()))
 					}
@@ -147,7 +148,7 @@ func (in *Instance) Adventure(message *types.MessageEventData) {
 				}
 			}
 			in.Log("important", "ERR", fmt.Sprintf("Failed to find adventure answer button for %s", q))
-			err := in.ClickButton(message.MessageData, 0, 0)
+			err := in.ClickButton(message, 0, 0)
 			if err != nil {
 				in.Log("discord", "ERR", fmt.Sprintf("Failed to click default adventure answer button: %s", err.Error()))
 			}
@@ -156,10 +157,10 @@ func (in *Instance) Adventure(message *types.MessageEventData) {
 	}
 }
 
-func (in *Instance) AdventureMessageCreate(message *types.MessageEventData) {
+func (in *Instance) AdventureMessageCreate(message gateway.EventMessage) {
 	in.Adventure(message)
 }
 
-func (in *Instance) AdventureMessageUpdate(message *types.MessageEventData) {
+func (in *Instance) AdventureMessageUpdate(message gateway.EventMessage) {
 	in.Adventure(message)
 }

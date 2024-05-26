@@ -2,6 +2,8 @@ package main
 
 import (
 	"embed"
+	"net/http"
+	_ "net/http/pprof"
 	"os"
 
 	"github.com/grongor/panicwatch"
@@ -25,6 +27,13 @@ var icon []byte
 
 func main() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+
+	go func() {
+		log.Info().Msg("Starting pprof server on :6060")
+		if err := http.ListenAndServe(":6060", nil); err != nil {
+			log.Error().Msgf("Failed to start pprof server: %v", err)
+		}
+	}()
 
 	app := NewApp()
 

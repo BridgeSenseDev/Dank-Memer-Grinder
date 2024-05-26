@@ -1,10 +1,10 @@
 package instance
 
 import (
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"math/rand"
 	"time"
 
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 )
 
@@ -22,21 +22,21 @@ func (in *Instance) SendSubCommand(name string, subCommandName string, options m
 	return in.Client.SendSubCommand(name, subCommandName, options)
 }
 
-func (in *Instance) ClickButton(message types.MessageData, row int, column int) error {
+func (in *Instance) ClickButton(message gateway.EventMessage, row int, column int) error {
 	minDelay := in.Cfg.Cooldowns.ButtonClickDelay.MinDelay
 	maxDelay := in.Cfg.Cooldowns.ButtonClickDelay.MaxDelay
 	<-utils.Sleep(time.Duration(rand.Intn(maxDelay-minDelay)+minDelay) * time.Millisecond)
 	return in.Client.ClickButton(message, row, column)
 }
 
-func (in *Instance) ChooseSelectMenu(message types.MessageData, row int, column int, values []string) error {
+func (in *Instance) ChooseSelectMenu(message gateway.EventMessage, row int, column int, values []string) error {
 	minDelay := in.Cfg.Cooldowns.ButtonClickDelay.MinDelay
 	maxDelay := in.Cfg.Cooldowns.ButtonClickDelay.MaxDelay
 	<-utils.Sleep(time.Duration(rand.Intn(maxDelay-minDelay)+minDelay) * time.Millisecond)
 	return in.Client.ChooseSelectMenu(message, row, column, values)
 }
 
-func (in *Instance) SubmitModal(modal types.ModalData) error {
+func (in *Instance) SubmitModal(modal gateway.EventModalCreate) error {
 	minDelay := in.Cfg.Cooldowns.ButtonClickDelay.MinDelay
 	maxDelay := in.Cfg.Cooldowns.ButtonClickDelay.MaxDelay
 	<-utils.Sleep(time.Duration(rand.Intn(maxDelay-minDelay)+minDelay) * time.Millisecond)

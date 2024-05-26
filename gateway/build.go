@@ -1,18 +1,28 @@
-package discord
+package gateway
 
 import (
 	"fmt"
 	"regexp"
+	"time"
 
 	"github.com/valyala/fasthttp"
 )
+
+var requestClient = fasthttp.Client{
+	ReadBufferSize:                8192,
+	ReadTimeout:                   time.Second * 5,
+	WriteTimeout:                  time.Second * 5,
+	NoDefaultUserAgentHeader:      true,
+	DisableHeaderNamesNormalizing: true,
+	DisablePathNormalizing:        true,
+}
 
 var (
 	JsFileRegex    = regexp.MustCompile(`<script src="(/assets/\d{4,5}\.[^"]+\.js)" defer></script>`)
 	BuildInfoRegex = regexp.MustCompile(`Build Number: "\).concat\("(\d+)"`)
 )
 
-func getLatestBuild() (string, error) {
+func (g *gatewayImpl) getLatestBuild() (string, error) {
 	req := fasthttp.AcquireRequest()
 	resp := fasthttp.AcquireResponse()
 	defer fasthttp.ReleaseRequest(req)
@@ -27,7 +37,7 @@ func getLatestBuild() (string, error) {
 
 	matches := JsFileRegex.FindAllStringSubmatch(string(resp.Body()), -1)
 	if len(matches) == 0 {
-		fmt.Println("build number not found, falling back to 9999")
+		g.Log("ERR", "Build number not found, falling back to 9999")
 		return "9999", nil
 	}
 	for _, match := range matches {
@@ -50,12 +60,12 @@ func getLatestBuild() (string, error) {
 		return match[1], nil
 	}
 
-	fmt.Println("build number not found, falling back to 9999")
+	g.Log("ERR", "Build number not found, falling back to 9999")
 	return "9999", nil
 }
 
-func mustGetLatestBuild() string {
-	if build, err := getLatestBuild(); err != nil {
+func (g *gatewayImpl) mustGetLatestBuild() string {
+	if build, err := g.getLatestBuild(); err != nil {
 		panic(err)
 	} else {
 		return build

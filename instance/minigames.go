@@ -2,6 +2,7 @@ package instance
 
 import (
 	"fmt"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"regexp"
 	"strconv"
 	"strings"
@@ -45,7 +46,7 @@ func generateEmojiActions(emojis []string) map[string]int {
 	return emojiActions
 }
 
-func (in *Instance) solveMoleman(message types.MessageData) {
+func (in *Instance) solveMoleman(message gateway.EventMessage) {
 	embed := message.Embeds[0]
 
 	molemanLoc := map[string]int{
@@ -108,7 +109,7 @@ func (in *Instance) solveMoleman(message types.MessageData) {
 	}
 }
 
-func (in *Instance) solveMinigame(message types.MessageData, gameName string, gameTrigger string, emojis []string) {
+func (in *Instance) solveMinigame(message gateway.EventMessage, gameName string, gameTrigger string, emojis []string) {
 	embed := message.Embeds[0]
 
 	if strings.Contains(embed.Description, gameTrigger) {
@@ -127,21 +128,21 @@ func (in *Instance) solveMinigame(message types.MessageData, gameName string, ga
 	}
 }
 
-func (in *Instance) MinigamesMessageCreate(message *types.MessageEventData) {
+func (in *Instance) MinigamesMessageCreate(message gateway.EventMessage) {
 	embed := message.Embeds[0]
 
 	// Moleman
 	if strings.Contains(embed.Description, "Dodge the Worms!") {
 		in.Log("others", "INF", "Solving moleman minigame")
 		in.PauseCommands(false)
-		in.solveMoleman(message.MessageData)
+		in.solveMoleman(message)
 	}
 
 	// Attack boss
 	if strings.Contains(embed.Description, "Attack the boss by clicking") {
 		in.Log("others", "INF", "Solving attack boss minigame")
 		in.PauseCommands(false)
-		err := in.ClickButton(message.MessageData, 0, 0)
+		err := in.ClickButton(message, 0, 0)
 		if err != nil {
 			in.Log("discord", "ERR", fmt.Sprintf("Failed to click attack boss minigame button: %s", err.Error()))
 		}
@@ -191,7 +192,7 @@ func (in *Instance) MinigamesMessageCreate(message *types.MessageEventData) {
 
 	// F in the chat
 	if embed.Description == "F" {
-		err := in.ClickButton(message.MessageData, 0, 0)
+		err := in.ClickButton(message, 0, 0)
 		if err != nil {
 			in.Log("discord", "ERR", fmt.Sprintf("Failed to click F in the chat minigame button: %s", err.Error()))
 		}
@@ -206,12 +207,12 @@ func (in *Instance) MinigamesMessageCreate(message *types.MessageEventData) {
 			num, _ := strconv.Atoi(numStr)
 
 			if num >= 50 {
-				err := in.ClickButton(message.MessageData, 0, 0)
+				err := in.ClickButton(message, 0, 0)
 				if err != nil {
 					in.Log("discord", "ERR", fmt.Sprintf("Failed to click highlow minigame button: %s", err.Error()))
 				}
 			} else {
-				err := in.ClickButton(message.MessageData, 0, 2)
+				err := in.ClickButton(message, 0, 2)
 				if err != nil {
 					in.Log("discord", "ERR", fmt.Sprintf("Failed to click highlow minigame button: %s", err.Error()))
 				}
@@ -224,12 +225,12 @@ func (in *Instance) MinigamesMessageCreate(message *types.MessageEventData) {
 	}
 }
 
-func (in *Instance) MinigamesMessageUpdate(message *types.MessageEventData) {
+func (in *Instance) MinigamesMessageUpdate(message gateway.EventMessage) {
 	embed := message.Embeds[0]
 
 	// Moleman
 	if strings.Contains(embed.Description, "Dodge the Worms!") {
-		in.solveMoleman(message.MessageData)
+		in.solveMoleman(message)
 	} else if strings.Contains(embed.Description, "because you didn't dodge a worm") {
 		in.UnpauseCommands()
 		in.Log("others", "ERR", "Failed moleman minigame")
@@ -239,18 +240,18 @@ func (in *Instance) MinigamesMessageUpdate(message *types.MessageEventData) {
 	}
 
 	// Football
-	in.solveMinigame(message.MessageData, "Football", "Hit the ball!", []string{levitate})
+	in.solveMinigame(message, "Football", "Hit the ball!", []string{levitate})
 
 	// Basketball
-	in.solveMinigame(message.MessageData, "Basketball", "Dunk the ball!", []string{basketball})
+	in.solveMinigame(message, "Basketball", "Dunk the ball!", []string{basketball})
 
 	// Dragon
-	in.solveMinigame(message.MessageData, "Dragon", "Dodge the Fireball!", []string{fireBall})
+	in.solveMinigame(message, "Dragon", "Dodge the Fireball!", []string{fireBall})
 
 	// Attack boss
 	if strings.Contains(embed.Description, "Attack the boss by clicking") {
 		if !message.Components[0].(*types.ActionsRow).Components[0].(*types.Button).Disabled {
-			err := in.ClickButton(message.MessageData, 0, 0)
+			err := in.ClickButton(message, 0, 0)
 			if err != nil {
 				in.Log("discord", "ERR", fmt.Sprintf("Failed to click attack boss minigame button: %s", err.Error()))
 			}
@@ -266,7 +267,7 @@ func (in *Instance) MinigamesMessageUpdate(message *types.MessageEventData) {
 		for rowIndex, row := range message.Components {
 			for columnIndex, button := range row.(*types.ActionsRow).Components {
 				if button.(*types.Button).Emoji.Name == emoji {
-					err := in.ClickButton(message.MessageData, rowIndex, columnIndex)
+					err := in.ClickButton(message, rowIndex, columnIndex)
 					if err != nil {
 						in.Log("discord", "ERR", fmt.Sprintf("Failed to click emoji match minigame button: %s", err.Error()))
 					}
@@ -286,7 +287,7 @@ func (in *Instance) MinigamesMessageUpdate(message *types.MessageEventData) {
 
 			for columnIndex, button := range message.Components[0].(*types.ActionsRow).Components {
 				if button.(*types.Button).Label == color {
-					err := in.ClickButton(message.MessageData, 0, columnIndex)
+					err := in.ClickButton(message, 0, columnIndex)
 					if err != nil {
 						in.Log("discord", "ERR", fmt.Sprintf("Failed to click color match minigame button: %s", err.Error()))
 					}
@@ -310,7 +311,7 @@ func (in *Instance) MinigamesMessageUpdate(message *types.MessageEventData) {
 
 		if repeatOrderLastClickedIndex < len(repeatOrder) {
 			choice := repeatOrder[repeatOrderLastClickedIndex]
-			err := in.ClickButton(message.MessageData, 0, answers[choice])
+			err := in.ClickButton(message, 0, answers[choice])
 			if err != nil {
 				in.Log("discord", "ERR", fmt.Sprintf("Failed to click repeat order minigame button: %s", err.Error()))
 			} else {

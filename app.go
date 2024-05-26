@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"os"
 	"sync"
 
@@ -95,7 +97,7 @@ func (a *App) UpdateInstanceToken(oldToken string, newToken string) {
 	}
 }
 
-func (a *App) UpdateDiscordStatus(status string) {
+func (a *App) UpdateDiscordStatus(status types.OnlineStatus) {
 	a.wsMutex.Lock()
 	defer a.wsMutex.Unlock()
 
@@ -104,23 +106,14 @@ func (a *App) UpdateDiscordStatus(status string) {
 			continue
 		}
 
-		payload := map[string]interface{}{
-			"op": 3,
-			"d": map[string]interface{}{
-				"since":      0,
-				"activities": []map[string]interface{}{},
-				"status":     status,
-				"afk":        false,
-			},
+		d := gateway.MessageDataPresenceUpdate{
+			Since:      new(int64),
+			Activities: []map[string]interface{}{},
+			Status:     status,
+			AFK:        false,
 		}
 
-		payloadJSON, err := json.Marshal(payload)
-		if err != nil {
-			log.Error().Msgf("Error marshaling payload: %s", err)
-			continue
-		}
-
-		err = in.Client.SendMessage(payloadJSON)
+		err := in.Client.SendMessage(3, d)
 		if err != nil {
 			log.Error().Msgf("Error setting Discord status: %s", err)
 		}
