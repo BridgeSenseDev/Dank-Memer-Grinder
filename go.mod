@@ -6,7 +6,7 @@ toolchain go1.22.1
 
 require (
 	github.com/fasthttp/websocket v1.5.8
-	github.com/goccy/go-json v0.10.2
+	github.com/goccy/go-json v0.10.3
 	github.com/grongor/panicwatch v1.2.0
 	github.com/jeandeaual/go-locale v0.0.0-20240223122105-ce5225dcaa49
 	github.com/rs/zerolog v1.33.0
