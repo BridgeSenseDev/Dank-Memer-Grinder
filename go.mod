@@ -12,7 +12,7 @@ require (
 	github.com/rs/zerolog v1.33.0
 	github.com/sasha-s/go-csync v0.0.0-20240107134140-fcbab37b09ad
 	github.com/valyala/fasthttp v1.55.0
-	github.com/wailsapp/wails/v2 v2.9.0
+	github.com/wailsapp/wails/v2 v2.9.1
 )
 
 require (
