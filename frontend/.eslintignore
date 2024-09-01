@@ -11,3 +11,7 @@ node_modules
 pnpm-lock.yaml
 package-lock.json
 yarn.lock
+bun.lcokb
+
+# Ignore fils for wails
+frontend/src/lib/wailsjs/*

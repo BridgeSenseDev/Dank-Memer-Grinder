@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { DotsVertical, Trash, Reload, DividerHorizontal } from 'svelte-radix';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import { Button } from '$lib/components/ui/button';
-	import { RestartInstance, RemoveInstance } from '$lib/wailsjs/go/main/App';
-	import { cfg } from '$lib/store';
+	import { DotsVertical, Trash, Reload, DividerHorizontal } from "svelte-radix";
+	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
+	import { Button } from "$lib/components/ui/button";
+	import { RestartInstance, RemoveInstance } from "$lib/wailsjs/go/main/App";
+	import { cfg } from "$lib/store";
 
 	export let id: string;
 

@@ -1,17 +1,17 @@
 <script lang="ts">
-	import { cfg } from '$lib/store';
-	import * as Card from '$lib/components/ui/card/index.js';
-	import * as Select from '$lib/components/ui/select';
-	import { Input } from '$lib/components/ui/input/index.js';
-	import { Label } from '$lib/components/ui/label/index.js';
-	import { Switch } from '$lib/components/ui/switch';
-	import { UpdateDiscordStatus } from '$lib/wailsjs/go/main/App';
+	import { cfg } from "$lib/store";
+	import * as Card from "$lib/components/ui/card/index.js";
+	import * as Select from "$lib/components/ui/select";
+	import { Input } from "$lib/components/ui/input/index.js";
+	import { Label } from "$lib/components/ui/label/index.js";
+	import { Switch } from "$lib/components/ui/switch";
+	import { UpdateDiscordStatus } from "$lib/wailsjs/go/main/App";
 
 	function statusLabel(input: string): string {
 		if (!input) {
-			return '';
-		} else if (input == 'dnd') {
-			return 'Do Not Disturb';
+			return "";
+		} else if (input == "dnd") {
+			return "Do Not Disturb";
 		} else {
 			return input.charAt(0).toUpperCase() + input.slice(1);
 		}

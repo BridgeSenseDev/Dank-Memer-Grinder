@@ -3,6 +3,7 @@ package gateway
 import (
 	"fmt"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/config"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"github.com/fasthttp/websocket"
 )
 
@@ -28,7 +29,7 @@ func DefaultConfig() *Config {
 		EnableResumeURL: true,
 		RateLimiter:     NewRateLimiter(),
 		Presence:        &presence,
-		UserAgent:       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+		UserAgent:       utils.GetUserAgent(),
 	}
 }
 

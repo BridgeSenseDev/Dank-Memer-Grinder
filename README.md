@@ -5,41 +5,33 @@
 
   # [![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Permanent+Marker&size=40&pause=1000&color=598e3c&center=true&vCenter=true&width=435&lines=Dank+Memer+Grinder)](https://git.io/typing-svg)
 
-  ### Supercharge your Dank Memer experience with Dank Memer Grinder
+  ### Supercharge your [Dank Memer](https://dankmemer.lol/) experience
 
-  ![License](https://img.shields.io/github/license/BridgeSenseDev/Dank-Memer-Grinder?color=598e3c&style=for-the-badge)
-  ![Lines of Code](https://tokei.rs/b1/github/bridgesensedev/dank-memer-grinder?category=code&style=for-the-badge&color=598e3c)
-  ![Downloads](https://img.shields.io/github/downloads/BridgeSenseDev/Dank-Memer-Grinder/total?color=598e3c&style=for-the-badge)
+  ![GitHub License](https://img.shields.io/github/license/BridgeSenseDev/Dank-Memer-Grinder?style=for-the-badge&color=%2322c55e)
+  ![GitHub Release](https://img.shields.io/github/v/release/BridgeSenseDev/Dank-Memer-Grinder?include_prereleases&sort=semver&style=for-the-badge)
+  ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/BridgeSenseDev/Dank-Memer-Grinder/total?style=for-the-badge&color=%2322c55e)
 
   [![Discord Server Invite](https://invidget.switchblade.xyz/KTrmQnhCHb)](https://discord.gg/KTrmQnhCHb)
 </div>
 
 > 🚨 WARNING: USE AT YOUR OWN RISK. This is a self-bot and is in violation of Discord's and Dank Memer's rules and TOS. By using this software, you acknowledge that we take no responsibility for any action taken against your account, whether by Discord or Dank Memer.
 >
->Possible actions that could be taken against your account include but are not limited to suspension or termination.
->
 > It is crucial that you take appropriate measures to avoid detection. These measures include:
 > <ol>
 >  <li>Running the bot only in private channels.</li>
 >  <li>Not being open about the fact that you use it.</li>
->  <li>Avoiding running the bot excessively to prevent raising suspicion.</li>
+>  <li>If you run the bot excessively, no matter the outcome of captchas. Big surprise, if you farm for 12 hours straight then they might think you're a little bit sussy. So if you script for an unnatural amount of time, then don't be surprised if you get banned for that very reason.</li>
 > </ol>
-> Remember, using this bot comes with significant risks, and you must take appropriate measures to protect your account from any consequences.
-      
 
 ## Features
-Find a detailed breakdown of all the features in our [**<u>documentation</u>**](https://docs.dankmemer.tools/features).
+A detailed breakdown of features are available in our [**<u>documentation</u>**](https://docs.dankmemer.tools/features/commands).
 
--   [x] **Up-to-date High Accuracy AI-Based Captcha Solver**
--   [x] **User-Friendly GUI:** Easy configuration and log management
--   [x] **Multi-Account Support:** Run unlimited accounts simultaneously
--   [x] **Automatic Updates:** Stay up-to-date with the latest version
--   [x] **Currency Commands and Minigames Automation:** Adventure, work, pets care, moleman, dragons and more
--   [x] **Search and Crime Locations:** Customizable location priority list
--   [x] **Lifesaver Management:** Purchases lifesavers when balance falls below a configurable amount
--   [x] **Auto Buy:** Automatically buys fishing poles, hunting rifles, and shovels
--   [x] **Appear Offline:** Option to appear offline in your Discord status
--   [x] **Resource Efficiency:** Uses minimal system resources and works without Discord app
+-   [x] **Undetectable:** Mimics native api's used by official discord clients, making it impossible for discord to tell the difference.
+-   [x] **Accurate and Cheap Captcha Solver:** DMG uses a custom AI model trained to solve Dank Memer captchas flawlessly, only at $0.03 per captcha.
+-   [x] **Performant:** DMG is written in Go with a focus on speed, using minimal system resources in the background.
+-   [x] **Highly Customizable:** Through DMG's modern GUI, everything from search priorities to adventure answers can be easily customized to your hearts content.
+-   [x] **Feature Rich:** DMG supports and automates most minigames and commands, from /pets care to the moleman minigame. Fishing support is coming soon.
+-   [x] **Multi-Platform Executables** No more installing python or node. Just download and run the executable file available for Windows, macOS and Linux.
 
 <div align="center">
   <img src=".github/assets/img/settings.png" width="400">

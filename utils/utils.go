@@ -1,7 +1,11 @@
 package utils
 
 import (
+	"encoding/json"
+	"fmt"
+	"github.com/valyala/fasthttp"
 	"math/rand"
+	"strings"
 	"time"
 )
 
@@ -54,4 +58,33 @@ func ExponentialBackoff(attempt int) time.Duration {
 	} else {
 		return 30 * time.Second
 	}
+}
+
+type browserVersionResponse struct {
+	Versions []struct {
+		Version string `json:"version"`
+	} `json:"versions"`
+}
+
+func GetUserAgent() string {
+	url := "https://versionhistory.googleapis.com/v1/chrome/platforms/win/channels/stable/versions"
+
+	req := fasthttp.AcquireRequest()
+	defer fasthttp.ReleaseRequest(req)
+	req.SetRequestURI(url)
+
+	resp := fasthttp.AcquireResponse()
+	defer fasthttp.ReleaseResponse(resp)
+
+	var version string = "128.0.0.0"
+
+	if err := fasthttp.Do(req, resp); err == nil {
+		var data browserVersionResponse
+		if err := json.Unmarshal(resp.Body(), &data); err == nil {
+			major := strings.Split(data.Versions[0].Version, ".")[0]
+			version = fmt.Sprintf("%s.0.0.0", major)
+		}
+	}
+
+	return fmt.Sprintf("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/%s Safari/537.36", version)
 }

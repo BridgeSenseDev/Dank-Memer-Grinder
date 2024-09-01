@@ -49,12 +49,12 @@
 }
 
 @layer base {
-	input[type='number']::-webkit-outer-spin-button,
-	input[type='number']::-webkit-inner-spin-button {
+	input[type="number"]::-webkit-outer-spin-button,
+	input[type="number"]::-webkit-inner-spin-button {
 		appearance: none;
 		margin: 0;
 	}
-	input[type='number'] {
+	input[type="number"] {
 		appearance: textfield;
 	}
 	* {
@@ -70,7 +70,7 @@
 }
 
 :root {
-	@apply scrollbar-thin scrollbar-thumb-primary/50 scrollbar-track-transparent overflow-y-auto;
+	@apply overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-primary/50;
 }
 
 h1 {

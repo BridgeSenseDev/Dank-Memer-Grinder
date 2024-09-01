@@ -1,6 +1,6 @@
 <script lang="ts">
-	import DataTable from './data-table.svelte';
-	import { fade } from 'svelte/transition';
+	import DataTable from "./data-table.svelte";
+	import { fade } from "svelte/transition";
 </script>
 
 <div

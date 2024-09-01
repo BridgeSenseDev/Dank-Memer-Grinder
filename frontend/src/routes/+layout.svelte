@@ -1,24 +1,24 @@
 <script lang="ts">
-	import '../app.postcss';
-	import Nav from '$lib/components/Nav.svelte';
-	import Header from '$lib/components/Header.svelte';
+	import "../app.postcss";
+	import Nav from "$lib/components/Nav.svelte";
+	import Header from "$lib/components/Header.svelte";
 
-	import { onMount } from 'svelte';
-	import { cfg, instances, layoutEventListenersSet } from '$lib/store';
-	import { GetConfig, GetInstances } from '$lib/wailsjs/go/main/App';
-	import { EventsOn } from '$lib/wailsjs/runtime/runtime';
-	import { config, main } from '$lib/wailsjs/go/models';
+	import { onMount } from "svelte";
+	import { cfg, instances, layoutEventListenersSet } from "$lib/store";
+	import { GetConfig, GetInstances } from "$lib/wailsjs/go/main/App";
+	import { EventsOn } from "$lib/wailsjs/runtime/runtime";
+	import { config, main } from "$lib/wailsjs/go/models";
 
 	onMount(async () => {
 		if (!$layoutEventListenersSet) {
 			cfg.set(await GetConfig());
 			instances.set(await GetInstances());
 
-			EventsOn('configUpdate', (newCfg: config.Config) => {
+			EventsOn("configUpdate", (newCfg: config.Config) => {
 				cfg.set(newCfg);
 			});
 
-			EventsOn('instancesUpdate', (newInstances: main.InstanceView[]) => {
+			EventsOn("instancesUpdate", (newInstances: main.InstanceView[]) => {
 				instances.set(newInstances);
 			});
 
@@ -34,7 +34,7 @@
 			<div class="sticky">
 				<Nav />
 			</div>
-			<div class="min-h-navbar relative left-48 mr-48 flex h-full w-full">
+			<div class="relative left-48 mr-48 flex h-full min-h-navbar w-full">
 				<div class="flex-1 p-4">
 					<slot />
 				</div>

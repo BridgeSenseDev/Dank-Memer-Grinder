@@ -1,17 +1,17 @@
 <script lang="ts">
-	import * as Tabs from '$lib/components/ui/tabs/index.js';
-	import { fade } from 'svelte/transition';
-	import AutoBuy from './auto-buy.svelte';
-	import General from './general.svelte';
+	import * as Tabs from "$lib/components/ui/tabs/index.js";
+	import { fade } from "svelte/transition";
+	import AutoBuy from "./auto-buy.svelte";
+	import General from "./general.svelte";
 
 	let settingsCurrentTab =
-		typeof window !== 'undefined'
-			? sessionStorage.getItem('settingsCurrentTab') || 'general'
-			: 'general';
+		typeof window !== "undefined"
+			? sessionStorage.getItem("settingsCurrentTab") || "general"
+			: "general";
 
 	$: {
-		if (typeof window !== 'undefined') {
-			sessionStorage.setItem('settingsCurrentTab', settingsCurrentTab);
+		if (typeof window !== "undefined") {
+			sessionStorage.setItem("settingsCurrentTab", settingsCurrentTab);
 		}
 	}
 </script>

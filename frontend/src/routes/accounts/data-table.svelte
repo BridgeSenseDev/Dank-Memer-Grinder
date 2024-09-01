@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { createTable, Render, Subscribe, createRender } from 'svelte-headless-table';
-	import { LockClosed, ExclamationTriangle, Check, Update } from 'svelte-radix';
-	import { readable, writable } from 'svelte/store';
-	import * as Table from '$lib/components/ui/table';
-	import DataTableActions from './data-table-actions.svelte';
-	import { cfg, instances } from '$lib/store';
-	import { Checkbox } from '$lib/components/ui/checkbox';
-	import { Input } from '$lib/components/ui/input';
-	import { Button } from '$lib/components/ui/button';
-	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
-	import { RestartInstances, UpdateInstanceToken } from '$lib/wailsjs/go/main/App';
-	import AddAccounts from './add-accounts.svelte';
+	import { createTable, Render, Subscribe, createRender } from "svelte-headless-table";
+	import { LockClosed, ExclamationTriangle, Check, Update } from "svelte-radix";
+	import { readable, writable } from "svelte/store";
+	import * as Table from "$lib/components/ui/table";
+	import DataTableActions from "./data-table-actions.svelte";
+	import { cfg, instances } from "$lib/store";
+	import { Checkbox } from "$lib/components/ui/checkbox";
+	import { Input } from "$lib/components/ui/input";
+	import { Button } from "$lib/components/ui/button";
+	import * as Tooltip from "$lib/components/ui/tooltip/index.js";
+	import { RestartInstances, UpdateInstanceToken } from "$lib/wailsjs/go/main/App";
+	import AddAccounts from "./add-accounts.svelte";
 
 	type Account = {
 		status: string;
@@ -28,28 +28,28 @@
 
 	const columns = table.createColumns([
 		table.column({
-			accessor: 'status',
-			header: 'Status'
+			accessor: "status",
+			header: "Status"
 		}),
 		table.column({
-			accessor: 'username',
-			header: 'Username'
+			accessor: "username",
+			header: "Username"
 		}),
 		table.column({
-			accessor: 'state',
-			header: 'State'
+			accessor: "state",
+			header: "State"
 		}),
 		table.column({
-			accessor: 'token',
-			header: 'Token'
+			accessor: "token",
+			header: "Token"
 		}),
 		table.column({
-			accessor: 'channelID',
-			header: 'Channel ID'
+			accessor: "channelID",
+			header: "Channel ID"
 		}),
 		table.column({
 			accessor: ({ token }) => token,
-			header: '',
+			header: "",
 			cell: ({ value }) => {
 				return createRender(DataTableActions, { id: value });
 			}
@@ -63,12 +63,12 @@
 		if ($instances && $cfg.accounts) {
 			for (let account of $cfg.accounts) {
 				let instance = $instances.find((instance) => instance.accountCfg.token === account.token);
-				let status = instance?.error ? instance.error : 'reload';
+				let status = instance?.error ? instance.error : "reload";
 				accounts.push({
 					status: status,
 					token: account.token,
 					channelID: parseInt(account.channelID, 10),
-					username: instance?.user.username ?? '',
+					username: instance?.user.username ?? "",
 					state: account.state
 				});
 			}
@@ -138,9 +138,9 @@
 								<Table.Row {...rowAttrs}>
 									{#each row.cells as cell (cell.id)}
 										<Subscribe attrs={cell.attrs()} let:attrs>
-											{#if cell.id === 'status'}
+											{#if cell.id === "status"}
 												<Table.Cell class="w-5 p-0 text-center" {...attrs}>
-													{#if cell.value === 'healthy'}
+													{#if cell.value === "healthy"}
 														<Tooltip.Root>
 															<Tooltip.Trigger>
 																<div class="flex items-center justify-center">
@@ -149,7 +149,7 @@
 															>
 															<Tooltip.Content>Connected</Tooltip.Content>
 														</Tooltip.Root>
-													{:else if cell.value === 'invalidToken'}
+													{:else if cell.value === "invalidToken"}
 														<Tooltip.Root>
 															<Tooltip.Trigger>
 																<div class="flex items-center justify-center">
@@ -158,7 +158,7 @@
 															>
 															<Tooltip.Content>Invalid token</Tooltip.Content>
 														</Tooltip.Root>
-													{:else if cell.value === 'invalidChannelID'}
+													{:else if cell.value === "invalidChannelID"}
 														<Tooltip.Root>
 															<Tooltip.Trigger>
 																<div class="flex items-center justify-center">
@@ -167,7 +167,7 @@
 															>
 															<Tooltip.Content>Invalid channel ID</Tooltip.Content>
 														</Tooltip.Root>
-													{:else if cell.value === 'reload'}
+													{:else if cell.value === "reload"}
 														<Tooltip.Root>
 															<Tooltip.Trigger>
 																<div class="flex items-center justify-center">
@@ -178,11 +178,11 @@
 														</Tooltip.Root>
 													{/if}
 												</Table.Cell>
-											{:else if cell.id === 'state'}
+											{:else if cell.id === "state"}
 												<Table.Cell class="p-0 text-center" {...attrs}>
 													<Checkbox bind:checked={$cfg.accounts[rowIndex].state}></Checkbox>
 												</Table.Cell>
-											{:else if cell.id === 'token'}
+											{:else if cell.id === "token"}
 												<Table.Cell class="text-center" {...attrs}>
 													<Input
 														type="text"
@@ -190,7 +190,7 @@
 														on:input={(event) => tokenUpdate(rowIndex, event.target.value)}
 													></Input>
 												</Table.Cell>
-											{:else if cell.id === 'channelID'}
+											{:else if cell.id === "channelID"}
 												<Table.Cell class="w-48 text-center" {...attrs}>
 													<Input
 														type="number"

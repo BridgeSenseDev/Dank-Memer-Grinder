@@ -1,15 +1,15 @@
 <script lang="ts">
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import * as Dialog from '$lib/components/ui/dialog';
-	import { Plus, Person, MagicWand } from 'svelte-radix';
-	import { Label } from '$lib/components/ui/label';
-	import { Input } from '$lib/components/ui/input';
-	import * as Select from '$lib/components/ui/select';
-	import { Button } from '$lib/components/ui/button';
-	import { cfg } from '$lib/store';
+	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
+	import * as Dialog from "$lib/components/ui/dialog";
+	import { Plus, Person, MagicWand } from "svelte-radix";
+	import { Label } from "$lib/components/ui/label";
+	import { Input } from "$lib/components/ui/input";
+	import * as Select from "$lib/components/ui/select";
+	import { Button } from "$lib/components/ui/button";
+	import { cfg } from "$lib/store";
 
-	let individualToken = '';
-	let individualChannelID = '';
+	let individualToken = "";
+	let individualChannelID = "";
 
 	function addAccount(token: string, channelID: string) {
 		const updatedAccounts = [
@@ -42,41 +42,41 @@
 	}
 
 	function parseAndAddAccounts(fileContent: string) {
-		const lines = fileContent.split('\n');
+		const lines = fileContent.split("\n");
 
 		lines.forEach((line) => {
 			line = line.trim();
 
 			switch (format.value) {
-				case 'token':
-					addAccount(line, '');
+				case "token":
+					addAccount(line, "");
 					break;
 				case '"token"':
 					const tokenMatch = line.match(/"(.*?)"/);
 					if (tokenMatch) {
-						addAccount(tokenMatch[1], '');
+						addAccount(tokenMatch[1], "");
 					}
 					break;
-				case 'token id':
-					let parts = line.split(' ');
+				case "token id":
+					let parts = line.split(" ");
 					if (parts.length >= 2) {
 						addAccount(parts[0], parts[1]);
 					}
 					break;
-				case 'id token':
-					parts = line.split(' ');
+				case "id token":
+					parts = line.split(" ");
 					if (parts.length >= 2) {
 						addAccount(parts[1], parts[0]);
 					}
 					break;
-				case 'token: id':
-					let colonParts = line.split(':');
+				case "token: id":
+					let colonParts = line.split(":");
 					if (colonParts.length >= 2) {
 						addAccount(colonParts[0].trim(), colonParts[1].trim());
 					}
 					break;
-				case 'id: token':
-					colonParts = line.split(':');
+				case "id: token":
+					colonParts = line.split(":");
 					if (colonParts.length >= 2) {
 						addAccount(colonParts[1].trim(), colonParts[0].trim());
 					}
@@ -87,7 +87,7 @@
 
 	let openSingleAccount = false;
 	let openBulkAccounts = false;
-	let format = { value: 'token id', label: 'token id' };
+	let format = { value: "token id", label: "token id" };
 </script>
 
 <DropdownMenu.Root>
