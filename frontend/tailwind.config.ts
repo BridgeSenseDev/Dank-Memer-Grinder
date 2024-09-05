@@ -2,7 +2,7 @@ import { fontFamily } from "tailwindcss/defaultTheme";
 import scrollbar from "tailwind-scrollbar";
 
 /** @type {import('tailwindcss').Config} */
-const config = {
+const config: import("tailwindcss").Config = {
 	darkMode: ["class"],
 	content: ["./src/**/*.{html,js,svelte,ts}"],
 	safelist: ["dark"],
