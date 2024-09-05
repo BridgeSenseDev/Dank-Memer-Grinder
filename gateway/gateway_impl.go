@@ -26,13 +26,17 @@ var _ Gateway = (*gatewayImpl)(nil)
 func New(ctx context.Context, token string, eventHandlerFunc EventHandlerFunc) Gateway {
 	config := DefaultConfig()
 
-	return &gatewayImpl{
+	g := &gatewayImpl{
 		config:           *config,
 		eventHandlerFunc: eventHandlerFunc,
 		token:            token,
-		status:           StatusUnconnected,
+		statusChan:       make(chan Status, 1),
 		ctx:              ctx,
 	}
+
+	g.statusChan <- StatusUnconnected
+
+	return g
 }
 
 type gatewayImpl struct {
@@ -44,7 +48,7 @@ type gatewayImpl struct {
 	conn            *websocket.Conn
 	connMu          sync.Mutex
 	heartbeatCancel context.CancelFunc
-	status          Status
+	statusChan      chan Status
 	ctx             context.Context
 
 	heartbeatInterval     time.Duration
@@ -80,7 +84,6 @@ func (g *gatewayImpl) open(ctx context.Context) error {
 	if g.conn != nil {
 		return types.ErrGatewayAlreadyConnected
 	}
-	g.status = StatusConnecting
 
 	wsURL := g.config.URL
 	if g.config.ResumeURL != nil && g.config.EnableResumeURL {
@@ -110,8 +113,6 @@ func (g *gatewayImpl) open(ctx context.Context) error {
 
 	// reset rate limiter when connecting
 	g.config.RateLimiter.Reset()
-
-	g.status = StatusWaitingForHello
 
 	go g.listen(conn)
 
@@ -148,10 +149,8 @@ func (g *gatewayImpl) CloseWithCode(ctx context.Context, code int, message strin
 	}
 }
 
-func (g *gatewayImpl) Status() Status {
-	g.connMu.Lock()
-	defer g.connMu.Unlock()
-	return g.status
+func (g *gatewayImpl) StatusUpdates() <-chan Status {
+	return g.statusChan
 }
 
 func (g *gatewayImpl) Send(ctx context.Context, op Opcode, d MessageData) error {
@@ -208,7 +207,7 @@ func (g *gatewayImpl) reconnectTry(ctx context.Context, try int) error {
 			return err
 		}
 		g.Log("ERR", fmt.Sprintf("Failed to reconnect gateway: %s", err.Error()))
-		g.status = StatusDisconnected
+		g.statusChan <- StatusDisconnected
 		return g.reconnectTry(ctx, try+1)
 	}
 	return nil
@@ -258,7 +257,7 @@ func (g *gatewayImpl) sendHeartbeat() {
 }
 
 func (g *gatewayImpl) identify() {
-	g.status = StatusIdentifying
+	g.statusChan <- StatusIdentifying
 	g.Log("INF", "Sending Identify command")
 
 	identify := MessageDataIdentify{
@@ -288,11 +287,11 @@ func (g *gatewayImpl) identify() {
 	if err := g.Send(ctx, OpcodeIdentify, identify); err != nil {
 		g.Log("ERR", fmt.Sprintf("Error sending Identify command: %s", err.Error()))
 	}
-	g.status = StatusWaitingForReady
+	g.statusChan <- StatusWaitingForReady
 }
 
 func (g *gatewayImpl) resume() {
-	g.status = StatusResuming
+	g.statusChan <- StatusResuming
 	resume := MessageDataResume{
 		Token:     g.token,
 		SessionID: *g.config.SessionID,
@@ -309,6 +308,8 @@ func (g *gatewayImpl) resume() {
 
 func (g *gatewayImpl) listen(conn *websocket.Conn) {
 	defer g.Log("INF", "Exiting listen goroutine")
+	g.statusChan <- StatusWaitingForHello
+
 loop:
 	for {
 		mt, r, err := conn.NextReader()
@@ -337,6 +338,10 @@ loop:
 				g.Log("ERR", "gateway close reconnect="+strconv.FormatBool(reconnect)+
 					" | code="+strconv.Itoa(closeError.Code)+
 					" | error="+closeError.Text)
+
+				if closeError.Code == 4004 {
+					g.statusChan <- StatusInvalidToken
+				}
 			} else if errors.Is(err, net.ErrClosed) {
 				// we closed the connection ourselves. Don't try to reconnect here
 				reconnect = false
@@ -388,7 +393,7 @@ loop:
 				g.config.SessionID = &readyEvent.SessionID
 				g.config.ResumeURL = &readyEvent.ResumeGatewayURL
 				g.ReadyUser = &readyEvent.User
-				g.status = StatusReady
+				g.statusChan <- StatusReady
 			}
 
 			if _, ok := eventData.(EventUnknown); ok {

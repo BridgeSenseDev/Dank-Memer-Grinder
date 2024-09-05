@@ -68,7 +68,7 @@
 					status: status,
 					token: account.token,
 					channelID: parseInt(account.channelID, 10),
-					username: instance?.user.username ?? "",
+					username: instance?.user?.username ?? "",
 					state: account.state
 				});
 			}

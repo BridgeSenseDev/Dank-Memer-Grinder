@@ -87,6 +87,7 @@ func (a *App) StartInstance(account config.AccountsConfig) {
 		})
 
 		err := client.Connect()
+
 		if err != nil {
 			log.Error().Msgf("Failed to connect: %v", err.Error())
 			in := &instance.Instance{
@@ -96,6 +97,29 @@ func (a *App) StartInstance(account config.AccountsConfig) {
 
 			a.instances = append(a.instances, in)
 			runtime.EventsEmit(a.ctx, "instancesUpdate", a.GetInstances())
+		}
+
+		statusChan := client.Gateway.StatusUpdates()
+
+		for {
+			select {
+			case status := <-statusChan:
+				switch status {
+				case gateway.StatusInvalidToken:
+					in := &instance.Instance{
+						AccountCfg: account,
+						Error:      "invalidToken",
+					}
+
+					a.instances = append(a.instances, in)
+					runtime.EventsEmit(a.ctx, "instancesUpdate", a.GetInstances())
+					break
+				default:
+				}
+			case <-a.ctx.Done():
+				client.Close()
+				return
+			}
 		}
 	}()
 }

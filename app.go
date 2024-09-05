@@ -102,7 +102,7 @@ func (a *App) UpdateDiscordStatus(status types.OnlineStatus) {
 	defer a.wsMutex.Unlock()
 
 	for _, in := range a.instances {
-		if in == nil || in.User.Status == status {
+		if in == nil || in.User == nil || in.User.Status == status {
 			continue
 		}
 

@@ -48,6 +48,9 @@ const (
 	// StatusDisconnected is the state when the Gateway is disconnected.
 	// Either due to an error or because the Gateway was closed gracefully.
 	StatusDisconnected
+
+	// StatusInvalidToken is the state when the Gateway is disconnected due to an invalid token.
+	StatusInvalidToken
 )
 
 type (
@@ -85,9 +88,6 @@ type Gateway interface {
 	// If the context is done, the Gateway connection will be killed.
 	CloseWithCode(ctx context.Context, code int, message string)
 
-	// Status returns the Status of the Gateway.
-	Status() Status
-
 	// Send sends a message to the Discord gateway with the opCode and data.
 	// If context is deadline exceeds, the message sending will be aborted.
 	Send(ctx context.Context, op Opcode, data MessageData) error
@@ -98,4 +98,7 @@ type Gateway interface {
 
 	// Presence returns the current presence of the Gateway.
 	Presence() *MessageDataPresenceUpdate
+
+	// StatusUpdates returns a channel that will be updated with the status of the gateway.
+	StatusUpdates() <-chan Status
 }
