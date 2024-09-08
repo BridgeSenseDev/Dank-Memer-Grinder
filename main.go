@@ -103,8 +103,9 @@ func main() {
 			},
 		},
 		Linux: &linux.Options{
-			Icon: icon,
-		},
+			Icon:             icon,
+			WebviewGpuPolicy: linux.WebviewGpuPolicyAlways,
+			ProgramName:      "Dank Memer Grinder"},
 	})
 
 	if err != nil {

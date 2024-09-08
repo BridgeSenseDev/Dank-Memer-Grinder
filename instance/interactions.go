@@ -8,17 +8,23 @@ import (
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 )
 
-func (in *Instance) SendCommand(name string, options map[string]string) error {
-	minDelay := in.Cfg.Cooldowns.CommandInterval.MinDelay
-	maxDelay := in.Cfg.Cooldowns.CommandInterval.MaxDelay
-	<-utils.Sleep(time.Duration(rand.Intn(maxDelay-minDelay)+minDelay) * time.Millisecond)
+func (in *Instance) SendCommand(name string, options map[string]string, delay bool) error {
+	if delay {
+		minDelay := in.Cfg.Cooldowns.CommandInterval.MinDelay
+		maxDelay := in.Cfg.Cooldowns.CommandInterval.MaxDelay
+		<-utils.Sleep(time.Duration(rand.Intn(maxDelay-minDelay)+minDelay) * time.Millisecond)
+	}
+
 	return in.Client.SendCommand(name, options)
 }
 
-func (in *Instance) SendSubCommand(name string, subCommandName string, options map[string]string) error {
-	minDelay := in.Cfg.Cooldowns.CommandInterval.MinDelay
-	maxDelay := in.Cfg.Cooldowns.CommandInterval.MaxDelay
-	<-utils.Sleep(time.Duration(rand.Intn(maxDelay-minDelay)+minDelay) * time.Millisecond)
+func (in *Instance) SendSubCommand(name string, subCommandName string, options map[string]string, delay bool) error {
+	if delay {
+		minDelay := in.Cfg.Cooldowns.CommandInterval.MinDelay
+		maxDelay := in.Cfg.Cooldowns.CommandInterval.MaxDelay
+		<-utils.Sleep(time.Duration(rand.Intn(maxDelay-minDelay)+minDelay) * time.Millisecond)
+	}
+
 	return in.Client.SendSubCommand(name, subCommandName, options)
 }
 

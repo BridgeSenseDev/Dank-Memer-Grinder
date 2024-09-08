@@ -179,12 +179,12 @@ func (in *Instance) AutoBuyMessageCreate(message gateway.EventMessage) {
 	in.PauseCommands(false)
 	in.Log("others", "INF", fmt.Sprintf("Auto buying %s", globalAutoBuyState.itemEmojiName))
 
-	err := in.SendCommand("withdraw", map[string]string{"amount": strconv.Itoa(globalAutoBuyState.price)})
+	err := in.SendCommand("withdraw", map[string]string{"amount": strconv.Itoa(globalAutoBuyState.price)}, true)
 	if err != nil {
 		in.Log("discord", "ERR", fmt.Sprintf("Failed to send autobuy /withdraw command: %s", err.Error()))
 	}
 
-	err = in.SendSubCommand("shop", "view", nil)
+	err = in.SendSubCommand("shop", "view", nil, true)
 	if err != nil {
 		in.Log("discord", "ERR", fmt.Sprintf("Failed to send /shop view command: %s", err.Error()))
 	}

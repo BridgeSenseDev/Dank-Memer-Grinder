@@ -2,6 +2,7 @@ package instance
 
 import (
 	"fmt"
+	"math/rand"
 	"strings"
 	"time"
 
@@ -22,6 +23,10 @@ func (in *Instance) CommandsLoop() {
 					case <-in.StopChan:
 						return
 					default:
+						minDelay := in.Cfg.Cooldowns.CommandInterval.MinDelay
+						maxDelay := in.Cfg.Cooldowns.CommandInterval.MaxDelay
+						<-utils.Sleep(time.Duration(rand.Intn(maxDelay-minDelay)+minDelay) * time.Millisecond)
+
 						if !shouldExecuteCommand(in, command) {
 							continue
 						}
@@ -29,11 +34,11 @@ func (in *Instance) CommandsLoop() {
 						in.LastRan[command] = time.Now().Add(2 * time.Second)
 						var err error
 						if command == "Work" {
-							err = in.SendSubCommand("work", "shift", nil)
+							err = in.SendSubCommand("work", "shift", nil, false)
 						} else if command == "Deposit" {
-							err = in.SendCommand("deposit", map[string]string{"amount": "max"})
+							err = in.SendCommand("deposit", map[string]string{"amount": "max"}, false)
 						} else {
-							err = in.SendCommand(strings.ToLower(command), nil)
+							err = in.SendCommand(strings.ToLower(command), nil, false)
 						}
 
 						if err != nil {
