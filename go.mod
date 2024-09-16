@@ -7,7 +7,7 @@ toolchain go1.23.1
 require (
 	github.com/fasthttp/websocket v1.5.10
 	github.com/goccy/go-json v0.10.3
-	github.com/grongor/panicwatch v1.2.0
+	github.com/grongor/panicwatch v1.3.0
 	github.com/jeandeaual/go-locale v0.0.0-20240223122105-ce5225dcaa49
 	github.com/rs/zerolog v1.33.0
 	github.com/sasha-s/go-csync v0.0.0-20240107134140-fcbab37b09ad
@@ -49,7 +49,7 @@ require (
 	golang.org/x/crypto v0.24.0 // indirect
 	golang.org/x/exp v0.0.0-20240325151524-a685a6edb6d8 // indirect
 	golang.org/x/net v0.26.0 // indirect
-	golang.org/x/sys v0.21.0 // indirect
+	golang.org/x/sys v0.25.0 // indirect
 	golang.org/x/text v0.16.0 // indirect
 )
 
