@@ -35,10 +35,23 @@
 				<Nav />
 			</div>
 			<div class="relative left-48 mr-48 flex h-full min-h-navbar w-full">
-				<div class="flex-1 p-4">
+				<div class="transition-container flex-1 p-4">
 					<slot />
 				</div>
 			</div>
 		</div>
 	</div>
 </main>
+
+<style>
+	.transition-container {
+		display: grid;
+		grid-template-rows: 1fr;
+		grid-template-columns: 1fr;
+	}
+
+	.transition-container > :global(*) {
+		grid-row: 1;
+		grid-column: 1;
+	}
+</style>

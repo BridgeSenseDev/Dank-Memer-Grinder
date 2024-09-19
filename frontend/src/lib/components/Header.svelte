@@ -65,7 +65,7 @@
 
 <div class="sticky top-0 z-30 flex w-full flex-row border-b border-border backdrop-blur">
 	<div class="flex h-14 max-w-48 items-center border-b border-r-2 border-border px-2">
-		<Select.Root>
+		<Select.Root preventScroll={false}>
 			<Select.Trigger class="w-[180px]">
 				<Select.Value placeholder="config.json" />
 			</Select.Trigger>
@@ -82,7 +82,7 @@
 					<Button on:click={() => toggleCommands(true)}>Enable all</Button>
 					<Button variant="destructive" on:click={() => toggleCommands(false)}>Disable all</Button>
 				{/if}
-				<DropdownMenu.Root>
+				<DropdownMenu.Root preventScroll={false}>
 					<DropdownMenu.Trigger asChild let:builder>
 						<Button builders={[builder]} variant="outline" size="icon">
 							<Sun class={sunClass} />
