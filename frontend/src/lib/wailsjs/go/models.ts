@@ -98,6 +98,22 @@ export namespace config {
 		    return a;
 		}
 	}
+	export class WorkCommandConfig {
+	    state: boolean;
+	    delay: number;
+	    autoWorkApply: boolean;
+	
+	    static createFrom(source: any = {}) {
+	        return new WorkCommandConfig(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.state = source["state"];
+	        this.delay = source["delay"];
+	        this.autoWorkApply = source["autoWorkApply"];
+	    }
+	}
 	export class TriviaCommandConfig {
 	    state: boolean;
 	    delay: number;
@@ -215,7 +231,7 @@ export namespace config {
 	    search: SearchCommandConfig;
 	    stream: StreamCommandConfig;
 	    trivia: TriviaCommandConfig;
-	    work: GeneralCommandConfig;
+	    work: WorkCommandConfig;
 	
 	    static createFrom(source: any = {}) {
 	        return new CommandsConfig(source);
@@ -237,7 +253,7 @@ export namespace config {
 	        this.search = this.convertValues(source["search"], SearchCommandConfig);
 	        this.stream = this.convertValues(source["stream"], StreamCommandConfig);
 	        this.trivia = this.convertValues(source["trivia"], TriviaCommandConfig);
-	        this.work = this.convertValues(source["work"], GeneralCommandConfig);
+	        this.work = this.convertValues(source["work"], WorkCommandConfig);
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

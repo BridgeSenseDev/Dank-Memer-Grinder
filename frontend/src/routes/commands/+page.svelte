@@ -2,6 +2,7 @@
 	import { cfg } from "$lib/store";
 	import { Switch } from "$lib/components/ui/switch";
 	import * as Card from "$lib/components/ui/card";
+	import { Checkbox } from "$lib/components/ui/checkbox";
 	import { fade } from "svelte/transition";
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
@@ -11,7 +12,7 @@
 			.replace(/[0-9]{2,}/g, (match) => ` ${match} `)
 			.replace(/[^A-Z0-9][A-Z]/g, (match) => `${match[0]} ${match[1]}`)
 			.replace(/[A-Z][A-Z][^A-Z0-9]/g, (match) => `${match[0]} ${match[1]}${match[2]}`)
-			.replace(/[ ]{2,}/g, (match) => " ")
+			.replace(/ {2,}/g, (match) => " ")
 			.replace(/\s./g, (match) => match.toUpperCase())
 			.replace(/^./, (match) => match.toUpperCase())
 			.trim();
@@ -57,6 +58,16 @@
 											value={$cfg.commands[commandKey][optionKey]}
 											on:input={(e) => updateCfg(commandKey, optionKey, parseInt(e.target.value))}
 										/>
+									</div>
+								{:else if typeof $cfg.commands[commandKey][optionKey] === "boolean"}
+									<div class="flex w-full flex-row items-center space-x-2">
+										<Checkbox
+											id={`${commandKey}_${optionKey}`}
+											bind:checked={$cfg.commands[commandKey][optionKey]}
+										/>
+										<Label class="whitespace-nowrap" for={`${commandKey}_${optionKey}`}>
+											{formatString(optionKey)}
+										</Label>
 									</div>
 								{:else if typeof $cfg.commands[commandKey][optionKey] === "object"}
 									<div class="flex w-full flex-row items-center space-x-2">

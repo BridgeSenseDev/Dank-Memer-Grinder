@@ -153,12 +153,14 @@ var messageCreateHandlers = map[string]MessageHandler{
 	"search":    (*Instance).Search,
 	"trivia":    (*Instance).Trivia,
 	"postmemes": (*Instance).PostMemesMessageCreate,
+	"work":      (*Instance).WorkMessageCreate,
 }
 
 var messageUpdateHandlers = map[string]MessageHandler{
 	"adventure": (*Instance).AdventureMessageUpdate,
 	"scratch":   (*Instance).ScratchMessageUpdate,
 	"postmemes": (*Instance).PostMemesMessageUpdate,
+	"work":      (*Instance).WorkMessageUpdate,
 }
 
 func (in *Instance) shouldHandleMessage(message gateway.EventMessage) bool {
@@ -179,7 +181,7 @@ func (in *Instance) getMessageType(message gateway.EventMessage) string {
 
 func (in *Instance) handleInteraction(message gateway.EventMessage, handlers map[string]MessageHandler) {
 	if message.Interaction != (types.MessageInteraction{}) && message.Interaction.User.ID == in.User.ID && message.Flags != 64 {
-		if handler, ok := handlers[message.Interaction.Name]; ok {
+		if handler, ok := handlers[strings.Split(message.Interaction.Name, " ")[0]]; ok {
 			handler(in, message)
 		}
 	}

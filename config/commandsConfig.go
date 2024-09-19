@@ -15,7 +15,7 @@ type CommandsConfig struct {
 	Search    SearchCommandConfig    `json:"search"`
 	Stream    StreamCommandConfig    `json:"stream"`
 	Trivia    TriviaCommandConfig    `json:"trivia"`
-	Work      GeneralCommandConfig   `json:"work"`
+	Work      WorkCommandConfig      `json:"work"`
 }
 
 func (c *CommandsConfig) GetCommandsMap() map[string]GeneralCommandConfig {
@@ -34,7 +34,7 @@ func (c *CommandsConfig) GetCommandsMap() map[string]GeneralCommandConfig {
 		"Search":    c.Search.GeneralCommandConfig,
 		"Stream":    c.Stream.GeneralCommandConfig,
 		"Trivia":    c.Trivia.GeneralCommandConfig,
-		"Work":      c.Work,
+		"Work":      c.Work.GeneralCommandConfig,
 	}
 }
 
@@ -84,4 +84,9 @@ type PostMemesCommandConfig struct {
 type TriviaCommandConfig struct {
 	GeneralCommandConfig
 	TriviaCorrectChance float64 `json:"triviaCorrectChance"`
+}
+
+type WorkCommandConfig struct {
+	GeneralCommandConfig
+	AutoWorkApply bool `json:"autoWorkApply"`
 }

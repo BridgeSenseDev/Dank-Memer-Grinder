@@ -63,7 +63,7 @@
 					<GithubLogo class="h-6 w-6 hover:text-primary/50" />
 				</button>
 			</div>
-			<h3 class="p-1 text-center">v2.0.0-alpha10</h3>
+			<h3 class="p-1 text-center">v2.0.0-alpha13</h3>
 		</div>
 	</div>
 </div>
