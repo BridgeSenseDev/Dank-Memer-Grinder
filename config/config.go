@@ -25,6 +25,7 @@ type Config struct {
 	Cooldowns     Cooldowns          `json:"cooldowns"`
 	Accounts      []AccountsConfig   `json:"accounts"`
 	AutoBuy       AutoBuyConfig      `json:"autoBuy"`
+	AutoUse       AutoUseConfig      `json:"autoUse"`
 	Commands      CommandsConfig     `json:"commands"`
 	Adventure     AdventureConfig    `json:"adventure"`
 }

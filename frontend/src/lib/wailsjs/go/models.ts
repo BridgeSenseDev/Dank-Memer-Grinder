@@ -98,6 +98,50 @@ export namespace config {
 		    return a;
 		}
 	}
+	export class GeneralAutoUseConfig {
+	    state: boolean;
+	
+	    static createFrom(source: any = {}) {
+	        return new GeneralAutoUseConfig(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.state = source["state"];
+	    }
+	}
+	export class AutoUseConfig {
+	    apple: GeneralAutoUseConfig;
+	    pizzaSlice: GeneralAutoUseConfig;
+	
+	    static createFrom(source: any = {}) {
+	        return new AutoUseConfig(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.apple = this.convertValues(source["apple"], GeneralAutoUseConfig);
+	        this.pizzaSlice = this.convertValues(source["pizzaSlice"], GeneralAutoUseConfig);
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
 	export class WorkCommandConfig {
 	    state: boolean;
 	    delay: number;
@@ -341,6 +385,7 @@ export namespace config {
 	    cooldowns: Cooldowns;
 	    accounts: AccountsConfig[];
 	    autoBuy: AutoBuyConfig;
+	    autoUse: AutoUseConfig;
 	    commands: CommandsConfig;
 	    adventure: AdventureConfig;
 	
@@ -358,6 +403,7 @@ export namespace config {
 	        this.cooldowns = this.convertValues(source["cooldowns"], Cooldowns);
 	        this.accounts = this.convertValues(source["accounts"], AccountsConfig);
 	        this.autoBuy = this.convertValues(source["autoBuy"], AutoBuyConfig);
+	        this.autoUse = this.convertValues(source["autoUse"], AutoUseConfig);
 	        this.commands = this.convertValues(source["commands"], CommandsConfig);
 	        this.adventure = this.convertValues(source["adventure"], AdventureConfig);
 	    }
@@ -380,6 +426,8 @@ export namespace config {
 		    return a;
 		}
 	}
+	
+	
 	
 	
 	

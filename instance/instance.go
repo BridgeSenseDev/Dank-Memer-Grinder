@@ -154,6 +154,7 @@ var messageCreateHandlers = map[string]MessageHandler{
 	"trivia":    (*Instance).Trivia,
 	"postmemes": (*Instance).PostMemesMessageCreate,
 	"work":      (*Instance).WorkMessageCreate,
+	"profile":   (*Instance).ProfileMessageCreate,
 }
 
 var messageUpdateHandlers = map[string]MessageHandler{
@@ -161,6 +162,7 @@ var messageUpdateHandlers = map[string]MessageHandler{
 	"scratch":   (*Instance).ScratchMessageUpdate,
 	"postmemes": (*Instance).PostMemesMessageUpdate,
 	"work":      (*Instance).WorkMessageUpdate,
+	"profile":   (*Instance).ProfileMessageUpdate,
 }
 
 func (in *Instance) shouldHandleMessage(message gateway.EventMessage) bool {
@@ -206,6 +208,7 @@ func (in *Instance) HandleMessageCreate(message gateway.EventMessage) {
 		} else if messageType == "dm" {
 			// Only apply to dank dm's
 			in.AutoBuyMessageCreate(message)
+			in.AutoUse(message)
 		}
 	}
 }

@@ -35,6 +35,7 @@ func (c *CommandsConfig) GetCommandsMap() map[string]GeneralCommandConfig {
 		"Stream":    c.Stream.GeneralCommandConfig,
 		"Trivia":    c.Trivia.GeneralCommandConfig,
 		"Work":      c.Work.GeneralCommandConfig,
+		"Profile":   {State: true, Delay: 1800},
 	}
 }
 

@@ -3,6 +3,7 @@ package instance
 import (
 	"fmt"
 	"math/rand"
+	"reflect"
 	"strings"
 	"time"
 
@@ -63,6 +64,14 @@ func shouldExecuteCommand(in *Instance, command string) bool {
 
 	switch command {
 	case "Pet":
+		return false
+	case "Profile":
+		val := reflect.ValueOf(in.Cfg.AutoUse)
+		for i := 0; i < val.NumField(); i++ {
+			if val.Field(i).FieldByName("State").Bool() {
+				return true
+			}
+		}
 		return false
 	default:
 		return true
