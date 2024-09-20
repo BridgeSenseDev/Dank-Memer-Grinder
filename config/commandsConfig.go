@@ -3,6 +3,7 @@ package config
 type CommandsConfig struct {
 	Adventure AdventureCommandConfig `json:"adventure"`
 	Beg       GeneralCommandConfig   `json:"beg"`
+	Blackjack BlackjackCommandConfig `json:"blackjack"`
 	Crime     CrimeCommandConfig     `json:"crime"`
 	Daily     GeneralCommandConfig   `json:"daily"`
 	Deposit   GeneralCommandConfig   `json:"deposit"`
@@ -22,6 +23,7 @@ func (c *CommandsConfig) GetCommandsMap() map[string]GeneralCommandConfig {
 	return map[string]GeneralCommandConfig{
 		"Adventure": c.Adventure.GeneralCommandConfig,
 		"Beg":       c.Beg,
+		"Blackjack": c.Blackjack.GeneralCommandConfig,
 		"Crime":     c.Crime.GeneralCommandConfig,
 		"Daily":     c.Daily,
 		"Deposit":   c.Deposit,
@@ -56,6 +58,12 @@ const (
 type AdventureCommandConfig struct {
 	GeneralCommandConfig
 	AdventureOption Adventure `json:"adventureOption"`
+}
+
+type BlackjackCommandConfig struct {
+	GeneralCommandConfig
+	Amount              string `json:"amount"`
+	ManuallyRunCommands bool   `json:"manuallyRunCommands"`
 }
 
 type CrimeCommandConfig struct {

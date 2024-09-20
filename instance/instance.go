@@ -147,6 +147,7 @@ type MessageHandler func(*Instance, gateway.EventMessage)
 
 var messageCreateHandlers = map[string]MessageHandler{
 	"adventure": (*Instance).AdventureMessageCreate,
+	"blackjack": (*Instance).BlackjackMessageCreate,
 	"highlow":   (*Instance).HighLow,
 	"scratch":   (*Instance).ScratchMessageCreate,
 	"crime":     (*Instance).Crime,
@@ -159,6 +160,7 @@ var messageCreateHandlers = map[string]MessageHandler{
 
 var messageUpdateHandlers = map[string]MessageHandler{
 	"adventure": (*Instance).AdventureMessageUpdate,
+	"blackjack": (*Instance).BlackjackMessageUpdate,
 	"scratch":   (*Instance).ScratchMessageUpdate,
 	"postmemes": (*Instance).PostMemesMessageUpdate,
 	"work":      (*Instance).WorkMessageUpdate,

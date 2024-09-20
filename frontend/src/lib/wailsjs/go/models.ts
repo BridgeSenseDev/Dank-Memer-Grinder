@@ -142,6 +142,24 @@ export namespace config {
 		    return a;
 		}
 	}
+	export class BlackjackCommandConfig {
+	    state: boolean;
+	    delay: number;
+	    amount: string;
+	    manuallyRunCommands: boolean;
+	
+	    static createFrom(source: any = {}) {
+	        return new BlackjackCommandConfig(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.state = source["state"];
+	        this.delay = source["delay"];
+	        this.amount = source["amount"];
+	        this.manuallyRunCommands = source["manuallyRunCommands"];
+	    }
+	}
 	export class WorkCommandConfig {
 	    state: boolean;
 	    delay: number;
@@ -263,6 +281,7 @@ export namespace config {
 	export class CommandsConfig {
 	    adventure: AdventureCommandConfig;
 	    beg: GeneralCommandConfig;
+	    blackjack: BlackjackCommandConfig;
 	    crime: CrimeCommandConfig;
 	    daily: GeneralCommandConfig;
 	    deposit: GeneralCommandConfig;
@@ -285,6 +304,7 @@ export namespace config {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.adventure = this.convertValues(source["adventure"], AdventureCommandConfig);
 	        this.beg = this.convertValues(source["beg"], GeneralCommandConfig);
+	        this.blackjack = this.convertValues(source["blackjack"], BlackjackCommandConfig);
 	        this.crime = this.convertValues(source["crime"], CrimeCommandConfig);
 	        this.daily = this.convertValues(source["daily"], GeneralCommandConfig);
 	        this.deposit = this.convertValues(source["deposit"], GeneralCommandConfig);

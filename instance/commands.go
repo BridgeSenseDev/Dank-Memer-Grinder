@@ -34,7 +34,9 @@ func (in *Instance) CommandsLoop() {
 
 						in.LastRan[command] = time.Now().Add(2 * time.Second)
 						var err error
-						if command == "Work" {
+						if command == "Blackjack" {
+							err = in.SendCommand("blackjack", map[string]string{"bet": in.Cfg.Commands.Blackjack.Amount}, false)
+						} else if command == "Work" {
 							err = in.SendSubCommand("work", "shift", nil, false)
 						} else if command == "Deposit" {
 							err = in.SendCommand("deposit", map[string]string{"amount": "max"}, false)
@@ -63,6 +65,8 @@ func shouldExecuteCommand(in *Instance, command string) bool {
 	}
 
 	switch command {
+	case "Blackjack":
+		return !in.Cfg.Commands.Blackjack.ManuallyRunCommands
 	case "Pet":
 		return false
 	case "Profile":
