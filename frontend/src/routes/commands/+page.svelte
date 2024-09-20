@@ -47,6 +47,19 @@
 					<div class="flex flex-col space-y-2">
 						{#each Object.keys($cfg.commands[commandKey]) as optionKey (optionKey)}
 							{#if optionKey !== "state"}
+								{#if typeof $cfg.commands[commandKey][optionKey] === "string"}
+									<div class="flex w-1/2 flex-row items-center space-x-2">
+										<Label class="whitespace-nowrap" for={`${commandKey}_${optionKey}`}>
+											{formatString(optionKey)}
+										</Label>
+										<Input
+											type="text"
+											id={`${commandKey}_${optionKey}`}
+											value={$cfg.commands[commandKey][optionKey]}
+											on:input={(e) => updateCfg(commandKey, optionKey, e.target.value)}
+										/>
+									</div>
+								{/if}
 								{#if typeof $cfg.commands[commandKey][optionKey] === "number"}
 									<div class="flex w-1/2 flex-row items-center space-x-2">
 										<Label class="whitespace-nowrap" for={`${commandKey}_${optionKey}`}>
