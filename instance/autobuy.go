@@ -133,7 +133,7 @@ func (in *Instance) AutoBuyMessageCreate(message gateway.EventMessage) {
 	} else if strings.Contains(embed.Description, "You don't have a hunting rifle") && in.Cfg.AutoBuy.HuntingRifle.State {
 		in.setAutoBuyState(0, 1, 1, "LowRifle", 50000)
 	} else if embed.Title == "Your lifesaver protected you!" && in.Cfg.AutoBuy.LifeSavers.State {
-		re := regexp.MustCompile(`You have (\d+)x Life Saver left`)
+		re := regexp.MustCompile(`You have (\d+) Life Saver left`)
 		match := re.FindStringSubmatch(message.Components[0].(*types.ActionsRow).Components[0].(*types.Button).Label)
 
 		if len(match) > 1 {
