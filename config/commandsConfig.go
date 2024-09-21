@@ -10,7 +10,7 @@ type CommandsConfig struct {
 	Dig       GeneralCommandConfig   `json:"dig"`
 	HighLow   GeneralCommandConfig   `json:"highlow"`
 	Hunt      GeneralCommandConfig   `json:"hunt"`
-	Pet       GeneralCommandConfig   `json:"pet"`
+	Pets      GeneralCommandConfig   `json:"pets"`
 	PostMemes PostMemesCommandConfig `json:"postmemes"`
 	Scratch   GeneralCommandConfig   `json:"scratch"`
 	Search    SearchCommandConfig    `json:"search"`
@@ -30,7 +30,7 @@ func (c *CommandsConfig) GetCommandsMap() map[string]GeneralCommandConfig {
 		"Dig":       c.Dig,
 		"HighLow":   c.HighLow,
 		"Hunt":      c.Hunt,
-		"Pet":       c.Pet,
+		"Pets":      c.Pets,
 		"PostMemes": c.PostMemes.GeneralCommandConfig,
 		"Scratch":   c.Scratch,
 		"Search":    c.Search.GeneralCommandConfig,

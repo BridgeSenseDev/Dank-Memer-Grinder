@@ -36,6 +36,8 @@ func (in *Instance) CommandsLoop() {
 						var err error
 						if command == "Blackjack" {
 							err = in.SendCommand("blackjack", map[string]string{"bet": in.Cfg.Commands.Blackjack.Amount}, false)
+						} else if command == "Pets" {
+							err = in.SendSubCommand("pets", "care", nil, false)
 						} else if command == "Work" {
 							err = in.SendSubCommand("work", "shift", nil, false)
 						} else if command == "Deposit" {
@@ -67,8 +69,6 @@ func shouldExecuteCommand(in *Instance, command string) bool {
 	switch command {
 	case "Blackjack":
 		return !in.Cfg.Commands.Blackjack.ManuallyRunCommands
-	case "Pet":
-		return false
 	case "Profile":
 		val := reflect.ValueOf(in.Cfg.AutoUse)
 		for i := 0; i < val.NumField(); i++ {

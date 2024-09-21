@@ -288,7 +288,7 @@ export namespace config {
 	    dig: GeneralCommandConfig;
 	    highlow: GeneralCommandConfig;
 	    hunt: GeneralCommandConfig;
-	    pet: GeneralCommandConfig;
+	    pets: GeneralCommandConfig;
 	    postmemes: PostMemesCommandConfig;
 	    scratch: GeneralCommandConfig;
 	    search: SearchCommandConfig;
@@ -311,7 +311,7 @@ export namespace config {
 	        this.dig = this.convertValues(source["dig"], GeneralCommandConfig);
 	        this.highlow = this.convertValues(source["highlow"], GeneralCommandConfig);
 	        this.hunt = this.convertValues(source["hunt"], GeneralCommandConfig);
-	        this.pet = this.convertValues(source["pet"], GeneralCommandConfig);
+	        this.pets = this.convertValues(source["pets"], GeneralCommandConfig);
 	        this.postmemes = this.convertValues(source["postmemes"], PostMemesCommandConfig);
 	        this.scratch = this.convertValues(source["scratch"], GeneralCommandConfig);
 	        this.search = this.convertValues(source["search"], SearchCommandConfig);
