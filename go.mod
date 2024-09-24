@@ -11,7 +11,7 @@ require (
 	github.com/jeandeaual/go-locale v0.0.0-20240223122105-ce5225dcaa49
 	github.com/rs/zerolog v1.33.0
 	github.com/sasha-s/go-csync v0.0.0-20240107134140-fcbab37b09ad
-	github.com/valyala/fasthttp v1.55.0
+	github.com/valyala/fasthttp v1.56.0
 	github.com/wailsapp/wails/v2 v2.9.2
 )
 
@@ -46,11 +46,11 @@ require (
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	github.com/wailsapp/go-webview2 v1.0.16 // indirect
 	github.com/wailsapp/mimetype v1.4.1 // indirect
-	golang.org/x/crypto v0.24.0 // indirect
+	golang.org/x/crypto v0.27.0 // indirect
 	golang.org/x/exp v0.0.0-20240325151524-a685a6edb6d8 // indirect
-	golang.org/x/net v0.26.0 // indirect
+	golang.org/x/net v0.29.0 // indirect
 	golang.org/x/sys v0.25.0 // indirect
-	golang.org/x/text v0.16.0 // indirect
+	golang.org/x/text v0.18.0 // indirect
 )
 
 // replace github.com/wailsapp/wails/v2 v2.8.0 => C:\Users\BridgeSense\go\pkg\mod
