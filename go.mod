@@ -2,7 +2,7 @@ module github.com/BridgeSenseDev/Dank-Memer-Grinder
 
 go 1.21
 
-toolchain go1.23.1
+toolchain go1.23.2
 
 require (
 	github.com/fasthttp/websocket v1.5.10
