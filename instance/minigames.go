@@ -26,17 +26,22 @@ const (
 	basketball = ":basketball:"
 	fireBall   = "<:FireBall:883714770748964864>"
 	worm       = "<:Worm:864261394920898600>"
-	moleman    = "<a:MoleMan:1022972147175526441>"
 )
 
 func generateEmojiActions(emojis []string) map[string]int {
 	emojiActions := make(map[string]int)
 	for _, emoji := range emojis {
-		if emoji == levitate || emoji == fireBall {
-			// Miss the goalkeeper / dodge the fireball
+		if emoji == levitate {
+			// Miss the goalkeeper
 			emojiActions[emoji] = 2
 			emojiActions[emptyspace+emoji] = 2
 			emojiActions[emptyspace+emptyspace+emoji] = 0
+		} else if emoji == fireBall || emoji == worm {
+			// Dodge the fireball / dodge the worm
+			emojiActions["# "+emptyspace+emoji] = 2
+			emojiActions["# "+emptyspace+emptyspace+emoji] = 2
+			emojiActions["# "+
+				emptyspace+emptyspace+emptyspace+emoji] = 0
 		} else {
 			emojiActions[emoji] = 0
 			emojiActions[emptyspace+emoji] = 1
@@ -44,69 +49,6 @@ func generateEmojiActions(emojis []string) map[string]int {
 		}
 	}
 	return emojiActions
-}
-
-func (in *Instance) solveMoleman(message gateway.EventMessage) {
-	embed := message.Embeds[0]
-
-	molemanLoc := map[string]int{
-		moleman + emptyspace + emptyspace: 0,
-		emptyspace + moleman + emptyspace: 1,
-		emptyspace + emptyspace + moleman: 2,
-	}
-
-	wormsLoc := map[string]int{
-		emptyspace + worm + worm: 0,
-		worm + emptyspace + worm: 1,
-		worm + worm + emptyspace: 2,
-	}
-
-	molemanLocIndex := -1
-	for loc, emojiSeq := range molemanLoc {
-		if strings.Contains(embed.Description, loc) {
-			molemanLocIndex = emojiSeq
-			break
-		}
-	}
-
-	lines := strings.Split(embed.Description, "\n")
-	for i := len(lines) - 1; i >= 0; i-- {
-		line := lines[i]
-		for loc, emptyspaceLoc := range wormsLoc {
-			if strings.Contains(line, loc) {
-				var err error
-				switch emptyspaceLoc {
-				case 0:
-					if molemanLocIndex != 0 {
-						err = in.ClickButton(message, 0, 0)
-						if err != nil {
-							in.Log("discord", "ERR", fmt.Sprintf("Failed to click moleman minigame button: %s", err.Error()))
-						}
-					}
-				case 1:
-					if molemanLocIndex == 0 {
-						err = in.ClickButton(message, 0, 1)
-						if err != nil {
-							in.Log("discord", "ERR", fmt.Sprintf("Failed to click moleman minigame button: %s", err.Error()))
-						}
-					} else if molemanLocIndex == 2 {
-						err = in.ClickButton(message, 0, 0)
-						if err != nil {
-							in.Log("discord", "ERR", fmt.Sprintf("Failed to click moleman minigame button: %s", err.Error()))
-						}
-					}
-				case 2:
-					if molemanLocIndex != 2 {
-						err = in.ClickButton(message, 0, 1)
-						if err != nil {
-							in.Log("discord", "ERR", fmt.Sprintf("Failed to click moleman minigame button: %s", err.Error()))
-						}
-					}
-				}
-				return
-			}
-		}
-	}
 }
 
 func (in *Instance) solveMinigame(message gateway.EventMessage, gameName string, gameTrigger string, emojis []string) {
@@ -131,12 +73,11 @@ func (in *Instance) solveMinigame(message gateway.EventMessage, gameName string,
 func (in *Instance) MinigamesMessageCreate(message gateway.EventMessage) {
 	embed := message.Embeds[0]
 
+	// Dragon
+	in.solveMinigame(message, "Dragon", "Dodge the Dragon's Fireball", []string{fireBall})
+
 	// Moleman
-	if strings.Contains(embed.Description, "Dodge the Worms!") {
-		in.Log("others", "INF", "Solving moleman minigame")
-		in.PauseCommands(false)
-		in.solveMoleman(message)
-	}
+	in.solveMinigame(message, "Moleman", "Dodge the Moleman's Worm", []string{worm})
 
 	// Attack boss
 	if strings.Contains(embed.Description, "Attack the boss by clicking") {
@@ -228,25 +169,11 @@ func (in *Instance) MinigamesMessageCreate(message gateway.EventMessage) {
 func (in *Instance) MinigamesMessageUpdate(message gateway.EventMessage) {
 	embed := message.Embeds[0]
 
-	// Moleman
-	if strings.Contains(embed.Description, "Dodge the Worms!") {
-		in.solveMoleman(message)
-	} else if strings.Contains(embed.Description, "because you didn't dodge a worm") {
-		in.UnpauseCommands()
-		in.Log("others", "ERR", "Failed moleman minigame")
-	} else if strings.Contains(embed.Description, "You dig in the dirt and find 1x <a:MoleMan:1022972147175526441> Mole Man") {
-		in.UnpauseCommands()
-		in.Log("others", "INF", "Solved moleman minigame")
-	}
-
 	// Football
 	in.solveMinigame(message, "Football", "Hit the ball!", []string{levitate})
 
 	// Basketball
 	in.solveMinigame(message, "Basketball", "Dunk the ball!", []string{basketball})
-
-	// Dragon
-	in.solveMinigame(message, "Dragon", "Dodge the Fireball!", []string{fireBall})
 
 	// Attack boss
 	if strings.Contains(embed.Description, "Attack the boss by clicking") {
