@@ -27,11 +27,14 @@ func extractCardValues(emojiString string) []string {
 
 func calculateSum(cards []string) (int, bool) {
 	sum, hasAce := 0, false
+	aceCount := 0
+
 	for _, card := range cards {
 		value := 0
 		switch card {
 		case "A":
 			value = 11
+			aceCount++
 			hasAce = true
 		case "K", "Q", "J":
 			value = 10
@@ -41,21 +44,21 @@ func calculateSum(cards []string) (int, bool) {
 		sum += value
 	}
 
-	if hasAce && sum > 21 {
+	for sum > 21 && aceCount > 0 {
 		sum -= 10
-		hasAce = false
+		aceCount--
 	}
 	return sum, hasAce
 }
 
-func bjFormula(dealer, player []string, canSurrender, canDoubleDown bool) int {
+func bjFormula(dealer, player []string, canSurrender, canDoubleDown bool, canSplit bool) int {
 	playerSum, isSoft := calculateSum(player)
 
-	return bjNewStrategy(player, dealer[0], playerSum, len(player), isSoft, canSurrender, canDoubleDown)
+	return bjNewStrategy(player, dealer[0], playerSum, len(player), isSoft, canSurrender, canDoubleDown, canSplit)
 }
 
-func bjNewStrategy(playerCards []string, dealerCard string, playerSum, cardCount int, isSoft, canSurrender, canDoubleDown bool) int {
-	if len(playerCards) == 2 && playerCards[0] == playerCards[1] {
+func bjNewStrategy(playerCards []string, dealerCard string, playerSum, cardCount int, isSoft, canSurrender, canDoubleDown, canSplit bool) int {
+	if len(playerCards) == 2 && playerCards[0] == playerCards[1] && canSplit {
 		return handlePairs(playerCards[0], dealerCard, canDoubleDown)
 	}
 
@@ -414,6 +417,7 @@ func (in *Instance) handleBlackjackMessage(message gateway.EventMessage) {
 
 		canSurrender := false
 		canDoubleDown := false
+		canSplit := false
 
 		if len(message.Components) > 1 {
 			if surrenderRow, ok := message.Components[1].(*types.ActionsRow); ok {
@@ -428,6 +432,13 @@ func (in *Instance) handleBlackjackMessage(message gateway.EventMessage) {
 
 		if len(message.Components) > 0 {
 			if actionRow, ok := message.Components[0].(*types.ActionsRow); ok {
+				if len(actionRow.Components) > 3 {
+					var splitButton *types.Button
+					if splitButton, ok = actionRow.Components[3].(*types.Button); ok {
+						canSplit = !splitButton.Disabled
+					}
+				}
+
 				if len(actionRow.Components) > 2 {
 					var doubleButton *types.Button
 					if doubleButton, ok = actionRow.Components[2].(*types.Button); ok {
@@ -437,7 +448,7 @@ func (in *Instance) handleBlackjackMessage(message gateway.EventMessage) {
 			}
 		}
 
-		result := bjFormula(dealerCards, playerCards, canSurrender, canDoubleDown)
+		result := bjFormula(dealerCards, playerCards, canSurrender, canDoubleDown, canSplit)
 
 		in.handleButtonClick(message, result)
 	}
