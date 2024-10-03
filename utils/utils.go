@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/valyala/fasthttp"
 	"math/rand"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -87,4 +88,25 @@ func GetUserAgent() string {
 	}
 
 	return fmt.Sprintf("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/%s Safari/537.36", version)
+}
+
+func FormatNumber(amount int, decimalPlaces int) string {
+	format := fmt.Sprintf("%%.%df", decimalPlaces)
+
+	sign := ""
+	if amount < 0 {
+		sign = "-"
+		amount = -amount
+	}
+
+	switch {
+	case amount >= 1_000_000_000:
+		return fmt.Sprintf(sign+format+"b", float64(amount)/1_000_000_000)
+	case amount >= 1_000_000:
+		return fmt.Sprintf(sign+format+"m", float64(amount)/1_000_000)
+	case amount >= 1_000:
+		return fmt.Sprintf(sign+format+"k", float64(amount)/1_000)
+	default:
+		return sign + strconv.Itoa(amount)
+	}
 }

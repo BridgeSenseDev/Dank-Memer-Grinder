@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"regexp"
 	"strconv"
 	"strings"
 )
 
-var wins, losses int
+var wins, losses, total int
 
 func extractCardValues(emojiString string) []string {
 	re := regexp.MustCompile(`<:bjFace([0-9JQKA]+)[RB]:[0-9]+>`)
@@ -69,7 +70,19 @@ func bjNewStrategy(playerCards []string, dealerCard string, playerSum, cardCount
 	return handleHardHands(playerSum, dealerCard, cardCount, canSurrender, canDoubleDown)
 }
 
+func convertFaceCard(card string) string {
+	switch card {
+	case "K", "Q", "J":
+		return "10"
+	default:
+		return card
+	}
+}
+
 func handlePairs(playerCard, dealerCard string, canDoubleDown bool) int {
+	dealerCard = convertFaceCard(dealerCard)
+	playerCard = convertFaceCard(playerCard)
+
 	switch playerCard {
 	case "A", "8":
 		// P
@@ -121,15 +134,6 @@ func handlePairs(playerCard, dealerCard string, canDoubleDown bool) int {
 		return 0
 	}
 	return 0
-}
-
-func convertFaceCard(card string) string {
-	switch card {
-	case "K", "Q", "J":
-		return "10"
-	default:
-		return card
-	}
 }
 
 func handleSoftHands(playerSum int, dealerCard string, cardCount int, canDoubleDown bool) int {
@@ -357,15 +361,10 @@ func (in *Instance) handleButtonClick(message gateway.EventMessage, result int) 
 	}
 }
 
-func (in *Instance) BlackjackMessageCreate(message gateway.EventMessage) {
-	in.handleBlackjackMessage(message)
-}
-
-func (in *Instance) BlackjackMessageUpdate(message gateway.EventMessage) {
-	in.handleBlackjackMessage(message)
-
+func (in *Instance) processBlackjackMessage(message gateway.EventMessage) {
 	embed := message.Embeds[0]
 	var result string
+
 	switch embed.Color {
 	case 15022389:
 		result = "Lost"
@@ -386,14 +385,26 @@ func (in *Instance) BlackjackMessageUpdate(message gateway.EventMessage) {
 			return
 		}
 
+		total += netValue
+
 		totalGames := wins + losses
 		winPercentage := 0.0
 		if totalGames > 0 {
 			winPercentage = (float64(wins) / float64(totalGames)) * 100
 		}
 
-		in.Log("others", "INF", fmt.Sprintf("%s blackjack minigame with net value: %d, Win %%: %.1f", result, netValue, winPercentage))
+		in.Log("others", "INF", fmt.Sprintf("%s blackjack (⏣ %s): Win %%: %.1f, Total earnings: ⏣ %s", result, utils.FormatNumber(netValue, 0), winPercentage, utils.FormatNumber(total, 0)))
 	}
+}
+
+func (in *Instance) BlackjackMessageCreate(message gateway.EventMessage) {
+	in.handleBlackjackMessage(message)
+	in.processBlackjackMessage(message)
+}
+
+func (in *Instance) BlackjackMessageUpdate(message gateway.EventMessage) {
+	in.handleBlackjackMessage(message)
+	in.processBlackjackMessage(message)
 }
 
 func (in *Instance) handleBlackjackMessage(message gateway.EventMessage) {
@@ -457,8 +468,16 @@ func (in *Instance) handleBlackjackMessage(message gateway.EventMessage) {
 func extractNetValue(description string) (int, error) {
 	re := regexp.MustCompile(`Net:\s\*\*⏣ ([+\-]?[0-9,]+)\*\*`)
 	matches := re.FindStringSubmatch(description)
-	if len(matches) > 1 {
-		return strconv.Atoi(strings.ReplaceAll(matches[1], ",", ""))
+	if len(matches) < 2 {
+		return 0, fmt.Errorf("net value not found")
 	}
-	return 0, fmt.Errorf("no match found")
+
+	cleanedValue := strings.ReplaceAll(matches[1], ",", "")
+
+	netValue, err := strconv.Atoi(cleanedValue)
+	if err != nil {
+		return 0, fmt.Errorf("failed to parse net value: %w", err)
+	}
+
+	return netValue, nil
 }
