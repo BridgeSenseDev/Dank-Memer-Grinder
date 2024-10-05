@@ -56,6 +56,7 @@ type Client interface {
 	SendCommand(name string, options map[string]string) error
 	SendSubCommand(name string, subCommandName string, options map[string]string) error
 	ClickButton(message gateway.EventMessage, row int, column int) error
+	ClickDmButton(message gateway.EventMessage, row int, column int) error
 	ChooseSelectMenu(message gateway.EventMessage, row int, column int, values []string) error
 	SubmitModal(modal gateway.EventModalCreate) error
 }

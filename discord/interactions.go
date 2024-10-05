@@ -88,7 +88,7 @@ func (client *Client) SendCommand(commandName string, options map[string]string)
 		"application_id": "270904126974590976",
 		"guild_id":       client.GuildID,
 		"channel_id":     client.ChannelID,
-		"session_id":     client.Gateway.SessionID(),
+		"session_id":     *client.Gateway.SessionID(),
 		"data": map[string]interface{}{
 			"version": commandInfo.Version,
 			"id":      commandInfo.ID,
@@ -139,7 +139,7 @@ func (client *Client) SendSubCommand(commandName string, subCommandName string, 
 		"application_id": "270904126974590976",
 		"guild_id":       client.GuildID,
 		"channel_id":     client.ChannelID,
-		"session_id":     client.Gateway.SessionID(),
+		"session_id":     *client.Gateway.SessionID(),
 		"data": map[string]interface{}{
 			"version": commandInfo.Version,
 			"id":      commandInfo.ID,
@@ -182,7 +182,25 @@ func (client *Client) ClickButton(message gateway.EventMessage, row int, column 
 		"guild_id":       message.GuildID,
 		"channel_id":     message.ChannelID,
 		"message_id":     message.MessageID,
-		"session_id":     client.Gateway.SessionID(),
+		"session_id":     *client.Gateway.SessionID(),
+		"message_flags":  message.Flags,
+		"data": map[string]interface{}{
+			"component_type": 2,
+			"custom_id":      message.Components[row].(*types.ActionsRow).Components[column].(*types.Button).CustomID,
+		},
+	}
+
+	return client.sendRequest("https://discord.com/api/v9/interactions", payload)
+}
+
+func (client *Client) ClickDmButton(message gateway.EventMessage, row int, column int) error {
+	payload := map[string]interface{}{
+		"type":           3,
+		"application_id": "270904126974590976",
+		"guild_id":       nil,
+		"channel_id":     message.ChannelID,
+		"message_id":     message.MessageID,
+		"session_id":     *client.Gateway.SessionID(),
 		"message_flags":  message.Flags,
 		"data": map[string]interface{}{
 			"component_type": 2,
@@ -205,7 +223,7 @@ func (client *Client) ChooseSelectMenu(message gateway.EventMessage, row int, co
 		},
 		"guild_id":   message.GuildID,
 		"message_id": message.MessageID,
-		"session_id": client.Gateway.SessionID(),
+		"session_id": *client.Gateway.SessionID(),
 		"type":       3,
 	}
 
@@ -223,7 +241,7 @@ func (client *Client) SubmitModal(modal gateway.EventModalCreate) error {
 			"custom_id":  modal.CustomID,
 			"components": modal.Components,
 		},
-		"session_id": client.Gateway.SessionID(),
+		"session_id": *client.Gateway.SessionID(),
 		"nonce":      generateNonce(),
 	}
 

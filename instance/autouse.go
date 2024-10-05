@@ -42,6 +42,11 @@ func (in *Instance) AutoUse(message gateway.EventMessage) {
 	in.Log("discord", "INF", fmt.Sprintf("Auto use triggered for %s", in.User.Username))
 	embed := message.Embeds[0]
 
+	err := in.ClickDmButton(message, 0, 0)
+	if err != nil {
+		in.Log("discord", "ERR", fmt.Sprintf("Failed to click use again button: %s", err.Error()))
+	}
+
 	if embed.Title == "Item Expiration" {
 		val := reflect.ValueOf(in.Cfg.AutoUse)
 		for i := 0; i < val.NumField(); i++ {
@@ -52,7 +57,7 @@ func (in *Instance) AutoUse(message gateway.EventMessage) {
 					continue
 				}
 
-				if err := in.ClickButton(message, 0, 0); err != nil {
+				if err := in.ClickDmButton(message, 0, 0); err != nil {
 					in.Log("discord", "ERR", fmt.Sprintf("Failed to click use again button: %s", err.Error()))
 				}
 				break
