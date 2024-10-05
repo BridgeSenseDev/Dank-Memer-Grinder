@@ -345,7 +345,11 @@ func (in *Instance) handleButtonClick(message gateway.EventMessage, result int) 
 	var err error
 	switch result {
 	case 0:
-		err = in.ClickButton(message, 0, 0)
+		if message.Components[0].(*types.ActionsRow).Components[0].(*types.Button).Disabled {
+			err = in.ClickButton(message, 0, 1)
+		} else {
+			err = in.ClickButton(message, 0, 0)
+		}
 	case 1:
 		err = in.ClickButton(message, 0, 1)
 	case 2:
