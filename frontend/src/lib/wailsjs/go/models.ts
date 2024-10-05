@@ -112,6 +112,7 @@ export namespace config {
 	}
 	export class AutoUseConfig {
 	    apple: GeneralAutoUseConfig;
+	    luckyHorseshoe: GeneralAutoUseConfig;
 	    pizzaSlice: GeneralAutoUseConfig;
 	
 	    static createFrom(source: any = {}) {
@@ -121,6 +122,7 @@ export namespace config {
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.apple = this.convertValues(source["apple"], GeneralAutoUseConfig);
+	        this.luckyHorseshoe = this.convertValues(source["luckyHorseshoe"], GeneralAutoUseConfig);
 	        this.pizzaSlice = this.convertValues(source["pizzaSlice"], GeneralAutoUseConfig);
 	    }
 	

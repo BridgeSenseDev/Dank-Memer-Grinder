@@ -5,6 +5,7 @@ type GeneralAutoUseConfig struct {
 }
 
 type AutoUseConfig struct {
-	Apple      GeneralAutoUseConfig `json:"apple"`
-	PizzaSlice GeneralAutoUseConfig `json:"pizzaSlice"`
+	Apple          GeneralAutoUseConfig `json:"apple"`
+	LuckyHorseshoe GeneralAutoUseConfig `json:"luckyHorseshoe"`
+	PizzaSlice     GeneralAutoUseConfig `json:"pizzaSlice"`
 }
