@@ -36,6 +36,8 @@ github.com/jchv/go-winloader v0.0.0-20210711035445-715c2860da7e h1:Q3+PugElBCf4P
 github.com/jchv/go-winloader v0.0.0-20210711035445-715c2860da7e/go.mod h1:alcuEEnZsY1WQsagKhZDsoPCRoOijYqhZvPwLG0kzVs=
 github.com/jeandeaual/go-locale v0.0.0-20240223122105-ce5225dcaa49 h1:Po+wkNdMmN+Zj1tDsJQy7mJlPlwGNQd9JZoPjObagf8=
 github.com/jeandeaual/go-locale v0.0.0-20240223122105-ce5225dcaa49/go.mod h1:YiutDnxPRLk5DLUFj6Rw4pRBBURZY07GFr54NdV9mQg=
+github.com/jeandeaual/go-locale v0.0.0-20241217141322-fcc2cadd6f08 h1:wMeVzrPO3mfHIWLZtDcSaGAe2I4PW9B/P5nMkRSwCAc=
+github.com/jeandeaual/go-locale v0.0.0-20241217141322-fcc2cadd6f08/go.mod h1:ZDXo8KHryOWSIqnsb/CiDq7hQUYryCgdVnxbj8tDG7o=
 github.com/jtolds/gls v4.20.0+incompatible h1:xdiiI2gbIgH/gLH7ADydsJ1uDOEzR8yvV7C0MuV77Wo=
 github.com/jtolds/gls v4.20.0+incompatible/go.mod h1:QJZ7F/aHp+rZTRtaJ1ow/lLfFfVYBRgL+9YlvaHOwJU=
 github.com/klauspost/compress v1.17.9 h1:6KIumPrER1LHsvBVuDa0r5xaG0Es51mhhB9BQB2qeMA=
