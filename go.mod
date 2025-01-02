@@ -5,7 +5,7 @@ go 1.21
 toolchain go1.23.4
 
 require (
-	github.com/fasthttp/websocket v1.5.11
+	github.com/fasthttp/websocket v1.5.12
 	github.com/goccy/go-json v0.10.4
 	github.com/grongor/panicwatch v1.3.0
 	github.com/jeandeaual/go-locale v0.0.0-20240223122105-ce5225dcaa49
@@ -46,11 +46,11 @@ require (
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	github.com/wailsapp/go-webview2 v1.0.16 // indirect
 	github.com/wailsapp/mimetype v1.4.1 // indirect
-	golang.org/x/crypto v0.29.0 // indirect
+	golang.org/x/crypto v0.31.0 // indirect
 	golang.org/x/exp v0.0.0-20240325151524-a685a6edb6d8 // indirect
-	golang.org/x/net v0.31.0 // indirect
-	golang.org/x/sys v0.27.0 // indirect
-	golang.org/x/text v0.20.0 // indirect
+	golang.org/x/net v0.33.0 // indirect
+	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/text v0.21.0 // indirect
 )
 
 // replace github.com/wailsapp/wails/v2 v2.8.0 => C:\Users\BridgeSense\go\pkg\mod
