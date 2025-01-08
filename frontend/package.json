@@ -48,6 +48,6 @@
 		"tailwind-variants": "^0.3.0"
 	},
 	"optionalDependencies": {
-		"@rollup/rollup-linux-x64-gnu": "4.30.0"
+		"@rollup/rollup-linux-x64-gnu": "4.30.1"
 	}
 }
