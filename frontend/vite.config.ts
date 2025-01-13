@@ -1,12 +1,17 @@
-import { purgeCss } from "vite-plugin-tailwind-purgecss";
 import { sveltekit } from "@sveltejs/kit/vite";
-import { defineConfig } from "vite";
+import { defineConfig, searchForWorkspaceRoot } from "vite";
+import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 
 export default defineConfig({
 	server: {
 		fs: {
-			allow: ["."]
+			allow: [
+				// search up for workspace root
+				searchForWorkspaceRoot(process.cwd()),
+				// your custom rules
+				"./bindings/*"
+			]
 		}
 	},
 	resolve: {
@@ -14,5 +19,5 @@ export default defineConfig({
 			"@": path.resolve(__dirname, "./")
 		}
 	},
-	plugins: [sveltekit(), purgeCss()]
+	plugins: [sveltekit(), tailwindcss()]
 });

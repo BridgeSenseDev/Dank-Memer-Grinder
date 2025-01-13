@@ -3,9 +3,8 @@ package instance
 import (
 	"fmt"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
+	"github.com/wailsapp/wails/v3/pkg/application"
 	"strings"
-
-	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 func (in *Instance) Others(message gateway.EventMessage) {
@@ -21,6 +20,6 @@ func (in *Instance) Others(message gateway.EventMessage) {
 		in.Log("important", "INF", "Global toggle has been switched due to a Dank Memer maintenance. Check if the update is safe before continuing to grind")
 		in.Cfg.State = false
 		in.UpdateConfig(in.Cfg)
-		runtime.EventsEmit(in.Ctx, "configUpdate", in.Cfg)
+		application.Get().EmitEvent("configUpdate", in.Cfg)
 	}
 }

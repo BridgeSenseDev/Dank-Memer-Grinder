@@ -2,40 +2,26 @@ package main
 
 import (
 	"embed"
-	"net/http"
-	_ "net/http/pprof"
-	"os"
-
 	"github.com/grongor/panicwatch"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"github.com/wailsapp/wails/v2"
-	"github.com/wailsapp/wails/v2/pkg/logger"
-	"github.com/wailsapp/wails/v2/pkg/options"
-	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
-	"github.com/wailsapp/wails/v2/pkg/options/linux"
-	"github.com/wailsapp/wails/v2/pkg/options/mac"
-	"github.com/wailsapp/wails/v2/pkg/options/windows"
-	"github.com/wailsapp/wails/v2/pkg/runtime"
+	"github.com/wailsapp/wails/v3/pkg/application"
+	"github.com/wailsapp/wails/v3/pkg/events"
+	_ "net/http/pprof"
+	"os"
+	"sync"
 )
 
-//go:embed all:frontend/build
+//go:embed all:frontend/dist
 var assets embed.FS
-
-//go:embed build/appicon.png
-var icon []byte
 
 func main() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 
-	go func() {
-		log.Info().Msg("Starting pprof server on :6060")
-		if err := http.ListenAndServe(":6060", nil); err != nil {
-			log.Error().Msgf("Failed to start pprof server: %v", err)
-		}
-	}()
-
-	app := NewApp()
+	dmgService := &DmgService{
+		wg:      &sync.WaitGroup{},
+		wsMutex: sync.Mutex{},
+	}
 
 	err := panicwatch.Start(panicwatch.Config{
 		OnPanic: func(p panicwatch.Panic) {
@@ -49,71 +35,46 @@ func main() {
 		log.Fatal().Msgf("failed to start panicwatch: " + err.Error())
 	}
 
-	err = wails.Run(&options.App{
-		Title:             "Dank Memer Grinder",
-		Width:             1024,
-		Height:            768,
-		MinWidth:          1024,
-		MinHeight:         768,
-		MaxWidth:          1280,
-		MaxHeight:         800,
-		DisableResize:     false,
-		Fullscreen:        false,
-		Frameless:         false,
-		StartHidden:       false,
-		HideWindowOnClose: false,
-		BackgroundColour:  &options.RGBA{R: 255, G: 255, B: 255, A: 255},
-		AssetServer: &assetserver.Options{
-			Assets: assets,
+	app := application.New(application.Options{
+		Name: "Dank Memer Grinder",
+		Assets: application.AssetOptions{
+			Handler: application.AssetFileServerFS(assets),
 		},
-		Menu:             nil,
-		Logger:           nil,
-		LogLevel:         logger.DEBUG,
-		OnStartup:        app.startup,
-		OnDomReady:       app.domReady,
-		OnBeforeClose:    app.beforeClose,
-		OnShutdown:       app.shutdown,
-		WindowStartState: options.Normal,
-		Bind: []interface{}{
-			app,
+		Logger: nil,
+		Services: []application.Service{
+			application.NewService(dmgService),
 		},
-		Windows: &windows.Options{
-			WebviewIsTransparent: false,
-			WindowIsTranslucent:  false,
-			DisableWindowIcon:    false,
-			WebviewUserDataPath:  "",
-			ZoomFactor:           1.0,
+		Mac: application.MacOptions{
+			ApplicationShouldTerminateAfterLastWindowClosed: true,
 		},
-		Mac: &mac.Options{
-			TitleBar: &mac.TitleBar{
-				TitlebarAppearsTransparent: true,
-				HideTitle:                  false,
-				HideTitleBar:               false,
-				FullSizeContent:            false,
-				UseToolbar:                 false,
-				HideToolbarSeparator:       true,
-			},
-			Appearance:           mac.NSAppearanceNameDarkAqua,
-			WebviewIsTransparent: true,
-			WindowIsTranslucent:  true,
-			About: &mac.AboutInfo{
-				Title:   "Dank Memer Grinder",
-				Message: "",
-				Icon:    icon,
-			},
-		},
-		Linux: &linux.Options{
-			Icon:             icon,
-			WebviewGpuPolicy: linux.WebviewGpuPolicyAlways,
-			ProgramName:      "Dank Memer Grinder"},
+		Linux: application.LinuxOptions{
+			ProgramName: "Dank Memer Grinder"},
 	})
 
+	app.NewWebviewWindowWithOptions(application.WebviewWindowOptions{
+		Title:         "Dank Memer Grinder",
+		Width:         1024,
+		Height:        768,
+		MinWidth:      1024,
+		MinHeight:     768,
+		MaxWidth:      1280,
+		MaxHeight:     800,
+		DisableResize: false,
+		Frameless:     false,
+	})
+
+	app.OnApplicationEvent(events.Common.ApplicationStarted, func(event *application.ApplicationEvent) {
+		dmgService.startup()
+	})
+
+	err = app.Run()
+
 	if err != nil {
-		runtime.MessageDialog(app.ctx, runtime.MessageDialogOptions{
-			Type:    runtime.ErrorDialog,
-			Title:   "A fatal error occurred!",
-			Message: err.Error(),
-		})
+		//runtime.MessageDialog(app.ctx, runtime.MessageDialogOptions{
+		//	Type:    runtime.ErrorDialog,
+		//	Title:   "A fatal error occurred!",
+		//	Message: err.Error(),
+		//})
 		panic(err.Error())
 	}
 }

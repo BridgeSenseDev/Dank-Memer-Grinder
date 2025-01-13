@@ -1,22 +1,33 @@
 <script lang="ts">
-	import { page } from "$app/stores";
+	import { page } from "$app/state";
 	import { Button } from "$lib/components/ui/button";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-	import { cfg } from "$lib/store";
+	import { cfg } from "$lib/state.svelte";
 	import * as Select from "$lib/components/ui/select";
 	import { Moon, Sun } from "svelte-radix";
+	import { Theme } from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/config";
 
-	let theme: string;
-	let sunClass = "";
-	let moonClass = "";
+	let theme = $state<Theme>();
+	let sunClass = $state("");
+	let moonClass = $state("");
 
-	$: if ($cfg.gui) {
-		theme = $cfg.gui.theme;
-		setTheme(theme);
-	}
+	let title = $derived(
+		(page.url.pathname.split("/")[1] || "logs")
+			.split(" ")
+			.map((word) => (word ? word.charAt(0).toUpperCase() + word.slice(1) : ""))
+			.join(" ")
+	);
 
-	function setTheme(theme: string) {
-		$cfg.gui.theme = theme;
+	$effect(() => {
+		if (cfg.c?.gui) {
+			theme = cfg.c.gui.theme;
+			setTheme(theme);
+		}
+	});
+
+	function setTheme(theme: Theme) {
+		if (!cfg.c) return;
+		cfg.c.gui.theme = theme;
 
 		let isDark = theme === "dark";
 		if (theme === "system") {
@@ -49,26 +60,18 @@
 	}
 
 	function toggleCommands(state: boolean) {
-		cfg.update((currentCfg) => {
-			for (let command in currentCfg.commands) {
-				(currentCfg.commands as any)[command].state = state;
-			}
-			return currentCfg;
-		});
+		if (!cfg.c) return;
+		const commands = cfg.c.commands as unknown as Record<string, { state: boolean }>;
+		for (let command in commands) {
+			commands[command].state = state;
+		}
 	}
-
-	$: title = ($page.url.pathname.split("/")[1] || "logs")
-		.split(" ")
-		.map((word) => (word ? word.charAt(0).toUpperCase() + word.slice(1) : ""))
-		.join(" ");
 </script>
 
-<div class="sticky top-0 z-30 flex w-full flex-row border-b border-border backdrop-blur">
-	<div class="flex h-14 max-w-48 items-center border-b border-r-2 border-border px-2">
-		<Select.Root preventScroll={false}>
-			<Select.Trigger class="w-[180px]">
-				<Select.Value placeholder="config.json" />
-			</Select.Trigger>
+<div class="border-border sticky top-0 z-30 flex w-full flex-row border-b backdrop-blur-sm">
+	<div class="border-border flex h-14 max-w-48 items-center border-r-2 border-b px-2">
+		<Select.Root type="single" disabled>
+			<Select.Trigger class="w-[180px]">config.json</Select.Trigger>
 			<Select.Content>
 				<Select.Item value="test">Test</Select.Item>
 			</Select.Content>
@@ -79,21 +82,21 @@
 		{#if title === "Commands" || theme}
 			<div class="flex flex-row items-center space-x-2">
 				{#if title === "Commands"}
-					<Button on:click={() => toggleCommands(true)}>Enable all</Button>
-					<Button variant="destructive" on:click={() => toggleCommands(false)}>Disable all</Button>
+					<Button onclick={() => toggleCommands(true)}>Enable all</Button>
+					<Button variant="destructive" onclick={() => toggleCommands(false)}>Disable all</Button>
 				{/if}
-				<DropdownMenu.Root preventScroll={false}>
-					<DropdownMenu.Trigger asChild let:builder>
-						<Button builders={[builder]} variant="outline" size="icon">
+				<DropdownMenu.Root>
+					<DropdownMenu.Trigger>
+						<Button variant="outline" size="icon">
 							<Sun class={sunClass} />
 							<Moon class={moonClass} />
 							<span class="sr-only">Toggle theme</span>
 						</Button>
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content align="end">
-						<DropdownMenu.Item on:click={() => setTheme("light")}>Light</DropdownMenu.Item>
-						<DropdownMenu.Item on:click={() => setTheme("dark")}>Dark</DropdownMenu.Item>
-						<DropdownMenu.Item on:click={() => setTheme("system")}>System</DropdownMenu.Item>
+						<DropdownMenu.Item onclick={() => setTheme(Theme.Light)}>Light</DropdownMenu.Item>
+						<DropdownMenu.Item onclick={() => setTheme(Theme.Dark)}>Dark</DropdownMenu.Item>
+						<DropdownMenu.Item onclick={() => setTheme(Theme.System)}>System</DropdownMenu.Item>
 					</DropdownMenu.Content>
 				</DropdownMenu.Root>
 			</div>

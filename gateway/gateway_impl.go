@@ -3,19 +3,18 @@ package gateway
 import (
 	"compress/zlib"
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
 	"github.com/rs/zerolog/log"
-	"github.com/wailsapp/wails/v2/pkg/runtime"
+	"github.com/wailsapp/wails/v3/pkg/application"
 	"io"
 	"net"
 	"strconv"
 	"sync"
 	"syscall"
 	"time"
-
-	"github.com/goccy/go-json"
 
 	"github.com/fasthttp/websocket"
 )
@@ -469,7 +468,7 @@ func (g *gatewayImpl) Log(logType LogType, msg string) {
 	if g.User() != nil {
 		username = g.User().Username
 	}
-	runtime.EventsEmit(g.ctx, "logDiscord", logType, username, msg)
+	application.Get().EmitEvent("logDiscord", logType, username, msg)
 	switch logType {
 	case Info:
 		log.Info().Msg(fmt.Sprintf("discord %s %s", username, msg))

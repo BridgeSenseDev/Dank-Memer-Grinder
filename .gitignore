@@ -4,12 +4,14 @@
 *.dll
 *.so
 *.dylib
+bin/
 
 .history
 Dank Memer Grinder.code-workspace
 config.json
 build/bin
-node_modules
-frontend/dist
-instance/captcha.go
+instance/captcha_private.go
 .idea
+wails
+.task
+.vscode/

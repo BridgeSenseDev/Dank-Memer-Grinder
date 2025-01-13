@@ -1,35 +1,47 @@
 <script lang="ts">
-	import { DotsVertical, Trash, Reload, DividerHorizontal } from "svelte-radix";
+	import { Trash, Reload } from "svelte-radix";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 	import { Button } from "$lib/components/ui/button";
-	import { RestartInstance, RemoveInstance } from "$lib/wailsjs/go/main/App";
-	import { cfg } from "$lib/store";
+	import { cfg } from "$lib/state.svelte";
+	import {
+		RemoveInstance,
+		RestartInstance
+	} from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/dmgservice";
+	import { Ellipsis } from "lucide-svelte";
 
-	export let id: string;
+	interface Props {
+		id: string;
+	}
+
+	let { id }: Props = $props();
 
 	async function deleteInstance(token: string) {
 		RemoveInstance(token);
-		$cfg.accounts = $cfg.accounts.filter((account) => account.token !== token);
+		if (cfg.c.accounts) {
+			cfg.c.accounts = cfg.c.accounts.filter((account) => account.token !== token);
+		}
 	}
 </script>
 
 <DropdownMenu.Root>
-	<DropdownMenu.Trigger asChild let:builder>
-		<Button variant="ghost" builders={[builder]} size="icon" class="relative h-8 w-8 p-0">
-			<span class="sr-only">Open menu</span>
-			<DotsVertical class="h-4 w-4" />
-		</Button>
+	<DropdownMenu.Trigger>
+		{#snippet child({ props })}
+			<Button {...props} variant="ghost" size="icon" class="relative size-8 p-0">
+				<span class="sr-only">Open menu</span>
+				<Ellipsis class="size-4" />
+			</Button>
+		{/snippet}
 	</DropdownMenu.Trigger>
 	<DropdownMenu.Content>
 		<DropdownMenu.Group>
-			<DropdownMenu.Item on:click={async () => await RestartInstance(id)}>
+			<DropdownMenu.Item onclick={async () => await RestartInstance(id)}>
 				<Reload class="mr-2 inline-block h-5 w-5" />
 				Restart account
 			</DropdownMenu.Item>
 			<DropdownMenu.Separator />
 			<DropdownMenu.Item
 				class="text-red-500 hover:text-red-500"
-				on:click={async () => await deleteInstance(id)}
+				onclick={async () => await deleteInstance(id)}
 			>
 				<Trash class="mr-2 inline-block h-5 w-5" />Delete account</DropdownMenu.Item
 			>

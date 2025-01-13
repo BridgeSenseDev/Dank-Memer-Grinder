@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"github.com/rs/zerolog/log"
-	"github.com/wailsapp/wails/v2/pkg/runtime"
+	"github.com/wailsapp/wails/v3/pkg/application"
 )
 
 type Client struct {
@@ -81,7 +81,7 @@ const (
 )
 
 func (client *Client) Log(logType LogType, msg string) {
-	runtime.EventsEmit(client.Ctx, "logDiscord", logType, client.Gateway.User().Username, msg)
+	application.Get().EmitEvent("logDiscord", logType, client.Gateway.User().Username, msg)
 	switch logType {
 	case Info:
 		log.Info().Msg(fmt.Sprintf("discord %s %s", client.Gateway.User().Username, msg))

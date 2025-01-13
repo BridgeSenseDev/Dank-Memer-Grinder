@@ -1,27 +1,26 @@
 <script lang="ts">
-	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-	import * as Dialog from "$lib/components/ui/dialog";
-	import { Plus, Person, MagicWand } from "svelte-radix";
+	import { MagicWand, Person } from "svelte-radix";
 	import { Label } from "$lib/components/ui/label";
 	import { Input } from "$lib/components/ui/input";
 	import * as Select from "$lib/components/ui/select";
-	import { Button } from "$lib/components/ui/button";
-	import { cfg } from "$lib/store";
+	import * as Dialog from "$lib/components/ui/dialog";
+	import { Button } from "$lib/components/ui/button/index.js";
+	import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
+	import { cfg } from "$lib/state.svelte";
+	import { Plus } from "lucide-svelte";
 
-	let individualToken = "";
-	let individualChannelID = "";
+	let individualToken = $state("");
+	let individualChannelID = $state("");
 
 	function addAccount(token: string, channelID: string) {
-		const updatedAccounts = [
-			...$cfg.accounts,
+		cfg.c.accounts = [
+			...(cfg.c.accounts ?? []),
 			{
 				token: token,
 				channelID: channelID,
 				state: false
 			}
 		];
-
-		$cfg.accounts = updatedAccounts;
 	}
 
 	function handleFileChange(event: Event) {
@@ -51,62 +50,72 @@
 				case "token":
 					addAccount(line, "");
 					break;
-				case '"token"':
+				case '"token"': {
 					const tokenMatch = line.match(/"(.*?)"/);
 					if (tokenMatch) {
 						addAccount(tokenMatch[1], "");
 					}
 					break;
-				case "token id":
+				}
+				case "token id": {
 					let parts = line.split(" ");
 					if (parts.length >= 2) {
 						addAccount(parts[0], parts[1]);
 					}
 					break;
-				case "id token":
-					parts = line.split(" ");
+				}
+				case "id token": {
+					let parts = line.split(" ");
 					if (parts.length >= 2) {
 						addAccount(parts[1], parts[0]);
 					}
 					break;
-				case "token: id":
+				}
+				case "token: id": {
 					let colonParts = line.split(":");
 					if (colonParts.length >= 2) {
 						addAccount(colonParts[0].trim(), colonParts[1].trim());
 					}
 					break;
-				case "id: token":
-					colonParts = line.split(":");
+				}
+				case "id: token": {
+					let colonParts = line.split(":");
 					if (colonParts.length >= 2) {
 						addAccount(colonParts[1].trim(), colonParts[0].trim());
 					}
 					break;
+				}
 			}
 		});
 	}
 
-	let openSingleAccount = false;
-	let openBulkAccounts = false;
+	let openSingleAccount = $state(false);
+	let openBulkAccounts = $state(false);
 	let format = { value: "token id", label: "token id" };
 </script>
 
 <DropdownMenu.Root>
-	<DropdownMenu.Trigger asChild let:builder>
-		<Button class="w-full rounded-t-none border" variant="ghost" builders={[builder]}>
-			<span class="sr-only">Actions</span>
-			<Plus class="h-5" />
-		</Button>
+	<DropdownMenu.Trigger>
+		{#snippet child({ props })}
+			<Button {...props} variant="ghost" size="icon" class="w-full rounded-t-none border">
+				<span class="sr-only">Actions</span>
+				<Plus class="h-5" />
+			</Button>
+		{/snippet}
 	</DropdownMenu.Trigger>
 	<DropdownMenu.Content align="center">
-		<DropdownMenu.Item on:click={() => (openSingleAccount = true)}
-			><Person class="mr-1" /> Single account</DropdownMenu.Item
-		>
-		<DropdownMenu.Item
-			on:click={() => (openBulkAccounts = true)}
-			class="text-primary hover:text-primary"
-		>
-			<MagicWand class="mr-1" /> Bulk accounts
-		</DropdownMenu.Item>
+		<DropdownMenu.Group>
+			<DropdownMenu.GroupHeading>Actions</DropdownMenu.GroupHeading>
+			<DropdownMenu.Item onclick={() => (openSingleAccount = true)}>
+				<Person class="mr-1" /> Single account
+			</DropdownMenu.Item>
+			<DropdownMenu.Item
+				onclick={() => (openBulkAccounts = true)}
+				class="text-primary hover:text-primary"
+			>
+				<MagicWand class="mr-1" /> Bulk accounts
+			</DropdownMenu.Item>
+		</DropdownMenu.Group>
 	</DropdownMenu.Content>
 </DropdownMenu.Root>
 
@@ -131,7 +140,7 @@
 		<Dialog.Footer>
 			<Button
 				type="submit"
-				on:click={() => {
+				onclick={() => {
 					addAccount(individualToken, individualChannelID);
 					openSingleAccount = false;
 				}}>Save account</Button
@@ -152,10 +161,8 @@
 		<div class="grid gap-4 py-4">
 			<div class="grid grid-cols-4 items-center gap-4">
 				<Label class="text-right">Format</Label>
-				<Select.Root selected={format}>
-					<Select.Trigger class="col-span-3">
-						<Select.Value placeholder="Choose account format" />
-					</Select.Trigger>
+				<Select.Root type="single" bind:value={format.value}>
+					<Select.Trigger class="col-span-3">Choose account format</Select.Trigger>
 					<Select.Content>
 						<Select.Item value="token">token</Select.Item>
 						<Select.Item value={`"token"`}>"token"</Select.Item>
@@ -172,12 +179,12 @@
 					class="col-span-3 dark:file:text-white"
 					id="accounts"
 					type="file"
-					on:change={handleFileChange}
+					onchange={handleFileChange}
 				/>
 			</div>
 		</div>
 		<Dialog.Footer>
-			<Button type="submit" on:click={() => (openBulkAccounts = false)}>Close</Button>
+			<Button type="submit" onclick={() => (openBulkAccounts = false)}>Close</Button>
 		</Dialog.Footer>
 	</Dialog.Content>
 </Dialog.Root>

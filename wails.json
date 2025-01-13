@@ -8,7 +8,6 @@
   "frontend:dev:serverUrl": "auto",
   "wailsjsdir": "./frontend/src/lib",
   "author": {
-    "name": "BridgeSense",
-    "email": "bridgesensemc@gmail.com"
+    "name": "BridgeSense"
   }
 }

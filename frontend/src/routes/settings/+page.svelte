@@ -5,16 +5,17 @@
 	import AutoUse from "./auto-use.svelte";
 	import General from "./general.svelte";
 
-	let settingsCurrentTab =
+	let settingsCurrentTab = $state(
 		typeof window !== "undefined"
 			? sessionStorage.getItem("settingsCurrentTab") || "general"
-			: "general";
+			: "general"
+	);
 
-	$: {
+	$effect(() => {
 		if (typeof window !== "undefined") {
 			sessionStorage.setItem("settingsCurrentTab", settingsCurrentTab);
 		}
-	}
+	});
 </script>
 
 <div

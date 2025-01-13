@@ -1,88 +1,39 @@
 <script lang="ts">
-	import { createTable, Render, Subscribe, createRender } from "svelte-headless-table";
+	import { type ColumnDef, getCoreRowModel } from "@tanstack/table-core";
+	import { createSvelteTable, FlexRender } from "$lib/components/ui/data-table/index.js";
 	import { LockClosed, ExclamationTriangle, Check, Update } from "svelte-radix";
-	import { readable, writable } from "svelte/store";
-	import * as Table from "$lib/components/ui/table";
-	import DataTableActions from "./data-table-actions.svelte";
-	import { cfg, instances } from "$lib/store";
-	import { Checkbox } from "$lib/components/ui/checkbox";
-	import { Input } from "$lib/components/ui/input";
+	import * as Table from "$lib/components/ui/table/index.js";
 	import { Button } from "$lib/components/ui/button";
-	import * as Tooltip from "$lib/components/ui/tooltip/index.js";
-	import { RestartInstances, UpdateInstanceToken } from "$lib/wailsjs/go/main/App";
+	import type { Account } from "@/src/routes/accounts/columns";
 	import AddAccounts from "./add-accounts.svelte";
+	import { Input } from "$lib/components/ui/input";
+	import * as Tooltip from "$lib/components/ui/tooltip";
+	import { Checkbox } from "$lib/components/ui/checkbox";
+	import {
+		RestartInstances,
+		UpdateInstanceToken
+	} from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/dmgservice";
+	import { cfg, instances } from "$lib/state.svelte";
 
-	type Account = {
-		status: string;
-		token: string;
-		channelID: number;
-		username: string;
-		state: boolean;
-	};
-
-	let accounts: Account[] = [];
-	let tokenValues = writable(accounts.map((account) => account.token));
-	let tableAttrs, headerRows, tableBodyAttrs, pageRows;
-
-	const table = createTable(readable(accounts));
-
-	const columns = table.createColumns([
-		table.column({
-			accessor: "status",
-			header: "Status"
-		}),
-		table.column({
-			accessor: "username",
-			header: "Username"
-		}),
-		table.column({
-			accessor: "state",
-			header: "State"
-		}),
-		table.column({
-			accessor: "token",
-			header: "Token"
-		}),
-		table.column({
-			accessor: "channelID",
-			header: "Channel ID"
-		}),
-		table.column({
-			accessor: ({ token }) => token,
-			header: "",
-			cell: ({ value }) => {
-				return createRender(DataTableActions, { id: value });
-			}
-		})
-	]);
-
-	({ headerRows, pageRows, tableAttrs, tableBodyAttrs } = table.createViewModel(columns));
-
-	$: {
-		accounts = [];
-		if ($instances && $cfg.accounts) {
-			for (let account of $cfg.accounts) {
-				let instance = $instances.find((instance) => instance.accountCfg.token === account.token);
-				let status = instance?.error ? instance.error : "reload";
-				accounts.push({
-					status: status,
-					token: account.token,
-					channelID: parseInt(account.channelID, 10),
-					username: instance?.user?.username ?? "",
-					state: account.state
-				});
-			}
-		}
-
-		if (accounts.length > 0) {
-			const table = createTable(readable(accounts));
-			({ headerRows, pageRows, tableAttrs, tableBodyAttrs } = table.createViewModel(columns));
-		}
+	interface DataTableProps<TData, TValue> {
+		columns: ColumnDef<TData, TValue>[];
+		data: TData[];
 	}
 
-	let hasChanges = false;
+	let { data, columns }: DataTableProps<Account, ColumnDef<Account>> = $props();
+
+	const table = createSvelteTable({
+		get data() {
+			return data;
+		},
+		columns,
+		getCoreRowModel: getCoreRowModel()
+	});
+
+	let hasChanges = $state(false);
 	function setHasChanges() {
 		hasChanges = true;
+		console.log(hasChanges);
 	}
 
 	async function restartAllBots() {
@@ -90,137 +41,155 @@
 		hasChanges = false;
 	}
 
-	$: {
-		tokenValues.set(accounts.map((account) => account.token));
-	}
-
-	function tokenUpdate(rowIndex: number, newToken: string) {
-		if (newToken !== $cfg.accounts[rowIndex].token) {
-			hasChanges = true;
-			const oldToken = $cfg.accounts[rowIndex].token;
-			UpdateInstanceToken(oldToken, newToken);
-			$cfg.accounts[rowIndex].token = newToken;
-			tokenValues.update((values) => {
-				values[rowIndex] = newToken;
-				return values;
+	$effect(() => {
+		if (instances && cfg.c.accounts) {
+			cfg.c.accounts.map((account) => {
+				const instance = instances.i.find(
+					(instance) => instance.accountCfg.token === account.token
+				);
+				const status = instance?.error ? instance.error : "reload";
+				return {
+					status,
+					token: account.token,
+					channelID: parseInt(account.channelID, 10),
+					username: instance?.user?.username ?? "",
+					state: account.state
+				};
 			});
+		}
+	});
+
+	function tokenUpdate(rowIndex: number, event: Event) {
+		const newToken = (event.target as HTMLInputElement).value;
+
+		if (cfg.c.accounts && newToken !== cfg.c.accounts[rowIndex].token) {
+			const oldToken = cfg.c.accounts[rowIndex].token;
+			UpdateInstanceToken(oldToken, newToken);
+			cfg.c.accounts[rowIndex].token = newToken;
+			hasChanges = true;
 		}
 	}
 
-	let accountIndex = 0;
+	function changeState(rowIndex: number) {
+		if (cfg.c.accounts) {
+			cfg.c.accounts[rowIndex].state = !cfg.c.accounts[rowIndex].state;
+		}
+	}
 </script>
 
 <div class="flex h-full flex-col justify-between">
-	{#if $tableAttrs}
-		<div>
-			<div class="rounded-md rounded-b-none border border-b-0">
-				<Table.Root {...$tableAttrs}>
-					<Table.Header>
-						{#each $headerRows as headerRow}
-							<Subscribe rowAttrs={headerRow.attrs()}>
-								<Table.Row>
-									{#each headerRow.cells as cell (cell.id)}
-										<Subscribe attrs={cell.attrs()} let:attrs props={cell.props()}>
-											<Table.Head {...attrs}>
-												<div class="text-center">
-													<Render of={cell.render()} />
-												</div>
-											</Table.Head>
-										</Subscribe>
-									{/each}
-								</Table.Row>
-							</Subscribe>
-						{/each}
-					</Table.Header>
-					<Table.Body {...$tableBodyAttrs}>
-						{#each $pageRows as row, rowIndex (row.id)}
-							<Subscribe rowAttrs={row.attrs()} let:rowAttrs>
-								<Table.Row {...rowAttrs}>
-									{#each row.cells as cell (cell.id)}
-										<Subscribe attrs={cell.attrs()} let:attrs>
-											{#if cell.id === "status"}
-												<Table.Cell class="w-5 p-0 text-center" {...attrs}>
-													{#if cell.value === "healthy"}
-														<Tooltip.Root>
-															<Tooltip.Trigger>
-																<div class="flex items-center justify-center">
-																	<Check class="text-primary" />
-																</div></Tooltip.Trigger
-															>
-															<Tooltip.Content>Connected</Tooltip.Content>
-														</Tooltip.Root>
-													{:else if cell.value === "invalidToken"}
-														<Tooltip.Root>
-															<Tooltip.Trigger>
-																<div class="flex items-center justify-center">
-																	<LockClosed class="text-red-500" />
-																</div></Tooltip.Trigger
-															>
-															<Tooltip.Content>Invalid token</Tooltip.Content>
-														</Tooltip.Root>
-													{:else if cell.value === "invalidChannelID"}
-														<Tooltip.Root>
-															<Tooltip.Trigger>
-																<div class="flex items-center justify-center">
-																	<ExclamationTriangle class="text-yellow-500" />
-																</div></Tooltip.Trigger
-															>
-															<Tooltip.Content>Invalid channel ID</Tooltip.Content>
-														</Tooltip.Root>
-													{:else if cell.value === "reload"}
-														<Tooltip.Root>
-															<Tooltip.Trigger>
-																<div class="flex items-center justify-center">
-																	<Update class="text-orange-500" />
-																</div></Tooltip.Trigger
-															>
-															<Tooltip.Content>Restart required</Tooltip.Content>
-														</Tooltip.Root>
-													{/if}
-												</Table.Cell>
-											{:else if cell.id === "state"}
-												<Table.Cell class="p-0 text-center" {...attrs}>
-													<Checkbox bind:checked={$cfg.accounts[rowIndex].state}></Checkbox>
-												</Table.Cell>
-											{:else if cell.id === "token"}
-												<Table.Cell class="text-center" {...attrs}>
-													<Input
-														type="text"
-														bind:value={$tokenValues[rowIndex]}
-														on:input={(event) => tokenUpdate(rowIndex, event.target.value)}
-													></Input>
-												</Table.Cell>
-											{:else if cell.id === "channelID"}
-												<Table.Cell class="w-48 text-center" {...attrs}>
-													<Input
-														type="number"
-														bind:value={$cfg.accounts[rowIndex].channelID}
-														on:input={setHasChanges}
-													></Input>
-												</Table.Cell>
-											{:else}
-												<Table.Cell class="text-center" {...attrs}>
-													<Render of={cell.render()} />
-												</Table.Cell>
-											{/if}
-										</Subscribe>
-									{/each}
-								</Table.Row>
-							</Subscribe>
-						{/each}
-					</Table.Body>
-				</Table.Root>
-			</div>
-			<AddAccounts />
+	<div>
+		<div class="rounded-md rounded-b-none border border-b-0">
+			<Table.Root>
+				<Table.Header>
+					{#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
+						<Table.Row>
+							{#each headerGroup.headers as header (header.id)}
+								<Table.Head class="text-center">
+									{#if !header.isPlaceholder}
+										<FlexRender
+											content={header.column.columnDef.header}
+											context={header.getContext()}
+										/>
+									{/if}
+								</Table.Head>
+							{/each}
+						</Table.Row>
+					{/each}
+				</Table.Header>
+				<Table.Body>
+					{#each table.getRowModel().rows as row, rowIndex (row.id)}
+						<Table.Row data-state={row.getIsSelected() && "selected"}>
+							{#each row.getVisibleCells() as cell (cell.id)}
+								{#if cell.column.id === "status"}
+									<Table.Cell class="w-5 p-0 text-center">
+										{#if cell.getValue() === "healthy"}
+											<Tooltip.Provider>
+												<Tooltip.Root>
+													<Tooltip.Trigger>
+														<div class="flex items-center justify-center">
+															<Check class="text-primary" />
+														</div>
+													</Tooltip.Trigger>
+													<Tooltip.Content>Connected</Tooltip.Content>
+												</Tooltip.Root>
+											</Tooltip.Provider>
+										{:else if cell.getValue() === "invalidToken"}
+											<Tooltip.Provider>
+												<Tooltip.Root>
+													<Tooltip.Trigger>
+														<div class="flex items-center justify-center">
+															<LockClosed class="text-red-500" />
+														</div>
+													</Tooltip.Trigger>
+													<Tooltip.Content>Invalid token</Tooltip.Content>
+												</Tooltip.Root>
+											</Tooltip.Provider>
+										{:else if cell.getValue() === "invalidChannelID"}
+											<Tooltip.Provider>
+												<Tooltip.Root>
+													<Tooltip.Trigger>
+														<div class="flex items-center justify-center">
+															<ExclamationTriangle class="text-yellow-500" />
+														</div>
+													</Tooltip.Trigger>
+													<Tooltip.Content>Invalid channel ID</Tooltip.Content>
+												</Tooltip.Root>
+											</Tooltip.Provider>
+										{:else if cell.getValue() === "reload"}
+											<Tooltip.Provider>
+												<Tooltip.Root>
+													<Tooltip.Trigger>
+														<div class="flex items-center justify-center">
+															<Update class="text-orange-500" />
+														</div>
+													</Tooltip.Trigger>
+													<Tooltip.Content>Restart required</Tooltip.Content>
+												</Tooltip.Root>
+											</Tooltip.Provider>
+										{/if}
+									</Table.Cell>
+								{:else if cell.column.id === "state" && cfg.c.accounts}
+									<Table.Cell class="p-0 text-center">
+										<Checkbox
+											bind:checked={cfg.c.accounts[rowIndex].state}
+											onchange={() => changeState(rowIndex)}
+										></Checkbox>
+									</Table.Cell>
+								{:else if cell.column.id === "token" && cfg.c.accounts}
+									<Table.Cell class="text-center">
+										<Input
+											type="text"
+											bind:value={cfg.c.accounts[rowIndex].token}
+											oninput={(event) => tokenUpdate(rowIndex, event)}
+										></Input>
+									</Table.Cell>
+								{:else if cell.column.id === "channelID" && cfg.c.accounts}
+									<Table.Cell class="w-48 text-center">
+										<Input
+											type="text"
+											bind:value={cfg.c.accounts[rowIndex].channelID}
+											oninput={setHasChanges}
+										></Input>
+									</Table.Cell>
+								{:else}
+									<Table.Cell class="text-center">
+										<FlexRender content={cell.column.columnDef.cell} context={cell.getContext()} />
+									</Table.Cell>
+								{/if}
+							{/each}
+						</Table.Row>
+					{:else}
+						<Table.Row>
+							<Table.Cell colspan={columns.length} class="h-24 text-center">No results.</Table.Cell>
+						</Table.Row>
+					{/each}
+				</Table.Body>
+			</Table.Root>
 		</div>
-		<Button
-			class={`sticky text-base font-semibold`}
-			disabled={!hasChanges}
-			on:click={restartAllBots}
-		>
-			Restart all accounts
-		</Button>
-	{:else}
-		<h1>Nope</h1>
-	{/if}
+		<AddAccounts />
+	</div>
+	<Button class={`sticky text-base font-semibold`} disabled={!hasChanges} onclick={restartAllBots}>
+		Restart all accounts
+	</Button>
 </div>

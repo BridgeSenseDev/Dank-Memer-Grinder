@@ -51,16 +51,6 @@ func Sleep(duration time.Duration) <-chan bool {
 	return done
 }
 
-func ExponentialBackoff(attempt int) time.Duration {
-	if attempt == 0 {
-		return time.Second
-	} else if attempt < 5 {
-		return time.Duration(2<<uint(attempt-1)) * time.Second
-	} else {
-		return 30 * time.Second
-	}
-}
-
 type browserVersionResponse struct {
 	Versions []struct {
 		Version string `json:"version"`
@@ -77,7 +67,7 @@ func GetUserAgent() string {
 	resp := fasthttp.AcquireResponse()
 	defer fasthttp.ReleaseResponse(resp)
 
-	var version string = "128.0.0.0"
+	var version string
 
 	if err := fasthttp.Do(req, resp); err == nil {
 		var data browserVersionResponse

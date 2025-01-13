@@ -1,0 +1,74 @@
+version: '3'
+
+tasks:
+  go:mod:tidy:
+    summary: Runs `go mod tidy`
+    internal: true
+    generates:
+      - go.sum
+    sources:
+      - go.mod
+    cmds:
+      - go mod tidy
+
+  install:frontend:deps:
+    summary: Install frontend dependencies
+    dir: frontend
+    sources:
+      - package.json
+      - package-lock.json
+    generates:
+      - node_modules/*
+    preconditions:
+      - sh: bun --version
+        msg: "Looks like bun isn't installed. Install bun from: https://bun.sh/"
+    cmds:
+      - bun install
+
+  build:frontend:
+    summary: Build the frontend project
+    dir: frontend
+    sources:
+      - "**/*"
+    generates:
+      - dist/*
+    deps:
+      - task: install:frontend:deps
+      - task: generate:bindings
+    cmds:
+      - bun run build
+
+  generate:bindings:
+    summary: Generates bindings for the frontend
+    sources:
+      - "**/*.go"
+      - go.mod
+      - go.sum
+    generates:
+      - "frontend/bindings/**/*"
+    cmds:
+      - wails3 generate bindings -ts -i -f '{{.BUILD_FLAGS}}'
+  generate:icons:
+    summary: Generates Windows `.ico` and Mac `.icns` files from an image
+    dir: build
+    sources:
+      - "appicon.png"
+    generates:
+      - "icons.icns"
+      - "icons.ico"
+    cmds:
+      - wails3 generate icons -input appicon.png -macfilename darwin/icons.icns -windowsfilename windows/icons.ico
+
+  dev:frontend:
+    summary: Runs the frontend in development mode
+    dir: frontend
+    deps:
+      - task: install:frontend:deps
+    cmds:
+      - bun run dev -- --port {{.VITE_PORT}} --strictPort
+
+  update:build-assets:
+    summary: Updates the build assets
+    dir: build
+    cmds:
+      - wails3 update build-assets -name "{{.APP_NAME}}" -binaryname "{{.APP_NAME}}" -config config.yml -dir .

@@ -4,13 +4,13 @@ import (
 	"context"
 	"fmt"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
+	"github.com/wailsapp/wails/v3/pkg/application"
 	"strings"
 	"time"
 
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/config"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
 	"github.com/rs/zerolog/log"
-	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 type LogLevel string
@@ -31,14 +31,14 @@ const (
 func (in *Instance) Log(level LogLevel, logType LogType, msg string) {
 	switch level {
 	case Important:
-		runtime.EventsEmit(in.Ctx, "logImportant", logType, in.User.Username, msg)
+		application.Get().EmitEvent("logImportant", logType, in.User.Username, msg)
 	case Others:
-		runtime.EventsEmit(in.Ctx, "logOthers", logType, in.User.Username, msg)
+		application.Get().EmitEvent("logOthers", logType, in.User.Username, msg)
 	case Discord:
 		if strings.Contains(msg, "COMPONENT_VALIDATION_FAILED") {
 			return
 		}
-		runtime.EventsEmit(in.Ctx, "logDiscord", logType, in.User.Username, msg)
+		application.Get().EmitEvent("logDiscord", logType, in.User.Username, msg)
 	}
 
 	switch logType {

@@ -5,4 +5,5 @@ yarn.lock
 bun.lockb
 
 # Ignore files for wails
-src/lib/wailsjs/*
+dist
+bindings
