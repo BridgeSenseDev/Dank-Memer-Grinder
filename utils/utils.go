@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/valyala/fasthttp"
+	"github.com/wailsapp/wails/v3/pkg/application"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -99,4 +100,14 @@ func FormatNumber(amount int, decimalPlaces int) string {
 	default:
 		return sign + strconv.Itoa(amount)
 	}
+}
+
+func ShowErrorDialog(title, message string) {
+	dialog := application.MessageDialog{MessageDialogOptions: application.MessageDialogOptions{
+		DialogType: application.ErrorDialogType,
+		Title:      title,
+		Message:    message,
+	}}
+	dialog.Show()
+	panic(message)
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"github.com/grongor/panicwatch"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -70,11 +71,6 @@ func main() {
 	err = app.Run()
 
 	if err != nil {
-		//runtime.MessageDialog(app.ctx, runtime.MessageDialogOptions{
-		//	Type:    runtime.ErrorDialog,
-		//	Title:   "A fatal error occurred!",
-		//	Message: err.Error(),
-		//})
-		panic(err.Error())
+		utils.ShowErrorDialog("A fatal error occurred!", err.Error())
 	}
 }

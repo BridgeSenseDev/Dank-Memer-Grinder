@@ -1,4 +1,3 @@
-import { browser } from "$app/environment";
 import { Events } from "@wailsio/runtime";
 import type {
 	AccountsConfig,
@@ -34,29 +33,25 @@ class Cfg {
 	});
 
 	constructor() {
-		if (browser) {
-			$effect.root(() => {
-				$effect(() => {
-					if (this.c?.gui?.theme !== "") {
-						UpdateConfig(this.c);
-					}
-				});
+		$effect.root(() => {
+			$effect(() => {
+				if (this.c?.gui?.theme !== "") {
+					UpdateConfig(this.c);
+				}
 			});
+		});
 
-			Events.On("configUpdate", (data: { data: [newCfg: Config] }) => {
-				this.c = data.data[0];
-			});
+		Events.On("configUpdate", (data: { data: [newCfg: Config] }) => {
+			this.c = data.data[0];
+		});
 
-			this.fetch();
-		}
+		this.fetch();
 	}
 
 	async fetch() {
-		if (browser) {
-			const cfg = await GetConfig();
-			if (cfg) {
-				this.c = cfg;
-			}
+		const cfg = await GetConfig();
+		if (cfg) {
+			this.c = cfg;
 		}
 	}
 }
@@ -65,24 +60,20 @@ class Instances {
 	i = $state<InstanceView[]>([]);
 
 	constructor() {
-		if (browser) {
-			Events.On("instancesUpdate", (data: { data: [newInstances: InstanceView[]] }) => {
-				this.i.length = 0;
+		Events.On("instancesUpdate", (data: { data: [newInstances: InstanceView[]] }) => {
+			this.i.length = 0;
 
-				this.i.push(...data.data[0]);
-			});
+			this.i.push(...data.data[0]);
+		});
 
-			this.fetch();
-		}
+		this.fetch();
 	}
 
 	async fetch() {
-		if (browser) {
-			const newInstances = await GetInstances();
-			if (newInstances !== null) {
-				this.i.length = 0;
-				this.i.push(...(newInstances as InstanceView[]));
-			}
+		const newInstances = await GetInstances();
+		if (newInstances !== null) {
+			this.i.length = 0;
+			this.i.push(...(newInstances as InstanceView[]));
 		}
 	}
 }
@@ -93,31 +84,29 @@ class Logs {
 	discordLogs = $state("");
 
 	constructor() {
-		if (browser) {
-			Events.On("logImportant", (data: { data: [type: string, username: string, msg: string] }) => {
-				const type = data.data[0];
-				const username = data.data[1];
-				const msg = data.data[2];
+		Events.On("logImportant", (data: { data: [type: string, username: string, msg: string] }) => {
+			const type = data.data[0];
+			const username = data.data[1];
+			const msg = data.data[2];
 
-				this.importantLogs = this.logWithTime(this.importantLogs, type, username, msg);
-			});
+			this.importantLogs = this.logWithTime(this.importantLogs, type, username, msg);
+		});
 
-			Events.On("logOthers", (data: { data: [type: string, username: string, msg: string] }) => {
-				const type = data.data[0];
-				const username = data.data[1];
-				const msg = data.data[2];
+		Events.On("logOthers", (data: { data: [type: string, username: string, msg: string] }) => {
+			const type = data.data[0];
+			const username = data.data[1];
+			const msg = data.data[2];
 
-				this.othersLogs = this.logWithTime(this.othersLogs, type, username, msg);
-			});
+			this.othersLogs = this.logWithTime(this.othersLogs, type, username, msg);
+		});
 
-			Events.On("logDiscord", (data: { data: [type: string, username: string, msg: string] }) => {
-				const type = data.data[0];
-				const username = data.data[1];
-				const msg = data.data[2];
+		Events.On("logDiscord", (data: { data: [type: string, username: string, msg: string] }) => {
+			const type = data.data[0];
+			const username = data.data[1];
+			const msg = data.data[2];
 
-				this.discordLogs = this.logWithTime(this.discordLogs, type, username, msg);
-			});
-		}
+			this.discordLogs = this.logWithTime(this.discordLogs, type, username, msg);
+		});
 	}
 
 	private logWithTime(logs: string, type: string, username: string, msg: string): string {

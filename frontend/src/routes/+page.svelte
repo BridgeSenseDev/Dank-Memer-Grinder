@@ -1,19 +1,14 @@
 <script lang="ts">
-	import { browser } from "$app/environment";
 	import * as Tabs from "$lib/components/ui/tabs/index.js";
 	import { fade } from "svelte/transition";
 	import { logs } from "$lib/state.svelte";
 
 	let mainCurrentTab = $state("important");
 
-	if (browser) {
-		mainCurrentTab = sessionStorage.getItem("mainCurrentTab") || "important";
-	}
+	mainCurrentTab = sessionStorage.getItem("mainCurrentTab") || "important";
 
 	$effect(() => {
-		if (browser) {
-			sessionStorage.setItem("mainCurrentTab", mainCurrentTab);
-		}
+		sessionStorage.setItem("mainCurrentTab", mainCurrentTab);
 	});
 </script>
 
