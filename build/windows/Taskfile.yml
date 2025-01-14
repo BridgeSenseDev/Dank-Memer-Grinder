@@ -18,13 +18,12 @@ tasks:
       - cmd: rm -f *.syso
         platforms: [linux, darwin]
     vars:
-      BUILD_FLAGS: '{{if eq .PRODUCTION "true"}}-tags production,{{.TAGS}} -trimpath -ldflags="-w -s -H windowsgui"{{else}}-gcflags=all="-l" -tags {{.TAGS}}{{end}}'
+      BUILD_FLAGS: '{{if eq .PRODUCTION "true"}}-trimpath -ldflags="-w -s -H windowsgui"{{else}}-gcflags=all="-l"{{end}} -tags "{{.TAGS}}{{if eq .PRODUCTION "true"}} production{{end}}"'
     env:
       GOOS: windows
       CGO_ENABLED: 0
       GOARCH: '{{.ARCH | default ARCH}}'
       PRODUCTION: '{{.PRODUCTION | default "false"}}'
-      TAGS: '{{.TAGS | default ""}}'  # Add TAGS as an environment variable
 
   package:
     summary: Packages a production build of the application into a `.exe` bundle

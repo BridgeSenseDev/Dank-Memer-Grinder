@@ -28,9 +28,9 @@ tasks:
           PRODUCTION: "true"
     cmds:
       - task: create:appimage
-      - task: create:deb
-      - task: create:rpm
-      - task: create:aur
+#      - task: create:deb
+#      - task: create:rpm
+#      - task: create:aur
 
   create:appimage:
     summary: Creates an AppImage
@@ -50,6 +50,8 @@ tasks:
       ICON: '../../appicon.png'
       DESKTOP_FILE: '../{{.APP_NAME}}.desktop'
       OUTPUT_DIR: '../../../bin'
+    env:
+      NO_STRIP: true
 
   create:deb:
     summary: Creates a deb package

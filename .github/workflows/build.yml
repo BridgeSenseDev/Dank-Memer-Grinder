@@ -61,11 +61,31 @@ jobs:
       - name: Tidy Go modules
         run: go mod tidy
 
-      - name: Build Wails project
+      - name: Build Wails project (Linux)
+        if: matrix.os == 'ubuntu-latest'
         run: wails3 task ${{ matrix.wails_os }}:package
 
-      - name: Upload binaries to GitHub release
+      - name: Build Wails project (Windows, Darwin)
+        if: matrix.os != 'ubuntu-latest'
+        run: wails3 task ${{ matrix.wails_os }}:build
+
+      - name: Upload Linux binaries to GitHub release
+        if: matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v3
         with:
-          name: dmg-${{ matrix.os }}
-          path: './build/bin/${{ matrix.wails_os }}/dmg'
+          name: DMG-${{ matrix.wails_os }}.AppImage
+          path: './bin/dmg-x86_64.AppImage'
+
+      - name: Upload Windows binaries to GitHub release
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v3
+        with:
+          name: DMG-${{ matrix.wails_os }}.AppImage
+          path: './bin/dmg.exe'
+
+      - name: Upload Darwin binaries to GitHub release
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v3
+        with:
+          name: DMG-${{ matrix.wails_os }}
+          path: './bin/dmg'
