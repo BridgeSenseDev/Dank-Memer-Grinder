@@ -4,7 +4,9 @@
 *.dll
 *.so
 *.dylib
+*.desktop
 bin/
+dmg
 
 .history
 Dank Memer Grinder.code-workspace
@@ -15,3 +17,6 @@ instance/captcha_private.go
 wails
 .task
 .vscode/
+
+build/linux/appimage
+!build/linux/appimage/build.sh

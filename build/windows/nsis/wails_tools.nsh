@@ -5,7 +5,7 @@
 !include "FileFunc.nsh"
 
 !ifndef INFO_PROJECTNAME
-    !define INFO_PROJECTNAME "myfirstapp"
+    !define INFO_PROJECTNAME "dmg"
 !endif
 !ifndef INFO_COMPANYNAME
     !define INFO_COMPANYNAME "My Company"

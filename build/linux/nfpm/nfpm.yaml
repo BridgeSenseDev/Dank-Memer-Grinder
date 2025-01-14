@@ -3,7 +3,7 @@
 #
 # The lines below are called `modelines`. See `:help modeline`
 
-name: "myfirstapp"
+name: "dmg"
 arch: ${GOARCH}
 platform: "linux"
 version: "0.1.0"
@@ -17,12 +17,12 @@ license: "MIT"
 release: "1"
 
 contents:
-  - src: "./bin/myfirstapp"
-    dst: "/usr/local/bin/myfirstapp"
+  - src: "./bin/dmg"
+    dst: "/usr/local/bin/dmg"
   - src: "./build/appicon.png"
-    dst: "/usr/share/icons/hicolor/128x128/apps/myfirstapp.png"
-  - src: "./build/linux/myfirstapp.desktop"
-    dst: "/usr/share/applications/myfirstapp.desktop"
+    dst: "/usr/share/icons/hicolor/128x128/apps/dmg.png"
+  - src: "./build/linux/dmg.desktop"
+    dst: "/usr/share/applications/dmg.desktop"
 
 depends:
   - gtk3

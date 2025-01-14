@@ -2,8 +2,8 @@ name: Wails build
 
 on:
   push:
-    tags:
-      - '*'
+    branches:
+      - main
 
 env:
   # Necessary for most environments as build failure can occur due to OOM issues
@@ -15,29 +15,57 @@ jobs:
       # Failure in one platform build won't impact the others
       fail-fast: false
       matrix:
-        build:
-          - name: 'Dank-Memer-Grinder-${{ github.ref_name }}-Linux-amd64'
+        include:
+          - name: 'DMG-${{ github.ref_name }}-Linux-amd64'
             platform: 'linux/amd64'
             os: 'ubuntu-latest'
-          - name: 'Dank-Memer-Grinder-${{ github.ref_name }}-Windows-amd64'
+            wails_os: 'linux'
+          - name: 'DMG-${{ github.ref_name }}-Windows-amd64'
             platform: 'windows/amd64'
             os: 'windows-latest'
-          - name: 'Dank-Memer-Grinder-${{ github.ref_name }}-macOS'
+            wails_os: 'windows'
+          - name: 'DMG-${{ github.ref_name }}-macOS'
             platform: 'darwin/universal'
             os: 'macos-latest'
+            wails_os: 'darwin'
 
-    runs-on: ${{ matrix.build.os }}
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - name: Build wails
-        uses: dAppServer/wails-build-action@v2.2
-        id: build
+      - name: Set up Go
+        uses: actions/setup-go@v5
         with:
-          build-name: ${{ matrix.build.name }}
-          build-platform: ${{ matrix.build.platform }}
-          package: false
-          go-version: '1.22'
+          go-version: '1.23'
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install Linux dependencies
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev
+
+      - name: Install Wails development version
+        run: |
+          git clone https://github.com/wailsapp/wails.git
+          cd wails
+          git checkout v3-alpha
+          cd v3/cmd/wails3
+          go install
+
+      - name: Tidy Go modules
+        run: go mod tidy
+
+      - name: Build Wails project
+        run: wails3 task ${{ matrix.wails_os }}:package
+
+      - name: Upload binaries to GitHub release
+        uses: actions/upload-artifact@v3
+        with:
+          name: dmg-${{ matrix.os }}
+          path: './build/bin/${{ matrix.wails_os }}/dmg'

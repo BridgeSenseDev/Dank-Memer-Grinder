@@ -11,9 +11,9 @@ tasks:
       - task: common:build:frontend
       - task: common:generate:icons
     cmds:
-      - go build {{.BUILD_FLAGS}} -tags {{.TAGS}} -o {{.BIN_DIR}}/{{.APP_NAME}}
+      - go build {{.BUILD_FLAGS}} -o {{.BIN_DIR}}/{{.APP_NAME}}
     vars:
-      BUILD_FLAGS: '{{if eq .PRODUCTION "true"}}-tags production -trimpath -ldflags="-w -s"{{else}}-gcflags=all="-l"{{end}}'
+      BUILD_FLAGS: '{{if eq .PRODUCTION "true"}}-trimpath -ldflags="-w -s"{{else}}-gcflags=all="-l"{{end}} -tags "{{.TAGS}} webkit2_41{{if eq .PRODUCTION "true"}} production{{end}}"'
     env:
       GOOS: linux
       CGO_ENABLED: 1

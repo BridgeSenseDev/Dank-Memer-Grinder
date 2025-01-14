@@ -6,9 +6,9 @@
         <key>CFBundleName</key>
         <string>My Product</string>
         <key>CFBundleExecutable</key>
-        <string>myfirstapp</string>
+        <string>dmg</string>
         <key>CFBundleIdentifier</key>
-        <string>com.wails.myfirstapp</string>
+        <string>com.wails.dmg</string>
         <key>CFBundleVersion</key>
         <string>0.1.0</string>
         <key>CFBundleGetInfoString</key>
