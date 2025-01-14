@@ -72,7 +72,7 @@ func GetUserAgent() string {
 
 	if err := fasthttp.Do(req, resp); err == nil {
 		var data browserVersionResponse
-		if err := json.Unmarshal(resp.Body(), &data); err == nil {
+		if err = json.Unmarshal(resp.Body(), &data); err == nil {
 			major := strings.Split(data.Versions[0].Version, ".")[0]
 			version = fmt.Sprintf("%s.0.0.0", major)
 		}
@@ -110,4 +110,36 @@ func ShowErrorDialog(title, message string) {
 	}}
 	dialog.Show()
 	panic(message)
+}
+
+type ApiResponse struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
+
+func MakeAPIRequest(url string, headers map[string]string) (*ApiResponse, error) {
+	req := fasthttp.AcquireRequest()
+	defer fasthttp.ReleaseRequest(req)
+
+	req.SetRequestURI(url)
+	req.Header.SetMethod("GET")
+
+	for k, v := range headers {
+		req.Header.Set(k, v)
+	}
+
+	resp := fasthttp.AcquireResponse()
+	defer fasthttp.ReleaseResponse(resp)
+
+	client := &fasthttp.Client{}
+	if err := client.Do(req, resp); err != nil {
+		return nil, fmt.Errorf("API request failed: %w", err)
+	}
+
+	var apiResponse ApiResponse
+	if err := json.Unmarshal(resp.Body(), &apiResponse); err != nil {
+		return nil, fmt.Errorf("unmarshaling API response failed: %w", err)
+	}
+
+	return &apiResponse, nil
 }
