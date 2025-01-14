@@ -65,7 +65,7 @@ jobs:
         run: wails3 task ${{ matrix.wails_os }}:package
 
       - name: Upload binaries to GitHub release
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dmg-${{ matrix.os }}
           path: './build/bin/${{ matrix.wails_os }}/dmg'
