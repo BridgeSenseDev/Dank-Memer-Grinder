@@ -22,7 +22,7 @@ func generateNonce() string {
 
 func (client *Client) GetCommandInfo(commandName string) *CommandData {
 	for _, cmd := range *client.CommandsData {
-		if cmd.Name == commandName {
+		if cmd.Name == commandName && cmd.ApplicationID == "270904126974590976" {
 			return &cmd
 		}
 	}
