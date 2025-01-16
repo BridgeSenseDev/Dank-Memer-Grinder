@@ -59,6 +59,7 @@ type Client interface {
 	ClickDmButton(message gateway.EventMessage, row int, column int) error
 	ChooseSelectMenu(message gateway.EventMessage, row int, column int, values []string) error
 	SubmitModal(modal gateway.EventModalCreate) error
+	GetAuthorizationCode() (string, error)
 }
 
 type Instance struct {

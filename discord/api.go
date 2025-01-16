@@ -100,7 +100,7 @@ func (client *Client) GetGuildID(channelID string) string {
 	return channel.GuildID
 }
 
-func (client *Client) RequestWithLockedBucket(method, urlStr string, b []byte, bucket *Bucket, sequence int) error {
+func (client *Client) RequestWithLockedBucket(method, urlStr string, b []byte, bucket *Bucket, sequence int) ([]byte, error) {
 	req := fasthttp.AcquireRequest()
 	resp := fasthttp.AcquireResponse()
 	defer fasthttp.ReleaseRequest(req)
@@ -110,7 +110,7 @@ func (client *Client) RequestWithLockedBucket(method, urlStr string, b []byte, b
 	req.Header.SetMethod(method)
 
 	if client.Token != "" {
-		req.Header.Set("authorization", client.Token)
+		req.Header.Set("Authorization", client.Token)
 	}
 
 	if b != nil {
@@ -119,47 +119,52 @@ func (client *Client) RequestWithLockedBucket(method, urlStr string, b []byte, b
 	}
 
 	req.Header.Set("User-Agent", client.Gateway.UserAgent())
+	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+	req.Header.Set("Accept-Language", "en-US,en;q=0.5")
+	req.Header.Set("Connection", "keep-alive")
+	req.Header.Set("Referer", "https://discord.com/")
+	req.Header.Set("Upgrade-Insecure-Requests", "1")
 
 	err := fasthttp.Do(req, resp)
 	if err != nil {
 		err := bucket.Release(nil)
 		if err != nil {
-			return err
+			return nil, err
 		}
-		return err
+		return nil, err
 	}
 
 	err = bucket.Release(&resp.Header)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	response := resp.Body()
 
 	switch resp.StatusCode() {
 	case fasthttp.StatusOK, fasthttp.StatusCreated, fasthttp.StatusNoContent:
+		return response, nil
 	case fasthttp.StatusBadGateway:
 		if sequence < 3 {
 			client.Log("INF", fmt.Sprintf("%s Failed (%d), Retrying...", urlStr, resp.StatusCode()))
-			err = client.RequestWithLockedBucket(method, urlStr, b, client.RateLimiter.LockBucketObject(bucket), sequence+1)
+			return client.RequestWithLockedBucket(method, urlStr, b, client.RateLimiter.LockBucketObject(bucket), sequence+1)
 		} else {
 			client.Log("ERR", fmt.Sprintf("Exceeded Max retries HTTP %d, %s", resp.StatusCode(), response))
+			return nil, fmt.Errorf("exceeded max retries: %s", string(response))
 		}
 	case fasthttp.StatusTooManyRequests:
 		rl := TooManyRequests{}
 		err = json.Unmarshal(response, &rl)
 		if err != nil {
 			client.Log("ERR", fmt.Sprintf("rate limit unmarshal error, %s", err))
-			return err
+			return nil, err
 		}
 
 		client.Log("INF", fmt.Sprintf("Rate Limiting %s, retry in %v", urlStr, rl.RetryAfter))
 
 		time.Sleep(time.Duration(rl.RetryAfter * float64(time.Second)))
-		err = client.RequestWithLockedBucket(method, urlStr, b, client.RateLimiter.LockBucketObject(bucket), sequence)
+		return client.RequestWithLockedBucket(method, urlStr, b, client.RateLimiter.LockBucketObject(bucket), sequence)
 	default:
-		err = fmt.Errorf("request failed with status code %d: %s", resp.StatusCode(), string(response))
+		return nil, fmt.Errorf("request failed with status code %d: %s", resp.StatusCode(), string(response))
 	}
-
-	return err
 }

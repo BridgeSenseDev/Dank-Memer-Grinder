@@ -106,7 +106,8 @@ func (r *RateLimiter) LockBucketObject(b *Bucket) *Bucket {
 
 // Bucket represents a ratelimit bucket, each bucket gets ratelimited individually (-global ratelimits)
 type Bucket struct {
-	sync.Mutex
+	mu        sync.Mutex
+	isLocked  bool
 	Key       string
 	Remaining int
 	reset     time.Time
@@ -115,6 +116,21 @@ type Bucket struct {
 	lastReset       time.Time
 	customRateLimit *customRateLimit
 	Userdata        interface{}
+}
+
+func (b *Bucket) Lock() {
+	b.mu.Lock()
+	b.isLocked = true
+}
+
+func (b *Bucket) Unlock() {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+
+	if b.isLocked {
+		b.isLocked = false
+		b.mu.Unlock()
+	}
 }
 
 func getDateHeader(headers []byte) string {
@@ -132,6 +148,9 @@ func getDateHeader(headers []byte) string {
 // Release unlocks the bucket and reads the headers to update the buckets ratelimit info
 // and locks up the whole thing in case if there's a global ratelimit.
 func (b *Bucket) Release(headers *fasthttp.ResponseHeader) error {
+	if !b.isLocked {
+		return nil
+	}
 	defer b.Unlock()
 
 	// Check if the bucket uses a custom ratelimiter
