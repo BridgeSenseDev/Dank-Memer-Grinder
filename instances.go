@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"github.com/wailsapp/wails/v3/pkg/application"
 	"sync"
 	"time"
@@ -11,7 +12,6 @@ import (
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/instance"
-	"github.com/rs/zerolog/log"
 )
 
 type InstanceView struct {
@@ -37,7 +37,7 @@ func (d *DmgService) StartInstance(account config.AccountsConfig) {
 				client.ChannelID = account.ChannelID
 				client.GuildID = client.GetGuildID(account.ChannelID)
 				if client.GuildID == "" {
-					log.Error().Msgf("Failed to fetch GuildID from channelID: %v", account.ChannelID)
+					client.Log("ERR", fmt.Sprintf("Failed to fetch GuildID from channelID: %v", account.ChannelID))
 					in := &instance.Instance{
 						AccountCfg: account,
 						Error:      "invalidChannelID",
@@ -89,7 +89,7 @@ func (d *DmgService) StartInstance(account config.AccountsConfig) {
 		err := client.Connect()
 
 		if err != nil {
-			log.Error().Msgf("Failed to connect: %v", err.Error())
+			utils.Log("ERR", fmt.Sprintf("Failed to connect: %v", err.Error()))
 			in := &instance.Instance{
 				AccountCfg: account,
 				Error:      "invalidToken",
@@ -159,7 +159,7 @@ func (d *DmgService) RestartInstance(token string) {
 	if accountToRestart.Token != "" {
 		d.StartInstance(accountToRestart)
 	} else {
-		log.Warn().Msgf("No account found with token %s", token)
+		utils.Log("ERR", fmt.Sprintf("No account found with token %s", token))
 	}
 }
 

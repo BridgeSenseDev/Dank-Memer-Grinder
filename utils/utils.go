@@ -3,6 +3,7 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/rs/zerolog/log"
 	"github.com/valyala/fasthttp"
 	"github.com/wailsapp/wails/v3/pkg/application"
 	"math/rand"
@@ -142,4 +143,30 @@ func MakeAPIRequest(url string, headers map[string]string) (*ApiResponse, error)
 	}
 
 	return &apiResponse, nil
+}
+
+type LogLevel string
+
+const (
+	Important LogLevel = "important"
+	Others    LogLevel = "others"
+	Discord   LogLevel = "discord"
+)
+
+type LogType string
+
+const (
+	Info  LogType = "INF"
+	Error LogType = "ERR"
+)
+
+func Log(logType LogType, msg string) {
+	application.Get().EmitEvent("logImportant", logType, "", msg)
+
+	switch logType {
+	case Info:
+		log.Info().Msg(fmt.Sprintf("%s %s", logType, msg))
+	case Error:
+		log.Error().Msg(fmt.Sprintf("%s %s", logType, msg))
+	}
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"github.com/wailsapp/wails/v3/pkg/application"
 	"strings"
 	"time"
@@ -13,28 +14,13 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-type LogLevel string
-
-const (
-	Important LogLevel = "important"
-	Others    LogLevel = "others"
-	Discord   LogLevel = "discord"
-)
-
-type LogType string
-
-const (
-	Info  LogType = "INF"
-	Error LogType = "ERR"
-)
-
-func (in *Instance) Log(level LogLevel, logType LogType, msg string) {
+func (in *Instance) Log(level utils.LogLevel, logType utils.LogType, msg string) {
 	switch level {
-	case Important:
+	case utils.Important:
 		application.Get().EmitEvent("logImportant", logType, in.User.Username, msg)
-	case Others:
+	case utils.Others:
 		application.Get().EmitEvent("logOthers", logType, in.User.Username, msg)
-	case Discord:
+	case utils.Discord:
 		if strings.Contains(msg, "COMPONENT_VALIDATION_FAILED") {
 			return
 		}
@@ -42,9 +28,9 @@ func (in *Instance) Log(level LogLevel, logType LogType, msg string) {
 	}
 
 	switch logType {
-	case Info:
+	case utils.Info:
 		log.Info().Msg(fmt.Sprintf("%s %s %s", level, in.User.Username, msg))
-	case Error:
+	case utils.Error:
 		log.Error().Msg(fmt.Sprintf("%s %s %s", level, in.User.Username, msg))
 	}
 }

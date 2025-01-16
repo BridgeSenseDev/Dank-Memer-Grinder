@@ -10,7 +10,6 @@ import (
 
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
-	"github.com/rs/zerolog/log"
 )
 
 //go:embed trivia.json
@@ -21,7 +20,7 @@ var trivia map[string]interface{}
 func init() {
 	err := json.Unmarshal(triviaJson, &trivia)
 	if err != nil {
-		log.Error().Msgf("Failed to unmarshal trivia data: %v", err)
+		utils.Log("ERR", fmt.Sprintf("Failed to unmarshal trivia data: %v", err))
 	}
 }
 

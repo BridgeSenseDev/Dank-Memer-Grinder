@@ -14,8 +14,6 @@ import (
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/config"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/instance"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 )
 
 type DmgService struct {
@@ -27,8 +25,6 @@ type DmgService struct {
 }
 
 func (d *DmgService) startup() {
-	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
-
 	// Load configuration
 	configFile := "./config.json"
 	cfg, err := config.ReadConfig(configFile)
@@ -132,7 +128,7 @@ func (d *DmgService) UpdateDiscordStatus(status types.OnlineStatus) {
 
 		err := in.Client.SendMessage(3, d)
 		if err != nil {
-			log.Error().Msgf("Error setting Discord status: %s", err)
+			in.Log("others", "ERR", fmt.Sprintf("Error setting Discord status: %s", err))
 		}
 
 		in.User.Status = status

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"github.com/rs/zerolog/log"
 	"github.com/wailsapp/wails/v3/pkg/application"
 )
@@ -73,19 +74,12 @@ func (client *Client) SendMessage(op gateway.Opcode, data gateway.MessageData) e
 	return client.Gateway.Send(client.Ctx, op, data)
 }
 
-type LogType string
-
-const (
-	Info  LogType = "INF"
-	Error LogType = "ERR"
-)
-
-func (client *Client) Log(logType LogType, msg string) {
+func (client *Client) Log(logType utils.LogType, msg string) {
 	application.Get().EmitEvent("logDiscord", logType, client.Gateway.User().Username, msg)
 	switch logType {
-	case Info:
+	case utils.Info:
 		log.Info().Msg(fmt.Sprintf("discord %s %s", client.Gateway.User().Username, msg))
-	case Error:
+	case utils.Error:
 		log.Error().Msg(fmt.Sprintf("discord %s %s", client.Gateway.User().Username, msg))
 	}
 }

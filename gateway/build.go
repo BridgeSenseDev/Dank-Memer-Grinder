@@ -1,8 +1,8 @@
 package gateway
 
 import (
+	"fmt"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
-	"log"
 	"regexp"
 	"strings"
 	"time"
@@ -69,7 +69,7 @@ func (g *gatewayImpl) extractAssetFiles() ([]string, error) {
 func (g *gatewayImpl) getLatestBuild() string {
 	files, err := g.extractAssetFiles()
 	if err != nil {
-		log.Println("Error extracting asset files:", err)
+		g.Log("ERR", fmt.Sprintf("Error extracting asset files: %s", err))
 		return fallbackBuildNumber
 	}
 
@@ -89,7 +89,7 @@ func (g *gatewayImpl) getLatestBuild() string {
 		}
 
 		if err := requestClient.Do(req, resp); err != nil {
-			log.Println("Error fetching JavaScript file:", err)
+			g.Log("ERR", fmt.Sprintf("Error fetching JavaScript file: %v", err))
 			continue
 		}
 
