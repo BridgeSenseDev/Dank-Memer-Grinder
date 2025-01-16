@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { type ColumnDef, getCoreRowModel } from "@tanstack/table-core";
 	import { createSvelteTable, FlexRender } from "$lib/components/ui/data-table/index.js";
-	import { LockClosed, ExclamationTriangle, Check, Update } from "svelte-radix";
+	import { LockClosed, ExclamationTriangle, Check } from "svelte-radix";
 	import * as Table from "$lib/components/ui/table/index.js";
 	import { Button } from "$lib/components/ui/button";
 	import type { Account } from "@/src/routes/accounts/columns";
@@ -14,6 +14,7 @@
 		UpdateInstanceToken
 	} from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/dmgservice";
 	import { cfg, instances } from "$lib/state.svelte";
+	import { Loader } from "lucide-svelte";
 
 	interface DataTableProps<TData, TValue> {
 		columns: ColumnDef<TData, TValue>[];
@@ -141,10 +142,10 @@
 												<Tooltip.Root>
 													<Tooltip.Trigger>
 														<div class="flex items-center justify-center">
-															<Update class="text-orange-500" />
+															<Loader class="text-white" />
 														</div>
 													</Tooltip.Trigger>
-													<Tooltip.Content>Restart required</Tooltip.Content>
+													<Tooltip.Content>Loading</Tooltip.Content>
 												</Tooltip.Root>
 											</Tooltip.Provider>
 										{/if}

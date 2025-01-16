@@ -43,6 +43,7 @@ func (d *DmgService) StartInstance(account config.AccountsConfig) {
 						Error:      "invalidChannelID",
 					}
 					d.instances = append(d.instances, in)
+					application.Get().EmitEvent("instancesUpdate", d.GetInstances())
 					return
 				}
 
@@ -141,6 +142,7 @@ func (d *DmgService) RemoveInstance(token string) {
 
 	wg.Wait()
 	d.instances = instancesToKeep
+	application.Get().EmitEvent("instancesUpdate", d.GetInstances())
 }
 
 func (d *DmgService) RestartInstance(token string) {
@@ -180,15 +182,7 @@ func (d *DmgService) RestartInstances() {
 }
 
 func (d *DmgService) GetInstances() []*InstanceView {
-	if len(d.instances) == 0 {
-		return []*InstanceView{}
-	}
-
-	for len(d.instances) != len(d.cfg.Accounts) {
-		time.Sleep(100 * time.Millisecond)
-	}
-
-	var instanceViews []*InstanceView
+	instanceViews := make([]*InstanceView, 0, len(d.instances))
 
 	for _, i := range d.instances {
 		instanceView := &InstanceView{

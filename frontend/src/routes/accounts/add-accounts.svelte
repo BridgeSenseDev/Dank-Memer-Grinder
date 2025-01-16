@@ -8,11 +8,12 @@
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
 	import { cfg } from "$lib/state.svelte";
 	import { Plus } from "lucide-svelte";
+	import { RestartInstance } from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/dmgservice";
 
 	let individualToken = $state("");
 	let individualChannelID = $state("");
 
-	function addAccount(token: string, channelID: string) {
+	async function addAccount(token: string, channelID: string) {
 		cfg.c.accounts = [
 			...(cfg.c.accounts ?? []),
 			{
@@ -21,18 +22,21 @@
 				state: false
 			}
 		];
+
+		await new Promise((r) => setTimeout(r, 100));
+		await RestartInstance(token);
 	}
 
-	function handleFileChange(event: Event) {
+	async function handleFileChange(event: Event) {
 		const input = event.target as HTMLInputElement;
 		const files = input.files;
 		if (files) {
 			const file = files[0];
 			const reader = new FileReader();
 
-			reader.onload = (e) => {
+			reader.onload = async (e) => {
 				if (e.target !== null) {
-					parseAndAddAccounts(e.target.result as string);
+					await parseAndAddAccounts(e.target.result as string);
 				}
 			};
 
@@ -40,53 +44,53 @@
 		}
 	}
 
-	function parseAndAddAccounts(fileContent: string) {
+	async function parseAndAddAccounts(fileContent: string) {
 		const lines = fileContent.split("\n");
 
-		lines.forEach((line) => {
-			line = line.trim();
+		for (const line of lines) {
+			const trimmedLine = line.trim();
 
 			switch (format.value) {
 				case "token":
-					addAccount(line, "");
+					await addAccount(trimmedLine, "");
 					break;
 				case '"token"': {
-					const tokenMatch = line.match(/"(.*?)"/);
+					const tokenMatch = trimmedLine.match(/"(.*?)"/);
 					if (tokenMatch) {
-						addAccount(tokenMatch[1], "");
+						await addAccount(tokenMatch[1], "");
 					}
 					break;
 				}
 				case "token id": {
-					let parts = line.split(" ");
+					let parts = trimmedLine.split(" ");
 					if (parts.length >= 2) {
-						addAccount(parts[0], parts[1]);
+						await addAccount(parts[0], parts[1]);
 					}
 					break;
 				}
 				case "id token": {
-					let parts = line.split(" ");
+					let parts = trimmedLine.split(" ");
 					if (parts.length >= 2) {
-						addAccount(parts[1], parts[0]);
+						await addAccount(parts[1], parts[0]);
 					}
 					break;
 				}
 				case "token: id": {
-					let colonParts = line.split(":");
+					let colonParts = trimmedLine.split(":");
 					if (colonParts.length >= 2) {
-						addAccount(colonParts[0].trim(), colonParts[1].trim());
+						await addAccount(colonParts[0].trim(), colonParts[1].trim());
 					}
 					break;
 				}
 				case "id: token": {
-					let colonParts = line.split(":");
+					let colonParts = trimmedLine.split(":");
 					if (colonParts.length >= 2) {
-						addAccount(colonParts[1].trim(), colonParts[0].trim());
+						await addAccount(colonParts[1].trim(), colonParts[0].trim());
 					}
 					break;
 				}
 			}
-		});
+		}
 	}
 
 	let openSingleAccount = $state(false);
@@ -134,16 +138,16 @@
 			</div>
 			<div class="grid grid-cols-4 items-center gap-4">
 				<Label for="channelID" class="text-right">Channel ID</Label>
-				<Input type="number" id="channelID" class="col-span-3" bind:value={individualChannelID} />
+				<Input type="text" id="channelID" class="col-span-3" bind:value={individualChannelID} />
 			</div>
 		</div>
 		<Dialog.Footer>
 			<Button
 				type="submit"
-				onclick={() => {
-					addAccount(individualToken, individualChannelID);
+				onclick={async () => {
+					await addAccount(individualToken, individualChannelID);
 					openSingleAccount = false;
-				}}>Save account</Button
+				}}>Add account</Button
 			>
 		</Dialog.Footer>
 	</Dialog.Content>
