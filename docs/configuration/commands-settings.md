@@ -8,25 +8,25 @@ description: Learn more about command customizations
 
 <summary>Adventure</summary>
 
-### Available Adventures
+#### Available Adventures
 
 These adventures are currently implemented in Dank Memer Grinder:
 
-- [x] Space
-- [x] Pasture (Out West)
-- [ ] Trick or Treating
-- [ ] Winter Wonderland
-- [ ] Museum
-- [x] Brazil
-- [x] Vacation
+* [x] Space
+* [x] Pasture (Out West)
+* [ ] Trick or Treating
+* [ ] Winter Wonderland
+* [ ] Museum
+* [x] Brazil
+* [x] Vacation
 
 To choose an adventure, find the "Adventure" drop down menu in the Settings tab and select the adventure you want the Dank Memer Grinder to run.
 
-### Adventure Answers
+#### Adventure Answers
 
 Dank Memer Grinder allows you to optimize your adventure success rate or profits by customizing the answers it chooses. You can configure different responses in the `config.json` file. [Dank Memer Adventure Guides](https://docs.google.com/spreadsheets/d/14AC-mmYNMrcdDGxfG2Nv0OAwq-Pkth1SIJuW3ADSXYQ/edit#gid=1274532499) is a useful tool for choosing answers.
 
-#### Answer Format
+**Answer Format**
 
 The format for specifying adventure answers is:
 
@@ -36,10 +36,9 @@ The format for specifying adventure answers is:
 
 Where `question` is the text of the prompt, and `answer button name` is the label of the button to click in response.
 
-### Default Adventure Answers
+#### Default Adventure Answers
 
 {% code title="config.json" %}
-
 ```json
 "adventure": {
     "brazil": {
@@ -113,7 +112,6 @@ Where `question` is the text of the prompt, and `answer button name` is the labe
     }
 }
 ```
-
 {% endcode %}
 
 </details>
@@ -122,15 +120,15 @@ Where `question` is the text of the prompt, and `answer button name` is the labe
 
 <summary>Search</summary>
 
-### Search Priorities
+#### Search Priorities
 
 You can configure your search priorities by editing the `config.json` file. This allows you to specify preferred and avoided locations to search.
 
-- The **"priority"** array determines the top search locations. Locations in this array will be checked first when searching.
-- The **"second_priority"** array specifies secondary search locations that will be checked after the top priorities.
-- The **"avoid"** array lists locations that should be avoided during searches. If no priority locations are found, searches will avoid locations in these arrays.
+* The **"priority"** array determines the top search locations. Locations in this array will be checked first when searching.
+* The **"second\_priority"** array specifies secondary search locations that will be checked after the top priorities.
+* The **"avoid"** array lists locations that should be avoided during searches. If no priority locations are found, searches will avoid locations in these arrays.
 
-#### Default Search Priorities
+**Default Search Priorities**
 
 <pre class="language-json" data-title="config.json"><code class="lang-json"><strong>"priority": [
 </strong>    "phoenix pits",
@@ -168,19 +166,15 @@ You can configure your search priorities by editing the `config.json` file. This
 
 <summary>Crime</summary>
 
-### Crime Priorities
+#### Crime Priorities
 
 You can configure your crime priorities by editing the `config.json` file. This allows you to specify preferred and avoided locations for crime.
 
-- The **"priority"** array determines the top crime locations. Locations in this array will be checked first when searching.
+* The **"priority"** array determines the top crime locations. Locations in this array will be checked first when searching.
 
-<!---->
+- The **"second\_priority"** array specifies secondary crime locations that will be checked after the top priorities.
 
-- The **"second_priority"** array specifies secondary crime locations that will be checked after the top priorities.
-
-<!---->
-
-- The **"avoid"** array lists locations that should be avoided during crimes. If no priority locations are found, crimes will avoid locations in these arrays.
+* The **"avoid"** array lists locations that should be avoided during crimes. If no priority locations are found, crimes will avoid locations in these arrays.
 
 <pre class="language-json" data-title="config.json"><code class="lang-json"><strong>"priority": [
 </strong>    "hacking",
@@ -212,7 +206,7 @@ You can configure your crime priorities by editing the `config.json` file. This 
 
 <summary>Trivia</summary>
 
-### Trivia Correct Chance
+#### Trivia Correct Chance
 
 The Trivia Correct Chance setting in Dank Memer Grinder's Settings tab lets you adjust the percentage of correct trivia answers from 1-100%. Higher percentages mean more accurate trivia responses, the default accuracy 75%.
 
@@ -222,22 +216,20 @@ The Trivia Correct Chance setting in Dank Memer Grinder's Settings tab lets you 
 
 <summary>Stream</summary>
 
-### Streaming Order
+#### Streaming Order
 
 Dank Memer Grinder allows you to configure the order in which it interacts with a stream. This allows you to prioritize gaining Levels or earning profits.
 
-- 0: Run AD (Moderate chance of failing)
-- 1: Read Chat (Low chance of failing)
-- 2: Collect Donations (High chance of failing)
+* 0: Run AD (Moderate chance of failing)
+* 1: Read Chat (Low chance of failing)
+* 2: Collect Donations (High chance of failing)
 
-### Default Streaming Order
+#### Default Streaming Order
 
 {% code title="captcha.json" %}
-
 ```json
 "order": [1, 1, 1, 1, 1, 0, 0, 0, 2, 2, 2]
 ```
-
 {% endcode %}
 
 </details>

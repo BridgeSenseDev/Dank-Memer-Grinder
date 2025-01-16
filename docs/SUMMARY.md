@@ -4,14 +4,12 @@
 
 ## Installation
 
-* [Windows](installation/windows.md)
-* [macOS](installation/macos.md)
-* [Linux](installation/linux.md)
+* [Pre-Built binaries](installation/pre-built-binaries.md)
+* [Build from Source](installation/build-from-source.md)
 
 ## Configuration
 
-* [Getting Your Discord Token](configuration/getting-your-discord-token.md)
-* [Getting Your Channel ID](configuration/getting-your-channel-id.md)
+* [Entering Token and Channel ID](configuration/getting-your-channel-id.md)
 * [General Settings](configuration/general-settings.md)
 * [Commands Settings](configuration/commands-settings.md)
 * [Config.json File](configuration/config-json.md)

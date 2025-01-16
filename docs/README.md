@@ -15,14 +15,14 @@ Join the Dank Memer Grinder Discord
 
 Start here to begin using Dank Memer Grinder!
 
-{% content-ref url="installation/windows.md" %}
-[windows.md](installation/windows.md)
+{% content-ref url="broken-reference" %}
+[Broken link](broken-reference)
 {% endcontent-ref %}
 
-{% content-ref url="installation/macos.md" %}
-[macos.md](installation/macos.md)
+{% content-ref url="broken-reference" %}
+[Broken link](broken-reference)
 {% endcontent-ref %}
 
-{% content-ref url="installation/linux.md" %}
-[linux.md](installation/linux.md)
+{% content-ref url="broken-reference" %}
+[Broken link](broken-reference)
 {% endcontent-ref %}
