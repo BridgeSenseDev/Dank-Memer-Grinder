@@ -148,13 +148,15 @@ func (in *Instance) AutoBuyMessageCreate(message gateway.EventMessage) {
 
 func (in *Instance) AutoBuyModalCreate(modal gateway.EventModalCreate) {
 	if modal.Title == "Dank Memer Shop" {
-		modal.Components[0].(*types.ActionsRow).Components[0].(*types.TextInput).Value = strconv.Itoa(globalAutoBuyState.count)
-		err := in.SubmitModal(modal)
-		if err != nil {
-			in.Log("discord", "ERR", fmt.Sprintf("Failed to submit autobuy modal: %s", err.Error()))
+		if globalAutoBuyState.count != 0 {
+			modal.Components[0].(*types.ActionsRow).Components[0].(*types.TextInput).Value = strconv.Itoa(globalAutoBuyState.count)
+			err := in.SubmitModal(modal)
+			if err != nil {
+				in.Log("discord", "ERR", fmt.Sprintf("Failed to submit autobuy modal: %s", err.Error()))
+			}
+			in.Log("others", "INF", fmt.Sprintf("Auto bought %s", globalAutoBuyState.itemEmojiName))
+			in.setAutoBuyState(0, 0, "", 0)
+			in.UnpauseCommands()
 		}
-		in.Log("others", "INF", fmt.Sprintf("Auto bought %s", globalAutoBuyState.itemEmojiName))
-		in.setAutoBuyState(0, 0, "", 0)
-		in.UnpauseCommands()
 	}
 }
