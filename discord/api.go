@@ -3,6 +3,7 @@ package discord
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/valyala/fasthttp"
@@ -119,11 +120,14 @@ func (client *Client) RequestWithLockedBucket(method, urlStr string, b []byte, b
 	}
 
 	req.Header.Set("User-Agent", client.Gateway.UserAgent())
-	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
-	req.Header.Set("Accept-Language", "en-US,en;q=0.5")
-	req.Header.Set("Connection", "keep-alive")
-	req.Header.Set("Referer", "https://discord.com/")
-	req.Header.Set("Upgrade-Insecure-Requests", "1")
+
+	if strings.Contains(urlStr, "https://discord.com/api/v9/oauth2/authorize") {
+		req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+		req.Header.Set("Accept-Language", "en-US,en;q=0.5")
+		req.Header.Set("Connection", "keep-alive")
+		req.Header.Set("Referer", "https://discord.com/")
+		req.Header.Set("Upgrade-Insecure-Requests", "1")
+	}
 
 	err := fasthttp.Do(req, resp)
 	if err != nil {
@@ -143,28 +147,32 @@ func (client *Client) RequestWithLockedBucket(method, urlStr string, b []byte, b
 
 	switch resp.StatusCode() {
 	case fasthttp.StatusOK, fasthttp.StatusCreated, fasthttp.StatusNoContent:
-		return response, nil
 	case fasthttp.StatusBadGateway:
 		if sequence < 3 {
 			client.Log("INF", fmt.Sprintf("%s Failed (%d), Retrying...", urlStr, resp.StatusCode()))
-			return client.RequestWithLockedBucket(method, urlStr, b, client.RateLimiter.LockBucketObject(bucket), sequence+1)
+			_, err = client.RequestWithLockedBucket(method, urlStr, b, client.RateLimiter.LockBucketObject(bucket), sequence+1)
 		} else {
 			client.Log("ERR", fmt.Sprintf("Exceeded Max retries HTTP %d, %s", resp.StatusCode(), response))
-			return nil, fmt.Errorf("exceeded max retries: %s", string(response))
+			return response, fmt.Errorf("exceeded max retries HTTP %d: %s", resp.StatusCode(), string(response))
 		}
 	case fasthttp.StatusTooManyRequests:
 		rl := TooManyRequests{}
 		err = json.Unmarshal(response, &rl)
 		if err != nil {
 			client.Log("ERR", fmt.Sprintf("rate limit unmarshal error, %s", err))
-			return nil, err
+			return response, err
 		}
 
 		client.Log("INF", fmt.Sprintf("Rate Limiting %s, retry in %v", urlStr, rl.RetryAfter))
 
 		time.Sleep(time.Duration(rl.RetryAfter * float64(time.Second)))
-		return client.RequestWithLockedBucket(method, urlStr, b, client.RateLimiter.LockBucketObject(bucket), sequence)
+		_, err = client.RequestWithLockedBucket(method, urlStr, b, client.RateLimiter.LockBucketObject(bucket), sequence)
+		if err != nil {
+			return response, err
+		}
 	default:
-		return nil, fmt.Errorf("request failed with status code %d: %s", resp.StatusCode(), string(response))
+		return response, fmt.Errorf("request failed with status code %d: %s", resp.StatusCode(), string(response))
 	}
+
+	return response, nil
 }
