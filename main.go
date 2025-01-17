@@ -39,7 +39,8 @@ func main() {
 	app := application.New(application.Options{
 		Name: "Dank Memer Grinder",
 		Assets: application.AssetOptions{
-			Handler: application.AssetFileServerFS(assets),
+			Handler:        application.AssetFileServerFS(assets),
+			DisableLogging: true,
 		},
 		Logger: nil,
 		Services: []application.Service{
