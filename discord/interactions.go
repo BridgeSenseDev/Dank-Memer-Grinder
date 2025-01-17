@@ -293,7 +293,7 @@ func (client *Client) GetAuthorizationCode() (string, error) {
 
 	bucket := client.RateLimiter.GetBucket(fullUrl)
 
-	response, err := client.RequestWithLockedBucket("POST", fullUrl, jsonPayload, bucket, 0)
+	response, err := client.RequestWithLockedBucket("POST", fullUrl, jsonPayload, client.RateLimiter.LockBucketObject(bucket), 0)
 	if err != nil {
 		return "", fmt.Errorf("authorization request failed: %v", err)
 	}
