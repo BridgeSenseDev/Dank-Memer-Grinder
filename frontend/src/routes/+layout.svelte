@@ -1,5 +1,5 @@
 <script lang="ts">
-	import "@/static/style.css";
+	import "../app.css";
 	import Nav from "$lib/components/Nav.svelte";
 	import Header from "$lib/components/Header.svelte";
 
