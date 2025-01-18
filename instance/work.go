@@ -2,6 +2,7 @@ package instance
 
 import (
 	"fmt"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"regexp"
@@ -86,7 +87,7 @@ func (in *Instance) WorkMessageUpdate(message gateway.EventMessage) {
 			highestJob = getLastUnlockedCYJob(embed.Description)
 		}
 
-		if strings.Count(embed.Description, cross) > 1 {
+		if strings.Count(embed.Description, cross) > 1 || message.Components[0].(*types.ActionsRow).Components[2].(*types.Button).Disabled {
 			err := in.SendSubCommand("work", "apply", map[string]string{"job": highestJob}, true)
 			if err != nil {
 				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to send /work apply command: %s", err.Error()))
