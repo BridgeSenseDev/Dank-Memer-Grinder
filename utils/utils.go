@@ -3,10 +3,12 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/rs/zerolog/log"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/config"
 	"github.com/valyala/fasthttp"
 	"github.com/wailsapp/wails/v3/pkg/application"
+	"log/slog"
 	"math/rand"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -160,13 +162,36 @@ const (
 	Error LogType = "ERR"
 )
 
-func Log(logType LogType, msg string) {
-	application.Get().EmitEvent("logImportant", logType, "", msg)
+func Log(level LogLevel, logType LogType, username string, msg string) {
+	application.Get().EmitEvent("log", level, logType, username, msg)
 
 	switch logType {
 	case Info:
-		log.Info().Msg(fmt.Sprintf("%s %s", logType, msg))
+		slog.Info(fmt.Sprintf("%s %s %s", level, username, msg))
 	case Error:
-		log.Error().Msg(fmt.Sprintf("%s %s", logType, msg))
+		slog.Error(fmt.Sprintf("%s %s %s", level, username, msg))
 	}
+}
+
+func ReadConfig(configFile string) (config.Config, error) {
+	var cfg config.Config
+	bytes, err := os.ReadFile(configFile)
+	if err != nil {
+		return cfg, err
+	}
+	err = json.Unmarshal(bytes, &cfg)
+	return cfg, err
+}
+
+func GetAccountNumber(token string) string {
+	cfg, err := ReadConfig("config.json")
+	if err != nil {
+		return "Error: Unable to fetch config"
+	}
+	for i, account := range cfg.Accounts {
+		if account.Token == token {
+			return fmt.Sprintf("Account %d", i+1)
+		}
+	}
+	return "Unknown Account"
 }

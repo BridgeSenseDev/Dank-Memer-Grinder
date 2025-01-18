@@ -2,14 +2,13 @@ package gateway
 
 import (
 	"fmt"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/config"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"github.com/fasthttp/websocket"
 )
 
 // DefaultConfig returns a Config with sensible defaults.
 func DefaultConfig() *Config {
-	cfg, err := config.ReadConfig("config.json")
+	cfg, err := utils.ReadConfig("config.json")
 	if err != nil {
 		panic(fmt.Sprintf("Failed to read config file: %s", err.Error()))
 	}

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"math/big"
 	"net/url"
 	"strings"
@@ -26,7 +27,7 @@ func (client *Client) GetCommandInfo(commandName string) *CommandData {
 			return &cmd
 		}
 	}
-	client.Log("ERR", fmt.Sprintf("Command %s not found", commandName))
+	utils.Log(utils.Discord, utils.Error, client.SafeGetUsername(), fmt.Sprintf("Command %s not found", commandName))
 	return nil
 }
 
@@ -57,7 +58,7 @@ func (client *Client) SendCommand(commandName string, options map[string]string)
 	if commandInfo == nil {
 		commands, err := client.GetCommands(client.GuildID)
 		if err != nil {
-			client.Log("ERR", fmt.Sprintf("Failed to get commands: %s", err.Error()))
+			utils.Log(utils.Discord, utils.Error, client.SafeGetUsername(), fmt.Sprintf("Failed to get commands: %s", err.Error()))
 		} else {
 			commandDataSlice := make([]CommandData, 0, len(commands))
 			for _, cmd := range commands {
@@ -67,7 +68,7 @@ func (client *Client) SendCommand(commandName string, options map[string]string)
 			client.CommandsData = &commandDataSlice
 		}
 
-		commandInfo := client.GetCommandInfo(commandName)
+		commandInfo = client.GetCommandInfo(commandName)
 		if commandInfo == nil {
 			return fmt.Errorf("failed to send /%s command: Could not get command info", commandName)
 		}

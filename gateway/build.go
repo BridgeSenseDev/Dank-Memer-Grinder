@@ -69,7 +69,7 @@ func (g *gatewayImpl) extractAssetFiles() ([]string, error) {
 func (g *gatewayImpl) getLatestBuild() string {
 	files, err := g.extractAssetFiles()
 	if err != nil {
-		g.Log("ERR", fmt.Sprintf("Error extracting asset files: %s", err))
+		utils.Log(utils.Discord, utils.Error, g.SafeGetUsername(), fmt.Sprintf("Error extracting asset files: %s", err))
 		return fallbackBuildNumber
 	}
 
@@ -89,7 +89,7 @@ func (g *gatewayImpl) getLatestBuild() string {
 		}
 
 		if err := requestClient.Do(req, resp); err != nil {
-			g.Log("ERR", fmt.Sprintf("Error fetching JavaScript file: %v", err))
+			utils.Log(utils.Discord, utils.Error, g.SafeGetUsername(), fmt.Sprintf("Error fetching JavaScript file: %v", err))
 			continue
 		}
 

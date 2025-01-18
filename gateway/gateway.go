@@ -101,4 +101,7 @@ type Gateway interface {
 
 	// StatusUpdates returns a channel that will be updated with the status of the gateway.
 	StatusUpdates() <-chan Status
+
+	// SafeGetUsername returns the username of the gateway if it is not nil, otherwise it returns the token
+	SafeGetUsername() string
 }

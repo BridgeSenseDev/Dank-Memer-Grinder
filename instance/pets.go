@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"regexp"
 	"strconv"
 	"strings"
@@ -54,7 +55,7 @@ func (in *Instance) handlePetsCare(message gateway.EventMessage) {
 		if nextPet != 0 {
 			err := in.ChooseSelectMenu(message, 0, 0, []string{petsChooseMenu.Options[nextPet].Value})
 			if err != nil {
-				in.Log("discord", "ERR", fmt.Sprintf("Failed to choose pets menu: %s", err.Error()))
+				utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to choose pets menu: %s", err.Error()))
 			}
 		} else {
 			in.UnpauseCommands()
@@ -66,20 +67,20 @@ func (in *Instance) handlePetsCare(message gateway.EventMessage) {
 	if requiredAction != 3 {
 		err := in.ClickButton(message, 1, requiredAction)
 		if err != nil {
-			in.Log("discord", "ERR", fmt.Sprintf("Failed to click pets button: %s", err.Error()))
+			utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click pets button: %s", err.Error()))
 		}
 	} else {
 		for i := 0; i < 3; i++ {
 			err := in.ClickButton(message, 2, i)
 			if err != nil {
-				in.Log("discord", "ERR", fmt.Sprintf("Failed to click pets button: %s", err.Error()))
+				utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click pets button: %s", err.Error()))
 			}
 		}
 
 		if nextPet != 0 {
 			err := in.ChooseSelectMenu(message, 0, 0, []string{petsChooseMenu.Options[nextPet].Value})
 			if err != nil {
-				in.Log("discord", "ERR", fmt.Sprintf("Failed to choose pets menu: %s", err.Error()))
+				utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to choose pets menu: %s", err.Error()))
 			}
 		} else {
 			in.UnpauseCommands()

@@ -3,6 +3,7 @@ package instance
 import (
 	"fmt"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"regexp"
 	"strconv"
 	"strings"
@@ -40,7 +41,7 @@ func (in *Instance) findAndClickButton(message gateway.EventMessage, targetEmoji
 			if button.(*types.Button).Emoji.Name == targetEmojiName {
 				err := in.ClickButton(message, rowIndex, columnIndex)
 				if err != nil {
-					in.Log("discord", "ERR", fmt.Sprintf("Failed to click autobuy button: %s", err.Error()))
+					utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click autobuy button: %s", err.Error()))
 				}
 				return true
 			}
@@ -55,13 +56,13 @@ func (in *Instance) shopBuy(shopMsg gateway.EventMessage) {
 	if !shopTypeOptions[globalAutoBuyState.shopTypeIndex].Default {
 		err := in.ChooseSelectMenu(shopMsg, 0, 0, []string{shopTypeOptions[globalAutoBuyState.shopTypeIndex].Value})
 		if err != nil {
-			in.Log("discord", "ERR", fmt.Sprintf("Failed to choose shop view select menu: %s", err.Error()))
+			utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to choose shop view select menu: %s", err.Error()))
 		}
 	} else {
 		if !in.findAndClickButton(shopMsg, globalAutoBuyState.itemEmojiName) {
 			err := in.ClickButton(shopMsg, 3, 1)
 			if err != nil {
-				in.Log("discord", "ERR", fmt.Sprintf("Failed to click next autobuy page button: %s", err.Error()))
+				utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click next autobuy page button: %s", err.Error()))
 			}
 		}
 	}
@@ -72,7 +73,7 @@ func (in *Instance) AutoBuyMessageUpdate(message gateway.EventMessage) {
 
 	if embed.Title == "Dank Memer Shop" && globalAutoBuyState.itemEmojiName != "" {
 		if strings.Contains(embed.Footer.Text, "Page 1") {
-			in.Log("others", "ERR", "Failed to find autobuy button")
+			utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), "Failed to find autobuy button")
 			in.setAutoBuyState(0, 0, "", 0)
 			in.UnpauseCommands()
 			return
@@ -95,7 +96,7 @@ func (in *Instance) AutoBuyMessageCreate(message gateway.EventMessage) {
 		if len(match) > 1 {
 			remaining, err := strconv.Atoi(match[1])
 			if err != nil {
-				in.Log("important", "ERR", fmt.Sprintf("Failed to determine amount of lifesavers required: %s", err.Error()))
+				utils.Log(utils.Important, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to determine amount of lifesavers required: %s", err.Error()))
 			}
 
 			required := in.Cfg.AutoBuy.LifeSavers.Amount
@@ -104,7 +105,7 @@ func (in *Instance) AutoBuyMessageCreate(message gateway.EventMessage) {
 				in.setAutoBuyState(0, required-remaining, "LifeSaver", (required-remaining)*250000)
 			}
 		} else {
-			in.Log("important", "ERR", "Failed to determine amount of lifesavers required")
+			utils.Log(utils.Important, utils.Error, in.SafeGetUsername(), "Failed to determine amount of lifesavers required")
 		}
 	} else if embed.Title == "You died!" {
 		in.setAutoBuyState(0, in.Cfg.AutoBuy.LifeSavers.Amount, "LifeSaver", in.Cfg.AutoBuy.LifeSavers.Amount*250000)
@@ -112,12 +113,12 @@ func (in *Instance) AutoBuyMessageCreate(message gateway.EventMessage) {
 		if strings.Contains(embed.Description, "Would you like to use your **<:Coupon:977969734307971132> Shop Coupon**") {
 			err := in.ClickButton(message, 0, 0)
 			if err != nil {
-				in.Log("important", "ERR", "Failed to click decline shop coupon button")
+				utils.Log(utils.Important, utils.Error, in.SafeGetUsername(), "Failed to click decline shop coupon button")
 			}
 		} else if strings.Contains(embed.Description, "Are you sure you want to buy") {
 			err := in.ClickButton(message, 0, 1)
 			if err != nil {
-				in.Log("important", "ERR", "Failed to click shop buy confirmation button")
+				utils.Log(utils.Important, utils.Error, in.SafeGetUsername(), "Failed to click shop buy confirmation button")
 			}
 		}
 		return
@@ -133,16 +134,16 @@ func (in *Instance) AutoBuyMessageCreate(message gateway.EventMessage) {
 	}
 
 	in.PauseCommands(false)
-	in.Log("others", "INF", fmt.Sprintf("Auto buying %s", globalAutoBuyState.itemEmojiName))
+	utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), fmt.Sprintf("Auto buying %s", globalAutoBuyState.itemEmojiName))
 
 	err := in.SendCommand("withdraw", map[string]string{"amount": strconv.Itoa(globalAutoBuyState.price)}, true)
 	if err != nil {
-		in.Log("discord", "ERR", fmt.Sprintf("Failed to send autobuy /withdraw command: %s", err.Error()))
+		utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to send autobuy /withdraw command: %s", err.Error()))
 	}
 
 	err = in.SendSubCommand("shop", "view", nil, true)
 	if err != nil {
-		in.Log("discord", "ERR", fmt.Sprintf("Failed to send /shop view command: %s", err.Error()))
+		utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to send /shop view command: %s", err.Error()))
 	}
 }
 
@@ -152,9 +153,9 @@ func (in *Instance) AutoBuyModalCreate(modal gateway.EventModalCreate) {
 			modal.Components[0].(*types.ActionsRow).Components[0].(*types.TextInput).Value = strconv.Itoa(globalAutoBuyState.count)
 			err := in.SubmitModal(modal)
 			if err != nil {
-				in.Log("discord", "ERR", fmt.Sprintf("Failed to submit autobuy modal: %s", err.Error()))
+				utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to submit autobuy modal: %s", err.Error()))
 			}
-			in.Log("others", "INF", fmt.Sprintf("Auto bought %s", globalAutoBuyState.itemEmojiName))
+			utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), fmt.Sprintf("Auto bought %s", globalAutoBuyState.itemEmojiName))
 			in.setAutoBuyState(0, 0, "", 0)
 			in.UnpauseCommands()
 		}

@@ -3,6 +3,7 @@ package discord
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"strings"
 	"time"
 
@@ -149,21 +150,21 @@ func (client *Client) RequestWithLockedBucket(method, urlStr string, b []byte, b
 	case fasthttp.StatusOK, fasthttp.StatusCreated, fasthttp.StatusNoContent:
 	case fasthttp.StatusBadGateway:
 		if sequence < 3 {
-			client.Log("INF", fmt.Sprintf("%s Failed (%d), Retrying...", urlStr, resp.StatusCode()))
+			utils.Log(utils.Discord, utils.Info, client.SafeGetUsername(), fmt.Sprintf("%s Failed (%d), Retrying...", urlStr, resp.StatusCode()))
 			_, err = client.RequestWithLockedBucket(method, urlStr, b, client.RateLimiter.LockBucketObject(bucket), sequence+1)
 		} else {
-			client.Log("ERR", fmt.Sprintf("Exceeded Max retries HTTP %d, %s", resp.StatusCode(), response))
+			utils.Log(utils.Discord, utils.Error, client.SafeGetUsername(), fmt.Sprintf("Exceeded Max retries HTTP %d, %s", resp.StatusCode(), response))
 			return response, fmt.Errorf("exceeded max retries HTTP %d: %s", resp.StatusCode(), string(response))
 		}
 	case fasthttp.StatusTooManyRequests:
 		rl := TooManyRequests{}
 		err = json.Unmarshal(response, &rl)
 		if err != nil {
-			client.Log("ERR", fmt.Sprintf("rate limit unmarshal error, %s", err))
+			utils.Log(utils.Discord, utils.Error, client.SafeGetUsername(), fmt.Sprintf("rate limit unmarshal error, %s", err))
 			return response, err
 		}
 
-		client.Log("INF", fmt.Sprintf("Rate Limiting %s, retry in %v", urlStr, rl.RetryAfter))
+		utils.Log(utils.Discord, utils.Info, client.SafeGetUsername(), fmt.Sprintf("Rate Limiting %s, retry in %v", urlStr, rl.RetryAfter))
 
 		time.Sleep(time.Duration(rl.RetryAfter * float64(time.Second)))
 		_, err = client.RequestWithLockedBucket(method, urlStr, b, client.RateLimiter.LockBucketObject(bucket), sequence)

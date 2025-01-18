@@ -27,7 +27,7 @@ type DmgService struct {
 func (d *DmgService) startup() {
 	// Load configuration
 	configFile := "./config.json"
-	cfg, err := config.ReadConfig(configFile)
+	cfg, err := utils.ReadConfig(configFile)
 	if err != nil {
 		client := &fasthttp.Client{}
 
@@ -63,7 +63,7 @@ func (d *DmgService) startup() {
 			utils.ShowErrorDialog("A fatal error occurred!", fmt.Sprintf("Error saving file: %s", err2.Error()))
 		}
 
-		cfg, err = config.ReadConfig(configFile)
+		cfg, err = utils.ReadConfig(configFile)
 		if err != nil {
 			utils.ShowErrorDialog("A fatal error occurred!", fmt.Sprintf("Failed to read config.json: %s", err.Error()))
 		}
@@ -128,7 +128,7 @@ func (d *DmgService) UpdateDiscordStatus(status types.OnlineStatus) {
 
 		err := in.Client.SendMessage(3, d)
 		if err != nil {
-			in.Log("others", "ERR", fmt.Sprintf("Error setting Discord status: %s", err))
+			utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Error setting Discord status: %s", err))
 		}
 
 		in.User.Status = status

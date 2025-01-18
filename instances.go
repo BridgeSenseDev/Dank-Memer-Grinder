@@ -37,7 +37,7 @@ func (d *DmgService) StartInstance(account config.AccountsConfig) {
 				client.ChannelID = account.ChannelID
 				client.GuildID = client.GetGuildID(account.ChannelID)
 				if client.GuildID == "" {
-					client.Log("ERR", fmt.Sprintf("Failed to fetch GuildID from channelID: %v", account.ChannelID))
+					utils.Log(utils.Discord, utils.Error, client.SafeGetUsername(), fmt.Sprintf("Failed to fetch GuildID from channelID: %v", account.ChannelID))
 					in := &instance.Instance{
 						AccountCfg: account,
 						Error:      "invalidChannelID",
@@ -49,7 +49,7 @@ func (d *DmgService) StartInstance(account config.AccountsConfig) {
 
 				commands, err := client.GetCommands(client.GuildID)
 				if err != nil {
-					client.Log("ERR", fmt.Sprintf("Failed to get commands: %s", err.Error()))
+					utils.Log(utils.Discord, utils.Error, client.SafeGetUsername(), fmt.Sprintf("Failed to get commands: %s", err.Error()))
 				}
 
 				commandDataSlice := make([]discord.CommandData, 0, len(commands))
@@ -81,14 +81,14 @@ func (d *DmgService) StartInstance(account config.AccountsConfig) {
 				if err != nil {
 					return
 				}
-				in.Log("important", "INF", fmt.Sprintf("Logged in as %s", e.User.Username))
+				utils.Log(utils.Important, utils.Info, in.SafeGetUsername(), fmt.Sprintf("Logged in as %s", e.User.Username))
 			})
 		})
 
 		err := client.Connect()
 
 		if err != nil {
-			utils.Log("ERR", fmt.Sprintf("Failed to connect: %v", err.Error()))
+			utils.Log(utils.Important, utils.Error, "", fmt.Sprintf("Failed to connect: %v", err.Error()))
 			in := &instance.Instance{
 				AccountCfg: account,
 				Error:      "invalidToken",
@@ -158,7 +158,7 @@ func (d *DmgService) RestartInstance(token string) {
 	if accountToRestart.Token != "" {
 		d.StartInstance(accountToRestart)
 	} else {
-		utils.Log("ERR", fmt.Sprintf("No account found with token %s", token))
+		utils.Log(utils.Important, utils.Error, "", fmt.Sprintf("No account found with token %s", token))
 	}
 }
 

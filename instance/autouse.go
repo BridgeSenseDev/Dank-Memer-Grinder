@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"reflect"
 	"regexp"
 	"strings"
@@ -39,7 +40,7 @@ func extractItems(input string) []string {
 }
 
 func (in *Instance) AutoUse(message gateway.EventMessage) {
-	in.Log("discord", "INF", fmt.Sprintf("Auto use triggered for %s", in.User.Username))
+	utils.Log(utils.Discord, utils.Info, in.SafeGetUsername(), fmt.Sprintf("Auto use triggered for %s", in.SafeGetUsername()))
 	embed := message.Embeds[0]
 
 	if embed.Title == "Item Expiration" {
@@ -53,7 +54,7 @@ func (in *Instance) AutoUse(message gateway.EventMessage) {
 				}
 
 				if err := in.ClickDmButton(message, 0, 0); err != nil {
-					in.Log("discord", "ERR", fmt.Sprintf("Failed to click use again button: %s", err.Error()))
+					utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click use again button: %s", err.Error()))
 				}
 				break
 			}
@@ -64,11 +65,11 @@ func (in *Instance) AutoUse(message gateway.EventMessage) {
 func (in *Instance) ProfileMessageCreate(message gateway.EventMessage) {
 	embed := message.Embeds[0]
 
-	if embed.Title == in.User.Username {
+	if embed.Title == in.SafeGetUsername() {
 		in.PauseCommands(false)
 		err := in.ChooseSelectMenu(message, 0, 0, []string{"activeitems"})
 		if err != nil {
-			in.Log("discord", "ERR", fmt.Sprintf("Failed to choose profile select menu: %s", err.Error()))
+			utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to choose profile select menu: %s", err.Error()))
 		}
 	}
 }
@@ -76,7 +77,7 @@ func (in *Instance) ProfileMessageCreate(message gateway.EventMessage) {
 func (in *Instance) ProfileMessageUpdate(message gateway.EventMessage) {
 	embed := message.Embeds[0]
 
-	if embed.Title == fmt.Sprintf(`%s's active items`, in.User.Username) {
+	if embed.Title == fmt.Sprintf(`%s's active items`, in.SafeGetUsername()) {
 		items := extractItems(embed.Description)
 
 		val := reflect.ValueOf(in.Cfg.AutoUse)
@@ -91,10 +92,10 @@ func (in *Instance) ProfileMessageUpdate(message gateway.EventMessage) {
 				}
 
 				if !itemIsUsed {
-					in.Log("others", "INF", fmt.Sprintf("Auto using %s", addSpaces(val.Type().Field(i).Name)))
+					utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), fmt.Sprintf("Auto using %s", addSpaces(val.Type().Field(i).Name)))
 					err := in.SendCommand("use", map[string]string{"item": addSpaces(val.Type().Field(i).Name)}, true)
 					if err != nil {
-						in.Log("discord", "ERR", fmt.Sprintf("Failed to send /use command: %s", err.Error()))
+						utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to send /use command: %s", err.Error()))
 					}
 					break
 				}

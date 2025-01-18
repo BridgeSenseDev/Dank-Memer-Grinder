@@ -2,11 +2,8 @@ package discord
 
 import (
 	"context"
-	"fmt"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
-	"github.com/rs/zerolog/log"
-	"github.com/wailsapp/wails/v3/pkg/application"
 )
 
 type Client struct {
@@ -26,6 +23,14 @@ type CommandSendOptions struct {
 	Value string `json:"value"`
 }
 
+func (client *Client) SafeGetUsername() string {
+	if client.Gateway != nil {
+		return client.SafeGetUsername()
+	} else {
+		return utils.GetAccountNumber(client.Token)
+	}
+}
+
 func NewClient(ctx context.Context, token string) *Client {
 	commandsData := make([]CommandData, 0)
 
@@ -42,7 +47,7 @@ func (client *Client) gatewayHandlers(gatewayEventType gateway.EventType, event 
 			handler(event.(gateway.EventReady))
 		}
 	case gateway.EventTypeResumed:
-		client.Log("INF", "Successfully resumed discord gateway")
+		utils.Log(utils.Discord, utils.Info, client.SafeGetUsername(), "Successfully resumed discord gateway")
 	case gateway.EventTypeMessageCreate:
 		for _, handler := range client.Handlers.OnMessageCreate {
 			handler(event.(gateway.EventMessage))
@@ -72,14 +77,4 @@ func (client *Client) Close() {
 
 func (client *Client) SendMessage(op gateway.Opcode, data gateway.MessageData) error {
 	return client.Gateway.Send(client.Ctx, op, data)
-}
-
-func (client *Client) Log(logType utils.LogType, msg string) {
-	application.Get().EmitEvent("logDiscord", logType, client.Gateway.User().Username, msg)
-	switch logType {
-	case utils.Info:
-		log.Info().Msg(fmt.Sprintf("discord %s %s", client.Gateway.User().Username, msg))
-	case utils.Error:
-		log.Error().Msg(fmt.Sprintf("discord %s %s", client.Gateway.User().Username, msg))
-	}
 }

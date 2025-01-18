@@ -3,6 +3,7 @@ package instance
 import (
 	"fmt"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"regexp"
 	"strconv"
 )
@@ -21,12 +22,12 @@ func (in *Instance) HighLow(message gateway.EventMessage) {
 	if num >= 50 {
 		err := in.ClickButton(message, 0, 0)
 		if err != nil {
-			in.Log("discord", "ERR", fmt.Sprintf("Failed to click highlow button: %s", err.Error()))
+			utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click highlow button: %s", err.Error()))
 		}
 	} else {
 		err := in.ClickButton(message, 0, 2)
 		if err != nil {
-			in.Log("discord", "ERR", fmt.Sprintf("Failed to click highlow button: %s", err.Error()))
+			utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click highlow button: %s", err.Error()))
 		}
 	}
 }

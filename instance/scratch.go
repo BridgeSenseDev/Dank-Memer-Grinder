@@ -20,11 +20,11 @@ func (in *Instance) ScratchMessageCreate(message gateway.EventMessage) {
 
 	if message.Flags != 64 {
 		in.PauseCommands(false)
-		in.Log("others", "INF", "Solving scratch command")
+		utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), "Solving scratch command")
 
 		err := in.ClickButton(message, utils.Rng.Intn(2), utils.Rng.Intn(4))
 		if err != nil {
-			in.Log("discord", "ERR", fmt.Sprintf("Failed to click scratch answer button: %s", err.Error()))
+			utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click scratch answer button: %s", err.Error()))
 		}
 	} else {
 		if strings.Contains(embed.Description, "You can scratch only once") {
@@ -38,10 +38,10 @@ func (in *Instance) ScratchMessageCreate(message gateway.EventMessage) {
 				}
 				in.LastRan["Scratch"] = time.Unix(timestamp+int64(time.Minute.Seconds()), 0)
 
-				in.Log("others", "INF", fmt.Sprintf("Time until next scratch: %.2f minutes", time.Until(in.LastRan["Scratch"]).Minutes()))
+				utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), fmt.Sprintf("Time until next scratch: %.2f minutes", time.Until(in.LastRan["Scratch"]).Minutes()))
 			}
 		} else if strings.Contains(embed.Description, "vote") {
-			in.Log("others", "ERR", "Account hasn't voted in past 12 hours")
+			utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), "Account hasn't voted in past 12 hours")
 		}
 	}
 }
@@ -57,16 +57,16 @@ func (in *Instance) ScratchMessageUpdate(message gateway.EventMessage) {
 		}
 
 		if attemptsLeft == 0 {
-			err := in.ClickButton(message, 4, 3)
+			err = in.ClickButton(message, 4, 3)
 			if err != nil {
-				in.Log("discord", "ERR", fmt.Sprintf("Failed to click end scratch button: %s", err.Error()))
+				utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click end scratch button: %s", err.Error()))
 			}
 
-			in.Log("others", "INF", "Solved scratch command")
+			utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), "Solved scratch command")
 			in.UnpauseCommands()
 
-			re := regexp.MustCompile(`Next Scratch-Off available <t:(\d+):R>`)
-			matches := re.FindStringSubmatch(message.Embeds[0].Description)
+			re = regexp.MustCompile(`Next Scratch-Off available <t:(\d+):R>`)
+			matches = re.FindStringSubmatch(message.Embeds[0].Description)
 
 			if len(matches) > 1 {
 				actionsRow, ok := message.Components[4].(*types.ActionsRow)
@@ -77,7 +77,7 @@ func (in *Instance) ScratchMessageUpdate(message gateway.EventMessage) {
 					}
 					in.LastRan["Scratch"] = time.Unix(timestamp+int64(time.Minute.Seconds()), 0)
 
-					in.Log("others", "INF", fmt.Sprintf("Time until next scratch: %.2f minutes", time.Until(in.LastRan["Scratch"]).Minutes()))
+					utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), fmt.Sprintf("Time until next scratch: %.2f minutes", time.Until(in.LastRan["Scratch"]).Minutes()))
 				}
 			}
 		} else {
@@ -88,9 +88,9 @@ func (in *Instance) ScratchMessageUpdate(message gateway.EventMessage) {
 				actionRow := message.Components[y].(*types.ActionsRow)
 				button := actionRow.Components[x].(*types.Button)
 				if !button.Disabled {
-					err := in.ClickButton(message, y, x)
+					err = in.ClickButton(message, y, x)
 					if err != nil {
-						in.Log("discord", "ERR", fmt.Sprintf("Failed to click scratch button: %s", err.Error()))
+						utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click scratch button: %s", err.Error()))
 					} else {
 						break
 					}

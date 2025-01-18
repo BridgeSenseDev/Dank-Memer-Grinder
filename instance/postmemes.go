@@ -19,7 +19,7 @@ func (in *Instance) PostMemesMessageCreate(message gateway.EventMessage) {
 	if !platformOptions[option].Default {
 		err := in.ChooseSelectMenu(message, 0, 0, []string{platformOptions[option].Value})
 		if err != nil {
-			in.Log("discord", "ERR", fmt.Sprintf("Failed to choose postmemes platform select menu: %s", err.Error()))
+			utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to choose postmemes platform select menu: %s", err.Error()))
 		}
 	}
 
@@ -35,13 +35,13 @@ func (in *Instance) PostMemesMessageCreate(message gateway.EventMessage) {
 		randomIndex := utils.Rng.Intn(len(memeTypeOptions))
 		err := in.ChooseSelectMenu(message, 1, 0, []string{memeTypeOptions[randomIndex].Value})
 		if err != nil {
-			in.Log("discord", "ERR", fmt.Sprintf("Failed to choose postmemes option select menu: %s", err.Error()))
+			utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to choose postmemes option select menu: %s", err.Error()))
 		}
 	}
 
 	err := in.ClickButton(message, 2, 0)
 	if err != nil {
-		in.Log("discord", "ERR", fmt.Sprintf("Failed to click postmemes button: %s", err.Error()))
+		utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click postmemes button: %s", err.Error()))
 	}
 }
 

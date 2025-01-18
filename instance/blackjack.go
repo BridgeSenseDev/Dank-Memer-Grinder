@@ -361,7 +361,7 @@ func (in *Instance) handleButtonClick(message gateway.EventMessage, result int) 
 	}
 
 	if err != nil {
-		in.Log("others", "ERR", fmt.Sprintf("Blackjack minigame failed to click button: %s", err.Error()))
+		utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Blackjack minigame failed to click button: %s", err.Error()))
 	}
 }
 
@@ -385,7 +385,7 @@ func (in *Instance) processBlackjackMessage(message gateway.EventMessage) {
 	if result != "" {
 		netValue, err := extractNetValue(embed.Description)
 		if err != nil {
-			in.Log("others", "ERR", fmt.Sprintf("Failed to extract net value: %s", err.Error()))
+			utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to extract net value: %s", err.Error()))
 			return
 		}
 
@@ -397,7 +397,7 @@ func (in *Instance) processBlackjackMessage(message gateway.EventMessage) {
 			winPercentage = (float64(wins) / float64(totalGames)) * 100
 		}
 
-		in.Log("others", "INF", fmt.Sprintf("%s blackjack (⏣ %s): Win %%: %.1f, Total earnings: ⏣ %s", result, utils.FormatNumber(netValue, 0), winPercentage, utils.FormatNumber(total, 0)))
+		utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), fmt.Sprintf("%s blackjack (⏣ %s): Win %%: %.1f, Total earnings: ⏣ %s", result, utils.FormatNumber(netValue, 0), winPercentage, utils.FormatNumber(total, 0)))
 	}
 }
 

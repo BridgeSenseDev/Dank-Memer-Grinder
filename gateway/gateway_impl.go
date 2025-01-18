@@ -7,8 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
-	"github.com/rs/zerolog/log"
-	"github.com/wailsapp/wails/v3/pkg/application"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"io"
 	"net"
 	"strconv"
@@ -76,7 +75,7 @@ func (g *gatewayImpl) Open(ctx context.Context) error {
 }
 
 func (g *gatewayImpl) open(ctx context.Context) error {
-	g.Log("INF", "Opening gateway connection")
+	utils.Log(utils.Discord, utils.Info, g.SafeGetUsername(), "Opening gateway connection")
 
 	g.connMu.Lock()
 	defer g.connMu.Unlock()
@@ -99,12 +98,12 @@ func (g *gatewayImpl) open(ctx context.Context) error {
 			}()
 			rawBody, bErr := io.ReadAll(rs.Body)
 			if bErr != nil {
-				g.Log("ERR", fmt.Sprintf("Error while reading response body: %s", err.Error()))
+				utils.Log(utils.Discord, utils.Error, g.SafeGetUsername(), fmt.Sprintf("Error while reading response body: %s", err.Error()))
 			}
 			body = string(rawBody)
 		}
 
-		g.Log("ERR", fmt.Sprintf("Error connecting to the gateway: %s | url=%s | body=%s", err.Error(), gatewayURL, body))
+		utils.Log(utils.Discord, utils.Error, g.SafeGetUsername(), fmt.Sprintf("Error connecting to the gateway: %s | url=%s | body=%s", err.Error(), gatewayURL, body))
 		return err
 	}
 
@@ -124,7 +123,7 @@ func (g *gatewayImpl) Close(ctx context.Context) {
 
 func (g *gatewayImpl) CloseWithCode(ctx context.Context, code int, message string) {
 	if g.heartbeatCancel != nil {
-		g.Log("INF", "Closing heartbeat goroutines...")
+		utils.Log(utils.Discord, utils.Info, g.SafeGetUsername(), "Closing heartbeat goroutines...")
 		g.heartbeatCancel()
 	}
 
@@ -132,9 +131,9 @@ func (g *gatewayImpl) CloseWithCode(ctx context.Context, code int, message strin
 	defer g.connMu.Unlock()
 	if g.conn != nil {
 		g.config.RateLimiter.Close(ctx)
-		g.Log("INF", fmt.Sprintf("Closing gateway connection code=%d | message=%s", code, message))
+		utils.Log(utils.Discord, utils.Info, g.SafeGetUsername(), fmt.Sprintf("Closing gateway connection code=%d | message=%s", code, message))
 		if err := g.conn.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(code, message)); err != nil && !errors.Is(err, websocket.ErrCloseSent) {
-			g.Log("ERR", fmt.Sprintf("Error writing close code: %s", err.Error()))
+			utils.Log(utils.Discord, utils.Error, g.SafeGetUsername(), fmt.Sprintf("Error writing close code: %s", err.Error()))
 		}
 		_ = g.conn.Close()
 		g.conn = nil
@@ -205,7 +204,7 @@ func (g *gatewayImpl) reconnectTry(ctx context.Context, try int) error {
 		if errors.Is(err, types.ErrGatewayAlreadyConnected) {
 			return err
 		}
-		g.Log("ERR", fmt.Sprintf("Failed to reconnect gateway: %s", err.Error()))
+		utils.Log(utils.Discord, utils.Error, g.SafeGetUsername(), fmt.Sprintf("Failed to reconnect gateway: %s", err.Error()))
 		g.statusChan <- StatusDisconnected
 		return g.reconnectTry(ctx, try+1)
 	}
@@ -215,7 +214,7 @@ func (g *gatewayImpl) reconnectTry(ctx context.Context, try int) error {
 func (g *gatewayImpl) reconnect() {
 	err := g.reconnectTry(context.Background(), 0)
 	if err != nil {
-		g.Log("ERR", fmt.Sprintf("Failed to reopen gateway: %s", err.Error()))
+		utils.Log(utils.Discord, utils.Error, g.SafeGetUsername(), fmt.Sprintf("Failed to reopen gateway: %s", err.Error()))
 	}
 }
 
@@ -225,7 +224,7 @@ func (g *gatewayImpl) heartbeat() {
 
 	heartbeatTicker := time.NewTicker(g.heartbeatInterval)
 	defer heartbeatTicker.Stop()
-	defer g.Log("INF", "Closing heartbeat goroutines...")
+	defer utils.Log(utils.Discord, utils.Info, g.SafeGetUsername(), "Closing heartbeat goroutines...")
 
 	for {
 		select {
@@ -245,7 +244,7 @@ func (g *gatewayImpl) sendHeartbeat() {
 		if errors.Is(err, types.ErrGatewayNotConnected) || errors.Is(err, syscall.EPIPE) {
 			return
 		}
-		g.Log("ERR", fmt.Sprintf("Failed to send heartbeat: %s", err.Error()))
+		utils.Log(utils.Discord, utils.Error, g.SafeGetUsername(), fmt.Sprintf("Failed to send heartbeat: %s", err.Error()))
 		closeCtx, closeCancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer closeCancel()
 		g.CloseWithCode(closeCtx, websocket.CloseServiceRestart, "heartbeat timeout")
@@ -257,7 +256,7 @@ func (g *gatewayImpl) sendHeartbeat() {
 
 func (g *gatewayImpl) identify() {
 	g.statusChan <- StatusIdentifying
-	g.Log("INF", "Sending Identify command")
+	utils.Log(utils.Discord, utils.Info, g.SafeGetUsername(), "Sending Identify command")
 
 	identify := MessageDataIdentify{
 		Capabilities: 30717,
@@ -284,7 +283,7 @@ func (g *gatewayImpl) identify() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := g.Send(ctx, OpcodeIdentify, identify); err != nil {
-		g.Log("ERR", fmt.Sprintf("Error sending Identify command: %s", err.Error()))
+		utils.Log(utils.Discord, utils.Error, g.SafeGetUsername(), fmt.Sprintf("Error sending Identify command: %s", err.Error()))
 	}
 	g.statusChan <- StatusWaitingForReady
 }
@@ -296,17 +295,17 @@ func (g *gatewayImpl) resume() {
 		SessionID: *g.config.SessionID,
 		Seq:       *g.config.LastSequenceReceived,
 	}
-	g.Log("INF", "Sending resume command")
+	utils.Log(utils.Discord, utils.Info, g.SafeGetUsername(), "Sending resume command")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := g.Send(ctx, OpcodeResume, resume); err != nil {
-		g.Log("ERR", fmt.Sprintf("Error sending resume command: %s", err.Error()))
+		utils.Log(utils.Discord, utils.Error, g.SafeGetUsername(), fmt.Sprintf("Error sending resume command: %s", err.Error()))
 	}
 }
 
 func (g *gatewayImpl) listen(conn *websocket.Conn) {
-	defer g.Log("INF", "Exiting listen goroutine")
+	defer utils.Log(utils.Discord, utils.Info, g.SafeGetUsername(), "Exiting listen goroutine")
 	g.statusChan <- StatusWaitingForHello
 
 loop:
@@ -334,7 +333,7 @@ loop:
 					g.config.ResumeURL = nil
 				}
 
-				g.Log("ERR", "gateway close reconnect="+strconv.FormatBool(reconnect)+
+				utils.Log(utils.Discord, utils.Error, g.SafeGetUsername(), "gateway close reconnect="+strconv.FormatBool(reconnect)+
 					" | code="+strconv.Itoa(closeError.Code)+
 					" | error="+closeError.Text)
 
@@ -345,7 +344,7 @@ loop:
 				// we closed the connection ourselves. Don't try to reconnect here
 				reconnect = false
 			} else {
-				g.Log("ERR", fmt.Sprintf("Failed to read next message from gateway: %s", err.Error()))
+				utils.Log(utils.Discord, utils.Error, g.SafeGetUsername(), fmt.Sprintf("Failed to read next message from gateway: %s", err.Error()))
 			}
 
 			// make sure the connection is properly closed
@@ -361,7 +360,7 @@ loop:
 
 		message, err := g.parseMessage(mt, r)
 		if err != nil {
-			g.Log("ERR", fmt.Sprintf("Error while parsing gateway message: %s", err.Error()))
+			utils.Log(utils.Discord, utils.Error, g.SafeGetUsername(), fmt.Sprintf("Error while parsing gateway message: %s", err.Error()))
 			continue
 		}
 
@@ -383,7 +382,7 @@ loop:
 
 			eventData, ok := message.D.(EventData)
 			if !ok && message.D != nil {
-				g.Log("ERR", fmt.Sprintf("Invalid message data received: %T", message.D))
+				utils.Log(utils.Discord, utils.Error, g.SafeGetUsername(), fmt.Sprintf("Invalid message data received: %T", message.D))
 				continue
 			}
 
@@ -435,14 +434,14 @@ loop:
 			g.lastHeartbeatReceived = time.Now().UTC()
 
 		default:
-			g.Log("ERR", fmt.Sprintf("Unknown opcode received: %v", int(message.Op)))
+			utils.Log(utils.Discord, utils.Error, g.SafeGetUsername(), fmt.Sprintf("Unknown opcode received: %v", int(message.Op)))
 		}
 	}
 }
 
 func (g *gatewayImpl) parseMessage(mt int, r io.Reader) (Message, error) {
 	if mt == websocket.BinaryMessage {
-		g.Log("INF", "Binary message received. decompressing")
+		utils.Log(utils.Discord, utils.Info, g.SafeGetUsername(), "Binary message received. decompressing")
 
 		reader, err := zlib.NewReader(r)
 		if err != nil {
@@ -456,23 +455,10 @@ func (g *gatewayImpl) parseMessage(mt int, r io.Reader) (Message, error) {
 	return message, json.NewDecoder(r).Decode(&message)
 }
 
-type LogType string
-
-const (
-	Info  LogType = "INF"
-	Error LogType = "ERR"
-)
-
-func (g *gatewayImpl) Log(logType LogType, msg string) {
-	username := ""
+func (g *gatewayImpl) SafeGetUsername() string {
 	if g.User() != nil {
-		username = g.User().Username
-	}
-	application.Get().EmitEvent("logDiscord", logType, username, msg)
-	switch logType {
-	case Info:
-		log.Info().Msg(fmt.Sprintf("discord %s %s", username, msg))
-	case Error:
-		log.Error().Msg(fmt.Sprintf("discord %s %s", username, msg))
+		return g.User().Username
+	} else {
+		return utils.GetAccountNumber(g.token)
 	}
 }

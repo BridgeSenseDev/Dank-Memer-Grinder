@@ -32,6 +32,6 @@ func (in *Instance) Crime(message gateway.EventMessage) {
 
 	err := in.ClickButton(message, 0, maxPriority)
 	if err != nil {
-		in.Log("discord", "ERR", fmt.Sprintf("Failed to click crime button: %s", err.Error()))
+		utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click crime button: %s", err.Error()))
 	}
 }

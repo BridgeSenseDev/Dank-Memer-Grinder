@@ -3,6 +3,7 @@ package instance
 import (
 	"fmt"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"regexp"
 	"strings"
 )
@@ -43,12 +44,12 @@ func (in *Instance) WorkMessageCreate(message gateway.EventMessage) {
 	embed := message.Embeds[0]
 
 	if strings.Contains(embed.Description, "You don't currently have a job to work at") {
-		in.Log("others", "INF", "Applying for new job")
+		utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), "Applying for new job")
 		in.PauseCommands(false)
 		err := in.SendSubCommand("work", "list", nil, true)
 
 		if err != nil {
-			in.Log("discord", "ERR", fmt.Sprintf("Failed to send /work list command: %s", err.Error()))
+			utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to send /work list command: %s", err.Error()))
 		}
 		return
 	}
@@ -60,7 +61,7 @@ func (in *Instance) WorkMessageCreate(message gateway.EventMessage) {
 
 		err := in.ClickButton(message, 0, 2)
 		if err != nil {
-			in.Log("discord", "ERR", fmt.Sprintf("Failed to click initial jobs button: %s", err.Error()))
+			utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click initial jobs button: %s", err.Error()))
 		}
 		return
 	}
@@ -68,7 +69,7 @@ func (in *Instance) WorkMessageCreate(message gateway.EventMessage) {
 	if strings.Contains(embed.Title, "Congratulations, you are now working as a") {
 		err := in.SendSubCommand("work", "shift", nil, true)
 		if err != nil {
-			in.Log("discord", "ERR", fmt.Sprintf("Failed to send /work shift command: %s", err.Error()))
+			utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to send /work shift command: %s", err.Error()))
 		}
 		in.UnpauseCommands()
 	}
@@ -88,14 +89,14 @@ func (in *Instance) WorkMessageUpdate(message gateway.EventMessage) {
 		if strings.Count(embed.Description, cross) > 1 {
 			err := in.SendSubCommand("work", "apply", map[string]string{"job": highestJob}, true)
 			if err != nil {
-				in.Log("discord", "ERR", fmt.Sprintf("Failed to send /work apply command: %s", err.Error()))
+				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to send /work apply command: %s", err.Error()))
 			}
 
-			in.Log("others", "INF", fmt.Sprintf("Applied for job: %s", highestJob))
+			utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), fmt.Sprintf("Applied for job: %s", highestJob))
 		} else {
 			err := in.ClickButton(message, 0, 2)
 			if err != nil {
-				in.Log("discord", "ERR", fmt.Sprintf("Failed to click next job button: %s", err.Error()))
+				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click next job button: %s", err.Error()))
 			}
 		}
 	}

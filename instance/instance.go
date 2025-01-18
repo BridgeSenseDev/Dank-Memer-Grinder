@@ -5,36 +5,13 @@ import (
 	"fmt"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
-	"github.com/wailsapp/wails/v3/pkg/application"
 	"strings"
 	"sync"
 	"time"
 
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/config"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
-	"github.com/rs/zerolog/log"
 )
-
-func (in *Instance) Log(level utils.LogLevel, logType utils.LogType, msg string) {
-	switch level {
-	case utils.Important:
-		application.Get().EmitEvent("logImportant", logType, in.User.Username, msg)
-	case utils.Others:
-		application.Get().EmitEvent("logOthers", logType, in.User.Username, msg)
-	case utils.Discord:
-		if strings.Contains(msg, "COMPONENT_VALIDATION_FAILED") {
-			return
-		}
-		application.Get().EmitEvent("logDiscord", logType, in.User.Username, msg)
-	}
-
-	switch logType {
-	case utils.Info:
-		log.Info().Msg(fmt.Sprintf("%s %s %s", level, in.User.Username, msg))
-	case utils.Error:
-		log.Error().Msg(fmt.Sprintf("%s %s %s", level, in.User.Username, msg))
-	}
-}
 
 type Client interface {
 	SendMessage(op gateway.Opcode, data gateway.MessageData) error
@@ -64,6 +41,14 @@ type Instance struct {
 	pauseMutex sync.Mutex
 }
 
+func (in *Instance) SafeGetUsername() string {
+	if in.User != nil {
+		return in.User.Username
+	} else {
+		return utils.GetAccountNumber(in.AccountCfg.Token)
+	}
+}
+
 func (in *Instance) Start() error {
 	if in.Client == nil {
 		return fmt.Errorf("no client")
@@ -87,7 +72,7 @@ func (in *Instance) Start() error {
 }
 
 func (in *Instance) Stop() {
-	in.Log("important", "INF", fmt.Sprintf("Stopping instance "+in.User.Username))
+	utils.Log(utils.Important, utils.Info, in.SafeGetUsername(), "Stopping instance")
 	close(in.StopChan)
 	in.Client.Close()
 }
@@ -100,9 +85,9 @@ func (in *Instance) PauseCommands(indefinite bool) {
 
 	if in.pauseCount == 1 {
 		if indefinite {
-			in.Log("others", "INF", "Paused commands indefinitely")
+			utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), "Paused commands indefinitely")
 		} else {
-			in.Log("others", "INF", "Paused commands")
+			utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), "Paused commands")
 		}
 	}
 
@@ -116,7 +101,7 @@ func (in *Instance) PauseCommands(indefinite bool) {
 			defer in.pauseMutex.Unlock()
 
 			if in.pauseCount == token {
-				in.Log("others", "ERR", "Force unpaused commands after being paused for 1 minute")
+				utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), "Force unpaused commands after being paused for 1 minute")
 				in.pauseCount = 0
 			}
 		}()
@@ -132,7 +117,7 @@ func (in *Instance) UnpauseCommands() {
 	}
 
 	if in.pauseCount == 0 {
-		in.Log("others", "INF", "Unpaused commands")
+		utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), "Unpaused commands")
 	}
 }
 

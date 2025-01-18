@@ -47,7 +47,7 @@ func (in *Instance) CommandsLoop() {
 						}
 
 						if err != nil {
-							in.Log("discord", "ERR", fmt.Sprintf("Failed to send %s command: %s", command, err.Error()))
+							utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to send %s command: %s", command, err.Error()))
 						}
 					}
 				}

@@ -3,6 +3,7 @@ package instance
 import (
 	"fmt"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"regexp"
 	"strconv"
 	"strings"
@@ -30,7 +31,7 @@ func (in *Instance) Adventure(message gateway.EventMessage) {
 
 			in.LastRan["Adventure"] = time.Unix(now.Unix()+int64(timeLeft)+int64(time.Minute.Seconds()), 0)
 
-			in.Log("others", "INF", fmt.Sprintf("Time until next adventure: %.2f seconds", timeLeft))
+			utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), fmt.Sprintf("Time until next adventure: %.2f seconds", timeLeft))
 			return
 		}
 	}
@@ -42,26 +43,26 @@ func (in *Instance) Adventure(message gateway.EventMessage) {
 				if !option.Default {
 					err := in.ChooseSelectMenu(message, 0, 0, []string{string(adventureOption)})
 					if err != nil {
-						in.Log("discord", "ERR", fmt.Sprintf("Failed to choose adventure select menu: %s", err.Error()))
+						utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to choose adventure select menu: %s", err.Error()))
 					}
 					return
 				} else {
 					if !message.Components[1].(*types.ActionsRow).Components[0].(*types.Button).Disabled {
 						err := in.ClickButton(message, 1, 0)
 						if err != nil {
-							in.Log("discord", "ERR", fmt.Sprintf("Failed to click start adventure button: %s", err.Error()))
+							utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click start adventure button: %s", err.Error()))
 						}
 
 						return
 					} else {
-						in.Log("others", "ERR", fmt.Sprintf("Not enough tickets to start %s adventure", adventureOption))
+						utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Not enough tickets to start %s adventure", adventureOption))
 						return
 					}
 				}
 			}
 		}
 	} else if embed.Author.Name == "Adventure Summary" {
-		in.Log("others", "INF", fmt.Sprintf("Completed %s adventure", adventureOption))
+		utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), fmt.Sprintf("Completed %s adventure", adventureOption))
 		in.UnpauseCommands()
 
 		cooldownLabel := message.Components[0].(*types.ActionsRow).Components[0].(*types.Button).Label
@@ -76,7 +77,7 @@ func (in *Instance) Adventure(message gateway.EventMessage) {
 
 			in.LastRan["Adventure"] = time.Unix(time.Now().Unix()+int64(cooldownMinutes*60)+int64(time.Minute.Seconds()), 0)
 
-			in.Log("others", "INF", fmt.Sprintf("Time until next adventure: %d minutes", cooldownMinutes))
+			utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), fmt.Sprintf("Time until next adventure: %d minutes", cooldownMinutes))
 		}
 		return
 	} else if strings.Contains(embed.Title, "choose items you want to bring along") {
@@ -84,14 +85,14 @@ func (in *Instance) Adventure(message gateway.EventMessage) {
 			in.PauseCommands(false)
 			err := in.ClickButton(message, len(message.Components)-1, 0)
 			if err != nil {
-				in.Log("discord", "ERR", fmt.Sprintf("Failed to click start adventure button: %s", err.Error()))
+				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click start adventure button: %s", err.Error()))
 			} else {
-				in.Log("others", "INF", fmt.Sprintf("Started %s adventure", adventureOption))
+				utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), fmt.Sprintf("Started %s adventure", adventureOption))
 			}
 
 			return
 		} else {
-			in.Log("others", "ERR", fmt.Sprintf("Not enough tickets to start %s adventure", adventureOption))
+			utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Not enough tickets to start %s adventure", adventureOption))
 			return
 		}
 	}
@@ -101,7 +102,7 @@ func (in *Instance) Adventure(message gateway.EventMessage) {
 			if !button.Disabled && button.Emoji.ID == "1067941108568567818" {
 				err := in.ClickButton(message, i, 1)
 				if err != nil {
-					in.Log("discord", "ERR", fmt.Sprintf("Failed to click next adventure page button: %s", err.Error()))
+					utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click next adventure page button: %s", err.Error()))
 				}
 
 				return
@@ -112,12 +113,12 @@ func (in *Instance) Adventure(message gateway.EventMessage) {
 	if strings.Contains(embed.Description, "Catch one of em!") {
 		err := in.ClickButton(message, 0, 2)
 		if err != nil {
-			in.Log("discord", "ERR", fmt.Sprintf(`Failed to click "Catch one of em!" adventure button: %s`, err.Error()))
+			utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf(`Failed to click "Catch one of em!" adventure button: %s`, err.Error()))
 		}
 
 		err = in.ClickButton(message, 1, 1)
 		if err != nil {
-			in.Log("discord", "ERR", fmt.Sprintf(`Failed to click adventure button: %s`, err.Error()))
+			utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf(`Failed to click adventure button: %s`, err.Error()))
 		}
 
 		return
@@ -142,17 +143,17 @@ func (in *Instance) Adventure(message gateway.EventMessage) {
 				if strings.EqualFold(button.(*types.Button).Label, ans) {
 					err := in.ClickButton(message, 0, columnIndex)
 					if err != nil {
-						in.Log("discord", "ERR", fmt.Sprintf("Failed to click adventure answer button: %s", err.Error()))
+						utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click adventure answer button: %s", err.Error()))
 					}
 					return
 				}
 			}
-			in.Log("important", "ERR", fmt.Sprintf("Failed to find adventure answer button for %s", q))
+			utils.Log(utils.Important, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to find answer in config.json for adventure question: %s", q))
 			err := in.ClickButton(message, 0, 0)
 			if err != nil {
-				in.Log("discord", "ERR", fmt.Sprintf("Failed to click default adventure answer button: %s", err.Error()))
+				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click default adventure answer button: %s", err.Error()))
 			}
-			in.Log("important", "ERR", fmt.Sprintf("Failed to find answer in config.json for adventure question: %s", q))
+			utils.Log(utils.Important, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to find answer in config.json for adventure question: %s", q))
 		}
 	}
 }

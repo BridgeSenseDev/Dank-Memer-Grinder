@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"github.com/valyala/fasthttp"
 	"strconv"
 	"strings"
@@ -18,7 +19,7 @@ func (in *Instance) handleOrderedClick(message gateway.EventMessage) error {
 	buttonIndex := order[currentOrderIndex]
 
 	if err := in.ClickButton(message, 0, buttonIndex); err != nil {
-		in.Log("discord", "ERR", fmt.Sprintf("Failed to click stream button: %s", err.Error()))
+		utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click stream button: %s", err.Error()))
 		return err
 	}
 
@@ -35,7 +36,7 @@ func (in *Instance) StreamMessageCreate(message gateway.EventMessage) {
 
 	if embed.Fields[1].Name == "Last Live" {
 		if err := in.ClickButton(message, 0, 0); err != nil {
-			in.Log("discord", "ERR", fmt.Sprintf("Failed to click stream button: %s", err.Error()))
+			utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click stream button: %s", err.Error()))
 			return
 		}
 
@@ -48,7 +49,7 @@ func (in *Instance) StreamMessageCreate(message gateway.EventMessage) {
 		req.Header.SetMethod(fasthttp.MethodGet)
 
 		if err := fasthttp.Do(req, resp); err != nil {
-			in.Log("discord", "ERR", fmt.Sprintf("Failed to get games: %s", err.Error()))
+			utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to get games: %s", err.Error()))
 			return
 		}
 
@@ -70,13 +71,13 @@ func (in *Instance) StreamMessageUpdate(message gateway.EventMessage) {
 			if option.Default {
 				if option.Value == trendingGame {
 					if err := in.ClickButton(message, 1, 0); err != nil {
-						in.Log("discord", "ERR", fmt.Sprintf("Failed to click go live button: %s", err.Error()))
+						utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click go live button: %s", err.Error()))
 						return
 					}
 				} else {
 					err := in.ChooseSelectMenu(message, 0, 0, []string{trendingGame})
 					if err != nil {
-						in.Log("discord", "ERR", fmt.Sprintf("Failed to choose stream game: %s", err.Error()))
+						utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to choose stream game: %s", err.Error()))
 					}
 				}
 			}
@@ -87,7 +88,7 @@ func (in *Instance) StreamMessageUpdate(message gateway.EventMessage) {
 		timestampStr := embed.Fields[1].Value[3 : len(embed.Fields[1].Value)-3]
 		timestamp, err := strconv.ParseInt(timestampStr, 10, 64)
 		if err != nil {
-			in.Log("discord", "ERR", fmt.Sprintf("Failed to parse timestamp: %s", err.Error()))
+			utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to parse timestamp: %s", err.Error()))
 			return
 		}
 

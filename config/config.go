@@ -1,9 +1,7 @@
 package config
 
 import (
-	"encoding/json"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
-	"os"
 )
 
 type Delays struct {
@@ -28,14 +26,4 @@ type Config struct {
 	AutoUse       AutoUseConfig      `json:"autoUse"`
 	Commands      CommandsConfig     `json:"commands"`
 	Adventure     AdventureConfig    `json:"adventure"`
-}
-
-func ReadConfig(configFile string) (Config, error) {
-	var config Config
-	bytes, err := os.ReadFile(configFile)
-	if err != nil {
-		return config, err
-	}
-	err = json.Unmarshal(bytes, &config)
-	return config, err
 }

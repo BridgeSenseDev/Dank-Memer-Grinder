@@ -84,29 +84,27 @@ class Logs {
 	discordLogs = $state("");
 
 	constructor() {
-		Events.On("logImportant", (data: { data: [type: string, username: string, msg: string] }) => {
-			const type = data.data[0];
-			const username = data.data[1];
-			const msg = data.data[2];
+		Events.On(
+			"log",
+			(data: { data: [level: string, logType: string, username: string, msg: string] }) => {
+				const level = data.data[0];
+				const logType = data.data[1];
+				const username = data.data[2];
+				const msg = data.data[3];
 
-			this.importantLogs = this.logWithTime(this.importantLogs, type, username, msg);
-		});
-
-		Events.On("logOthers", (data: { data: [type: string, username: string, msg: string] }) => {
-			const type = data.data[0];
-			const username = data.data[1];
-			const msg = data.data[2];
-
-			this.othersLogs = this.logWithTime(this.othersLogs, type, username, msg);
-		});
-
-		Events.On("logDiscord", (data: { data: [type: string, username: string, msg: string] }) => {
-			const type = data.data[0];
-			const username = data.data[1];
-			const msg = data.data[2];
-
-			this.discordLogs = this.logWithTime(this.discordLogs, type, username, msg);
-		});
+				switch (level) {
+					case "important":
+						this.importantLogs = this.logWithTime(this.importantLogs, logType, username, msg);
+						break;
+					case "others":
+						this.othersLogs = this.logWithTime(this.othersLogs, logType, username, msg);
+						break;
+					case "discord":
+						this.discordLogs = this.logWithTime(this.discordLogs, logType, username, msg);
+						break;
+				}
+			}
+		);
 	}
 
 	private logWithTime(logs: string, type: string, username: string, msg: string): string {

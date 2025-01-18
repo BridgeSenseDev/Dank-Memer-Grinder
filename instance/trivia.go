@@ -20,7 +20,7 @@ var trivia map[string]interface{}
 func init() {
 	err := json.Unmarshal(triviaJson, &trivia)
 	if err != nil {
-		utils.Log("ERR", fmt.Sprintf("Failed to unmarshal trivia data: %v", err))
+		utils.Log(utils.Important, utils.Error, "", fmt.Sprintf("Failed to unmarshal trivia data: %v", err))
 	}
 }
 
@@ -34,7 +34,7 @@ func (in *Instance) Trivia(message gateway.EventMessage) {
 
 	answer, ok := trivia[category].(map[string]interface{})[question]
 	if !ok {
-		in.Log("others", "ERR", fmt.Sprintf("Question not found in trivia data: %v", question))
+		utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Question not found in trivia data: %v", question))
 		in.clickButtonBasedOnCondition(buttons, message, "", false)
 		return
 	}
@@ -56,7 +56,7 @@ func (in *Instance) clickButtonBasedOnCondition(buttons []types.MessageComponent
 		randomIndex := buttonIndices[utils.Rng.Intn(len(buttonIndices))]
 		err := in.ClickButton(message, 0, randomIndex)
 		if err != nil {
-			in.Log("discord", "ERR", fmt.Sprintf("Failed to click trivia answer button: %s", err.Error()))
+			utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click trivia answer button: %s", err.Error()))
 		}
 	}
 }

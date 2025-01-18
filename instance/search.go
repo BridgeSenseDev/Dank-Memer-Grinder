@@ -32,6 +32,6 @@ func (in *Instance) Search(message gateway.EventMessage) {
 
 	err := in.ClickButton(message, 0, maxPriority)
 	if err != nil {
-		in.Log("discord", "ERR", fmt.Sprintf("Failed to click search button: %s", err.Error()))
+		utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click search button: %s", err.Error()))
 	}
 }

@@ -1,13 +1,14 @@
 package main
 
 import (
+	"context"
 	"embed"
+	"fmt"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"github.com/grongor/panicwatch"
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"github.com/wailsapp/wails/v3/pkg/application"
 	"github.com/wailsapp/wails/v3/pkg/events"
+	"log/slog"
 	_ "net/http/pprof"
 	"os"
 	"sync"
@@ -16,8 +17,47 @@ import (
 //go:embed all:frontend/dist
 var assets embed.FS
 
+type CustomHandler struct {
+	slog.Handler
+}
+
+func (h *CustomHandler) Handle(ctx context.Context, r slog.Record) error {
+	timeStr := r.Time.Format("3:04PM")
+	level := r.Level.String()[:3]
+	msg := r.Message
+
+	const (
+		reset  = "\033[0m"
+		red    = "\033[31m"
+		green  = "\033[32m"
+		yellow = "\033[33m"
+		blue   = "\033[34m"
+	)
+
+	var color string
+	switch r.Level {
+	case slog.LevelDebug:
+		color = blue
+	case slog.LevelInfo:
+		color = green
+	case slog.LevelWarn:
+		color = yellow
+	case slog.LevelError:
+		color = red
+	default:
+		color = reset
+	}
+
+	_, err := fmt.Fprintf(os.Stdout, "%s %s%s%s %s\n", timeStr, color, level, reset, msg)
+	return err
+}
+
 func main() {
-	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+	customHandler := &CustomHandler{
+		Handler: slog.NewTextHandler(os.Stdout, nil),
+	}
+	logger := slog.New(customHandler)
+	slog.SetDefault(logger)
 
 	dmgService := &DmgService{
 		wg:      &sync.WaitGroup{},
@@ -26,14 +66,17 @@ func main() {
 
 	err := panicwatch.Start(panicwatch.Config{
 		OnPanic: func(p panicwatch.Panic) {
-			log.Error().Msgf("panic: %s, stack: %s", p.Message, p.Stack)
+			slog.Error("panic occurred",
+				"message", p.Message,
+				"stack", p.Stack)
 		},
 		OnWatcherDied: func(err error) {
-			log.Fatal().Msg("panicwatch watcher process died")
+			slog.Error("panicwatch watcher process died")
+			os.Exit(1)
 		},
 	})
 	if err != nil {
-		log.Fatal().Msgf("failed to start panicwatch: " + err.Error())
+		slog.Error("failed to start panicwatch: " + err.Error())
 	}
 
 	app := application.New(application.Options{
@@ -42,7 +85,8 @@ func main() {
 			Handler:        application.AssetFileServerFS(assets),
 			DisableLogging: true,
 		},
-		Logger: nil,
+		Logger:   nil,
+		LogLevel: slog.LevelWarn,
 		Services: []application.Service{
 			application.NewService(dmgService),
 		},
