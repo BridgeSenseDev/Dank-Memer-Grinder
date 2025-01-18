@@ -64,6 +64,14 @@ func (in *Instance) WorkMessageCreate(message gateway.EventMessage) {
 		}
 		return
 	}
+
+	if strings.Contains(embed.Title, "Congratulations, you are now working as a") {
+		err := in.SendSubCommand("work", "shift", nil, true)
+		if err != nil {
+			in.Log("discord", "ERR", fmt.Sprintf("Failed to send /work shift command: %s", err.Error()))
+		}
+		in.UnpauseCommands()
+	}
 }
 
 func (in *Instance) WorkMessageUpdate(message gateway.EventMessage) {
@@ -84,12 +92,6 @@ func (in *Instance) WorkMessageUpdate(message gateway.EventMessage) {
 			}
 
 			in.Log("others", "INF", fmt.Sprintf("Applied for job: %s", highestJob))
-
-			err = in.SendSubCommand("work", "shift", nil, true)
-			if err != nil {
-				in.Log("discord", "ERR", fmt.Sprintf("Failed to send /work shift command: %s", err.Error()))
-			}
-			in.UnpauseCommands()
 		} else {
 			err := in.ClickButton(message, 0, 2)
 			if err != nil {
