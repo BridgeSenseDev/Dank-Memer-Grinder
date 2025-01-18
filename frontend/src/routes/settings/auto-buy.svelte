@@ -16,31 +16,6 @@
 			.replace(/^./, (match) => match.toUpperCase())
 			.trim();
 	}
-
-	function updateCfg<K extends keyof AutoBuyType[string]>(
-		autoBuyKey: string,
-		optionKey: K,
-		value: string[] | string | number | boolean | Event
-	) {
-		if (value instanceof Event) {
-			value = (value.target as HTMLInputElement).value;
-			if (value.includes(",")) {
-				value = value.split(",").map((val) => val.trim());
-			}
-		}
-
-		autoBuy[autoBuyKey][optionKey] = value as AutoBuyType[string][K];
-	}
-
-	type AutoBuyType = Record<
-		string,
-		{
-			state: boolean;
-			amount: number;
-		}
-	>;
-
-	const autoBuy = cfg.c.autoBuy as unknown as AutoBuyType;
 </script>
 
 <div class="flex flex-col space-y-2">
@@ -51,10 +26,10 @@
 				<Card.Description>Automatically purchase items needed for some commands</Card.Description>
 			</Card.Header>
 			<Card.Content class="flex w-4/6 flex-col justify-center space-y-3 pb-0">
-				{#each TypedObject.keys(autoBuy) as autoBuyKey (autoBuyKey)}
+				{#each TypedObject.keys(cfg.c.autoBuy) as autoBuyKey (autoBuyKey)}
 					{#if autoBuyKey === "huntingRifle" || autoBuyKey === "shovel"}
 						<div class="flex w-1/2 flex-row items-center space-x-2">
-							<Switch id={autoBuyKey} bind:checked={autoBuy[autoBuyKey].state} />
+							<Switch id={autoBuyKey} bind:checked={cfg.c.autoBuy[autoBuyKey].state} />
 							<Label for={autoBuyKey}>{formatString(autoBuyKey)}</Label>
 						</div>
 					{/if}
@@ -78,12 +53,7 @@
 				</div>
 				<div class="flex w-1/2 flex-row items-center space-x-2">
 					<Label for="lifeSaversAmount">Amount</Label>
-					<Input
-						value={cfg.c.autoBuy.lifeSavers.amount}
-						oninput={(e) => updateCfg("lifeSavers", "amount", e)}
-						id="lifeSaversAmount"
-						type="number"
-					/>
+					<Input bind:value={cfg.c.autoBuy.lifeSavers.amount} id="lifeSaversAmount" type="number" />
 				</div>
 			</Card.Content>
 		</div>
