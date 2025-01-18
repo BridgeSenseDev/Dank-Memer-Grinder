@@ -9,7 +9,7 @@ require (
 	github.com/jeandeaual/go-locale v0.0.0-20240223122105-ce5225dcaa49
 	github.com/sasha-s/go-csync v0.0.0-20240107134140-fcbab37b09ad
 	github.com/valyala/fasthttp v1.58.0
-	github.com/wailsapp/wails/v3 v3.0.0-00010101000000-000000000000
+	github.com/wailsapp/wails/v3 v3.0.0-alpha.9
 )
 
 require (
