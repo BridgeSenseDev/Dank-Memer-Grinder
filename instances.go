@@ -67,7 +67,6 @@ func (d *DmgService) StartInstance(account config.AccountsConfig) {
 					Cfg:        *d.cfg,
 					AccountCfg: account,
 					LastRan:    make(map[string]time.Time),
-					Pause:      false,
 					StopChan:   make(chan struct{}),
 					Error:      "healthy",
 					Ctx:        d.ctx,
@@ -192,7 +191,6 @@ func (d *DmgService) GetInstances() []*InstanceView {
 			Cfg:        i.Cfg,
 			AccountCfg: i.AccountCfg,
 			LastRan:    i.LastRan,
-			Pause:      i.Pause,
 			Error:      i.Error,
 		}
 		instanceViews = append(instanceViews, instanceView)

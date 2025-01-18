@@ -17,7 +17,7 @@ func (in *Instance) CommandsLoop() {
 	for {
 		select {
 		case <-ticker.C:
-			if !in.Pause && in.Cfg.State && in.AccountCfg.State {
+			if !in.IsPaused() && in.Cfg.State && in.AccountCfg.State {
 				commandsMap := in.Cfg.Commands.GetCommandsMap()
 				for command := range commandsMap {
 					select {
@@ -62,7 +62,7 @@ func (in *Instance) CommandsLoop() {
 
 func shouldExecuteCommand(in *Instance, command string) bool {
 	commandConfig := in.Cfg.Commands.GetCommandsMap()[command]
-	if time.Since(in.LastRan[command]) < time.Duration(commandConfig.Delay)*time.Second || !commandConfig.State || in.Pause || !in.Cfg.State || !in.AccountCfg.State {
+	if time.Since(in.LastRan[command]) < time.Duration(commandConfig.Delay)*time.Second || !commandConfig.State || in.IsPaused() || !in.Cfg.State || !in.AccountCfg.State {
 		return false
 	}
 

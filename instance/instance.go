@@ -7,6 +7,7 @@ import (
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"github.com/wailsapp/wails/v3/pkg/application"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/config"
@@ -56,11 +57,11 @@ type Instance struct {
 	Cfg        config.Config         `json:"config"`
 	AccountCfg config.AccountsConfig `json:"accountCfg"`
 	LastRan    map[string]time.Time  `json:"lastRan"`
-	Pause      bool                  `json:"pause"`
 	StopChan   chan struct{}         `json:"stopChan"`
 	Error      string                `json:"error,omitempty"`
 	Ctx        context.Context
-	pauseToken int
+	pauseCount int
+	pauseMutex sync.Mutex
 }
 
 func (in *Instance) Start() error {
@@ -92,33 +93,53 @@ func (in *Instance) Stop() {
 }
 
 func (in *Instance) PauseCommands(indefinite bool) {
-	if indefinite {
-		in.Log("others", "INF", "Paused commands indefinitely")
-	} else {
-		in.Log("others", "INF", "Paused commands")
+	in.pauseMutex.Lock()
+	defer in.pauseMutex.Unlock()
+
+	in.pauseCount++
+
+	if in.pauseCount == 1 {
+		if indefinite {
+			in.Log("others", "INF", "Paused commands indefinitely")
+		} else {
+			in.Log("others", "INF", "Paused commands")
+		}
 	}
 
-	in.Pause = true
-
 	if !indefinite {
-		in.pauseToken++
-
-		token := in.pauseToken
+		token := in.pauseCount
 
 		go func() {
 			time.Sleep(time.Minute)
 
-			if in.Pause && in.pauseToken == token {
+			in.pauseMutex.Lock()
+			defer in.pauseMutex.Unlock()
+
+			if in.pauseCount == token {
 				in.Log("others", "ERR", "Force unpaused commands after being paused for 1 minute")
-				in.Pause = false
+				in.pauseCount = 0
 			}
 		}()
 	}
 }
 
 func (in *Instance) UnpauseCommands() {
-	in.Log("others", "INF", "Unpaused commands")
-	in.Pause = false
+	in.pauseMutex.Lock()
+	defer in.pauseMutex.Unlock()
+
+	if in.pauseCount > 0 {
+		in.pauseCount--
+	}
+
+	if in.pauseCount == 0 {
+		in.Log("others", "INF", "Unpaused commands")
+	}
+}
+
+func (in *Instance) IsPaused() bool {
+	in.pauseMutex.Lock()
+	defer in.pauseMutex.Unlock()
+	return in.pauseCount > 0
 }
 
 func (in *Instance) UpdateConfig(newConfig config.Config) {
