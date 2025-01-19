@@ -80,6 +80,11 @@
       "state": false,
       "delay": 30
     },
+    "fish": {
+      "state": false,
+      "delay": 20,
+      "sellCoinsValue": 250000
+    },
     "highlow": {
       "state": false,
       "delay": 20
