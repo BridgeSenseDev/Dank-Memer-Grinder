@@ -70,7 +70,7 @@ wails3 doctor
 4. Return to root project directory and install go dependencies:
 
 ```sh
-cd ../../../
+cd ../../../../
 go mod tidy
 ```
 
