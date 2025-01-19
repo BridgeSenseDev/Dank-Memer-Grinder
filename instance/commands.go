@@ -42,6 +42,8 @@ func (in *Instance) CommandsLoop() {
 							err = in.SendSubCommand("work", "shift", nil, false)
 						} else if command == "Deposit" {
 							err = in.SendCommand("deposit", map[string]string{"amount": "max"}, false)
+						} else if command == "Fish" {
+							err = in.SendSubCommand("fish", "catch", nil, false)
 						} else {
 							err = in.SendCommand(strings.ToLower(command), nil, false)
 						}

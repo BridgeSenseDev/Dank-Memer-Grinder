@@ -8,6 +8,7 @@ type CommandsConfig struct {
 	Daily     GeneralCommandConfig   `json:"daily"`
 	Deposit   GeneralCommandConfig   `json:"deposit"`
 	Dig       GeneralCommandConfig   `json:"dig"`
+	Fish      FishCommandConfig      `json:"fish"`
 	HighLow   GeneralCommandConfig   `json:"highlow"`
 	Hunt      GeneralCommandConfig   `json:"hunt"`
 	Pets      GeneralCommandConfig   `json:"pets"`
@@ -28,6 +29,7 @@ func (c *CommandsConfig) GetCommandsMap() map[string]GeneralCommandConfig {
 		"Daily":     c.Daily,
 		"Deposit":   c.Deposit,
 		"Dig":       c.Dig,
+		"Fish":      c.Fish.GeneralCommandConfig,
 		"HighLow":   c.HighLow,
 		"Hunt":      c.Hunt,
 		"Pets":      c.Pets,
@@ -71,6 +73,11 @@ type CrimeCommandConfig struct {
 	Priority       []string `json:"priority"`
 	SecondPriority []string `json:"secondPriority"`
 	Avoid          []string `json:"avoid"`
+}
+
+type FishCommandConfig struct {
+	GeneralCommandConfig
+	SellCoinsValue int `json:"sellCoinsValue"`
 }
 
 type StreamCommandConfig struct {

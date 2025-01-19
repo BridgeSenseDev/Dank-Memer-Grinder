@@ -64,6 +64,7 @@ export interface CommandsConfig {
     "daily": GeneralCommandConfig;
     "deposit": GeneralCommandConfig;
     "dig": GeneralCommandConfig;
+    "fish": FishCommandConfig;
     "highlow": GeneralCommandConfig;
     "hunt": GeneralCommandConfig;
     "pets": GeneralCommandConfig;
@@ -105,6 +106,12 @@ export interface CrimeCommandConfig {
 export interface Delays {
     "minDelay": number;
     "maxDelay": number;
+}
+
+export interface FishCommandConfig {
+    "state": boolean;
+    "delay": number;
+    "sellCoinsValue": number;
 }
 
 export interface GeneralAutoUseConfig {

@@ -145,6 +145,7 @@ var messageCreateHandlers = map[string]MessageHandler{
 	"highlow":   (*Instance).HighLow,
 	"scratch":   (*Instance).ScratchMessageCreate,
 	"crime":     (*Instance).Crime,
+	"fish":      (*Instance).FishMessageCreate,
 	"search":    (*Instance).Search,
 	"stream":    (*Instance).StreamMessageCreate,
 	"trivia":    (*Instance).Trivia,
@@ -157,6 +158,7 @@ var messageCreateHandlers = map[string]MessageHandler{
 var messageUpdateHandlers = map[string]MessageHandler{
 	"adventure": (*Instance).AdventureMessageUpdate,
 	"blackjack": (*Instance).BlackjackMessageUpdate,
+	"fish":      (*Instance).FishMessageUpdate,
 	"scratch":   (*Instance).ScratchMessageUpdate,
 	"stream":    (*Instance).StreamMessageUpdate,
 	"pets":      (*Instance).PetsMessageUpdate,
