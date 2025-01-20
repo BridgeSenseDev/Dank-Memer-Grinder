@@ -73,19 +73,19 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v4
         with:
-          name: DMG-${{ matrix.wails_os }}.AppImage
+          name: DMG-linux
           path: './bin/dmg-x86_64.AppImage'
 
       - name: Upload Windows binaries to GitHub release
         if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v4
         with:
-          name: DMG-${{ matrix.wails_os }}.exe
+          name: DMG-windows
           path: './bin/dmg.exe'
 
       - name: Upload Darwin binaries to GitHub release
         if: matrix.os == 'macos-latest'
         uses: actions/upload-artifact@v4
         with:
-          name: DMG-${{ matrix.wails_os }}
+          name: DMG-macos
           path: './bin/dmg'
