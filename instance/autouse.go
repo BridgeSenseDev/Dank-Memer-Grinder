@@ -40,7 +40,6 @@ func extractItems(input string) []string {
 }
 
 func (in *Instance) AutoUse(message gateway.EventMessage) {
-	utils.Log(utils.Discord, utils.Info, in.SafeGetUsername(), fmt.Sprintf("Auto use triggered for %s", in.SafeGetUsername()))
 	embed := message.Embeds[0]
 
 	if embed.Title == "Item Expiration" {

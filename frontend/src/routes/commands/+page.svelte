@@ -1,13 +1,18 @@
 <script lang="ts">
 	import { cfg } from "$lib/state.svelte";
 	import { Switch } from "$lib/components/ui/switch";
+	import * as Select from "$lib/components/ui/select/index.js";
 	import * as Card from "$lib/components/ui/card";
 	import { Checkbox } from "$lib/components/ui/checkbox";
 	import { fade } from "svelte/transition";
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
 	import { TypedObject } from "$lib/utils.js";
-	import type { CommandsConfig } from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/config";
+	import {
+		AdventureOption,
+		type CommandsConfig,
+		FishLocation
+	} from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/config";
 
 	function formatString(input: string): string {
 		return input
@@ -37,6 +42,27 @@
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const commands = cfg.c.commands as CommandsConfig & Record<string, any>;
+
+	const enumMap = {
+		AdventureOption,
+		FishLocation
+	};
+
+	function isEnum(value: string): boolean {
+		return Object.keys(enumMap).includes(
+			String(value).charAt(0).toUpperCase() + String(value).slice(1)
+		);
+	}
+
+	function getEnumValues(enumName: string): string[] {
+		const enumObject =
+			enumMap[
+				(String(enumName).charAt(0).toUpperCase() +
+					String(enumName).slice(1)) as keyof typeof enumMap
+			];
+		console.log(Object.values(enumObject));
+		return Object.values(enumObject).filter((v) => typeof v === "string" && v !== "");
+	}
 </script>
 
 <div
@@ -60,7 +86,27 @@
 					<div class="flex flex-col space-y-2">
 						{#each TypedObject.keys(commands[commandKey]) as optionKey (optionKey)}
 							{#if optionKey !== "state"}
-								{#if typeof commands[commandKey][optionKey] === "string"}
+								{#if typeof commands[commandKey][optionKey] === "string" && isEnum(optionKey)}
+									<div class="flex w-1/2 flex-row items-center space-x-2">
+										<Label class="whitespace-nowrap" for={`${commandKey}_${optionKey}`}>
+											{formatString(optionKey)}
+										</Label>
+										<Select.Root
+											bind:value={commands[commandKey][optionKey]}
+											on:change={(e) => updateCfg(commandKey, optionKey, e)}
+											type="single"
+										>
+											<Select.Trigger class="w-[180px]"
+												>{commands[commandKey][optionKey]}</Select.Trigger
+											>
+											<Select.Content>
+												{#each getEnumValues(optionKey) as enumValue}
+													<Select.Item value={enumValue}>{enumValue}</Select.Item>
+												{/each}
+											</Select.Content>
+										</Select.Root>
+									</div>
+								{:else if typeof commands[commandKey][optionKey] === "string"}
 									<div class="flex w-1/2 flex-row items-center space-x-2">
 										<Label class="whitespace-nowrap" for={`${commandKey}_${optionKey}`}>
 											{formatString(optionKey)}
@@ -69,11 +115,10 @@
 											type="text"
 											id={`${commandKey}_${optionKey}`}
 											value={commands[commandKey][optionKey]}
-											oninput={(e) => updateCfg(commandKey, optionKey, e)}
+											on:input={(e) => updateCfg(commandKey, optionKey, e)}
 										/>
 									</div>
-								{/if}
-								{#if typeof commands[commandKey][optionKey] === "number"}
+								{:else if typeof commands[commandKey][optionKey] === "number"}
 									<div class="flex w-1/2 flex-row items-center space-x-2">
 										<Label class="whitespace-nowrap" for={`${commandKey}_${optionKey}`}>
 											{formatString(optionKey)}

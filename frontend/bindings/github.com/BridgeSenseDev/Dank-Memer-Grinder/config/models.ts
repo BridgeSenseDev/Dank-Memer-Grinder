@@ -12,7 +12,20 @@ export interface AccountsConfig {
     "state": boolean;
 }
 
-export enum Adventure {
+export interface AdventureCommandConfig {
+    "state": boolean;
+    "delay": number;
+    "adventureOption": AdventureOption;
+}
+
+export interface AdventureConfig {
+    "space": { [_: string]: string } | null;
+    "west": { [_: string]: string } | null;
+    "brazil": { [_: string]: string } | null;
+    "vacation": { [_: string]: string } | null;
+}
+
+export enum AdventureOption {
     /**
      * The Go zero value for the underlying type of the enum.
      */
@@ -23,19 +36,6 @@ export enum Adventure {
     Vacation = "vacation",
     West = "west",
 };
-
-export interface AdventureCommandConfig {
-    "state": boolean;
-    "delay": number;
-    "adventureOption": Adventure;
-}
-
-export interface AdventureConfig {
-    "space": { [_: string]: string } | null;
-    "west": { [_: string]: string } | null;
-    "brazil": { [_: string]: string } | null;
-    "vacation": { [_: string]: string } | null;
-}
 
 export interface AutoBuyConfig {
     "huntingRifle": GeneralAutobuyConfig;
@@ -112,7 +112,25 @@ export interface FishCommandConfig {
     "state": boolean;
     "delay": number;
     "sellCoinsValue": number;
+    "fishLocation": FishLocation;
 }
+
+export enum FishLocation {
+    /**
+     * The Go zero value for the underlying type of the enum.
+     */
+    $zero = "",
+
+    VertigoBeach = "Vertigo Beach",
+    WilyRiver = "Wily River",
+    UnderwaterSanctuary = "Underwater Sanctuary",
+    CampGuillermo = "Camp Guillermo",
+    MysticPond = "Mystic Pond",
+    IceCaves = "Ice Caves",
+    SnowyMountain = "Snowy Mountain",
+    ScurvyWaters = "Scurvy Waters",
+    NorthpointCabin = "Northpoint Cabin",
+};
 
 export interface GeneralAutoUseConfig {
     "state": boolean;

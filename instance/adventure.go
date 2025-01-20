@@ -152,6 +152,7 @@ func (in *Instance) Adventure(message gateway.EventMessage) {
 			err := in.ClickButton(message, 0, 0)
 			if err != nil {
 				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click default adventure answer button: %s", err.Error()))
+				return
 			}
 			utils.Log(utils.Important, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to find answer in config.json for adventure question: %s", q))
 		}

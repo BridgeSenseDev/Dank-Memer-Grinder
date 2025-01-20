@@ -22,24 +22,24 @@ type CommandsConfig struct {
 
 func (c *CommandsConfig) GetCommandsMap() map[string]GeneralCommandConfig {
 	return map[string]GeneralCommandConfig{
-		"Adventure": c.Adventure.GeneralCommandConfig,
-		"Beg":       c.Beg,
-		"Blackjack": c.Blackjack.GeneralCommandConfig,
-		"Crime":     c.Crime.GeneralCommandConfig,
-		"Daily":     c.Daily,
-		"Deposit":   c.Deposit,
-		"Dig":       c.Dig,
-		"Fish":      c.Fish.GeneralCommandConfig,
-		"HighLow":   c.HighLow,
-		"Hunt":      c.Hunt,
-		"Pets":      c.Pets,
-		"PostMemes": c.PostMemes.GeneralCommandConfig,
-		"Scratch":   c.Scratch,
-		"Search":    c.Search.GeneralCommandConfig,
-		"Stream":    c.Stream.GeneralCommandConfig,
-		"Trivia":    c.Trivia.GeneralCommandConfig,
-		"Work":      c.Work.GeneralCommandConfig,
-		"Profile":   {State: true, Delay: 1800},
+		"AdventureOption": c.Adventure.GeneralCommandConfig,
+		"Beg":             c.Beg,
+		"Blackjack":       c.Blackjack.GeneralCommandConfig,
+		"Crime":           c.Crime.GeneralCommandConfig,
+		"Daily":           c.Daily,
+		"Deposit":         c.Deposit,
+		"Dig":             c.Dig,
+		"Fish":            c.Fish.GeneralCommandConfig,
+		"HighLow":         c.HighLow,
+		"Hunt":            c.Hunt,
+		"Pets":            c.Pets,
+		"PostMemes":       c.PostMemes.GeneralCommandConfig,
+		"Scratch":         c.Scratch,
+		"Search":          c.Search.GeneralCommandConfig,
+		"Stream":          c.Stream.GeneralCommandConfig,
+		"Trivia":          c.Trivia.GeneralCommandConfig,
+		"Work":            c.Work.GeneralCommandConfig,
+		"Profile":         {State: true, Delay: 1800},
 	}
 }
 
@@ -48,18 +48,18 @@ type GeneralCommandConfig struct {
 	Delay int64 `json:"delay"`
 }
 
-type Adventure string
+type AdventureOption string
 
 const (
-	Brazil   Adventure = "brazil"
-	Space    Adventure = "space"
-	Vacation Adventure = "vacation"
-	West     Adventure = "west"
+	Brazil   AdventureOption = "brazil"
+	Space    AdventureOption = "space"
+	Vacation AdventureOption = "vacation"
+	West     AdventureOption = "west"
 )
 
 type AdventureCommandConfig struct {
 	GeneralCommandConfig
-	AdventureOption Adventure `json:"adventureOption"`
+	AdventureOption AdventureOption `json:"adventureOption"`
 }
 
 type BlackjackCommandConfig struct {
@@ -75,9 +75,24 @@ type CrimeCommandConfig struct {
 	Avoid          []string `json:"avoid"`
 }
 
+type FishLocation string
+
+const (
+	VertigoBeach        FishLocation = "Vertigo Beach"
+	WilyRiver           FishLocation = "Wily River"
+	UnderwaterSanctuary FishLocation = "Underwater Sanctuary"
+	CampGuillermo       FishLocation = "Camp Guillermo"
+	MysticPond          FishLocation = "Mystic Pond"
+	IceCaves            FishLocation = "Ice Caves"
+	SnowyMountain       FishLocation = "Snowy Mountain"
+	ScurvyWaters        FishLocation = "Scurvy Waters"
+	NorthpointCabin     FishLocation = "Northpoint Cabin"
+)
+
 type FishCommandConfig struct {
 	GeneralCommandConfig
-	SellCoinsValue int `json:"sellCoinsValue"`
+	SellCoinsValue int          `json:"sellCoinsValue"`
+	FishLocation   FishLocation `json:"fishLocation"`
 }
 
 type StreamCommandConfig struct {

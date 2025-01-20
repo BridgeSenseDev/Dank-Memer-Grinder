@@ -5,30 +5,22 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"github.com/valyala/fasthttp"
 	_ "golang.org/x/image/webp"
 	"image"
+	"log/slog"
 	"regexp"
 	"strconv"
 	"strings"
-	"sync"
-)
-
-var (
-	directions      []int
-	currentStep     int
-	directionsMutex sync.Mutex
 )
 
 const (
-	bombHash     = "705646c414efd35eaa8d25ec4d38c2bea01aea5174d5ce8d3644db11de584cd4"
-	fishHash     = "2e41961de003cdbd29f06f7dd15223599b068b000f214c44f008c833a1114504"
-	startingHash = "c5558c0acbf5307034ba5ae73c1f8a778459a576251a60d419ff6d986c42e851"
-	gridSize     = 3
-	startRow     = 2
-	startCol     = 1
+	bombHash = "705646c414efd35eaa8d25ec4d38c2bea01aea5174d5ce8d3644db11de584cd4"
+	fishHash = "2e41961de003cdbd29f06f7dd15223599b068b000f214c44f008c833a1114504"
+	gridSize = 3
 )
 
 type Cell struct {
@@ -37,8 +29,25 @@ type Cell struct {
 
 func (in *Instance) FishMessageCreate(message gateway.EventMessage) {
 	embed := message.Embeds[0]
+	if strings.Contains(embed.Title, "Fishing Tutorial") && !strings.Contains(embed.Description, "Tutorial is over") {
+		// Tutorial messages all handled in message update
+		in.FishMessageUpdate(message)
+		return
+	}
 
 	if embed.Title == "Fishing" {
+		in.PauseCommands(false)
+
+		// Check location
+		if strings.TrimSpace(strings.SplitN(embed.Fields[1].Value, ">", 2)[1]) != string(in.Cfg.Commands.Fish.FishLocation) {
+			err := in.ClickButton(message, 0, 1)
+			if err != nil {
+				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click fish location button: %s", err.Error()))
+			}
+			return
+		}
+
+		// Check if buckets full
 		re := regexp.MustCompile(`(\d+)\s*/\s*(\d+)`)
 		matches := re.FindStringSubmatch(embed.Fields[3].Value)
 
@@ -47,7 +56,6 @@ func (in *Instance) FishMessageCreate(message gateway.EventMessage) {
 			maxSpace := matches[2]
 
 			if current == maxSpace && current != "0" {
-				in.PauseCommands(false)
 				err := in.SendSubCommand("fish", "buckets", nil, false)
 				if err != nil {
 					utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to send fish buckets command: %s", err.Error()))
@@ -56,15 +64,13 @@ func (in *Instance) FishMessageCreate(message gateway.EventMessage) {
 			}
 		}
 
-		in.PauseCommands(false)
+		// Go fishing
 		err := in.ClickButton(message, 0, 2)
 		if err != nil {
 			utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click go fishing button: %s", err.Error()))
 		}
-		return
-	}
-
-	if embed.Title == "Viewing Bucket Slots" {
+	} else if embed.Title == "Viewing Bucket Slots" {
+		// Click empty buckets if buckets full
 		re := regexp.MustCompile(`All Buckets Space:[\s\S]*?(\d+)\s*/\s*(\d+)`)
 		matches := re.FindStringSubmatch(embed.Description)
 
@@ -78,14 +84,41 @@ func (in *Instance) FishMessageCreate(message gateway.EventMessage) {
 				}
 			}
 		}
-		return
 	}
 }
 
 func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
 	embed := message.Embeds[0]
+	if strings.Contains(embed.Title, "Fishing Tutorial") && !strings.Contains(embed.Description, "Tutorial is over") {
+		embed = message.Embeds[1]
 
-	if embed.Image != nil && strings.Contains(embed.Image.URL, "catch.webp") {
+		for row, rowData := range message.Components {
+			for col, colData := range rowData.(*types.ActionsRow).Components {
+				if button, ok := colData.(*types.Button); ok {
+					if button.Disabled || strings.Contains(button.Label, "Season Pass") {
+						continue
+					}
+
+					err := in.ClickButton(message, row, col)
+					if err != nil {
+						utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click fishing tutorial button: %s", err.Error()))
+					}
+					return
+				}
+			}
+		}
+	} else if strings.Contains(embed.Title, "caught a") {
+		if strings.Contains(embed.Description, "You have no more bucket space") {
+			// Send fish buckets command
+			err := in.SendSubCommand("fish", "buckets", nil, false)
+			if err != nil {
+				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to send fish buckets command: %s", err.Error()))
+			}
+		} else {
+			in.UnpauseCommands()
+		}
+	} else if embed.Image != nil && strings.Contains(embed.Image.URL, "catch.webp") {
+		// Move next step in fish game
 		img, err := in.downloadAndDecodeImage(embed.Image.URL)
 		if err != nil {
 			utils.Log(utils.Important, utils.Error, in.SafeGetUsername(), err.Error())
@@ -93,31 +126,11 @@ func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
 		}
 
 		cellWidth, cellHeight := img.Bounds().Dx()/gridSize, img.Bounds().Dy()/gridSize
-		bottomMiddleHash := calculateGridHash(img, cellWidth, 2*cellHeight, cellWidth, cellHeight)
-
-		if bottomMiddleHash == startingHash {
-			in.handleFirstUpdate(img, cellWidth, cellHeight, message)
-		} else {
-			in.handleSubsequentUpdate(message)
-		}
-		return
-	}
-
-	if embed.Title == "There was nothing to catch." {
+		in.handleCatchUpdate(img, cellWidth, cellHeight, message)
+	} else if embed.Title == "There was nothing to catch." {
 		in.UnpauseCommands()
-		return
-	}
-
-	if strings.Contains(embed.Description, "You have no more bucket space") {
-		in.PauseCommands(false)
-		err := in.SendSubCommand("fish", "buckets", nil, false)
-		if err != nil {
-			utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to send fish buckets command: %s", err.Error()))
-		}
-		return
-	}
-
-	if embed.Title == "Selling Creatures" {
+	} else if embed.Title == "Selling Creatures" {
+		// Choose between coins / tokens
 		coins, _ := strconv.Atoi(strings.ReplaceAll(regexp.MustCompile(`(\d+(?:\.\d+)?)[kKmM]?`).FindStringSubmatch("Sell for 250,000 Coins")[1], ".", ""))
 		if coins > in.Cfg.Commands.Fish.SellCoinsValue {
 			err := in.ClickButton(message, 0, 1)
@@ -131,7 +144,29 @@ func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
 			}
 		}
 		in.UnpauseCommands()
-		return
+	} else if embed.Title == "Picking Location" {
+		options := message.Components[0].(*types.ActionsRow).Components[0].(*types.SelectMenu).Options
+
+		for _, option := range options {
+			if option.Label == string(in.Cfg.Commands.Fish.FishLocation) {
+				if option.Default {
+					// Click travel to button
+					err := in.ClickButton(message, 1, 1)
+					if err != nil {
+						utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click travel to button: %s", err.Error()))
+					}
+					return
+				} else {
+					// Change location select menu
+					err := in.ChooseSelectMenu(message, 0, 0, []string{option.Value})
+					if err != nil {
+						utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to choose fish location: %s", err.Error()))
+					}
+				}
+			}
+		}
+	} else if embed.Title == "Traveling..." {
+		in.UnpauseCommands()
 	}
 }
 
@@ -151,62 +186,50 @@ func (in *Instance) downloadAndDecodeImage(url string) (image.Image, error) {
 	return img, nil
 }
 
-func (in *Instance) handleFirstUpdate(img image.Image, cellWidth, cellHeight int, message gateway.EventMessage) {
-	bombPositions, fishPosition := findBombsAndFish(img, cellWidth, cellHeight)
+func (in *Instance) handleCatchUpdate(img image.Image, cellWidth, cellHeight int, message gateway.EventMessage) {
+	bombPositions, fishPosition, hookPosition := findPositions(img, cellWidth, cellHeight)
 
-	directionsMutex.Lock()
-	defer directionsMutex.Unlock()
-
-	directions = in.SolveFishingGame(bombPositions, fishPosition)
-	currentStep = 0
-
-	if len(directions) > 0 {
-		err := in.ClickButton(message, 0, directions[currentStep])
-		if err != nil {
-			utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click fish button: %s", err.Error()))
-			return
-		}
-		currentStep++
-	}
-}
-
-func (in *Instance) handleSubsequentUpdate(message gateway.EventMessage) {
-	directionsMutex.Lock()
-	defer directionsMutex.Unlock()
-
-	if currentStep < len(directions) {
-		err := in.ClickButton(message, 0, directions[currentStep])
-		if err != nil {
-			utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click fish button: %s", err.Error()))
-			return
-		}
-		currentStep++
-	} else {
+	if fishPosition == nil {
 		err := in.ClickButton(message, 0, 2)
 		if err != nil {
-			utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click fish button: %s", err.Error()))
-			return
+			utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Error clicking catch button: %s", err))
 		}
-		in.UnpauseCommands()
+		return
+	}
+
+	grid := initializeGrid(bombPositions, *fishPosition)
+	path := findPath(grid, hookPosition, *fishPosition)
+	direction := convertPathToDirection(path)
+
+	err := in.ClickButton(message, 0, direction)
+	if err != nil {
+		utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click fish button: %s", err.Error()))
+		return
 	}
 }
 
-func findBombsAndFish(img image.Image, cellWidth, cellHeight int) ([]Cell, Cell) {
+func findPositions(img image.Image, cellWidth, cellHeight int) ([]Cell, *Cell, Cell) {
 	var bombPositions []Cell
-	var fishPosition Cell
+	var fishPosition *Cell
+	var hookPosition Cell
 
 	for i := 0; i < gridSize; i++ {
 		for j := 0; j < gridSize; j++ {
 			hash := calculateGridHash(img, j*cellWidth, i*cellHeight, cellWidth, cellHeight)
+			slog.Info(hash)
 			switch hash {
 			case bombHash:
 				bombPositions = append(bombPositions, Cell{Row: i, Col: j})
 			case fishHash:
-				fishPosition = Cell{Row: i, Col: j}
+				fishPos := Cell{Row: i, Col: j}
+				fishPosition = &fishPos
+			case "8605b972256b2b2f9774e77c807e2f17782e655bc5a9345229deb74638f53640":
+			default:
+				hookPosition = Cell{Row: i, Col: j}
 			}
 		}
 	}
-	return bombPositions, fishPosition
+	return bombPositions, fishPosition, hookPosition
 }
 
 func calculateGridHash(img image.Image, x, y, width, height int) string {
@@ -218,12 +241,6 @@ func calculateGridHash(img image.Image, x, y, width, height int) string {
 		}
 	}
 	return hex.EncodeToString(hasher.Sum(nil))
-}
-
-func (in *Instance) SolveFishingGame(bombPositions []Cell, fishPosition Cell) []int {
-	grid := initializeGrid(bombPositions, fishPosition)
-	path := findPath(grid, Cell{Row: startRow, Col: startCol}, fishPosition)
-	return convertPathToDirections(path)
 }
 
 func initializeGrid(bombPositions []Cell, fishPosition Cell) [][]string {
@@ -284,20 +301,18 @@ func getValidNeighbors(grid [][]string, cell Cell) []Cell {
 	return valid
 }
 
-func convertPathToDirections(path []Cell) []int {
-	directions = make([]int, 0, len(path)-1)
-	for i := 1; i < len(path); i++ {
-		prev, curr := path[i-1], path[i]
-		switch {
-		case curr.Row < prev.Row:
-			directions = append(directions, 1) // Up
-		case curr.Row > prev.Row:
-			directions = append(directions, 3) // Down
-		case curr.Col < prev.Col:
-			directions = append(directions, 0) // Left
-		case curr.Col > prev.Col:
-			directions = append(directions, 4) // Right
-		}
+func convertPathToDirection(path []Cell) int {
+	prev, curr := path[0], path[1]
+	switch {
+	case curr.Row < prev.Row:
+		return 1 // Up
+	case curr.Row > prev.Row:
+		return 3 // Down
+	case curr.Col < prev.Col:
+		return 0 // Left
+	case curr.Col > prev.Col:
+		return 4 // Right
+	default:
+		return -1
 	}
-	return directions
 }
