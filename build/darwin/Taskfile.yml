@@ -13,7 +13,7 @@ tasks:
     cmds:
       - go build {{.BUILD_FLAGS}} -o {{.OUTPUT}}
     vars:
-      BUILD_FLAGS: '{{if eq .PRODUCTION "true"}}-trimpath -ldflags="-w -s"{{else}}-gcflags=all="-l"{{end}} -tags "{{.TAGS}}{{if eq .PRODUCTION "true"}} production{{end}}"'
+      BUILD_FLAGS: '{{if eq .PRODUCTION "true"}}-trimpath -ldflags="-w -s"{{else}}-gcflags=all="-l"{{end}} -tags "{{if eq .PRODUCTION "true"}}production{{end}}"'
       DEFAULT_OUTPUT: '{{.BIN_DIR}}/{{.APP_NAME}}'
       OUTPUT: '{{ .OUTPUT | default .DEFAULT_OUTPUT }}'
     env:

@@ -13,7 +13,7 @@ tasks:
     cmds:
       - go build {{.BUILD_FLAGS}} -o {{.BIN_DIR}}/{{.APP_NAME}}
     vars:
-      BUILD_FLAGS: '{{if eq .PRODUCTION "true"}}-trimpath -ldflags="-w -s"{{else}}-gcflags=all="-l"{{end}} -tags "{{.TAGS}} webkit2_41{{if eq .PRODUCTION "true"}} production{{end}}"'
+      BUILD_FLAGS: '{{if eq .PRODUCTION "true"}}-trimpath -ldflags="-w -s"{{else}}-gcflags=all="-l"{{end}} -tags "webkit2_41{{if eq .PRODUCTION "true"}} production{{end}}"'
     env:
       GOOS: linux
       CGO_ENABLED: 1

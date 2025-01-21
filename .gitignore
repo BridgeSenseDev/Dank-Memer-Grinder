@@ -12,7 +12,6 @@ dmg
 Dank Memer Grinder.code-workspace
 config.json
 build/bin
-instance/captcha_private.go
 .idea
 wails
 .task
