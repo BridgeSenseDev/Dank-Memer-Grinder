@@ -1,7 +1,6 @@
 package instance
 
 import (
-	"fmt"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"math/rand"
 	"time"
@@ -36,15 +35,6 @@ func (in *Instance) ClickButton(message gateway.EventMessage, row int, column in
 
 	err := in.Client.ClickButton(message, row, column)
 	if err != nil {
-		for attempt := 0; attempt < 5; attempt++ {
-			backoff := time.Duration(1<<attempt) * time.Second
-			utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Attempt %d to click button, waiting %v", attempt+1, backoff))
-			time.Sleep(backoff)
-			err = in.Client.ClickButton(message, row, column)
-			if err == nil {
-				return nil
-			}
-		}
 		return err
 	} else {
 		return nil
