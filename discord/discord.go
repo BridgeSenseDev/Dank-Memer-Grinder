@@ -25,7 +25,7 @@ type CommandSendOptions struct {
 
 func (client *Client) SafeGetUsername() string {
 	if client.Gateway != nil {
-		return client.SafeGetUsername()
+		return client.Gateway.SafeGetUsername()
 	} else {
 		return utils.GetAccountNumber(client.Token)
 	}
