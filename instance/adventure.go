@@ -137,25 +137,36 @@ func (in *Instance) Adventure(message gateway.EventMessage) {
 	}
 
 	question := strings.Split(embed.Description, "\n")[0]
+	questionFound := false
+
 	for q, ans := range adventureMap {
 		if strings.Contains(strings.ToLower(question), strings.ToLower(q)) {
+			questionFound = true
 			for columnIndex, button := range message.Components[0].(*types.ActionsRow).Components {
 				if strings.EqualFold(button.(*types.Button).Label, ans) {
 					err := in.ClickButton(message, 0, columnIndex)
 					if err != nil {
-						utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click adventure answer button: %s", err.Error()))
+						utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(),
+							fmt.Sprintf("Failed to click adventure answer button: %s", err.Error()))
 					}
 					return
 				}
 			}
-			utils.Log(utils.Important, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to find answer in config.json for adventure question: %s", q))
-			err := in.ClickButton(message, 0, 0)
-			if err != nil {
-				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click default adventure answer button: %s", err.Error()))
-				return
-			}
-			utils.Log(utils.Important, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to find answer in config.json for adventure question: %s", q))
+			utils.Log(utils.Important, utils.Error, in.SafeGetUsername(),
+				fmt.Sprintf("Found question but failed to find matching answer button for: %s", q))
+			break
 		}
+	}
+
+	if !questionFound {
+		utils.Log(utils.Important, utils.Error, in.SafeGetUsername(),
+			fmt.Sprintf("Failed to find question in config.json: %s", question))
+	}
+
+	err := in.ClickButton(message, 0, 0)
+	if err != nil {
+		utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(),
+			fmt.Sprintf("Failed to click default adventure answer button: %s", err.Error()))
 	}
 }
 
