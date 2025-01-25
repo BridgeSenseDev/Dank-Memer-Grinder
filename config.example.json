@@ -16,8 +16,7 @@
       "maxDelay": 4000
     }
   },
-  "accounts": [
-  ],
+  "accounts": [],
   "autoBuy": {
     "huntingRifle": {
       "state": true,
@@ -29,7 +28,18 @@
     },
     "lifeSavers": {
       "state": true,
-      "amount": 1
+      "amount": 2
+    }
+  },
+  "autoUse": {
+    "apple": {
+      "state": false
+    },
+    "luckyHorseshoe": {
+      "state": false
+    },
+    "pizzaSlice": {
+      "state": false
     }
   },
   "commands": {
@@ -41,6 +51,12 @@
     "beg": {
       "state": false,
       "delay": 40
+    },
+    "blackjack": {
+      "state": false,
+      "delay": 20,
+      "amount": "10k",
+      "manuallyRunCommands": true
     },
     "crime": {
       "state": false,
@@ -77,8 +93,9 @@
     },
     "fish": {
       "state": false,
-      "delay": 20,
-      "sellCoinsValue": 250000
+      "delay": 30,
+      "sellCoinsValue": 2500000,
+      "fishLocation": "Vertigo Beach"
     },
     "highlow": {
       "state": false,
