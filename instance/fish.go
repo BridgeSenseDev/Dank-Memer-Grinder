@@ -11,7 +11,6 @@ import (
 	"github.com/valyala/fasthttp"
 	_ "golang.org/x/image/webp"
 	"image"
-	"log/slog"
 	"regexp"
 	"strconv"
 	"strings"
@@ -216,7 +215,6 @@ func findPositions(img image.Image, cellWidth, cellHeight int) ([]Cell, *Cell, C
 	for i := 0; i < gridSize; i++ {
 		for j := 0; j < gridSize; j++ {
 			hash := calculateGridHash(img, j*cellWidth, i*cellHeight, cellWidth, cellHeight)
-			slog.Info(hash)
 			switch hash {
 			case bombHash:
 				bombPositions = append(bombPositions, Cell{Row: i, Col: j})
