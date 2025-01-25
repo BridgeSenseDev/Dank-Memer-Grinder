@@ -27,18 +27,20 @@ type Client interface {
 }
 
 type Instance struct {
-	User       *types.User           `json:"user"`
-	Client     Client                `json:"client"`
-	ChannelID  string                `json:"channelID"`
-	GuildID    string                `json:"guildID"`
-	Cfg        config.Config         `json:"config"`
-	AccountCfg config.AccountsConfig `json:"accountCfg"`
-	LastRan    map[string]time.Time  `json:"lastRan"`
-	StopChan   chan struct{}         `json:"stopChan"`
-	Error      string                `json:"error,omitempty"`
-	Ctx        context.Context
-	pauseCount int
-	pauseMutex sync.Mutex
+	User         *types.User           `json:"user"`
+	Client       Client                `json:"client"`
+	ChannelID    string                `json:"channelID"`
+	GuildID      string                `json:"guildID"`
+	Cfg          config.Config         `json:"config"`
+	AccountCfg   config.AccountsConfig `json:"accountCfg"`
+	LastRan      map[string]time.Time  `json:"lastRan"`
+	StopChan     chan struct{}         `json:"stopChan"`
+	Error        string                `json:"error,omitempty"`
+	Ctx          context.Context
+	IsRestarting bool
+	commandsWg   sync.WaitGroup
+	pauseCount   int
+	pauseMutex   sync.Mutex
 }
 
 func (in *Instance) SafeGetUsername() string {
@@ -54,7 +56,11 @@ func (in *Instance) Start() error {
 		return fmt.Errorf("no client")
 	}
 
-	go in.CommandsLoop()
+	in.commandsWg.Add(1)
+	go func() {
+		defer in.commandsWg.Done()
+		in.CommandsLoop()
+	}()
 
 	in.Client.AddHandler(gateway.EventTypeMessageCreate, func(event gateway.EventMessage) {
 		in.HandleMessageCreate(event)
@@ -74,7 +80,10 @@ func (in *Instance) Start() error {
 func (in *Instance) Stop() {
 	utils.Log(utils.Important, utils.Info, in.SafeGetUsername(), "Stopping instance")
 	close(in.StopChan)
+	in.commandsWg.Wait()
 	in.Client.Close()
+	in.Client = nil
+	time.Sleep(500 * time.Millisecond)
 }
 
 func (in *Instance) PauseCommands(indefinite bool) {

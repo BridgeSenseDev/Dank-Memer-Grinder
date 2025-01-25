@@ -121,6 +121,8 @@ func (d *DmgService) StartInstance(account config.AccountsConfig) {
 			}
 		}
 	}()
+
+	time.Sleep(5 * time.Second)
 }
 
 func (d *DmgService) RemoveInstance(token string) {

@@ -14,7 +14,7 @@
 		UpdateInstanceToken
 	} from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/dmgservice";
 	import { cfg, instances } from "$lib/state.svelte";
-	import { Loader } from "lucide-svelte";
+	import { LoaderCircle } from "lucide-svelte";
 
 	interface DataTableProps<TData, TValue> {
 		columns: ColumnDef<TData, TValue>[];
@@ -34,12 +34,14 @@
 	let hasChanges = $state(false);
 	function setHasChanges() {
 		hasChanges = true;
-		console.log(hasChanges);
 	}
 
+	let isRestarting = $state(false);
 	async function restartAllBots() {
+		isRestarting = true;
 		await RestartInstances();
 		hasChanges = false;
+		isRestarting = false;
 	}
 
 	$effect(() => {
@@ -142,7 +144,7 @@
 												<Tooltip.Root>
 													<Tooltip.Trigger>
 														<div class="flex items-center justify-center">
-															<Loader class="text-white" />
+															<LoaderCircle class="animate-spin" />
 														</div>
 													</Tooltip.Trigger>
 													<Tooltip.Content>Loading</Tooltip.Content>
@@ -190,7 +192,15 @@
 		</div>
 		<AddAccounts />
 	</div>
-	<Button class={`sticky text-base font-semibold`} disabled={!hasChanges} onclick={restartAllBots}>
-		Restart all accounts
+	<Button
+		class="sticky text-base font-semibold"
+		disabled={!hasChanges || isRestarting}
+		onclick={restartAllBots}
+	>
+		{#if isRestarting}
+			<LoaderCircle class="animate-spin" /> Restarting...
+		{:else}
+			Restart all accounts
+		{/if}
 	</Button>
 </div>

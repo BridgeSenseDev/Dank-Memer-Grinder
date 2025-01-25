@@ -81,7 +81,6 @@ func (d *DmgService) GetConfig() *config.Config {
 }
 
 func (d *DmgService) UpdateConfig(newCfg *config.Config) error {
-
 	d.cfg = newCfg
 
 	configJSON, err := json.MarshalIndent(newCfg, "", "  ")
