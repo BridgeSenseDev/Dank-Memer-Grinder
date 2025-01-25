@@ -13,7 +13,6 @@ Dank Memer Grinder.code-workspace
 config.json
 build/bin
 .idea
-wails
 .task
 .vscode/
 

@@ -135,6 +135,8 @@ github.com/wailsapp/go-webview2 v1.0.19 h1:7U3QcDj1PrBPaxJNCui2k1SkWml+Q5kvFUFyT
 github.com/wailsapp/go-webview2 v1.0.19/go.mod h1:qJmWAmAmaniuKGZPWwne+uor3AHMB5PFhqiK0Bbj8kc=
 github.com/wailsapp/mimetype v1.4.1 h1:pQN9ycO7uo4vsUUuPeHEYoUkLVkaRntMnHJxVwYhwHs=
 github.com/wailsapp/mimetype v1.4.1/go.mod h1:9aV5k31bBOv5z6u+QP8TltzvNGJPmNJD4XlAL3U+j3o=
+github.com/wailsapp/wails/v3 v3.0.0-alpha.9 h1:b8CfRrhPno8Fra0xFp4Ifyj+ogmXBc35rsQWvcrHtsI=
+github.com/wailsapp/wails/v3 v3.0.0-alpha.9/go.mod h1:dSv6s722nSWaUyUiapAM1DHc5HKggNGY1a79shO85/g=
 github.com/xanzy/ssh-agent v0.3.3 h1:+/15pJfg/RsTxqYcX6fHqOXZwwMP+2VyYWJeWM2qQFM=
 github.com/xanzy/ssh-agent v0.3.3/go.mod h1:6dzNDKs0J9rVPHPhaGCukekBHKqfl+L3KghI1Bc68Uw=
 github.com/xyproto/randomstring v1.0.5 h1:YtlWPoRdgMu3NZtP45drfy1GKoojuR7hmRcnhZqKjWU=
