@@ -17,11 +17,6 @@
     }
   },
   "accounts": [
-    {
-      "token": "",
-      "channelID": "",
-      "state": true
-    }
   ],
   "autoBuy": {
     "huntingRifle": {
