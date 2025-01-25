@@ -28,7 +28,10 @@ func (d *DmgService) startup() {
 	// Load configuration
 	configFile := "./config.json"
 	cfg, err := utils.ReadConfig(configFile)
+
 	if err != nil {
+		utils.Log(utils.Important, utils.Error, "", fmt.Sprintf("Failed to read config file, downloading example cofnfig: %s", err.Error()))
+
 		client := &fasthttp.Client{}
 
 		req := fasthttp.AcquireRequest()
@@ -67,10 +70,13 @@ func (d *DmgService) startup() {
 		if err != nil {
 			utils.ShowErrorDialog("A fatal error occurred!", fmt.Sprintf("Failed to read config.json: %s", err.Error()))
 		}
-
-		application.Get().EmitEvent("configUpdate", cfg)
 	}
 
+	if err = cfg.Validate(); err != nil {
+		utils.ShowErrorDialog("A fatal error occurred!", fmt.Sprintf("Invalid config.json: %s", err.Error()))
+	}
+
+	application.Get().EmitEvent("configUpdate", cfg)
 	d.ctx = context.Background()
 	d.cfg = &cfg
 	d.StartInstances()
@@ -81,6 +87,10 @@ func (d *DmgService) GetConfig() *config.Config {
 }
 
 func (d *DmgService) UpdateConfig(newCfg *config.Config) error {
+	if err := newCfg.Validate(); err != nil {
+		return err
+	}
+
 	d.cfg = newCfg
 
 	configJSON, err := json.MarshalIndent(newCfg, "", "  ")

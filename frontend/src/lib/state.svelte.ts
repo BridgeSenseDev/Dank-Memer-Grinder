@@ -35,9 +35,7 @@ class Cfg {
 	constructor() {
 		$effect.root(() => {
 			$effect(() => {
-				if (this.c?.gui?.theme !== "") {
-					UpdateConfig(this.c);
-				}
+				UpdateConfig(this.c);
 			});
 		});
 
