@@ -30,7 +30,7 @@ func (d *DmgService) startup() {
 	cfg, err := utils.ReadConfig(configFile)
 
 	if err != nil {
-		utils.Log(utils.Important, utils.Error, "", fmt.Sprintf("Failed to read config file, downloading example cofnfig: %s", err.Error()))
+		utils.Log(utils.Important, utils.Error, "", fmt.Sprintf("Failed to read config file, downloading example config: %s", err.Error()))
 
 		client := &fasthttp.Client{}
 
