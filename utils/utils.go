@@ -106,12 +106,14 @@ func FormatNumber(amount int, decimalPlaces int) string {
 }
 
 func ShowErrorDialog(title, message string) {
-	dialog := application.MessageDialog{MessageDialogOptions: application.MessageDialogOptions{
-		DialogType: application.ErrorDialogType,
-		Title:      title,
-		Message:    message,
-	}}
-	dialog.Show()
+	if !isCliMode() {
+		dialog := application.MessageDialog{MessageDialogOptions: application.MessageDialogOptions{
+			DialogType: application.ErrorDialogType,
+			Title:      title,
+			Message:    message,
+		}}
+		dialog.Show()
+	}
 	panic(message)
 }
 
