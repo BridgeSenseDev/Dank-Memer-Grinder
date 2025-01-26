@@ -163,7 +163,8 @@ const (
 )
 
 func Log(level LogLevel, logType LogType, username string, msg string) {
-	application.Get().EmitEvent("log", level, logType, username, msg)
+	EmitEventIfNotCLI(
+		"log", level, logType, username, msg)
 
 	switch logType {
 	case Info:
@@ -194,4 +195,16 @@ func GetAccountNumber(token string) string {
 		}
 	}
 	return "Unknown Account"
+}
+
+var isCliMode = func() bool { return false }
+
+func SetCliMode(checker func() bool) {
+	isCliMode = checker
+}
+
+func EmitEventIfNotCLI(eventName string, args ...interface{}) {
+	if !isCliMode() {
+		application.Get().EmitEvent(eventName, args...)
+	}
 }

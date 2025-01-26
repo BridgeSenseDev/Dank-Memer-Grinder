@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
-	"github.com/wailsapp/wails/v3/pkg/application"
 	"sync"
 	"time"
 
@@ -43,7 +42,7 @@ func (d *DmgService) StartInstance(account config.AccountsConfig) {
 						Error:      "invalidChannelID",
 					}
 					d.instances = append(d.instances, in)
-					application.Get().EmitEvent("instancesUpdate", d.GetInstances())
+					utils.EmitEventIfNotCLI("instancesUpdate", d.GetInstances())
 					return
 				}
 
@@ -73,7 +72,7 @@ func (d *DmgService) StartInstance(account config.AccountsConfig) {
 				}
 
 				d.instances = append(d.instances, in)
-				application.Get().EmitEvent("instancesUpdate", d.GetInstances())
+				utils.EmitEventIfNotCLI("instancesUpdate", d.GetInstances())
 
 				d.UpdateDiscordStatus(d.cfg.DiscordStatus)
 
@@ -95,7 +94,7 @@ func (d *DmgService) StartInstance(account config.AccountsConfig) {
 			}
 
 			d.instances = append(d.instances, in)
-			application.Get().EmitEvent("instancesUpdate", d.GetInstances())
+			utils.EmitEventIfNotCLI("instancesUpdate", d.GetInstances())
 		}
 
 		statusChan := client.Gateway.StatusUpdates()
@@ -111,7 +110,7 @@ func (d *DmgService) StartInstance(account config.AccountsConfig) {
 					}
 
 					d.instances = append(d.instances, in)
-					application.Get().EmitEvent("instancesUpdate", d.GetInstances())
+					utils.EmitEventIfNotCLI("instancesUpdate", d.GetInstances())
 					break
 				default:
 				}
@@ -143,7 +142,7 @@ func (d *DmgService) RemoveInstance(token string) {
 
 	wg.Wait()
 	d.instances = instancesToKeep
-	application.Get().EmitEvent("instancesUpdate", d.GetInstances())
+	utils.EmitEventIfNotCLI("instancesUpdate", d.GetInstances())
 }
 
 func (d *DmgService) RestartInstance(token string) {

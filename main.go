@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"embed"
+	"flag"
 	"fmt"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"github.com/grongor/panicwatch"
@@ -77,6 +78,21 @@ func main() {
 	})
 	if err != nil {
 		slog.Error("failed to start panicwatch: " + err.Error())
+	}
+
+	cli := flag.Bool("cli", false, "enable CLI mode")
+	flag.Parse()
+
+	utils.SetCliMode(func() bool {
+		return *cli
+	})
+
+	if *cli {
+		dmgService.startup()
+		var wg sync.WaitGroup
+		wg.Add(1)
+		wg.Wait()
+		return
 	}
 
 	app := application.New(application.Options{

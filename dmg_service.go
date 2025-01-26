@@ -7,7 +7,6 @@ import (
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"github.com/valyala/fasthttp"
-	"github.com/wailsapp/wails/v3/pkg/application"
 	"os"
 	"sync"
 
@@ -76,7 +75,7 @@ func (d *DmgService) startup() {
 		utils.ShowErrorDialog("A fatal error occurred!", fmt.Sprintf("Invalid config.json: %s", err.Error()))
 	}
 
-	application.Get().EmitEvent("configUpdate", cfg)
+	utils.EmitEventIfNotCLI("configUpdate", cfg)
 	d.ctx = context.Background()
 	d.cfg = &cfg
 	d.StartInstances()
