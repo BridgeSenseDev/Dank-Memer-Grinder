@@ -13,6 +13,15 @@ import (
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
 )
 
+func (client *Client) safeGetSessionID() (string, error) {
+	sessionID := client.Gateway.SessionID()
+	if sessionID == nil {
+		return "", fmt.Errorf("session ID not available (gateway disconnected)")
+	}
+
+	return *sessionID, nil
+}
+
 func generateNonce() string {
 	now := time.Now().UnixNano() / int64(time.Millisecond)
 	a := now - 1420070400000
@@ -52,6 +61,11 @@ func (client *Client) sendRequest(url string, payload map[string]interface{}) er
 }
 
 func (client *Client) SendCommand(commandName string, options map[string]string) error {
+	sessionID, err := client.safeGetSessionID()
+	if err != nil {
+		return err
+	}
+
 	interactionsUrl := "https://discord.com/api/v9/interactions"
 	commandInfo := client.GetCommandInfo(commandName)
 
@@ -91,7 +105,7 @@ func (client *Client) SendCommand(commandName string, options map[string]string)
 		"application_id": "270904126974590976",
 		"guild_id":       client.GuildID,
 		"channel_id":     client.ChannelID,
-		"session_id":     *client.Gateway.SessionID(),
+		"session_id":     sessionID,
 		"data": map[string]interface{}{
 			"version": commandInfo.Version,
 			"id":      commandInfo.ID,
@@ -118,6 +132,11 @@ func (client *Client) SendCommand(commandName string, options map[string]string)
 }
 
 func (client *Client) SendSubCommand(commandName string, subCommandName string, options map[string]string) error {
+	sessionID, err := client.safeGetSessionID()
+	if err != nil {
+		return err
+	}
+
 	interactionsUrl := "https://discord.com/api/v9/interactions"
 	commandInfo := client.GetCommandInfo(commandName)
 
@@ -142,7 +161,7 @@ func (client *Client) SendSubCommand(commandName string, subCommandName string, 
 		"application_id": "270904126974590976",
 		"guild_id":       client.GuildID,
 		"channel_id":     client.ChannelID,
-		"session_id":     *client.Gateway.SessionID(),
+		"session_id":     sessionID,
 		"data": map[string]interface{}{
 			"version": commandInfo.Version,
 			"id":      commandInfo.ID,
@@ -175,6 +194,11 @@ func (client *Client) SendSubCommand(commandName string, subCommandName string, 
 }
 
 func (client *Client) ClickButton(message gateway.EventMessage, row int, column int) error {
+	sessionID, err := client.safeGetSessionID()
+	if err != nil {
+		return err
+	}
+
 	if message.GuildID == "" {
 		message.GuildID = client.GuildID
 	}
@@ -185,7 +209,7 @@ func (client *Client) ClickButton(message gateway.EventMessage, row int, column 
 		"guild_id":       message.GuildID,
 		"channel_id":     message.ChannelID,
 		"message_id":     message.MessageID,
-		"session_id":     *client.Gateway.SessionID(),
+		"session_id":     sessionID,
 		"message_flags":  message.Flags,
 		"data": map[string]interface{}{
 			"component_type": 2,
@@ -197,13 +221,18 @@ func (client *Client) ClickButton(message gateway.EventMessage, row int, column 
 }
 
 func (client *Client) ClickDmButton(message gateway.EventMessage, row int, column int) error {
+	sessionID, err := client.safeGetSessionID()
+	if err != nil {
+		return err
+	}
+
 	payload := map[string]interface{}{
 		"type":           3,
 		"application_id": "270904126974590976",
 		"guild_id":       nil,
 		"channel_id":     message.ChannelID,
 		"message_id":     message.MessageID,
-		"session_id":     *client.Gateway.SessionID(),
+		"session_id":     sessionID,
 		"message_flags":  message.Flags,
 		"data": map[string]interface{}{
 			"component_type": 2,
@@ -215,6 +244,11 @@ func (client *Client) ClickDmButton(message gateway.EventMessage, row int, colum
 }
 
 func (client *Client) ChooseSelectMenu(message gateway.EventMessage, row int, column int, values []string) error {
+	sessionID, err := client.safeGetSessionID()
+	if err != nil {
+		return err
+	}
+
 	payload := map[string]interface{}{
 		"application_id": "270904126974590976",
 		"channel_id":     message.ChannelID,
@@ -226,7 +260,7 @@ func (client *Client) ChooseSelectMenu(message gateway.EventMessage, row int, co
 		},
 		"guild_id":   message.GuildID,
 		"message_id": message.MessageID,
-		"session_id": *client.Gateway.SessionID(),
+		"session_id": sessionID,
 		"type":       3,
 	}
 
@@ -234,6 +268,11 @@ func (client *Client) ChooseSelectMenu(message gateway.EventMessage, row int, co
 }
 
 func (client *Client) SubmitModal(modal gateway.EventModalCreate) error {
+	sessionID, err := client.safeGetSessionID()
+	if err != nil {
+		return err
+	}
+
 	payload := map[string]interface{}{
 		"type":           5,
 		"application_id": "270904126974590976",
@@ -244,7 +283,7 @@ func (client *Client) SubmitModal(modal gateway.EventModalCreate) error {
 			"custom_id":  modal.CustomID,
 			"components": modal.Components,
 		},
-		"session_id": *client.Gateway.SessionID(),
+		"session_id": sessionID,
 		"nonce":      generateNonce(),
 	}
 

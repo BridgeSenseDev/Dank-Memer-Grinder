@@ -55,6 +55,8 @@ type gatewayImpl struct {
 }
 
 func (g *gatewayImpl) SessionID() *string {
+	g.connMu.Lock()
+	defer g.connMu.Unlock()
 	return g.config.SessionID
 }
 
