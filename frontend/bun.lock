@@ -5,7 +5,7 @@
       "name": "frontend",
       "dependencies": {
         "@tanstack/table-core": "^8.20.5",
-        "@wailsio/runtime": "3.0.0-alpha.39",
+        "@wailsio/runtime": "3.0.0-alpha.40",
         "lucide-svelte": "^0.474.0",
         "svelte-radix": "^2.0.1",
       },
@@ -252,7 +252,7 @@
 
     "@typescript-eslint/visitor-keys": ["@typescript-eslint/visitor-keys@8.21.0", "", { "dependencies": { "@typescript-eslint/types": "8.21.0", "eslint-visitor-keys": "^4.2.0" } }, "sha512-BkLMNpdV6prozk8LlyK/SOoWLmUFi+ZD+pcqti9ILCbVvHGk1ui1g4jJOc2WDLaeExz2qWwojxlPce5PljcT3w=="],
 
-    "@wailsio/runtime": ["@wailsio/runtime@3.0.0-alpha.39", "", {}, "sha512-wlLAcNx0lEZn6pXz1Wv3IIwemKw1wEvbNhbFjcWjiQPIT0DsRtsAkzgiWSpRw/nCu3eaAwVchNy+fLbWBhGITg=="],
+    "@wailsio/runtime": ["@wailsio/runtime@3.0.0-alpha.40", "", {}, "sha512-PHG2NNvi5OOoOH5ImyyOMeYpJsAwdneFgid8xl+RGUnRnJdSIqz7bmK+pijworeP1BF+RfR8WHiIw/7MzDLmiA=="],
 
     "acorn": ["acorn@8.14.0", "", { "bin": { "acorn": "bin/acorn" } }, "sha512-cl669nCJTZBsL97OF4kUQm5g5hC2uihk0NxY3WENAC0TYdILVkAyHymAntgxGkl7K+t0cXIrH5siy5S4XkFycA=="],
 
