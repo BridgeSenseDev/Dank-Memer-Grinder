@@ -8,9 +8,9 @@ tasks:
     summary: Builds the application for Windows
     deps:
       - task: common:go:mod:tidy
-      - task: common:build:frontend
       - task: common:generate:icons
     cmds:
+      - task: common:build:frontend
       - task: generate:syso
       - go build {{.BUILD_FLAGS}} -o {{.BIN_DIR}}/{{.APP_NAME}}.exe
       - cmd: powershell Remove-item *.syso
