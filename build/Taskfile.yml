@@ -32,11 +32,11 @@ tasks:
       - "**/*"
     generates:
       - dist/*
-    cmds:
+    deps:
       - task: install:frontend:deps
       - task: generate:bindings
+    cmds:
       - bun run build
-    method: timestamp
 
   generate:bindings:
     summary: Generates bindings for the frontend
