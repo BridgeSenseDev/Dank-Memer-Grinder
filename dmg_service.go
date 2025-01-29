@@ -8,7 +8,6 @@ import (
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"github.com/valyala/fasthttp"
 	"os"
-	"path/filepath"
 	"sync"
 
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/config"
@@ -24,18 +23,9 @@ type DmgService struct {
 	wsMutex   sync.Mutex
 }
 
-func getConfigPath() string {
-	if appImagePath := os.Getenv("APPIMAGE"); appImagePath != "" {
-		return filepath.Join(filepath.Dir(appImagePath), "config.json")
-	}
-
-	return "./config.json"
-}
-
 func (d *DmgService) startup() {
 	// Load configuration
-	configFile := getConfigPath()
-	cfg, err := utils.ReadConfig(configFile)
+	cfg, err := utils.ReadConfig()
 
 	if err != nil {
 		utils.Log(utils.Important, utils.Error, "", fmt.Sprintf("Failed to read config file, downloading example config: %s", err.Error()))
@@ -58,7 +48,7 @@ func (d *DmgService) startup() {
 			utils.ShowErrorDialog("A fatal error occurred!", fmt.Sprintf("Failed to download config file: %d", resp.StatusCode()))
 		}
 
-		file, err2 := os.Create(getConfigPath())
+		file, err2 := os.Create(utils.GetConfigPath())
 		if err2 != nil {
 			utils.ShowErrorDialog("A fatal error occurred!", fmt.Sprintf("Failed to write config.json: %s", err2.Error()))
 		}
@@ -74,7 +64,7 @@ func (d *DmgService) startup() {
 			utils.ShowErrorDialog("A fatal error occurred!", fmt.Sprintf("Error saving file: %s", err2.Error()))
 		}
 
-		cfg, err = utils.ReadConfig(configFile)
+		cfg, err = utils.ReadConfig()
 		if err != nil {
 			utils.ShowErrorDialog("A fatal error occurred!", fmt.Sprintf("Failed to read config.json: %s", err.Error()))
 		}
@@ -106,7 +96,7 @@ func (d *DmgService) UpdateConfig(newCfg *config.Config) error {
 		return err
 	}
 
-	err = os.WriteFile(getConfigPath(), configJSON, 0644)
+	err = os.WriteFile(utils.GetConfigPath(), configJSON, 0644)
 	if err != nil {
 		return err
 	}

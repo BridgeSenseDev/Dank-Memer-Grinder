@@ -8,7 +8,7 @@ import (
 
 // DefaultConfig returns a Config with sensible defaults.
 func DefaultConfig() *Config {
-	cfg, err := utils.ReadConfig("config.json")
+	cfg, err := utils.ReadConfig()
 	if err != nil {
 		panic(fmt.Sprintf("Failed to read config file: %s", err.Error()))
 	}

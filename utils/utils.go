@@ -9,6 +9,7 @@ import (
 	"log/slog"
 	"math/rand"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -176,7 +177,17 @@ func Log(level LogLevel, logType LogType, username string, msg string) {
 	}
 }
 
-func ReadConfig(configFile string) (config.Config, error) {
+func GetConfigPath() string {
+	if appImagePath := os.Getenv("APPIMAGE"); appImagePath != "" {
+		return filepath.Join(filepath.Dir(appImagePath), "config.json")
+	}
+
+	return "./config.json"
+}
+
+func ReadConfig() (config.Config, error) {
+	configFile := GetConfigPath()
+
 	var cfg config.Config
 	bytes, err := os.ReadFile(configFile)
 	if err != nil {
@@ -187,7 +198,7 @@ func ReadConfig(configFile string) (config.Config, error) {
 }
 
 func GetAccountNumber(token string) string {
-	cfg, err := ReadConfig("config.json")
+	cfg, err := ReadConfig()
 	if err != nil {
 		return "Error: Unable to fetch config"
 	}
