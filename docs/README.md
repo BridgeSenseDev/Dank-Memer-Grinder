@@ -15,14 +15,10 @@ Join the Dank Memer Grinder Discord
 
 Start here to begin using Dank Memer Grinder!
 
-{% content-ref url="broken-reference" %}
-[Broken link](broken-reference)
+{% content-ref url="installation/pre-built-binaries.md" %}
+[pre-built-binaries.md](installation/pre-built-binaries.md)
 {% endcontent-ref %}
 
-{% content-ref url="broken-reference" %}
-[Broken link](broken-reference)
-{% endcontent-ref %}
-
-{% content-ref url="broken-reference" %}
-[Broken link](broken-reference)
+{% content-ref url="installation/build-from-source.md" %}
+[build-from-source.md](installation/build-from-source.md)
 {% endcontent-ref %}

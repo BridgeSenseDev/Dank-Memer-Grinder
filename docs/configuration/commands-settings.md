@@ -10,7 +10,7 @@ description: Learn more about command customizations
 
 #### Available Adventures
 
-These adventures are currently implemented in Dank Memer Grinder:
+These adventures are currently implemented in DMG:
 
 * [x] Space
 * [x] Pasture (Out West)
@@ -24,7 +24,7 @@ To choose an adventure, find the "Adventure" drop down menu in the Settings tab 
 
 #### Adventure Answers
 
-Dank Memer Grinder allows you to optimize your adventure success rate or profits by customizing the answers it chooses. You can configure different responses in the `config.json` file. [Dank Memer Adventure Guides](https://docs.google.com/spreadsheets/d/14AC-mmYNMrcdDGxfG2Nv0OAwq-Pkth1SIJuW3ADSXYQ/edit#gid=1274532499) is a useful tool for choosing answers.
+You can optimize your adventure success rate or profits by customizing the answers for each adventure possibility. You can configure different responses in the `config.json` file. [Dank Memer Adventure Guides](https://docs.google.com/spreadsheets/d/14AC-mmYNMrcdDGxfG2Nv0OAwq-Pkth1SIJuW3ADSXYQ/edit#gid=1274532499) is a useful tool for choosing answers.
 
 **Answer Format**
 

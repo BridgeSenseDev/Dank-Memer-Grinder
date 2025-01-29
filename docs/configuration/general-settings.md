@@ -6,7 +6,7 @@ description: Learn more about Dank Memer Grinder's general configuration options
 
 ### Bot Toggle
 
-The Dank Memer Grinder GUI has a toggle switch for each bot account in the bottom left corner. The toggle switch allows you to easily enable or disable each bot. When the toggle is off, the bot is disabled and will not send any commands or respond to events.
+The DMG GUI has a global toggle switch for all accounts in the bottom left corner. This toggle switch is the fastest way to globally start or pause DMG. When off, all accounts will not send any commands or respond to messages.
 
 <details>
 

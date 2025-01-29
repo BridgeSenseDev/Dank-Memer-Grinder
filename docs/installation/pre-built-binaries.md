@@ -69,3 +69,8 @@ First, extract and double click the downloaded binary named `dmg` once. Because 
 2. Scroll down to Security section, where you should see `"dmg" was blocked to protect your mac`. Click `Open anyway`.
 3. In the popup, click `Open anyway` again, then enter your login password, then click OK.
 
+After installation, you can proceed to configuring DMG.
+
+{% content-ref url="../configuration/getting-your-channel-id.md" %}
+[getting-your-channel-id.md](../configuration/getting-your-channel-id.md)
+{% endcontent-ref %}

@@ -132,3 +132,9 @@ We can also run DMG in development mode. This mode allows you to make changes to
 ```sh
 wails3 dev
 ```
+
+After installation, you can proceed to configuring DMG.
+
+{% content-ref url="../configuration/getting-your-channel-id.md" %}
+[getting-your-channel-id.md](../configuration/getting-your-channel-id.md)
+{% endcontent-ref %}
