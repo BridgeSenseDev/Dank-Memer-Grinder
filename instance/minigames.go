@@ -22,11 +22,13 @@ var (
 )
 
 const (
-	emptyspace = "<:emptyspace:827651824739156030>"
-	levitate   = ":levitate:"
-	basketball = ":basketball:"
-	fireBall   = "<:FireBall:883714770748964864>"
-	worm       = "<:Worm:864261394920898600>"
+	emptyspace        = "<:emptyspace:827651824739156030>"
+	levitate          = ":levitate:"
+	basketball        = ":basketball:"
+	fireBall          = "<:FireBall:883714770748964864>"
+	worm              = "<:Worm:864261394920898600>"
+	PinkBits          = "<:PinkBits:975398146152738906>"
+	PinkSludgeMonster = "<:PinkSludgeMonster:1127334051422937240>"
 )
 
 func generateEmojiActions(emojis []string) map[string]int {
@@ -37,8 +39,8 @@ func generateEmojiActions(emojis []string) map[string]int {
 			emojiActions[emoji] = 2
 			emojiActions[emptyspace+emoji] = 2
 			emojiActions[emptyspace+emptyspace+emoji] = 0
-		} else if emoji == fireBall || emoji == worm {
-			// Dodge the fireball / dodge the worm
+		} else if emoji == fireBall || emoji == worm || emoji == PinkBits {
+			// Dodge the fireball / dodge the worm // dodge the pink bits
 			emojiActions["# "+emptyspace+emoji] = 2
 			emojiActions["# "+emptyspace+emptyspace+emoji] = 2
 			emojiActions["# "+
@@ -76,6 +78,9 @@ func (in *Instance) MinigamesMessageCreate(message gateway.EventMessage) {
 
 	// Dragon
 	in.solveMinigame(message, "Dragon", "Dodge the Dragon's Fireball", []string{fireBall})
+
+	// Pink sludge monster
+	in.solveMinigame(message, "Pink Sludge Monster", "Dodge the Sludge Monster's Pink Bits", []string{PinkBits})
 
 	// Moleman
 	in.solveMinigame(message, "Moleman", "Dodge the Moleman's Worm", []string{worm})
