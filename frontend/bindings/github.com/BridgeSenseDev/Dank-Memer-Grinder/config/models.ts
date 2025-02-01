@@ -112,7 +112,7 @@ export interface FishCommandConfig {
     "state": boolean;
     "delay": number;
     "sellCoinsValue": number;
-    "fishLocation": FishLocation;
+    "fishLocation": FishLocation[] | null;
 }
 
 export enum FishLocation {

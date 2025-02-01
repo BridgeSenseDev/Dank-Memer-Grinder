@@ -37,7 +37,11 @@
 			}
 		}
 
-		if (typeof commands[commandKey][optionKey] === "number") {
+		if (Array.isArray(commands[commandKey][optionKey])) {
+			if (!Array.isArray(value)) {
+				value = [String(value)];
+			}
+		} else if (typeof commands[commandKey][optionKey] === "number") {
 			value = Number(value);
 		}
 		commands[commandKey][optionKey] = value;
@@ -105,6 +109,28 @@
 											<Select.Content>
 												{#each getEnumValues(optionKey) as enumValue}
 													<Select.Item value={enumValue}>{enumValue}</Select.Item>
+												{/each}
+											</Select.Content>
+										</Select.Root>
+									</div>
+								{:else if commands[commandKey][optionKey] instanceof Array && isEnum(optionKey)}
+									<div class="flex w-1/2 flex-row items-center space-x-2">
+										<Label class="whitespace-nowrap" for={`${commandKey}_${optionKey}`}>
+											{formatString(optionKey)}
+										</Label>
+										<Select.Root
+											bind:value={commands[commandKey][optionKey]}
+											on:change={(e) => updateCfg(commandKey, optionKey, e)}
+											type="multiple"
+										>
+											<Select.Trigger>
+												Select {formatString(optionKey)}s
+											</Select.Trigger>
+											<Select.Content>
+												{#each getEnumValues(optionKey) as enumValue}
+													<Select.Item value={enumValue}>
+														{enumValue}
+													</Select.Item>
 												{/each}
 											</Select.Content>
 										</Select.Root>

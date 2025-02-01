@@ -91,8 +91,8 @@ const (
 
 type FishCommandConfig struct {
 	GeneralCommandConfig
-	SellCoinsValue int          `json:"sellCoinsValue"`
-	FishLocation   FishLocation `json:"fishLocation"`
+	SellCoinsValue int            `json:"sellCoinsValue"`
+	FishLocation   []FishLocation `json:"fishLocation"`
 }
 
 type StreamCommandConfig struct {

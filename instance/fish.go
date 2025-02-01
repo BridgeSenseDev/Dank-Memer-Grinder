@@ -39,10 +39,20 @@ func (in *Instance) FishMessageCreate(message gateway.EventMessage) {
 		in.PauseCommands(false)
 
 		// Check location
-		if strings.TrimSpace(strings.SplitN(embed.Fields[1].Value, ">", 2)[1]) != string(in.Cfg.Commands.Fish.FishLocation) {
+		currentLocation := strings.TrimSpace(strings.SplitN(embed.Fields[1].Value, ">", 2)[1])
+		locationValid := false
+		for _, loc := range in.Cfg.Commands.Fish.FishLocation {
+			if currentLocation == string(loc) {
+				locationValid = true
+				break
+			}
+		}
+
+		if !locationValid {
 			err := in.ClickButton(message, 0, 1)
 			if err != nil {
-				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click fish location button: %s", err.Error()))
+				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(),
+					fmt.Sprintf("Failed to click fish location button: %s", err.Error()))
 			}
 			return
 		}
@@ -147,16 +157,16 @@ func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
 		in.UnpauseCommands()
 	} else if embed.Title == "Picking Location" {
 		options := message.Components[0].(*types.ActionsRow).Components[0].(*types.SelectMenu).Options
+		chosenLocation := in.Cfg.Commands.Fish.FishLocation[utils.Rng.Intn(len(in.Cfg.Commands.Fish.FishLocation))]
 
 		for _, option := range options {
-			if option.Label == string(in.Cfg.Commands.Fish.FishLocation) {
+			if option.Label == string(chosenLocation) {
 				if option.Default {
 					// Click travel to button
 					err := in.ClickButton(message, 1, 1)
 					if err != nil {
 						utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click travel to button: %s", err.Error()))
 					}
-					return
 				} else {
 					// Change location select menu
 					err := in.ChooseSelectMenu(message, 0, 0, []string{option.Value})

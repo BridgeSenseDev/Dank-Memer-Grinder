@@ -95,7 +95,17 @@
       "state": false,
       "delay": 30,
       "sellCoinsValue": 2500000,
-      "fishLocation": "Vertigo Beach"
+      "fishLocation": [
+        "Underwater Sanctuary",
+        "Wily River",
+        "Vertigo Beach",
+        "Scurvy Waters",
+        "Mystic Pond",
+        "Ice Caves",
+        "Snowy Mountain",
+        "Camp Guillermo",
+        "Northpoint Cabin"
+      ]
     },
     "highlow": {
       "state": false,

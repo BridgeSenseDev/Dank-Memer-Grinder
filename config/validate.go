@@ -191,8 +191,14 @@ func (f *FishCommandConfig) Validate() error {
 		NorthpointCabin:     true,
 	}
 
-	if !validLocations[f.FishLocation] {
-		return fmt.Errorf("invalid fish location: %s", f.FishLocation)
+	if len(f.FishLocation) == 0 {
+		return errors.New("at least one fish location must be specified")
+	}
+
+	for _, location := range f.FishLocation {
+		if !validLocations[location] {
+			return fmt.Errorf("invalid fish location: %s", location)
+		}
 	}
 
 	if f.SellCoinsValue < 0 {
