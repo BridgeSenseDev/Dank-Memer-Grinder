@@ -17,9 +17,6 @@ type ApiResponse struct {
 func (in *Instance) Captcha(message gateway.EventMessage) bool {
 	embed := message.Embeds[0]
 	if !strings.Contains(embed.Description, "captcha") || len(message.Components) == 0 {
-		if embed.Description == "You have passed the captcha! You can now run commands." {
-			utils.Log(utils.Important, utils.Info, in.SafeGetUsername(), "Successfully solved captcha")
-		}
 		return false
 	}
 
@@ -80,6 +77,7 @@ func (in *Instance) waitForCaptchaSolution(captchaID string) bool {
 			return true
 		case "Successfully solved captcha":
 			utils.Log(utils.Important, utils.Info, in.SafeGetUsername(), "Successfully solved captcha")
+			in.UnpauseCommands()
 			return true
 		case "Solving in progress":
 			utils.Sleep(time.Minute)
