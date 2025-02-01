@@ -37,6 +37,9 @@
 			}
 		}
 
+		if (typeof commands[commandKey][optionKey] === "number") {
+			value = Number(value);
+		}
 		commands[commandKey][optionKey] = value;
 	}
 
