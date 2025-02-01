@@ -120,7 +120,8 @@ func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
 	} else if strings.Contains(embed.Title, "caught a") {
 		if strings.Contains(embed.Description, "You have no more bucket space") {
 			// Send fish buckets command
-			err := in.ClickButton(message, 0, 3)
+			<-utils.Sleep(2 * time.Second)
+			err := in.SendSubCommand("fish", "buckets", nil, false)
 			if err != nil {
 				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to send fish buckets command: %s", err.Error()))
 			}

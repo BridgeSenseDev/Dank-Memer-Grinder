@@ -2,11 +2,10 @@ package instance
 
 import (
 	"fmt"
-	"strings"
-	"time"
-
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
+	"strings"
+	"time"
 )
 
 type ApiResponse struct {
@@ -80,7 +79,7 @@ func (in *Instance) waitForCaptchaSolution(captchaID string) bool {
 			in.UnpauseCommands()
 			return true
 		case "Solving in progress":
-			utils.Sleep(time.Minute)
+			<-utils.Sleep(30 * time.Second)
 		default:
 			utils.Log(utils.Important, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Unknown captcha solver status: %s", resp.Message))
 			return true
