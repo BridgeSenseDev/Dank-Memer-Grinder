@@ -14,6 +14,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 )
 
 const (
@@ -166,6 +167,12 @@ func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
 		}
 	} else if embed.Title == "Traveling..." {
 		in.UnpauseCommands()
+
+		match := regexp.MustCompile(`<t:(\d+):[a-zA-Z]>`).FindStringSubmatch(embed.Fields[1].Value)
+		ts, _ := strconv.ParseInt(match[1], 10, 64)
+		in.LastRan["Fish"] = in.LastRan["Fish"].Add(
+			time.Unix(ts, 0).Sub(time.Now()),
+		)
 	}
 }
 
