@@ -122,7 +122,7 @@ func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
 			// Send fish buckets command
 			err := in.ClickButton(message, 0, 3)
 			if err != nil {
-				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click fish buckets: %s", err.Error()))
+				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to send fish buckets command: %s", err.Error()))
 			}
 		} else {
 			in.UnpauseCommands()
@@ -142,7 +142,7 @@ func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
 	} else if embed.Title == "Selling Creatures" {
 		// Choose between coins / tokens
 		buttonLabel := message.Components[0].(*types.ActionsRow).Components[1].(*types.Button).Label
-		coins, _ := strconv.Atoi(strings.ReplaceAll(regexp.MustCompile(`(\d+(?:\.\d+)?)[kKmM]?`).FindStringSubmatch(buttonLabel)[1], ".", ""))
+		coins, _ := strconv.Atoi(strings.ReplaceAll(regexp.MustCompile(`(\d+(?:\.\d+)?)[kKmM]?`).FindStringSubmatch(strings.ReplaceAll(buttonLabel, ",", ""))[1], ".", ""))
 		if coins > in.Cfg.Commands.Fish.SellCoinsValue {
 			err := in.ClickButton(message, 0, 1)
 			if err != nil {
