@@ -4,7 +4,7 @@ description: Learn more about all the automated minigames available
 
 # Minigames
 
-Dank Memer Grinder automatically solves all of the following minigames:
+DMG automatically solves all of the following minigames:
 
 * [x] Dodge the Worms (Mole Man)
 * [x] Hit the ball (Football)

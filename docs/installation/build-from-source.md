@@ -5,7 +5,7 @@ description: >-
   contribute to DMG.
 ---
 
-# Build from Source
+# Build from source
 
 ## Requirements
 
@@ -113,13 +113,13 @@ If you see something like `wails3: command not found...` make sure you've follow
 If you don't intend to make any changes and want to build an optimized binary:
 
 ```sh
-// Windows
+# Windows
 wails3 task windows:build
 
-// Linux
+# Linux
 wails3 task linux:build
 
-// macOS
+# macOS
 wails3 task darwin:build
 ```
 

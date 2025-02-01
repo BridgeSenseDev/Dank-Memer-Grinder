@@ -24,7 +24,7 @@ Not out
 You can run DMG by double clicking the .exe on Windows, but this is not recommended as you won't be able to see logs if DMG crashes.&#x20;
 {% endhint %}
 
-```
+```bash
 # GUI
 .\dmg.exe
 

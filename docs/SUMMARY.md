@@ -5,19 +5,18 @@
 ## Installation
 
 * [Pre-Built binaries](installation/pre-built-binaries.md)
-* [Build from Source](installation/build-from-source.md)
+* [Build from source](installation/build-from-source.md)
 
 ## Configuration
 
-* [Entering Token and Channel ID](configuration/getting-your-channel-id.md)
+* [Entering token and channel ID](configuration/getting-your-channel-id.md)
+* [config.json file](configuration/config-json.md)
 * [General Settings](configuration/general-settings.md)
 * [Commands Settings](configuration/commands-settings.md)
-* [config.json File](configuration/config-json.md)
+* [Auto Buy Settings](configuration/auto-buy.md)
+* [Auto Use Settings](configuration/auto-use.md)
 
 ## Features
 
 * [Commands](features/commands.md)
 * [Minigames](features/minigames.md)
-* [Miscellaneous](features/miscellaneous.md)
-* [Auto Buy](features/auto-buy.md)
-* [Auto Use](features/auto-use.md)

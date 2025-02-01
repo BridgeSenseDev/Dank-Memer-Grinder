@@ -1,56 +1,29 @@
-# Config.json Documentation
+---
+description: Learn what is stored in this file.
+---
 
-## Overview
-The `config.json` file allows users to configure various settings for advanced usage. Below is a detailed explanation of each field and its purpose.
+# config.json file
 
-## Global Settings
-| Field         | Type     | Default | Description                                          |
-|---------------|----------|---------|------------------------------------------------------|
-| `state`       | Boolean  | OFF     | Indicates the ON/OFF state of the application.      |
-| `apiKey`      | String   | ""      | API key used for authentication.                     |
-| `gui`         | Object   |         | Graphical user interface settings.                   |
-|               | `theme`  | String  | "system"                                             |
-| `readAlerts`  | Boolean  | ON      | Determines whether alerts are enabled for reading.   |
-| `discordStatus`| String  | "online"  | Specifies the status of the Discord integration.     |
-| `accounts`    | Array    |         | Array of user account settings.                      |
-|               | `token`  | String  | Authentication token for user accounts.              |
-|               | `channelID`| String | ID of the channel associated with the user account. |
-|               | `state`  | Boolean | ON                                                   |
+The `config.json` file located in the same directory as the DMG binary is where all configuration is stored. It is recommended to change values through the GUI, but you can configure various settings for advanced usage. Refer to these sections for instructions to do advanced configuration:
 
-## Auto Buy Settings
-| Field         | Type     | Default | Description                                          |
-|---------------|----------|---------|------------------------------------------------------|
-| `autoBuy`     | Object   |         | Settings for automatic purchases.                    |
-|               | `huntingRifle`| Object| Settings for hunting rifle purchase.                |
-|               |           | `state` | Boolean | ON                                               |
-|               |           | `amount`| Number  | 1                                                |
-|               | `shovel` | Object   | Settings for shovel purchase.                        |
-|               |           | `state` | Boolean | OFF                                              |
-|               |           | `amount`| Number  | 1                                                |
-|               | `lifeSavers`| Object| Settings for life savers purchase.                  |
-|               |           | `state` | Boolean | ON                                               |
-|               |           | `amount`| Number  | 1                                                |
+{% content-ref url="general-settings.md" %}
+[general-settings.md](general-settings.md)
+{% endcontent-ref %}
 
-## Command Settings
-| Field         | Type     | Default | Description                                          |
-|---------------|----------|---------|------------------------------------------------------|
-| `commands`    | Object   |         | Settings for various commands.                       |
-|               | `adventure`| Object| Settings for adventure command.                     |
-|               |           | `state` | Boolean | OFF                                              |
-|               |           | `delay` | Number  | 1800                                            |
-|               |           | `adventureOption`| String | "west"                                       |
-|               | `beg`    | Object   | Settings for beg command.                            |
-|               |           | `state` | Boolean | OFF                                              |
-|               |           | `delay` | Number  | 40                                              |
-| Additional command settings are listed in the actual configuration file.
+{% content-ref url="commands-settings.md" %}
+[commands-settings.md](commands-settings.md)
+{% endcontent-ref %}
 
-## Adventure Settings
-| Field         | Type     | Description                                          |
-|---------------|----------|------------------------------------------------------|
-| `adventure`   | Object   | Settings specific to different adventure scenarios. |
-| Specific settings for each adventure scenario are listed in the actual configuration file.
+{% content-ref url="auto-buy.md" %}
+[auto-buy.md](auto-buy.md)
+{% endcontent-ref %}
 
-## Example
+{% content-ref url="auto-use.md" %}
+[auto-use.md](auto-use.md)
+{% endcontent-ref %}
+
+## Example config (Default)
+
 ```json
 {
   "state": false,
@@ -60,13 +33,17 @@ The `config.json` file allows users to configure various settings for advanced u
   },
   "readAlerts": true,
   "discordStatus": "online",
-  "accounts": [
-    {
-      "token": "",
-      "channelID": "",
-      "state": true
+  "cooldowns": {
+    "buttonClickDelay": {
+      "minDelay": 300,
+      "maxDelay": 500
+    },
+    "commandInterval": {
+      "minDelay": 2000,
+      "maxDelay": 4000
     }
-  ],
+  },
+  "accounts": [],
   "autoBuy": {
     "huntingRifle": {
       "state": true,
@@ -78,7 +55,18 @@ The `config.json` file allows users to configure various settings for advanced u
     },
     "lifeSavers": {
       "state": true,
-      "amount": 1
+      "amount": 2
+    }
+  },
+  "autoUse": {
+    "apple": {
+      "state": false
+    },
+    "luckyHorseshoe": {
+      "state": false
+    },
+    "pizzaSlice": {
+      "state": false
     }
   },
   "commands": {
@@ -90,6 +78,12 @@ The `config.json` file allows users to configure various settings for advanced u
     "beg": {
       "state": false,
       "delay": 40
+    },
+    "blackjack": {
+      "state": false,
+      "delay": 20,
+      "amount": "10k",
+      "manuallyRunCommands": true
     },
     "crime": {
       "state": false,
@@ -123,6 +117,12 @@ The `config.json` file allows users to configure various settings for advanced u
     "dig": {
       "state": false,
       "delay": 30
+    },
+    "fish": {
+      "state": false,
+      "delay": 30,
+      "sellCoinsValue": 2500000,
+      "fishLocation": "Vertigo Beach"
     },
     "highlow": {
       "state": false,
