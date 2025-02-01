@@ -8,7 +8,7 @@ import (
 )
 
 func (in *Instance) Others(message gateway.EventMessage) {
-	if message.Embeds[0].Title == "You have an unread alert!" && in.Cfg.ReadAlerts {
+	if message.Embeds[0].Title == "You have an unread alert!" && in.Cfg.ReadAlerts && !in.IsPaused() {
 		err := in.SendCommand("alert", nil, true)
 
 		if err != nil {
