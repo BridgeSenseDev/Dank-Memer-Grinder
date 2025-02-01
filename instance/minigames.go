@@ -16,7 +16,7 @@ var (
 	colorMatchOptions           = make(map[string]string)
 	repeatOrder                 []string
 	repeatOrderLastClickedIndex int
-	wordRegex                   = regexp.MustCompile(`(.+?)`)
+	wordRegex                   = regexp.MustCompile("`([^`]+)`")
 	colorRegex                  = regexp.MustCompile(`:([^:]+):`)
 	highlowRegex                = regexp.MustCompile(`\*\*(.*?)\*\*`)
 )
@@ -104,6 +104,7 @@ func (in *Instance) MinigamesMessageCreate(message gateway.EventMessage) {
 	if strings.Contains(embed.Description, "Look at each color next to the words closely!") {
 		in.PauseCommands(false)
 		utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), "Solving color match minigame")
+		colorMatchOptions = make(map[string]string)
 
 		lines := strings.Split(embed.Description, "\n")[1:]
 
