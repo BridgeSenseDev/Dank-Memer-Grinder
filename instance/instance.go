@@ -17,6 +17,7 @@ type Client interface {
 	SendMessage(op gateway.Opcode, data gateway.MessageData) error
 	Close()
 	AddHandler(event gateway.EventType, handler interface{}) error
+	SendChatMessage(content string) error
 	SendCommand(name string, options map[string]string) error
 	SendSubCommand(name string, subCommandName string, options map[string]string) error
 	ClickButton(message gateway.EventMessage, row int, column int) error

@@ -5,7 +5,6 @@ import (
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"regexp"
-	"strconv"
 	"strings"
 
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
@@ -85,17 +84,6 @@ func (in *Instance) MinigamesMessageCreate(message gateway.EventMessage) {
 	// Moleman
 	in.solveMinigame(message, "Moleman", "Dodge the Moleman's Worm", []string{worm})
 
-	// Attack boss
-	if strings.Contains(embed.Description, "Attack the boss by clicking") {
-		utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), "Solving attack boss minigame")
-		in.PauseCommands(false)
-		err := in.ClickButton(message, 0, 0)
-		if err != nil {
-			utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click attack boss minigame button: %s", err.Error()))
-		}
-		return
-	}
-
 	// Emoji match
 	if strings.Contains(embed.Description, "Look at the emoji closely!") {
 		in.PauseCommands(false)
@@ -136,40 +124,6 @@ func (in *Instance) MinigamesMessageCreate(message gateway.EventMessage) {
 			repeatOrder[i] = strings.Trim(line, "`")
 		}
 		repeatOrderLastClickedIndex = 0
-	}
-
-	// F in the chat
-	if embed.Description == "F" {
-		err := in.ClickButton(message, 0, 0)
-		if err != nil {
-			utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click F in the chat minigame button: %s", err.Error()))
-		}
-		utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), "Solved F in the chat minigame")
-	}
-
-	// HighLow
-	if strings.Contains(embed.Description, "I just chose a secret number") && message.Interaction.Name != "highlow" {
-		matches := highlowRegex.FindStringSubmatch(embed.Description)
-		if len(matches) > 1 {
-			numStr := matches[1]
-			num, _ := strconv.Atoi(numStr)
-
-			if num >= 50 {
-				err := in.ClickButton(message, 0, 0)
-				if err != nil {
-					utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click highlow minigame button: %s", err.Error()))
-				}
-			} else {
-				err := in.ClickButton(message, 0, 2)
-				if err != nil {
-					utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click highlow minigame button: %s", err.Error()))
-				}
-			}
-
-			utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), "Solved highlow minigame")
-		} else {
-			utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), "Failed to solve highlow minigame")
-		}
 	}
 }
 

@@ -8,6 +8,16 @@ import (
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 )
 
+func (in *Instance) SendChatMessage(content string, delay bool) error {
+	if delay {
+		minDelay := in.Cfg.Cooldowns.CommandInterval.MinDelay
+		maxDelay := in.Cfg.Cooldowns.CommandInterval.MaxDelay
+		<-utils.Sleep(time.Duration(rand.Intn(maxDelay-minDelay)+minDelay) * time.Millisecond)
+	}
+
+	return in.Client.SendChatMessage(content)
+}
+
 func (in *Instance) SendCommand(name string, options map[string]string, delay bool) error {
 	if delay {
 		minDelay := in.Cfg.Cooldowns.CommandInterval.MinDelay

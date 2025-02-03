@@ -60,6 +60,18 @@ func (client *Client) sendRequest(url string, payload map[string]interface{}) er
 	return err
 }
 
+func (client *Client) SendChatMessage(content string) error {
+	interactionsUrl := fmt.Sprintf("https://discord.com/api/v9/channels/%s/messages", client.ChannelID)
+
+	payload := map[string]interface{}{
+		"content": content,
+		"flags":   0,
+		"tts":     false,
+	}
+
+	return client.sendRequest(interactionsUrl, payload)
+}
+
 func (client *Client) SendCommand(commandName string, options map[string]string) error {
 	sessionID, err := client.safeGetSessionID()
 	if err != nil {
