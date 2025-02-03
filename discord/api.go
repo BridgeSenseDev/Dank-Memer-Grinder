@@ -62,7 +62,9 @@ func (client *Client) GetCommands(guildID string) (map[string]CommandData, error
 
 	commands := make(map[string]CommandData)
 	for _, cmd := range data.ApplicationCommands {
-		commands[cmd.Name] = cmd
+		if cmd.ApplicationID == "270904126974590976" {
+			commands[cmd.Name] = cmd
+		}
 	}
 
 	return commands, nil
@@ -73,7 +75,7 @@ type Channel struct {
 	GuildID string `json:"guild_id"`
 }
 
-func (client *Client) GetGuildID(channelID string) string {
+func (client *Client) GetGuildID(channelID string) (string, error) {
 	url := fmt.Sprintf("https://discord.com/api/v9/channels/%s", channelID)
 
 	req := fasthttp.AcquireRequest()
@@ -89,17 +91,17 @@ func (client *Client) GetGuildID(channelID string) string {
 
 	err := fasthttp.Do(req, resp)
 	if err != nil {
-		return ""
+		return "", err
 	}
 
 	body := resp.Body()
 
 	var channel Channel
 	if err := json.Unmarshal(body, &channel); err != nil {
-		return ""
+		return "", err
 	}
 
-	return channel.GuildID
+	return channel.GuildID, nil
 }
 
 func (client *Client) RequestWithLockedBucket(method, urlStr string, b []byte, bucket *Bucket, sequence int) ([]byte, error) {

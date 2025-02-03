@@ -201,3 +201,21 @@ type MessageDataHello struct {
 }
 
 func (MessageDataHello) messageData() {}
+
+// GuildSubscription represents the subscription settings for a single guild.
+type GuildSubscription struct {
+	Typing            bool                `json:"typing"`
+	Threads           bool                `json:"threads"`
+	Activities        bool                `json:"activities"`
+	Members           []int64             `json:"members"`
+	MemberUpdates     bool                `json:"member_updates"`
+	Channels          map[string][][2]int `json:"channels"`
+	ThreadMemberLists []int64             `json:"thread_member_lists"`
+}
+
+// MessageDataGuildSubscriptionsBulk is the payload for the bulk guild subscribe (opcode 37)
+type MessageDataGuildSubscriptionsBulk struct {
+	Subscriptions map[string]GuildSubscription `json:"subscriptions"`
+}
+
+func (MessageDataGuildSubscriptionsBulk) messageData() {}

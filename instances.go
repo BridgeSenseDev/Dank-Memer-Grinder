@@ -34,9 +34,9 @@ func (d *DmgService) StartInstance(account config.AccountsConfig) {
 		client.AddHandler(gateway.EventTypeReady, func(e gateway.EventReady) {
 			readyOnce.Do(func() {
 				client.ChannelID = account.ChannelID
-				client.GuildID = client.GetGuildID(account.ChannelID)
-				if client.GuildID == "" {
-					utils.Log(utils.Discord, utils.Error, client.SafeGetUsername(), fmt.Sprintf("Failed to fetch GuildID from channelID: %v", account.ChannelID))
+				guildID, err := client.GetGuildID(account.ChannelID)
+				if err != nil {
+					utils.Log(utils.Discord, utils.Error, client.SafeGetUsername(), fmt.Sprintf("Failed to fetch GuildID from channelID %v: %s", account.ChannelID, err.Error()))
 					in := &instance.Instance{
 						AccountCfg: account,
 						Error:      "invalidChannelID",
@@ -44,6 +44,24 @@ func (d *DmgService) StartInstance(account config.AccountsConfig) {
 					d.instances = append(d.instances, in)
 					utils.EmitEventIfNotCLI("instancesUpdate", d.GetInstances())
 					return
+				}
+				client.GuildID = guildID
+
+				err = client.Gateway.Send(d.ctx, gateway.GUILD_SUBSCRIPTIONS_BULK, gateway.MessageDataGuildSubscriptionsBulk{
+					Subscriptions: map[string]gateway.GuildSubscription{
+						client.GuildID: {
+							Typing:            true,
+							Threads:           false,
+							Activities:        false,
+							Members:           []int64{},
+							MemberUpdates:     false,
+							Channels:          map[string][][2]int{},
+							ThreadMemberLists: []int64{},
+						},
+					},
+				})
+				if err != nil {
+					utils.Log(utils.Important, utils.Error, client.SafeGetUsername(), fmt.Sprintf("Failed to send guild subscriptions bulk: %s", err.Error()))
 				}
 
 				commands, err := client.GetCommands(client.GuildID)
@@ -62,7 +80,7 @@ func (d *DmgService) StartInstance(account config.AccountsConfig) {
 					User:       client.Gateway.User(),
 					Client:     client,
 					ChannelID:  account.ChannelID,
-					GuildID:    client.GetGuildID(account.ChannelID),
+					GuildID:    client.GuildID,
 					Cfg:        *d.cfg,
 					AccountCfg: account,
 					LastRan:    make(map[string]time.Time),

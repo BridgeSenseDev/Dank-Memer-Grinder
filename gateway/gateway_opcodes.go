@@ -17,6 +17,7 @@ const (
 	OpcodeInvalidSession
 	OpcodeHello
 	OpcodeHeartbeatACK
+	GUILD_SUBSCRIPTIONS_BULK = Opcode(37)
 )
 
 type CloseEventCode struct {
