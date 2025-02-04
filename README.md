@@ -10,9 +10,9 @@
   ·
   <a href="https://dankmemer.tools/download">Download</a>
   ·
-  <a href="https://docs.dankmeemer.tools/">Documentation</a>
+  <a href="https://docs.dankmemer.tools/">Documentation</a>
   ·
-  <a href="https://dankmeemer.tools/">Website</a>
+  <a href="https://dankmemer.tools/">Website</a>
 
   ![GitHub License](https://img.shields.io/github/license/BridgeSenseDev/Dank-Memer-Grinder?style=for-the-badge&color=%2322c55e)
   ![GitHub Release](https://img.shields.io/github/v/release/BridgeSenseDev/Dank-Memer-Grinder?include_prereleases&sort=semver&style=for-the-badge)
