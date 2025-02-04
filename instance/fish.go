@@ -36,7 +36,9 @@ func (in *Instance) FishMessageCreate(message gateway.EventMessage) {
 	}
 
 	if embed.Title == "Fishing" {
-		in.PauseCommands(false)
+		if !in.Cfg.Commands.Fish.FishOnly {
+			in.PauseCommands(false)
+		}
 
 		// Check location
 		currentLocation := strings.TrimSpace(strings.SplitN(embed.Fields[1].Value, ">", 2)[1])
@@ -117,8 +119,10 @@ func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
 				}
 			}
 		}
-	} else if strings.Contains(embed.Title, "caught a") {
+	} else if strings.Contains(embed.Title, "You caught") || embed.Title == "There was nothing to catch." {
 		if strings.Contains(embed.Description, "You have no more bucket space") {
+			in.LastRan["Fish"] = time.Now()
+
 			// Send fish buckets command
 			<-utils.Sleep(2 * time.Second)
 			err := in.SendSubCommand("fish", "buckets", nil, false)
@@ -126,7 +130,40 @@ func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
 				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to send fish buckets command: %s", err.Error()))
 			}
 		} else {
-			in.UnpauseCommands()
+			if in.Cfg.Commands.Fish.FishOnly {
+				in.LastRan["Fish"] = time.Now().Add(time.Minute)
+
+				re := regexp.MustCompile(`<t:(\d+):R>`)
+				matches := re.FindStringSubmatch(embed.Description)
+				if len(matches) < 2 {
+					utils.Log(utils.Important, utils.Error, in.SafeGetUsername(), "Failed to find fish timestamp")
+					return
+				}
+
+				ts, err := strconv.ParseInt(matches[1], 10, 64)
+				if err != nil {
+					utils.Log(utils.Important, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to parse fish timestamp: %s", err.Error()))
+					return
+				}
+
+				cooldown := time.Duration(ts-time.Now().Unix()) * time.Second
+
+				randomDelay := time.Duration(utils.Rng.Intn(in.Cfg.Cooldowns.CommandInterval.MaxDelay-in.Cfg.Cooldowns.CommandInterval.MinDelay)+
+					in.Cfg.Cooldowns.CommandInterval.MinDelay) * time.Millisecond
+
+				<-utils.Sleep(cooldown + randomDelay)
+
+				if in.IsPaused() {
+					return
+				}
+
+				err = in.ClickButton(message, 0, 1)
+				if err != nil {
+					utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click fish again button: %s", err.Error()))
+				}
+			} else {
+				in.UnpauseCommands()
+			}
 		}
 	} else if embed.Image != nil && strings.Contains(embed.Image.URL, "catch.webp") {
 		// Move next step in fish game
@@ -138,8 +175,6 @@ func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
 
 		cellWidth, cellHeight := img.Bounds().Dx()/gridSize, img.Bounds().Dy()/gridSize
 		in.handleCatchUpdate(img, cellWidth, cellHeight, message)
-	} else if embed.Title == "There was nothing to catch." {
-		in.UnpauseCommands()
 	} else if embed.Title == "Selling Creatures" {
 		// Choose between coins / tokens
 		buttonLabel := message.Components[0].(*types.ActionsRow).Components[1].(*types.Button).Label
@@ -155,7 +190,9 @@ func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
 				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click sell for tokens button: %s", err.Error()))
 			}
 		}
-		in.UnpauseCommands()
+		if !in.Cfg.Commands.Fish.FishOnly {
+			in.UnpauseCommands()
+		}
 	} else if embed.Title == "Picking Location" {
 		options := message.Components[0].(*types.ActionsRow).Components[0].(*types.SelectMenu).Options
 		chosenLocation := in.Cfg.Commands.Fish.FishLocation[utils.Rng.Intn(len(in.Cfg.Commands.Fish.FishLocation))]
@@ -178,7 +215,9 @@ func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
 			}
 		}
 	} else if embed.Title == "Traveling..." {
-		in.UnpauseCommands()
+		if !in.Cfg.Commands.Fish.FishOnly {
+			in.UnpauseCommands()
+		}
 
 		match := regexp.MustCompile(`<t:(\d+):[a-zA-Z]>`).FindStringSubmatch(embed.Fields[1].Value)
 		ts, _ := strconv.ParseInt(match[1], 10, 64)

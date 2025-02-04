@@ -35,7 +35,9 @@ class Cfg {
 	constructor() {
 		$effect.root(() => {
 			$effect(() => {
-				UpdateConfig(this.c);
+				if (this.c.discordStatus !== "") {
+					UpdateConfig(this.c);
+				}
 			});
 		});
 

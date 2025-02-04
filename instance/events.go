@@ -4,6 +4,7 @@ import (
 	_ "embed"
 	"encoding/json"
 	"fmt"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"regexp"
@@ -161,6 +162,44 @@ func (in *Instance) EventsMessageCreate(message gateway.EventMessage) {
 		if err != nil {
 			utils.Log(utils.Important, utils.Error, in.SafeGetUsername(),
 				fmt.Sprintf("Failed to send fish guesser chat message: %s", err.Error()))
+		}
+	} else if strings.Contains(embed.Title, "says...") {
+		if !in.Cfg.Commands.Fish.AutoCompleteEvents {
+			return
+		}
+
+		components := message.Components[0].(*types.ActionsRow).Components
+		if len(components) >= 2 {
+			if components[1].(*types.Button).Label == "Accept" {
+				err := in.ClickButton(message, 0, 0)
+				if err != nil {
+					utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click accept task button: %s", err.Error()))
+					return
+				}
+			}
+		}
+
+		// Randomly click a button if button is not "Decline"
+		validIndices := make([]int, 0)
+		for i, cmp := range components {
+			btn, ok := cmp.(*types.Button)
+			if !ok {
+				continue
+			}
+
+			if btn.Label != "Decline" {
+				validIndices = append(validIndices, i)
+			}
+		}
+
+		if len(validIndices) > 0 {
+			utils.Rng.Seed(time.Now().UnixNano())
+			randomIndex := validIndices[utils.Rng.Intn(len(validIndices))]
+			err := in.ClickButton(message, 0, randomIndex)
+			if err != nil {
+				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click random task button: %s", err.Error()))
+				return
+			}
 		}
 	}
 }

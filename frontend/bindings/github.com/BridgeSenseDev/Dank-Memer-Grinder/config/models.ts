@@ -111,6 +111,8 @@ export interface Delays {
 export interface FishCommandConfig {
     "state": boolean;
     "delay": number;
+    "fishOnly": boolean;
+    "autoCompleteEvents": boolean;
     "sellCoinsValue": number;
     "fishLocation": FishLocation[] | null;
 }

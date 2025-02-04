@@ -67,8 +67,58 @@
 				(String(enumName).charAt(0).toUpperCase() +
 					String(enumName).slice(1)) as keyof typeof enumMap
 			];
-		console.log(Object.values(enumObject));
-		return Object.values(enumObject).filter((v) => typeof v === "string" && v !== "");
+
+		return Object.values(enumObject).filter((v) => v !== "");
+	}
+
+	let fishOnlyEnabled = $state(false);
+	let backupCommandsState: Record<string, boolean> = {};
+
+	$effect(() => {
+		if (commands.fish.state && commands.fish.fishOnly) {
+			fishOnlyEnabled = true;
+		}
+	});
+
+	function toggle(option: string, value: boolean | Event) {
+		if (value instanceof Event) {
+			value = (value.target as HTMLInputElement).checked;
+		}
+
+		if (option === "fishOnly") {
+			fishOnlyEnabled = value;
+			if (value) {
+				for (const command in commands) {
+					if (command !== "fish") {
+						backupCommandsState[command] = commands[command].state;
+						commands[command].state = false;
+					}
+				}
+			} else {
+				for (const command in backupCommandsState) {
+					if (command !== "fish") {
+						commands[command].state = backupCommandsState[command] ?? commands[command].state;
+					}
+				}
+			}
+		} else if (option === "fish") {
+			if (!value && fishOnlyEnabled) {
+				fishOnlyEnabled = false;
+				for (const command in backupCommandsState) {
+					if (command !== "fish") {
+						commands[command].state = backupCommandsState[command] ?? commands[command].state;
+					}
+				}
+			} else if (value && commands.fish.fishOnly) {
+				fishOnlyEnabled = true;
+				for (const command in commands) {
+					if (command !== "fish") {
+						backupCommandsState[command] = commands[command].state;
+						commands[command].state = false;
+					}
+				}
+			}
+		}
 	}
 </script>
 
@@ -85,7 +135,16 @@
 				<Card.Header>
 					<div class="flex items-center space-x-2">
 						<Card.Title>{formatString(commandKey)}</Card.Title>
-						<Switch id={commandKey} bind:checked={commands[commandKey].state} />
+						<!--
+							Disable toggles (other than fish) when fishOnly is active.
+							Additionally, assume the "fishOnly" toggle exists as a command.
+						-->
+						<Switch
+							id={commandKey}
+							bind:checked={commands[commandKey].state}
+							disabled={fishOnlyEnabled && commandKey !== "fish"}
+							onCheckedChange={(e) => toggle(commandKey, e)}
+						/>
 						<Label for={commandKey}>Enabled</Label>
 					</div>
 				</Card.Header>
@@ -164,6 +223,7 @@
 										<Checkbox
 											id={`${commandKey}_${optionKey}`}
 											bind:checked={commands[commandKey][optionKey]}
+											onCheckedChange={(e) => toggle(optionKey, e)}
 										/>
 										<Label
 											class="cursor-pointer whitespace-nowrap"

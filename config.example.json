@@ -94,7 +94,9 @@
     "fish": {
       "state": false,
       "delay": 30,
-      "sellCoinsValue": 2500000,
+      "fishOnly": false,
+      "autoCompleteEvents": true,
+      "sellCoinsValue": 100000,
       "fishLocation": [
         "Underwater Sanctuary",
         "Wily River",

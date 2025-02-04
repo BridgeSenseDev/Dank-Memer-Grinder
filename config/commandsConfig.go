@@ -91,8 +91,10 @@ const (
 
 type FishCommandConfig struct {
 	GeneralCommandConfig
-	SellCoinsValue int            `json:"sellCoinsValue"`
-	FishLocation   []FishLocation `json:"fishLocation"`
+	FishOnly           bool           `json:"fishOnly"`
+	AutoCompleteEvents bool           `json:"autoCompleteEvents"`
+	SellCoinsValue     int            `json:"sellCoinsValue"`
+	FishLocation       []FishLocation `json:"fishLocation"`
 }
 
 type StreamCommandConfig struct {
