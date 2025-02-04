@@ -39,10 +39,18 @@ func getLastUnlockedCYJob(input string) string {
 }
 
 func (in *Instance) WorkMessageCreate(message gateway.EventMessage) {
+	embed := message.Embeds[0]
+
+	if strings.Contains(embed.Description, "did not meet the minimum amount of required hours") {
+		err := in.SendSubCommand("work", "shift", nil, true)
+		if err != nil {
+			utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to resend /work shift command: %s", err.Error()))
+		}
+	}
+
 	if !in.Cfg.Commands.Work.AutoWorkApply {
 		return
 	}
-	embed := message.Embeds[0]
 
 	if strings.Contains(embed.Description, "You don't currently have a job to work at") {
 		utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), "Applying for new job")
@@ -52,10 +60,7 @@ func (in *Instance) WorkMessageCreate(message gateway.EventMessage) {
 		if err != nil {
 			utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to send /work list command: %s", err.Error()))
 		}
-		return
-	}
-
-	if strings.Contains(embed.Title, "Available Jobs") {
+	} else if strings.Contains(embed.Title, "Available Jobs") {
 		if len(strings.TrimSpace(getLastUnlockedCYJob(embed.Description))) != 0 {
 			highestJob = getLastUnlockedCYJob(embed.Description)
 		}
@@ -64,10 +69,7 @@ func (in *Instance) WorkMessageCreate(message gateway.EventMessage) {
 		if err != nil {
 			utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click initial jobs button: %s", err.Error()))
 		}
-		return
-	}
-
-	if strings.Contains(embed.Title, "Congratulations, you are now working as a") {
+	} else if strings.Contains(embed.Title, "Congratulations, you are now working as a") {
 		err := in.SendSubCommand("work", "shift", nil, true)
 		if err != nil {
 			utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to send /work shift command: %s", err.Error()))
