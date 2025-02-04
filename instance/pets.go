@@ -64,16 +64,18 @@ func (in *Instance) handlePetsCare(message gateway.EventMessage) {
 	}
 
 	requiredAction := in.getRequiredAction(embed.Fields)
-	if requiredAction != 3 {
+	if requiredAction != 3 && !message.Components[1].(*types.ActionsRow).Components[requiredAction].(*types.Button).Disabled {
 		err := in.ClickButton(message, 1, requiredAction)
 		if err != nil {
-			utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click pets button: %s", err.Error()))
+			utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click pets button 1: %s", err.Error()))
 		}
 	} else {
 		for i := 0; i < 3; i++ {
-			err := in.ClickButton(message, 2, i)
-			if err != nil {
-				utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click pets button: %s", err.Error()))
+			if !message.Components[2].(*types.ActionsRow).Components[i].(*types.Button).Disabled {
+				err := in.ClickButton(message, 2, i)
+				if err != nil {
+					utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click pets button 2: %s", err.Error()))
+				}
 			}
 		}
 
