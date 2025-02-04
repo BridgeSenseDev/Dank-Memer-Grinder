@@ -33,25 +33,24 @@ func (in *Instance) EventsMessageCreate(message gateway.EventMessage) {
 
 	if embed.Title == "Trivia Night" {
 		re := regexp.MustCompile(`\*\*(.*?)\*\*`)
-		matches := re.FindStringSubmatch(embed.Description)
-		var (
-			question string
-			answer   string
-		)
-		if len(matches) > 1 {
-			question = matches[1]
-		} else {
-			return
-		}
+		question := strings.Trim(re.FindStringSubmatch(embed.Description)[0], "*")
+		buttons := message.Components[0].(*types.ActionsRow).Components
+		var answer string
 
 		for _, category := range trivia {
-			if strings.Contains(category.(string), question) {
-				if ans, ok := category.(map[string]interface{})[question].(string); ok {
-					answer = ans
-				} else {
-					utils.Log(utils.Important, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Question not found in trivia data: %v", question))
-					return
-				}
+			ans, ok := category.(map[string]interface{})[question]
+
+			if !ok {
+				utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Question not found in trivia data: %v", question))
+				in.clickButtonBasedOnCondition(buttons, message, "", false)
+				return
+			}
+
+			condition := utils.Rng.Float64() > in.Cfg.Commands.Trivia.TriviaCorrectChance
+			if !condition {
+				answer = ans.(string)
+			} else {
+				return
 			}
 		}
 
@@ -106,7 +105,7 @@ func (in *Instance) EventsMessageCreate(message gateway.EventMessage) {
 			"AD": "down",
 		}
 
-		combo := strings.Split(embed.Description, "#")[1]
+		combo := strings.Split(embed.Description, "#")[2]
 		re := regexp.MustCompile(`<:(A[RLUD]):\d+>`)
 		matches := re.FindAllStringSubmatch(combo, -1)
 
@@ -126,17 +125,22 @@ func (in *Instance) EventsMessageCreate(message gateway.EventMessage) {
 	} else if embed.Title == "Punch Pepe" {
 		lines := strings.Split(embed.Description, "\n")
 		for row := 0; row < 3; row++ {
-			if line := lines[row+3]; strings.Contains(line, "pepeBoxer") {
-				col := 0
-				if strings.HasPrefix(line, "# :white_small_square::white_small_square:<:pepeBoxer") {
-					col = 2
+			line := lines[row+3]
+			if strings.Contains(line, "pepeBoxer") {
+				parts := strings.Split(line, ":")
+				for i, part := range parts {
+					if strings.Contains(part, "pepeBoxer") {
+						col := (i - 1) / 2
+
+						err := in.ClickButton(message, row, col)
+						if err != nil {
+							utils.Log(utils.Important, utils.Error, in.SafeGetUsername(),
+								fmt.Sprintf("Failed to click punch pepe button: %s", err.Error()))
+						}
+
+						break
+					}
 				}
-				err := in.ClickButton(message, row, col)
-				if err != nil {
-					utils.Log(utils.Important, utils.Error, in.SafeGetUsername(),
-						fmt.Sprintf("Failed to click punch pepe button: %s", err.Error()))
-				}
-				break
 			}
 		}
 	} else if embed.Title == "Fish Guesser" || embed.Title == "Item Guesser" {
