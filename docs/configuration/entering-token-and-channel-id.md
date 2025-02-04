@@ -2,14 +2,14 @@
 description: Learn how to add accounts using your discord token and channel ID.
 ---
 
-# Entering Token and Channel ID
+# Entering token and channel ID
 
 ## Adding accounts
 
 Navigate to the Accounts tab and click the plus button under the table. There are two options:
 
 * Single account:
-  * Enter your [Discord token](getting-your-channel-id.md#getting-discord-token) and [channel ID](getting-your-channel-id.md#getting-channel-id) and click `Add account`&#x20;
+  * Enter your [Discord token](entering-token-and-channel-id.md#getting-discord-token) and [channel ID](entering-token-and-channel-id.md#getting-channel-id) and click `Add account`&#x20;
 * Bulk accounts:
   * Import a list of Discord tokens with channel ID's in various formats from a file on your computer
 

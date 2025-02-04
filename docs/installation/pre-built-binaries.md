@@ -71,6 +71,6 @@ First, extract and double click the downloaded binary named `dmg` once. Because 
 
 After installation, you can proceed to configuring DMG.
 
-{% content-ref url="../configuration/getting-your-channel-id.md" %}
-[getting-your-channel-id.md](../configuration/getting-your-channel-id.md)
+{% content-ref url="../configuration/entering-token-and-channel-id.md" %}
+[entering-token-and-channel-id.md](../configuration/entering-token-and-channel-id.md)
 {% endcontent-ref %}

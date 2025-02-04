@@ -9,12 +9,12 @@
 
 ## Configuration
 
-* [Entering token and channel ID](configuration/getting-your-channel-id.md)
+* [Entering token and channel ID](configuration/entering-token-and-channel-id.md)
 * [config.json file](configuration/config-json.md)
-* [General Settings](configuration/general-settings.md)
-* [Commands Settings](configuration/commands-settings.md)
-* [Auto Buy Settings](configuration/auto-buy.md)
-* [Auto Use Settings](configuration/auto-use.md)
+* [General settings](configuration/general-settings.md)
+* [Commands settings](configuration/commands-settings.md)
+* [Auto buy settings](configuration/auto-buy.md)
+* [Auto use settings](configuration/auto-use.md)
 
 ## Features
 

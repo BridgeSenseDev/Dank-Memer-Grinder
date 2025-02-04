@@ -2,7 +2,7 @@
 description: Learn more about command customizations
 ---
 
-# Commands Settings
+# Commands settings
 
 <details>
 
@@ -122,15 +122,15 @@ Where `question` is the text of the prompt, and `answer button name` is the labe
 
 #### Search Priorities
 
-You can configure your search priorities by editing the `config.json` file. This allows you to specify preferred and avoided locations to search.
+You can configure your search priorities by editing the priority lists in the commands GUI. This allows you to specify preferred and avoided locations to search.
 
-* The **"priority"** array determines the top search locations. Locations in this array will be checked first when searching.
-* The **"second\_priority"** array specifies secondary search locations that will be checked after the top priorities.
-* The **"avoid"** array lists locations that should be avoided during searches. If no priority locations are found, searches will avoid locations in these arrays.
+* The **"priority"** list determines the top search locations. Locations in this array will be checked first when searching.
+* The **"second\_prioritvy"** list specifies secondary search locations that will be checked after the top priorities.
+* The **"avoid"** list contains locations that should be avoided during searches. If no priority locations are found, searches will avoid locations in these arrays.
 
 **Default Search Priorities**
 
-<pre class="language-json" data-title="config.json"><code class="lang-json"><strong>"priority": [
+<pre class="language-json" data-title="Default search priority config"><code class="lang-json"><strong>"priority": [
 </strong>    "phoenix pits",
     "aeradella's home",
     "shadow's realm",
@@ -168,15 +168,15 @@ You can configure your search priorities by editing the `config.json` file. This
 
 #### Crime Priorities
 
-You can configure your crime priorities by editing the `config.json` file. This allows you to specify preferred and avoided locations for crime.
+You can configure your crime priorities by editing the priority lists in the commands GUI. This allows you to specify preferred and avoided locations for crime.
 
-* The **"priority"** array determines the top crime locations. Locations in this array will be checked first when searching.
+* The **"priority"** list determines the top crime locations. Locations in this array will be checked first when searching.
 
-- The **"second\_priority"** array specifies secondary crime locations that will be checked after the top priorities.
+- The **"second\_priority"** list specifies secondary crime locations that will be checked after the top priorities.
 
-* The **"avoid"** array lists locations that should be avoided during crimes. If no priority locations are found, crimes will avoid locations in these arrays.
+* The **"avoid"** lists contains locations that should be avoided during crimes. If no priority locations are found, crimes will avoid locations in these arrays.
 
-<pre class="language-json" data-title="config.json"><code class="lang-json"><strong>"priority": [
+<pre class="language-json" data-title="Default crime priorities config"><code class="lang-json"><strong>"priority": [
 </strong>    "hacking",
     "tax evasion",
     "fraud",
@@ -204,6 +204,34 @@ You can configure your crime priorities by editing the `config.json` file. This 
 
 <details>
 
+<summary>Fishing</summary>
+
+#### Fish Only Mode
+
+When enabled, will only run the fish command and use the fish again button instead of sending the fish command again and again. All other commands will be disabled.
+
+#### Auto Complete Events
+
+If this is toggled on, will automatically accept all trade offers and all tasks from random fishing NPC's. If there are multiple trade offers, it will select randomly.
+
+#### Auto Equipment
+
+If this is toggled on, when first fishing or when an existing equipment breaks, DMG will try to select the best fishing equipment available, as accounts may get better fishing equipment randomly from NPC's or tools boxes. If none is available, DMG will try to auto buy and use a fishing rod.
+
+#### Fish Locations
+
+Each fishing location has its own unique possible [NPC encounters](https://dank-memer.fandom.com/wiki/Fish#Locations). Using the commands GUI, enable the locations you want DMG to fish in through the commands GUI. DMG will automatically travel to one of these random fishing locations if an account's current fishing location is not in the configured list of fishing locations.
+
+#### Sell Coins Value
+
+When selling your bucket, if the coins profit is above this sell coins value integer, it will sell for coins. Otherwise, it will sell for fish tokens. Default: 10000.
+
+
+
+</details>
+
+<details>
+
 <summary>Trivia</summary>
 
 #### Trivia Correct Chance
@@ -218,7 +246,7 @@ The Trivia Correct Chance setting in Dank Memer Grinder's Settings tab lets you 
 
 #### Streaming Order
 
-Dank Memer Grinder allows you to configure the order in which it interacts with a stream. This allows you to prioritize gaining Levels or earning profits.
+DMG allows you to configure the order in which it interacts with a stream through a comma separated list in the commands GUI. This allows you to prioritize gaining Levels or earning profits.
 
 * 0: Run AD (Moderate chance of failing)
 * 1: Read Chat (Low chance of failing)
