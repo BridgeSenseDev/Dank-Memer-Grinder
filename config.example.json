@@ -95,7 +95,8 @@
       "state": false,
       "delay": 30,
       "fishOnly": false,
-      "autoCompleteEvents": true,
+      "autoCompleteTasks": true,
+      "autoCompleteTradeOffers": false,
       "sellCoinsValue": 100000,
       "fishLocation": [
         "Underwater Sanctuary",

@@ -112,7 +112,8 @@ export interface FishCommandConfig {
     "state": boolean;
     "delay": number;
     "fishOnly": boolean;
-    "autoCompleteEvents": boolean;
+    "autoCompleteTasks": boolean;
+    "autoCompleteTradeOffers": boolean;
     "sellCoinsValue": number;
     "fishLocation": FishLocation[] | null;
 }
