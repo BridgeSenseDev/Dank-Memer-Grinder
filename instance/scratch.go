@@ -22,7 +22,7 @@ func (in *Instance) ScratchMessageCreate(message gateway.EventMessage) {
 		in.PauseCommands(false)
 		utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), "Solving scratch command")
 
-		err := in.ClickButton(message, utils.Rng.Intn(2), utils.Rng.Intn(4))
+		err := in.ClickButton(message, utils.Rng.Intn(4), utils.Rng.Intn(2))
 		if err != nil {
 			utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click scratch answer button: %s", err.Error()))
 		}
