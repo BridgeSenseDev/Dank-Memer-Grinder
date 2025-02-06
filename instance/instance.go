@@ -204,7 +204,7 @@ func (in *Instance) getMessageType(message gateway.EventMessage) string {
 }
 
 func (in *Instance) handleInteraction(message gateway.EventMessage, handlers map[string]MessageHandler) {
-	if message.Interaction != (types.MessageInteraction{}) && message.Flags != 64 {
+	if message.Interaction != (types.MessageInteraction{}) {
 		if handler, ok := handlers[strings.Split(message.Interaction.Name, " ")[0]]; ok {
 			handler(in, message)
 		}
@@ -212,27 +212,25 @@ func (in *Instance) handleInteraction(message gateway.EventMessage, handlers map
 }
 
 func (in *Instance) HandleMessageCreate(message gateway.EventMessage) {
+	messageType := in.getMessageType(message)
+
+	if messageType == "global" {
+		return
+	}
+
 	if in.shouldHandleMessage(message) {
-		messageType := in.getMessageType(message)
+		// Apply to both
+		if in.Captcha(message) {
+			return
+		}
+		in.Others(message)
 
 		if messageType == "channel" {
-			// Only apply to channel_id channel
-			if in.Captcha(message) {
-				return
-			}
-			in.Others(message)
-
 			in.handleInteraction(message, messageCreateHandlers)
 			in.MinigamesMessageCreate(message)
 			in.EventsMessageCreate(message)
 			in.AutoBuyMessageCreate(message)
 		} else if messageType == "dm" {
-			// Only apply to dank dm's
-			if in.Captcha(message) {
-				return
-			}
-			in.Others(message)
-
 			in.AutoBuyMessageCreate(message)
 			in.AutoUse(message)
 		}
