@@ -34,27 +34,37 @@ func (in *Instance) EventsMessageCreate(message gateway.EventMessage) {
 	if embed.Title == "Trivia Night" {
 		re := regexp.MustCompile(`\*\*(.*?)\*\*`)
 		question := strings.Trim(re.FindStringSubmatch(embed.Description)[0], "*")
-		buttons := message.Components[0].(*types.ActionsRow).Components
 		var answer string
 
 		for _, category := range trivia {
 			ans, ok := category.(map[string]interface{})[question]
-
 			if !ok {
-				utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Question not found in trivia data: %v", question))
-				in.clickButtonBasedOnCondition(buttons, message, "", false)
-				return
+				continue
 			}
 
 			condition := utils.Rng.Float64() > in.Cfg.Commands.Trivia.TriviaCorrectChance
 			if !condition {
 				answer = ans.(string)
 			} else {
-				return
+				answer = ""
 			}
 		}
 
 		lines := strings.Split(embed.Description, "\n")
+
+		if answer == "" {
+			var choices []string
+			for _, line := range lines {
+				choice := strings.TrimSpace(strings.TrimPrefix(line, "-"))
+				if choice != "" && choice != question {
+					choices = append(choices, choice)
+				}
+			}
+			if len(choices) > 0 {
+				answer = choices[utils.Rng.Intn(len(choices))]
+			}
+		}
+
 		for _, line := range lines {
 			line = strings.TrimSpace(strings.TrimPrefix(line, "-"))
 			if line == answer {
