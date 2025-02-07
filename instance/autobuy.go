@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
 )
@@ -25,6 +26,11 @@ var globalAutoBuyState = AutoBuyState{
 	price:         0,
 }
 
+type AutoBuyResult struct {
+	Success bool
+	Message string
+}
+
 func (in *Instance) setAutoBuyState(shopTypeIndex, count int, itemEmojiName string, price int) {
 	globalAutoBuyState.shopTypeIndex = shopTypeIndex
 	globalAutoBuyState.count = count
@@ -39,6 +45,10 @@ func (in *Instance) findAndClickButton(message gateway.EventMessage, targetEmoji
 		}
 		for columnIndex, button := range component.(*types.ActionsRow).Components {
 			if button.(*types.Button).Emoji.Name == targetEmojiName {
+				if button.(*types.Button).Disabled {
+					return false
+				}
+
 				err := in.ClickButton(message, rowIndex, columnIndex)
 				if err != nil {
 					utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click autobuy button: %s", err.Error()))
@@ -59,6 +69,29 @@ func (in *Instance) shopBuy(shopMsg gateway.EventMessage) {
 			utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to choose shop view select menu: %s", err.Error()))
 		}
 	} else {
+		if globalAutoBuyState.price != 0 {
+			re := regexp.MustCompile(`<:Coin:\d+>\s+([0-9,]+)`)
+			matches := re.FindStringSubmatch(shopMsg.Embeds[0].Description)
+			if len(matches) < 2 {
+				utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), "Failed to find coins in shop message")
+				return
+			}
+
+			coins, err := strconv.Atoi(strings.ReplaceAll(matches[1], ",", ""))
+			if err != nil {
+				utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to parse coins: %s", err.Error()))
+				return
+			}
+
+			if coins < globalAutoBuyState.price {
+				in.AutoBuyResultChan <- AutoBuyResult{
+					Success: false,
+					Message: "Not enough coins",
+				}
+				return
+			}
+		}
+
 		if !in.findAndClickButton(shopMsg, globalAutoBuyState.itemEmojiName) {
 			err := in.ClickButton(shopMsg, 3, 1)
 			if err != nil {
@@ -66,6 +99,47 @@ func (in *Instance) shopBuy(shopMsg gateway.EventMessage) {
 			}
 		}
 	}
+}
+
+func (in *Instance) StartAutoBuy(command string, subCommand string) <-chan AutoBuyResult {
+	in.AutoBuyResultChan = make(chan AutoBuyResult, 1)
+
+	if globalAutoBuyState.itemEmojiName == "" {
+		in.AutoBuyResultChan <- AutoBuyResult{
+			Success: false,
+			Message: "No item set for autobuy",
+		}
+		return in.AutoBuyResultChan
+	}
+
+	in.PauseCommands(false)
+	utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), fmt.Sprintf("Auto buying %s", globalAutoBuyState.itemEmojiName))
+
+	if globalAutoBuyState.price != 0 {
+		err := in.SendCommand("withdraw", map[string]string{"amount": strconv.Itoa(globalAutoBuyState.price)}, true)
+		if err != nil {
+			utils.Log(utils.Others, utils.Error, in.SafeGetUsername(),
+				fmt.Sprintf("Failed to send autobuy /withdraw command: %s", err.Error()))
+			in.AutoBuyResultChan <- AutoBuyResult{
+				Success: false,
+				Message: "Failed to withdraw funds",
+			}
+			return in.AutoBuyResultChan
+		}
+
+		<-utils.Sleep(1 * time.Second)
+	}
+
+	err := in.SendSubCommand(command, subCommand, nil, true)
+	if err != nil {
+		utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to send /%s %s command: %s", command, subCommand, err.Error()))
+		in.AutoBuyResultChan <- AutoBuyResult{
+			Success: false,
+			Message: fmt.Sprintf("Failed to send /%s %s command: %s", command, subCommand, err.Error()),
+		}
+		return in.AutoBuyResultChan
+	}
+	return in.AutoBuyResultChan
 }
 
 func (in *Instance) AutoBuyMessageUpdate(message gateway.EventMessage) {
@@ -92,7 +166,7 @@ func (in *Instance) AutoBuyMessageCreate(message gateway.EventMessage) {
 	} else if embed.Title == "Your lifesaver protected you!" && in.Cfg.AutoBuy.LifeSavers.State {
 		re := regexp.MustCompile(`You have (\d+) Life Saver left`)
 		match := re.FindStringSubmatch(message.Components[0].(*types.ActionsRow).Components[0].(*types.Button).Label)
-
+		fmt.Println(match)
 		if len(match) > 1 {
 			remaining, err := strconv.Atoi(match[1])
 			if err != nil {
@@ -122,29 +196,24 @@ func (in *Instance) AutoBuyMessageCreate(message gateway.EventMessage) {
 			}
 		}
 		return
-	} else if message.Embeds[0].Title == "Dank Memer Shop" && globalAutoBuyState.itemEmojiName != "" {
+	} else if embed.Title == "Dank Memer Shop" && globalAutoBuyState.itemEmojiName != "" {
 		in.shopBuy(message)
 		return
 	} else {
 		return
 	}
 
-	if globalAutoBuyState.itemEmojiName == "" {
-		return
-	}
+	resultChan := in.StartAutoBuy("shop", "view")
 
-	in.PauseCommands(false)
-	utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), fmt.Sprintf("Auto buying %s", globalAutoBuyState.itemEmojiName))
-
-	err := in.SendCommand("withdraw", map[string]string{"amount": strconv.Itoa(globalAutoBuyState.price)}, true)
-	if err != nil {
-		utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to send autobuy /withdraw command: %s", err.Error()))
-	}
-
-	err = in.SendSubCommand("shop", "view", nil, true)
-	if err != nil {
-		utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to send /shop view command: %s", err.Error()))
-	}
+	go func() {
+		select {
+		case result := <-resultChan:
+			utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), result.Message)
+		case <-time.After(45 * time.Second):
+			utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), "Autobuy timed out")
+			in.UnpauseCommands()
+		}
+	}()
 }
 
 func (in *Instance) AutoBuyModalCreate(modal gateway.EventModalCreate) {
@@ -154,8 +223,18 @@ func (in *Instance) AutoBuyModalCreate(modal gateway.EventModalCreate) {
 			err := in.SubmitModal(modal)
 			if err != nil {
 				utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to submit autobuy modal: %s", err.Error()))
+				in.AutoBuyResultChan <- AutoBuyResult{
+					Success: false,
+					Message: "Failed to submit autobuy modal",
+				}
+				return
 			}
-			utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), fmt.Sprintf("Auto bought %s", globalAutoBuyState.itemEmojiName))
+
+			in.AutoBuyResultChan <- AutoBuyResult{
+				Success: true,
+				Message: fmt.Sprintf("Successfully bought %s", globalAutoBuyState.itemEmojiName),
+			}
+
 			in.setAutoBuyState(0, 0, "", 0)
 			in.UnpauseCommands()
 		}

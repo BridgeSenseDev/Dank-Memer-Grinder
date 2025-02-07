@@ -114,6 +114,7 @@ export interface FishCommandConfig {
     "fishOnly": boolean;
     "autoCompleteTasks": boolean;
     "autoCompleteTradeOffers": boolean;
+    "autoEquipment": boolean;
     "sellCoinsValue": number;
     "fishLocation": FishLocation[] | null;
 }

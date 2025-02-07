@@ -94,6 +94,7 @@ type FishCommandConfig struct {
 	FishOnly                bool           `json:"fishOnly"`
 	AutoCompleteTasks       bool           `json:"autoCompleteTasks"`
 	AutoCompleteTradeOffers bool           `json:"autoCompleteTradeOffers"`
+	AutoEquipment           bool           `json:"autoEquipment"`
 	SellCoinsValue          int            `json:"sellCoinsValue"`
 	FishLocation            []FishLocation `json:"fishLocation"`
 }

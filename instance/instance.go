@@ -28,20 +28,21 @@ type Client interface {
 }
 
 type Instance struct {
-	User         *types.User           `json:"user"`
-	Client       Client                `json:"client"`
-	ChannelID    string                `json:"channelID"`
-	GuildID      string                `json:"guildID"`
-	Cfg          config.Config         `json:"config"`
-	AccountCfg   config.AccountsConfig `json:"accountCfg"`
-	LastRan      map[string]time.Time  `json:"lastRan"`
-	StopChan     chan struct{}         `json:"stopChan"`
-	Error        string                `json:"error,omitempty"`
-	Ctx          context.Context
-	IsRestarting bool
-	commandsWg   sync.WaitGroup
-	pauseCount   int
-	pauseMutex   sync.Mutex
+	User              *types.User           `json:"user"`
+	Client            Client                `json:"client"`
+	ChannelID         string                `json:"channelID"`
+	GuildID           string                `json:"guildID"`
+	Cfg               config.Config         `json:"config"`
+	AccountCfg        config.AccountsConfig `json:"accountCfg"`
+	LastRan           map[string]time.Time  `json:"lastRan"`
+	StopChan          chan struct{}         `json:"stopChan"`
+	Error             string                `json:"error,omitempty"`
+	Ctx               context.Context
+	IsRestarting      bool
+	AutoBuyResultChan chan AutoBuyResult
+	commandsWg        sync.WaitGroup
+	pauseCount        int
+	pauseMutex        sync.Mutex
 }
 
 func (in *Instance) SafeGetUsername() string {
@@ -99,6 +100,8 @@ func (in *Instance) PauseCommands(indefinite bool) {
 		} else {
 			utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), "Paused commands")
 		}
+	} else {
+		utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), "Paused commands again")
 	}
 
 	if !indefinite {
@@ -180,7 +183,7 @@ var messageUpdateHandlers = map[string]MessageHandler{
 func (in *Instance) shouldHandleMessage(message gateway.EventMessage) bool {
 	if !in.Cfg.State ||
 		!in.AccountCfg.State ||
-		message.Author.ID != "270904126974590976" ||
+		(message.Author.ID != "270904126974590976" && message.Author.ID != "982638853548539924") ||
 		len(message.Embeds) == 0 ||
 		strings.Contains(message.Embeds[0].Description, "cooldown is") {
 		return false
@@ -224,14 +227,13 @@ func (in *Instance) HandleMessageCreate(message gateway.EventMessage) {
 			return
 		}
 		in.Others(message)
+		in.AutoBuyMessageCreate(message)
 
 		if messageType == "channel" {
 			in.handleInteraction(message, messageCreateHandlers)
 			in.MinigamesMessageCreate(message)
 			in.EventsMessageCreate(message)
-			in.AutoBuyMessageCreate(message)
 		} else if messageType == "dm" {
-			in.AutoBuyMessageCreate(message)
 			in.AutoUse(message)
 		}
 	}
@@ -241,14 +243,18 @@ func (in *Instance) HandleMessageUpdate(message gateway.EventMessage) {
 	if in.shouldHandleMessage(message) {
 		messageType := in.getMessageType(message)
 
-		if messageType == "channel" {
-			// Only apply to channel_id channel
-			in.handleInteraction(message, messageUpdateHandlers)
-			in.MinigamesMessageUpdate(message)
+		if messageType == "global" {
+			return
+		}
+
+		if in.shouldHandleMessage(message) {
+			// Apply to both
 			in.AutoBuyMessageUpdate(message)
-		} else if messageType == "dm" {
-			// Only apply to dank dm's
-			in.AutoBuyMessageUpdate(message)
+
+			if messageType == "channel" {
+				in.handleInteraction(message, messageUpdateHandlers)
+				in.MinigamesMessageUpdate(message)
+			}
 		}
 	}
 }

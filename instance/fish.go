@@ -12,6 +12,7 @@ import (
 	_ "golang.org/x/image/webp"
 	"image"
 	"regexp"
+	"slices"
 	"strconv"
 	"strings"
 	"time"
@@ -23,19 +24,42 @@ const (
 	gridSize = 3
 )
 
+var (
+	autoBuySuccess = false
+	lastAutoBuy    = time.Now().Add(-6 * time.Minute)
+)
+
 type Cell struct {
 	Row, Col int
 }
 
 func (in *Instance) FishMessageCreate(message gateway.EventMessage) {
-	embed := message.Embeds[0]
-	if strings.Contains(embed.Title, "Fishing Tutorial") && !strings.Contains(embed.Description, "Tutorial is over") {
-		// Tutorial messages all handled in message update
-		in.FishMessageUpdate(message)
-		return
-	}
+	// Everything can be a message update
+	in.FishMessageUpdate(message)
+}
 
-	if embed.Title == "Fishing" {
+func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
+	embed := message.Embeds[0]
+
+	if strings.Contains(embed.Title, "Fishing Tutorial") && !strings.Contains(embed.Description, "Tutorial is over") {
+		embed = message.Embeds[1]
+
+		for row, rowData := range message.Components {
+			for col, colData := range rowData.(*types.ActionsRow).Components {
+				if button, ok := colData.(*types.Button); ok {
+					if button.Disabled || strings.Contains(button.Label, "Season Pass") {
+						continue
+					}
+
+					err := in.ClickButton(message, row, col)
+					if err != nil {
+						utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click fishing tutorial button: %s", err.Error()))
+					}
+					return
+				}
+			}
+		}
+	} else if embed.Title == "Fishing" {
 		if !in.Cfg.Commands.Fish.FishOnly {
 			in.PauseCommands(false)
 		}
@@ -76,6 +100,15 @@ func (in *Instance) FishMessageCreate(message gateway.EventMessage) {
 			}
 		}
 
+		// Check if equipment available, if not already tried to buy equipment in past 5 minutes
+		if in.Cfg.Commands.Fish.AutoEquipment && strings.Contains(embed.Fields[0].Value, "Bare Hand") && !(!autoBuySuccess && lastAutoBuy.Add(5*time.Minute).After(time.Now())) {
+			err := in.ClickButton(message, 0, 0)
+			if err != nil {
+				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click fishing equipment button: %s", err.Error()))
+			}
+			return
+		}
+
 		// Go fishing
 		err := in.ClickButton(message, 0, 2)
 		if err != nil {
@@ -96,29 +129,79 @@ func (in *Instance) FishMessageCreate(message gateway.EventMessage) {
 				}
 			}
 		}
-	}
-}
+	} else if embed.Title == "Picking Equipment" {
+		if embed.Fields[0].Name != "Bare Hand" {
+			err := in.ClickButton(message, 2, 0)
+			if err != nil {
+				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click go back in fish equipment: %s", err.Error()))
+			}
+			return
+		}
 
-func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
-	embed := message.Embeds[0]
-	if strings.Contains(embed.Title, "Fishing Tutorial") && !strings.Contains(embed.Description, "Tutorial is over") {
-		embed = message.Embeds[1]
+		options := message.Components[0].(*types.ActionsRow).Components[0].(*types.SelectMenu).Options
+		slices.Reverse(options)
 
-		for row, rowData := range message.Components {
-			for col, colData := range rowData.(*types.ActionsRow).Components {
-				if button, ok := colData.(*types.Button); ok {
-					if button.Disabled || strings.Contains(button.Label, "Season Pass") {
-						continue
-					}
+		for _, option := range options {
+			if option.Description == "" {
+				continue
+			}
 
-					err := in.ClickButton(message, row, col)
-					if err != nil {
-						utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click fishing tutorial button: %s", err.Error()))
-					}
-					return
+			re := regexp.MustCompile(`You own: (\d+)`)
+			matches := re.FindStringSubmatch(option.Description)
+
+			if len(matches) < 2 {
+				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to find fishing equipment count from description: %s", option.Description))
+				return
+			}
+
+			count, _ := strconv.Atoi(matches[1])
+			if count > 0 {
+				err := in.ChooseSelectMenu(message, 0, 0, []string{option.Value})
+				if err != nil {
+					utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to choose fishing equipment: %s", err.Error()))
 				}
+				return
 			}
 		}
+
+		// Dont autobuy equipment again if last autobuy less than 5 minutes ago
+		if lastAutoBuy.Add(5 * time.Minute).After(time.Now()) {
+			return
+		}
+
+		// No better equipment available, buy fishing rod
+		in.setAutoBuyState(2, 1, "fishingrodtool", 0)
+		resultChan := in.StartAutoBuy("fish", "shop")
+
+		go func() {
+			select {
+			case result := <-resultChan:
+				utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), result.Message)
+				lastAutoBuy = time.Now()
+
+				<-utils.Sleep(time.Duration(utils.Rng.Intn(5-2)+2) * time.Second)
+
+				if result.Success {
+					autoBuySuccess = true
+					err := in.ChooseSelectMenu(message, 0, 0, []string{"fishing-rod"})
+					if err != nil {
+						utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to select fishing rod: %s", err.Error()))
+					}
+				} else {
+					err := in.ClickDmButton(message, 2, 0)
+					if err != nil {
+						utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click fishing rod button: %s", err.Error()))
+					}
+				}
+			case <-time.After(45 * time.Second):
+				utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), "Fish shop autobuy timed out")
+				lastAutoBuy = time.Now()
+
+				<-utils.Sleep(time.Duration(utils.Rng.Intn(5-2)+2) * time.Second)
+
+				in.UnpauseCommands()
+			}
+		}()
 	} else if strings.Contains(embed.Title, "You caught") || embed.Title == "There was nothing to catch." {
 		if strings.Contains(embed.Description, "You have no more bucket space") {
 			in.LastRan["Fish"] = time.Now()
@@ -128,6 +211,11 @@ func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
 			err := in.SendSubCommand("fish", "buckets", nil, false)
 			if err != nil {
 				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to send fish buckets command: %s", err.Error()))
+			}
+		} else if strings.Contains(message.Embeds[1].Description, "Bare Hand") {
+			err := in.ClickButton(message, 0, 0)
+			if err != nil {
+				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click go back button: %s", err.Error()))
 			}
 		} else {
 			if in.Cfg.Commands.Fish.FishOnly {

@@ -9,6 +9,10 @@ import (
 )
 
 func (in *Instance) SendChatMessage(content string, delay bool) error {
+	if !in.Cfg.State || !in.AccountCfg.State {
+		return nil
+	}
+
 	if delay {
 		minDelay := in.Cfg.Cooldowns.CommandInterval.MinDelay
 		maxDelay := in.Cfg.Cooldowns.CommandInterval.MaxDelay
@@ -19,6 +23,10 @@ func (in *Instance) SendChatMessage(content string, delay bool) error {
 }
 
 func (in *Instance) SendCommand(name string, options map[string]string, delay bool) error {
+	if !in.Cfg.State || !in.AccountCfg.State {
+		return nil
+	}
+
 	if delay {
 		minDelay := in.Cfg.Cooldowns.CommandInterval.MinDelay
 		maxDelay := in.Cfg.Cooldowns.CommandInterval.MaxDelay
@@ -29,6 +37,10 @@ func (in *Instance) SendCommand(name string, options map[string]string, delay bo
 }
 
 func (in *Instance) SendSubCommand(name string, subCommandName string, options map[string]string, delay bool) error {
+	if !in.Cfg.State || !in.AccountCfg.State {
+		return nil
+	}
+
 	if delay {
 		minDelay := in.Cfg.Cooldowns.CommandInterval.MinDelay
 		maxDelay := in.Cfg.Cooldowns.CommandInterval.MaxDelay
@@ -39,6 +51,10 @@ func (in *Instance) SendSubCommand(name string, subCommandName string, options m
 }
 
 func (in *Instance) ClickButton(message gateway.EventMessage, row int, column int) error {
+	if !in.Cfg.State || !in.AccountCfg.State {
+		return nil
+	}
+
 	minDelay := in.Cfg.Cooldowns.ButtonClickDelay.MinDelay
 	maxDelay := in.Cfg.Cooldowns.ButtonClickDelay.MaxDelay
 	<-utils.Sleep(time.Duration(rand.Intn(maxDelay-minDelay)+minDelay) * time.Millisecond)
@@ -52,6 +68,10 @@ func (in *Instance) ClickButton(message gateway.EventMessage, row int, column in
 }
 
 func (in *Instance) ClickDmButton(message gateway.EventMessage, row int, column int) error {
+	if !in.Cfg.State || !in.AccountCfg.State {
+		return nil
+	}
+
 	minDelay := in.Cfg.Cooldowns.ButtonClickDelay.MinDelay
 	maxDelay := in.Cfg.Cooldowns.ButtonClickDelay.MaxDelay
 	<-utils.Sleep(time.Duration(rand.Intn(maxDelay-minDelay)+minDelay) * time.Millisecond)
@@ -59,6 +79,10 @@ func (in *Instance) ClickDmButton(message gateway.EventMessage, row int, column 
 }
 
 func (in *Instance) ChooseSelectMenu(message gateway.EventMessage, row int, column int, values []string) error {
+	if !in.Cfg.State || !in.AccountCfg.State {
+		return nil
+	}
+
 	minDelay := in.Cfg.Cooldowns.ButtonClickDelay.MinDelay
 	maxDelay := in.Cfg.Cooldowns.ButtonClickDelay.MaxDelay
 	<-utils.Sleep(time.Duration(rand.Intn(maxDelay-minDelay)+minDelay) * time.Millisecond)
@@ -66,6 +90,10 @@ func (in *Instance) ChooseSelectMenu(message gateway.EventMessage, row int, colu
 }
 
 func (in *Instance) SubmitModal(modal gateway.EventModalCreate) error {
+	if !in.Cfg.State || !in.AccountCfg.State {
+		return nil
+	}
+
 	minDelay := in.Cfg.Cooldowns.ButtonClickDelay.MinDelay
 	maxDelay := in.Cfg.Cooldowns.ButtonClickDelay.MaxDelay
 	<-utils.Sleep(time.Duration(rand.Intn(maxDelay-minDelay)+minDelay) * time.Millisecond)
