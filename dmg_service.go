@@ -4,15 +4,17 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
-	"github.com/valyala/fasthttp"
+	"io"
 	"os"
 	"sync"
 
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/config"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/instance"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
+	"github.com/imdario/mergo"
+	"github.com/valyala/fasthttp"
 )
 
 type DmgService struct {
@@ -24,59 +26,43 @@ type DmgService struct {
 }
 
 func (d *DmgService) startup() {
-	// Load configuration
-	cfg, err := utils.ReadConfig()
-
+	userCfg, err := utils.ReadConfig()
 	if err != nil {
-		utils.Log(utils.Important, utils.Error, "", fmt.Sprintf("Failed to read config file, downloading example config: %s", err.Error()))
+		utils.Log(utils.Important, utils.Error, "",
+			fmt.Sprintf("Failed to read config file, downloading example config: %s", err.Error()))
 
-		client := &fasthttp.Client{}
-
-		req := fasthttp.AcquireRequest()
-		defer fasthttp.ReleaseRequest(req)
-
-		req.SetRequestURI("https://raw.githubusercontent.com/BridgeSenseDev/Dank-Memer-Grinder/refs/heads/main/config.example.json")
-		resp := fasthttp.AcquireResponse()
-		defer fasthttp.ReleaseResponse(resp)
-
-		err = client.Do(req, resp)
-		if err != nil {
-			utils.ShowErrorDialog("A fatal error occurred!", fmt.Sprintf("Failed to download config file: %s", err.Error()))
+		defaultCfg, dlErr := downloadDefaultConfig()
+		if dlErr != nil {
+			utils.ShowErrorDialog("A fatal error occurred!",
+				fmt.Sprintf("Failed to download default config file: %s", dlErr.Error()))
 		}
 
-		if resp.StatusCode() != fasthttp.StatusOK {
-			utils.ShowErrorDialog("A fatal error occurred!", fmt.Sprintf("Failed to download config file: %d", resp.StatusCode()))
+		if writeErr := writeConfigToDisk(defaultCfg); writeErr != nil {
+			utils.ShowErrorDialog("A fatal error occurred!",
+				fmt.Sprintf("Failed to write config.json: %s", writeErr.Error()))
 		}
-
-		file, err2 := os.Create(utils.GetConfigPath())
-		if err2 != nil {
-			utils.ShowErrorDialog("A fatal error occurred!", fmt.Sprintf("Failed to write config.json: %s", err2.Error()))
-		}
-		defer func(file *os.File) {
-			err = file.Close()
-			if err != nil {
-				utils.ShowErrorDialog("A fatal error occurred!", fmt.Sprintf("Failed to close config.json: %s", err2.Error()))
+		userCfg = defaultCfg
+	} else {
+		defaultCfg, dlErr := downloadDefaultConfig()
+		if dlErr != nil {
+			utils.Log(utils.Important, utils.Error, "",
+				fmt.Sprintf("Failed to download default config file for merging: %s", dlErr.Error()))
+		} else {
+			if mergeErr := mergo.Merge(&userCfg, defaultCfg); mergeErr != nil {
+				utils.Log(utils.Important, utils.Error, "",
+					fmt.Sprintf("Failed to merge config: %s", mergeErr.Error()))
 			}
-		}(file)
-
-		_, err2 = file.Write(resp.Body())
-		if err2 != nil {
-			utils.ShowErrorDialog("A fatal error occurred!", fmt.Sprintf("Error saving file: %s", err2.Error()))
-		}
-
-		cfg, err = utils.ReadConfig()
-		if err != nil {
-			utils.ShowErrorDialog("A fatal error occurred!", fmt.Sprintf("Failed to read config.json: %s", err.Error()))
 		}
 	}
 
-	if err = cfg.Validate(); err != nil {
-		utils.ShowErrorDialog("A fatal error occurred!", fmt.Sprintf("Invalid config.json: %s", err.Error()))
+	if err = userCfg.Validate(); err != nil {
+		utils.ShowErrorDialog("A fatal error occurred!",
+			fmt.Sprintf("Invalid config.json: %s", err.Error()))
 	}
 
-	utils.EmitEventIfNotCLI("configUpdate", cfg)
+	utils.EmitEventIfNotCLI("configUpdate", userCfg)
 	d.ctx = context.Background()
-	d.cfg = &cfg
+	d.cfg = &userCfg
 	d.StartInstances()
 }
 
@@ -140,4 +126,54 @@ func (d *DmgService) UpdateDiscordStatus(status types.OnlineStatus) {
 
 		in.User.Status = status
 	}
+}
+
+func downloadDefaultConfig() (config.Config, error) {
+	var defCfg config.Config
+
+	client := &fasthttp.Client{}
+
+	req := fasthttp.AcquireRequest()
+	defer fasthttp.ReleaseRequest(req)
+
+	req.SetRequestURI("https://raw.githubusercontent.com/BridgeSenseDev/Dank-Memer-Grinder/refs/heads/main/config.example.json")
+	resp := fasthttp.AcquireResponse()
+	defer fasthttp.ReleaseResponse(resp)
+
+	if err := client.Do(req, resp); err != nil {
+		return defCfg, err
+	}
+
+	if resp.StatusCode() != fasthttp.StatusOK {
+		return defCfg, fmt.Errorf("failed to download default config: %d", resp.StatusCode())
+	}
+
+	body := resp.Body()
+	if err := json.Unmarshal(body, &defCfg); err != nil {
+		return defCfg, err
+	}
+
+	return defCfg, nil
+}
+
+func writeConfigToDisk(cfg config.Config) error {
+	file, err := os.Create(utils.GetConfigPath())
+	if err != nil {
+		return err
+	}
+	defer func() {
+		errClose := file.Close()
+		if errClose != nil {
+			utils.Log(utils.Important, utils.Error, "",
+				fmt.Sprintf("Failed to close config.json: %s", errClose.Error()))
+		}
+	}()
+
+	configJSON, err := json.MarshalIndent(cfg, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	_, err = io.WriteString(file, string(configJSON))
+	return err
 }

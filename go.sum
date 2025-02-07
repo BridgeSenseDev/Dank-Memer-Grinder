@@ -62,6 +62,8 @@ github.com/gopherjs/gopherjs v0.0.0-20210803090616-8f023c250c89 h1:cuZTXJQ2J5mpT
 github.com/gopherjs/gopherjs v0.0.0-20210803090616-8f023c250c89/go.mod h1:0RnbP5ioI0nqRf3R9iK3iQaUJgsn0htlZEHCMn8FSfw=
 github.com/grongor/panicwatch v1.3.0 h1:jPUiW04AZd+eae1c4NFKiq33/7ekOATLsC9qXnADTJs=
 github.com/grongor/panicwatch v1.3.0/go.mod h1:fox2At4lCsNDgqHCyZE8Uw1uab9VVf/iL05S95aYhB0=
+github.com/imdario/mergo v0.3.16 h1:wwQJbIsHYGMUyLSPrEq1CT16AhnhNJQ51+4fdHUnCl4=
+github.com/imdario/mergo v0.3.16/go.mod h1:WBLT9ZmE3lPoWsEzCh9LPo3TiwVN+ZKEjmz+hD27ysY=
 github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 h1:BQSFePA1RWJOlocH6Fxy8MmwDt+yVQYULKfN0RoTN8A=
 github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99/go.mod h1:1lJo3i6rXxKeerYnT8Nvf0QmHCRC1n8sfWVwXF2Frvo=
 github.com/jchv/go-winloader v0.0.0-20210711035445-715c2860da7e h1:Q3+PugElBCf4PFpxhErSzU3/PY5sFL5Z6rfv4AbGAck=
