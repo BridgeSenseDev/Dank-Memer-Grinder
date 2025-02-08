@@ -175,43 +175,48 @@ func (in *Instance) EventsMessageCreate(message gateway.EventMessage) {
 				utils.Log(utils.Important, utils.Error, in.SafeGetUsername(),
 					fmt.Sprintf("Failed to send fish guesser chat message: %s", err.Error()))
 			}
-		} else if strings.Contains(embed.Title, "says...") {
-			if strings.Contains(embed.Footer.Text, "time limit") && in.Cfg.Commands.Fish.AutoCompleteTasks {
-				components := message.Components[0].(*types.ActionsRow).Components
-				if len(components) >= 2 && components[1].(*types.Button).Label == "Accept" {
-					err := in.ClickButton(message, 0, 1)
-					if err != nil {
-						utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click accept task button: %s", err.Error()))
-					}
-
-				}
-			} else if strings.Contains(embed.Footer.Text, "to trade the item") && in.Cfg.Commands.Fish.AutoCompleteTradeOffers {
-				// Randomly click a button if button is not "Decline"
-				validIndices := make([]int, 0)
-				for i, cmp := range message.Components[0].(*types.ActionsRow).Components {
-					btn, ok := cmp.(*types.Button)
-					if !ok {
-						continue
-					}
-
-					if btn.Label != "Decline" {
-						validIndices = append(validIndices, i)
-					}
-				}
-
-				if len(validIndices) > 0 {
-					utils.Rng.Seed(time.Now().UnixNano())
-					randomIndex := validIndices[utils.Rng.Intn(len(validIndices))]
-					err := in.ClickButton(message, 0, randomIndex)
-					if err != nil {
-						utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click random task button: %s", err.Error()))
-					}
-				}
+		} else if embed.Title == "Dice Champs" {
+			err := in.ClickButton(message, 0, 0)
+			if err != nil {
+				utils.Log(utils.Important, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click dice champs button: %s", err.Error()))
 			}
 		}
+	}
 
-		// Non general random events color
-		if strings.Contains(embed.Fields[0].Name, "requests:") && in.Cfg.Commands.Fish.AutoCompleteTasks {
+	// Non general random events color
+	if strings.Contains(embed.Title, "says...") {
+		if strings.Contains(embed.Footer.Text, "time limit") && in.Cfg.Commands.Fish.AutoCompleteTasks {
+			components := message.Components[0].(*types.ActionsRow).Components
+			if len(components) >= 2 && components[1].(*types.Button).Label == "Accept" {
+				err := in.ClickButton(message, 0, 1)
+				if err != nil {
+					utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click accept task button: %s", err.Error()))
+				}
+
+			}
+		} else if strings.Contains(embed.Footer.Text, "to trade the item") && in.Cfg.Commands.Fish.AutoCompleteTradeOffers {
+			// Randomly click a button if button is not "Decline"
+			validIndices := make([]int, 0)
+			for i, cmp := range message.Components[0].(*types.ActionsRow).Components {
+				btn, ok := cmp.(*types.Button)
+				if !ok {
+					continue
+				}
+
+				if btn.Label != "Decline" {
+					validIndices = append(validIndices, i)
+				}
+			}
+
+			if len(validIndices) > 0 {
+				utils.Rng.Seed(time.Now().UnixNano())
+				randomIndex := validIndices[utils.Rng.Intn(len(validIndices))]
+				err := in.ClickButton(message, 0, randomIndex)
+				if err != nil {
+					utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click random task button: %s", err.Error()))
+				}
+			}
+		} else if len(embed.Fields) > 0 && strings.Contains(embed.Fields[0].Name, "requests:") && in.Cfg.Commands.Fish.AutoCompleteTasks {
 			components := message.Components[0].(*types.ActionsRow).Components
 			if len(components) >= 2 {
 				if components[1].(*types.Button).Label == "Accept" {
