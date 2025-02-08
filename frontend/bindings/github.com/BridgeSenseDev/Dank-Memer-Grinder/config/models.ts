@@ -129,9 +129,6 @@ export enum FishLocation {
     WilyRiver = "Wily River",
     UnderwaterSanctuary = "Underwater Sanctuary",
     CampGuillermo = "Camp Guillermo",
-    MysticPond = "Mystic Pond",
-    IceCaves = "Ice Caves",
-    SnowyMountain = "Snowy Mountain",
     ScurvyWaters = "Scurvy Waters",
     NorthpointCabin = "Northpoint Cabin",
 };

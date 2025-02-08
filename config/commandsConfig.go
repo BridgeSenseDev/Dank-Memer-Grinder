@@ -82,9 +82,6 @@ const (
 	WilyRiver           FishLocation = "Wily River"
 	UnderwaterSanctuary FishLocation = "Underwater Sanctuary"
 	CampGuillermo       FishLocation = "Camp Guillermo"
-	MysticPond          FishLocation = "Mystic Pond"
-	IceCaves            FishLocation = "Ice Caves"
-	SnowyMountain       FishLocation = "Snowy Mountain"
 	ScurvyWaters        FishLocation = "Scurvy Waters"
 	NorthpointCabin     FishLocation = "Northpoint Cabin"
 )
