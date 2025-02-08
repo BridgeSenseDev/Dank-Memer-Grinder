@@ -16,6 +16,7 @@ import {
 	UpdateConfig
 } from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/dmgservice";
 import { OnlineStatus } from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types";
+import * as time$0 from "@/bindings/time/models";
 
 class Cfg {
 	c: Config = $state({
@@ -65,6 +66,17 @@ class Instances {
 
 			this.i.push(...data.data[0]);
 		});
+
+		Events.On(
+			"breakUpdate",
+			(data: { data: [token: string, state: string, breakTime: time$0.Time] }) => {
+				const index = this.i.findIndex((instance) => instance.accountCfg.token === data.data[0]);
+				if (index !== -1) {
+					this.i[index].state = data.data[1];
+					this.i[index].breakUpdateTime = data.data[2];
+				}
+			}
+		);
 
 		this.fetch();
 	}

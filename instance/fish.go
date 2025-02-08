@@ -213,6 +213,7 @@ func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
 				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to send fish buckets command: %s", err.Error()))
 			}
 		} else if strings.Contains(message.Embeds[1].Description, "Bare Hand") {
+			<-utils.Sleep(2 * time.Second)
 			err := in.ClickButton(message, 0, 0)
 			if err != nil {
 				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click go back button: %s", err.Error()))

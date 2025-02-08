@@ -56,6 +56,11 @@ export interface BlackjackCommandConfig {
     "manuallyRunCommands": boolean;
 }
 
+export interface BreakTime {
+    "minHours": number;
+    "maxHours": number;
+}
+
 export interface CommandsConfig {
     "adventure": AdventureCommandConfig;
     "beg": GeneralCommandConfig;
@@ -93,6 +98,8 @@ export interface Config {
 export interface Cooldowns {
     "buttonClickDelay": Delays;
     "commandInterval": Delays;
+    "breakCooldown": BreakTime;
+    "breakTime": BreakTime;
 }
 
 export interface CrimeCommandConfig {

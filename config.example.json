@@ -14,6 +14,14 @@
     "commandInterval": {
       "minDelay": 2000,
       "maxDelay": 4000
+    },
+    "breakCooldown": {
+      "minHours": 0.5,
+      "maxHours": 2.0
+    },
+    "breakTime": {
+      "minHours": 1.0,
+      "maxHours": 5.0
     }
   },
   "accounts": [],

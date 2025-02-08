@@ -11,7 +11,7 @@
 				const instance = instances.i.find(
 					(instance) => instance.accountCfg.token === account.token
 				);
-				const status = instance?.error ? instance.error : "reload";
+				const status = instance?.state ? instance.state : "reload";
 				accounts.push({
 					status: status,
 					token: account.token,

@@ -15,6 +15,7 @@ build/bin
 .idea
 .task
 .vscode/
+test
 
 build/linux/appimage
 !build/linux/appimage/build.sh

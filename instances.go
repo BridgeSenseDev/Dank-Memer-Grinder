@@ -14,14 +14,15 @@ import (
 )
 
 type InstanceView struct {
-	User       *types.User           `json:"user"`
-	ChannelID  string                `json:"channelID"`
-	GuildID    string                `json:"guildID"`
-	Cfg        config.Config         `json:"config"`
-	AccountCfg config.AccountsConfig `json:"accountCfg"`
-	LastRan    map[string]time.Time  `json:"lastRan"`
-	Pause      bool                  `json:"pause"`
-	Error      string                `json:"error,omitempty"`
+	User            *types.User           `json:"user"`
+	ChannelID       string                `json:"channelID"`
+	GuildID         string                `json:"guildID"`
+	Cfg             config.Config         `json:"config"`
+	AccountCfg      config.AccountsConfig `json:"accountCfg"`
+	LastRan         map[string]time.Time  `json:"lastRan"`
+	Pause           bool                  `json:"pause"`
+	State           string                `json:"state,omitempty"`
+	BreakUpdateTime string                `json:"breakUpdateTime,omitempty"`
 }
 
 func (d *DmgService) StartInstance(account config.AccountsConfig) {
@@ -39,7 +40,7 @@ func (d *DmgService) StartInstance(account config.AccountsConfig) {
 					utils.Log(utils.Discord, utils.Error, client.SafeGetUsername(), fmt.Sprintf("Failed to fetch GuildID from channelID %v: %s", account.ChannelID, err.Error()))
 					in := &instance.Instance{
 						AccountCfg: account,
-						Error:      "invalidChannelID",
+						State:      "invalidChannelID",
 					}
 					d.instances = append(d.instances, in)
 					utils.EmitEventIfNotCLI("instancesUpdate", d.GetInstances())
@@ -85,7 +86,7 @@ func (d *DmgService) StartInstance(account config.AccountsConfig) {
 					AccountCfg: account,
 					LastRan:    make(map[string]time.Time),
 					StopChan:   make(chan struct{}),
-					Error:      "healthy",
+					State:      "healthy",
 					Ctx:        d.ctx,
 				}
 
@@ -108,7 +109,7 @@ func (d *DmgService) StartInstance(account config.AccountsConfig) {
 			utils.Log(utils.Important, utils.Error, "", fmt.Sprintf("Failed to connect: %v", err.Error()))
 			in := &instance.Instance{
 				AccountCfg: account,
-				Error:      "invalidToken",
+				State:      "invalidToken",
 			}
 
 			d.instances = append(d.instances, in)
@@ -124,7 +125,7 @@ func (d *DmgService) StartInstance(account config.AccountsConfig) {
 				case gateway.StatusInvalidToken:
 					in := &instance.Instance{
 						AccountCfg: account,
-						Error:      "invalidToken",
+						State:      "invalidToken",
 					}
 
 					d.instances = append(d.instances, in)
@@ -149,7 +150,7 @@ func (d *DmgService) RemoveInstance(token string) {
 	for _, in := range d.instances {
 		if in.AccountCfg.Token != token {
 			instancesToKeep = append(instancesToKeep, in)
-		} else if in.Error == "healthy" {
+		} else if in.State == "healthy" {
 			wg.Add(1)
 			go func(in *instance.Instance) {
 				defer wg.Done()
@@ -204,13 +205,14 @@ func (d *DmgService) GetInstances() []*InstanceView {
 
 	for _, i := range d.instances {
 		instanceView := &InstanceView{
-			User:       i.User,
-			ChannelID:  i.ChannelID,
-			GuildID:    i.GuildID,
-			Cfg:        i.Cfg,
-			AccountCfg: i.AccountCfg,
-			LastRan:    i.LastRan,
-			Error:      i.Error,
+			User:            i.User,
+			ChannelID:       i.ChannelID,
+			GuildID:         i.GuildID,
+			Cfg:             i.Cfg,
+			AccountCfg:      i.AccountCfg,
+			LastRan:         i.LastRan,
+			State:           i.State,
+			BreakUpdateTime: i.BreakUpdateTime.String(),
 		}
 		instanceViews = append(instanceViews, instanceView)
 	}

@@ -36,10 +36,11 @@ type Instance struct {
 	AccountCfg        config.AccountsConfig `json:"accountCfg"`
 	LastRan           map[string]time.Time  `json:"lastRan"`
 	StopChan          chan struct{}         `json:"stopChan"`
-	Error             string                `json:"error,omitempty"`
+	State             string                `json:"state,omitempty"`
 	Ctx               context.Context
 	IsRestarting      bool
 	AutoBuyResultChan chan AutoBuyResult
+	BreakUpdateTime   time.Time
 	commandsWg        sync.WaitGroup
 	pauseCount        int
 	pauseMutex        sync.Mutex

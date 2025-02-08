@@ -33,6 +33,7 @@ export const columns: ColumnDef<Account>[] = [
 	},
 	{
 		id: "actions",
+		header: "Actions",
 		cell: ({ row }) => {
 			return renderComponent(DataTableActions, { id: row.original.token });
 		}

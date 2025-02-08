@@ -63,6 +63,12 @@ func (c *Cooldowns) Validate() error {
 	if err := c.CommandInterval.Validate(); err != nil {
 		return fmt.Errorf("commandInterval: %w", err)
 	}
+	if err := c.BreakCooldown.Validate(false); err != nil {
+		return fmt.Errorf("breakCooldown: %w", err)
+	}
+	if err := c.BreakTime.Validate(true); err != nil {
+		return fmt.Errorf("breakTime: %w", err)
+	}
 	return nil
 }
 
@@ -72,6 +78,21 @@ func (d *Delays) Validate() error {
 	}
 	if d.MinDelay > d.MaxDelay {
 		return errors.New("minDelay cannot be greater than maxDelay")
+	}
+	return nil
+}
+
+func (b *BreakTime) Validate(allowZero bool) error {
+	if !allowZero {
+		if b.MinHours == 0 || b.MaxHours == 0 {
+			return errors.New("break time cannot be 0")
+		}
+	}
+	if b.MinHours < 0 || b.MaxHours < 0 {
+		return errors.New("break time cannot be negative")
+	}
+	if b.MinHours > b.MaxHours {
+		return errors.New("minHours cannot be greater than maxHours")
 	}
 	return nil
 }
@@ -184,9 +205,6 @@ func (f *FishCommandConfig) Validate() error {
 		WilyRiver:           true,
 		UnderwaterSanctuary: true,
 		CampGuillermo:       true,
-		MysticPond:          true,
-		IceCaves:            true,
-		SnowyMountain:       true,
 		ScurvyWaters:        true,
 		NorthpointCabin:     true,
 	}

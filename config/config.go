@@ -9,9 +9,16 @@ type Delays struct {
 	MaxDelay int `json:"maxDelay"`
 }
 
+type BreakTime struct {
+	MinHours float32 `json:"minHours"`
+	MaxHours float32 `json:"maxHours"`
+}
+
 type Cooldowns struct {
-	ButtonClickDelay Delays `json:"buttonClickDelay"`
-	CommandInterval  Delays `json:"commandInterval"`
+	ButtonClickDelay Delays    `json:"buttonClickDelay"`
+	CommandInterval  Delays    `json:"commandInterval"`
+	BreakCooldown    BreakTime `json:"breakCooldown"`
+	BreakTime        BreakTime `json:"breakTime"`
 }
 
 type Config struct {

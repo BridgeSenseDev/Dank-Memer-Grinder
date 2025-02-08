@@ -20,5 +20,6 @@ export interface InstanceView {
     "accountCfg": config$0.AccountsConfig;
     "lastRan": { [_: string]: time$0.Time } | null;
     "pause": boolean;
-    "error"?: string;
+    "state"?: string;
+    "breakUpdateTime"?: string;
 }

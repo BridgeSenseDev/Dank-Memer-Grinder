@@ -1,13 +1,12 @@
 <script lang="ts">
 	import { Trash, Reload } from "svelte-radix";
-	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
+	import * as Tooltip from "$lib/components/ui/tooltip/index.js";
 	import { Button } from "$lib/components/ui/button";
 	import { cfg } from "$lib/state.svelte";
 	import {
 		RemoveInstance,
 		RestartInstance
 	} from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/dmgservice";
-	import { Ellipsis } from "lucide-svelte";
 
 	interface Props {
 		id: string;
@@ -23,28 +22,25 @@
 	}
 </script>
 
-<DropdownMenu.Root>
-	<DropdownMenu.Trigger>
-		{#snippet child({ props })}
-			<Button {...props} variant="ghost" size="icon" class="relative size-8 p-0">
-				<span class="sr-only">Open menu</span>
-				<Ellipsis class="size-4" />
-			</Button>
-		{/snippet}
-	</DropdownMenu.Trigger>
-	<DropdownMenu.Content>
-		<DropdownMenu.Group>
-			<DropdownMenu.Item onclick={async () => await RestartInstance(id)}>
-				<Reload class="mr-2 inline-block h-5 w-5" />
-				Restart account
-			</DropdownMenu.Item>
-			<DropdownMenu.Separator />
-			<DropdownMenu.Item
-				class="text-red-500 hover:text-red-500"
-				onclick={async () => await deleteInstance(id)}
-			>
-				<Trash class="mr-2 inline-block h-5 w-5" />Delete account</DropdownMenu.Item
-			>
-		</DropdownMenu.Group>
-	</DropdownMenu.Content>
-</DropdownMenu.Root>
+<div class="inline-flex flex-row space-x-2">
+	<Tooltip.Provider>
+		<Tooltip.Root>
+			<Tooltip.Trigger>
+				<Button variant="outline" size="icon" onclick={async () => await RestartInstance(id)}>
+					<Reload />
+				</Button>
+			</Tooltip.Trigger>
+			<Tooltip.Content>Restart</Tooltip.Content>
+		</Tooltip.Root>
+	</Tooltip.Provider>
+	<Tooltip.Provider>
+		<Tooltip.Root>
+			<Tooltip.Trigger>
+				<Button variant="destructive" size="icon" onclick={() => deleteInstance(id)}>
+					<Trash />
+				</Button>
+			</Tooltip.Trigger>
+			<Tooltip.Content>Delete</Tooltip.Content>
+		</Tooltip.Root>
+	</Tooltip.Provider>
+</div>

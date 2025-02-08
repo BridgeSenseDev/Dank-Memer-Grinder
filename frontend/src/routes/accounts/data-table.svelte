@@ -7,14 +7,15 @@
 	import type { Account } from "@/src/routes/accounts/columns";
 	import AddAccounts from "./add-accounts.svelte";
 	import { Input } from "$lib/components/ui/input";
-	import * as Tooltip from "$lib/components/ui/tooltip";
 	import { Checkbox } from "$lib/components/ui/checkbox";
 	import {
 		RestartInstances,
 		UpdateInstanceToken
 	} from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/dmgservice";
 	import { cfg, instances } from "$lib/state.svelte";
-	import { LoaderCircle } from "lucide-svelte";
+	import { InfinityIcon, LoaderCircle, PauseIcon, TerminalIcon } from "lucide-svelte";
+	import { Label } from "$lib/components/ui/label";
+	import { onMount } from "svelte";
 
 	interface DataTableProps<TData, TValue> {
 		columns: ColumnDef<TData, TValue>[];
@@ -44,13 +45,32 @@
 		isRestarting = false;
 	}
 
+	let timeRemaining: string[] = $state([]);
+
+	function updateTimeRemaining() {
+		if (instances && instances.i) {
+			timeRemaining = instances.i.map((instance) => {
+				if (instance.breakUpdateTime) {
+					const diff = new Date(instance.breakUpdateTime).getTime() - new Date().getTime();
+					if (diff > 0) {
+						return (diff / 1000 / 60 / 60).toFixed(2);
+					} else {
+						return "0.00";
+					}
+				} else {
+					return "";
+				}
+			});
+		}
+	}
+
 	$effect(() => {
 		if (instances && cfg.c.accounts) {
 			cfg.c.accounts.map((account) => {
 				const instance = instances.i.find(
 					(instance) => instance.accountCfg.token === account.token
 				);
-				const status = instance?.error ? instance.error : "reload";
+				const status = instance?.state ? instance.state : "reload";
 				return {
 					status,
 					token: account.token,
@@ -59,7 +79,14 @@
 					state: account.state
 				};
 			});
+			updateTimeRemaining();
 		}
+	});
+
+	onMount(() => {
+		const intervalId = setInterval(updateTimeRemaining, 60 * 1000);
+
+		return () => clearInterval(intervalId);
 	});
 
 	function tokenUpdate(rowIndex: number, event: Event) {
@@ -105,51 +132,48 @@
 						<Table.Row data-state={row.getIsSelected() && "selected"}>
 							{#each row.getVisibleCells() as cell (cell.id)}
 								{#if cell.column.id === "status"}
-									<Table.Cell class="w-5 p-0 text-center">
+									<Table.Cell class="w-18 p-0 text-center">
 										{#if cell.getValue() === "healthy"}
-											<Tooltip.Provider>
-												<Tooltip.Root>
-													<Tooltip.Trigger>
-														<div class="flex items-center justify-center">
-															<Check class="text-primary" />
-														</div>
-													</Tooltip.Trigger>
-													<Tooltip.Content>Connected</Tooltip.Content>
-												</Tooltip.Root>
-											</Tooltip.Provider>
+											<div class="flex flex-col items-center justify-center">
+												<Check class="text-primary h-5 w-5" />
+												<Label class="text-xs leading-4">Connected</Label>
+											</div>
 										{:else if cell.getValue() === "invalidToken"}
-											<Tooltip.Provider>
-												<Tooltip.Root>
-													<Tooltip.Trigger>
-														<div class="flex items-center justify-center">
-															<LockClosed class="text-red-500" />
-														</div>
-													</Tooltip.Trigger>
-													<Tooltip.Content>Invalid token</Tooltip.Content>
-												</Tooltip.Root>
-											</Tooltip.Provider>
+											<div class="flex flex-col items-center justify-center">
+												<LockClosed class="h-5 w-5 text-red-500" />
+												<Label class="text-xs leading-4">Token</Label>
+											</div>
 										{:else if cell.getValue() === "invalidChannelID"}
-											<Tooltip.Provider>
-												<Tooltip.Root>
-													<Tooltip.Trigger>
-														<div class="flex items-center justify-center">
-															<ExclamationTriangle class="text-yellow-500" />
-														</div>
-													</Tooltip.Trigger>
-													<Tooltip.Content>Invalid channel ID</Tooltip.Content>
-												</Tooltip.Root>
-											</Tooltip.Provider>
+											<div class="flex flex-col items-center justify-center">
+												<ExclamationTriangle class="h-5 w-5 text-yellow-500" />
+												<Label class="text-xs leading-4">Channel ID</Label>
+											</div>
 										{:else if cell.getValue() === "reload"}
-											<Tooltip.Provider>
-												<Tooltip.Root>
-													<Tooltip.Trigger>
-														<div class="flex items-center justify-center">
-															<LoaderCircle class="animate-spin" />
+											<div class="flex flex-col items-center justify-center">
+												<LoaderCircle class="h-5 w-5 animate-spin" />
+												<Label class="text-xs leading-4">Loading</Label>
+											</div>
+										{:else if cell.getValue() === "running" && instances.i[rowIndex].breakUpdateTime}
+											<div class="flex flex-col items-center justify-center">
+												<TerminalIcon class="text-primary h-5 w-5" />
+												<Label class="text-xs leading-4">
+													{#if cfg.c.cooldowns.breakTime.minHours === 0 && cfg.c.cooldowns.breakTime.maxHours === 0}
+														<div class="flex flex-row items-center">
+															For
+															<InfinityIcon class="ml-1 h-4 w-4" />
 														</div>
-													</Tooltip.Trigger>
-													<Tooltip.Content>Loading</Tooltip.Content>
-												</Tooltip.Root>
-											</Tooltip.Provider>
+													{:else}
+														For {timeRemaining[rowIndex]}h
+													{/if}
+												</Label>
+											</div>
+										{:else if cell.getValue() === "sleeping" && instances.i[rowIndex].breakUpdateTime}
+											<div class="flex flex-col items-center justify-center">
+												<PauseIcon class="h-5 w-5 text-orange-500" />
+												<Label class="text-xs leading-4">
+													For {timeRemaining[rowIndex]}h
+												</Label>
+											</div>
 										{/if}
 									</Table.Cell>
 								{:else if cell.column.id === "state" && cfg.c.accounts}
