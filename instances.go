@@ -150,7 +150,7 @@ func (d *DmgService) RemoveInstance(token string) {
 	for _, in := range d.instances {
 		if in.AccountCfg.Token != token {
 			instancesToKeep = append(instancesToKeep, in)
-		} else if in.State == "healthy" {
+		} else if in.State == "healthy" || in.State == "running" || in.State == "sleeping" {
 			wg.Add(1)
 			go func(in *instance.Instance) {
 				defer wg.Done()
@@ -212,7 +212,7 @@ func (d *DmgService) GetInstances() []*InstanceView {
 			AccountCfg:      i.AccountCfg,
 			LastRan:         i.LastRan,
 			State:           i.State,
-			BreakUpdateTime: i.BreakUpdateTime.String(),
+			BreakUpdateTime: i.BreakUpdateTime.Format(time.RFC3339),
 		}
 		instanceViews = append(instanceViews, instanceView)
 	}
