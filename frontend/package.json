@@ -53,7 +53,7 @@
 	"type": "module",
 	"dependencies": {
 		"@tanstack/table-core": "^8.20.5",
-		"@wailsio/runtime": "3.0.0-alpha.29",
+		"@wailsio/runtime": "3.0.0-alpha.55",
 		"lucide-svelte": "^0.474.0",
 		"svelte-radix": "^2.0.1"
 	}

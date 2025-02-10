@@ -2,8 +2,6 @@ package instance
 
 import (
 	"fmt"
-	"github.com/wailsapp/wails/v3/pkg/application"
-	"math/rand"
 	"reflect"
 	"strings"
 	"time"
@@ -18,47 +16,61 @@ func (in *Instance) CommandsLoop() {
 	for {
 		select {
 		case <-ticker.C:
-			breakOff := in.Cfg.Cooldowns.BreakTime.MinHours == 0 && in.Cfg.Cooldowns.BreakTime.MaxHours == 0
+			minBreakCooldown := in.Cfg.Cooldowns.BreakCooldown.MinHours
+			maxBreakCooldown := in.Cfg.Cooldowns.BreakCooldown.MaxHours
+			minBreakDuration := in.Cfg.Cooldowns.BreakDuration.MinHours
+			maxBreakDuration := in.Cfg.Cooldowns.BreakDuration.MaxHours
+			breakOff := minBreakDuration == 0 && maxBreakDuration == 0
 
-			if in.State == "healthy" {
+			if in.State == "ready" {
 				in.State = "running"
 				if !breakOff {
-					duration := time.Duration((utils.Rng.Float32()*(in.Cfg.Cooldowns.BreakCooldown.MaxHours-in.Cfg.Cooldowns.BreakCooldown.MinHours) + in.Cfg.Cooldowns.BreakCooldown.MinHours) * float32(time.Hour))
-					in.BreakUpdateTime = time.Now().Add(duration)
+					in.BreakUpdateTime = time.Now().Add(utils.RandHours(minBreakCooldown, maxBreakCooldown))
 				}
-				application.Get().EmitEvent("breakUpdate", in.AccountCfg.Token, in.State, in.BreakUpdateTime)
+				utils.EmitEventIfNotCLI("instanceUpdate", in.GetView())
 			} else if in.State == "running" && !breakOff {
 				if time.Now().After(in.BreakUpdateTime) {
 					in.State = "sleeping"
-					duration := time.Duration((utils.Rng.Float32()*(in.Cfg.Cooldowns.BreakTime.MaxHours-in.Cfg.Cooldowns.BreakTime.MinHours) + in.Cfg.Cooldowns.BreakTime.MinHours) * float32(time.Hour))
-					in.BreakUpdateTime = time.Now().Add(duration)
+					in.BreakUpdateTime = time.Now().Add(utils.RandHours(minBreakDuration, maxBreakDuration))
 					in.PauseCommands(true)
-					application.Get().EmitEvent("breakUpdate", in.AccountCfg.Token, in.State, in.BreakUpdateTime)
+					utils.EmitEventIfNotCLI("instanceUpdate", in.GetView())
 				}
 			} else if in.State == "sleeping" && !breakOff {
 				if time.Now().After(in.BreakUpdateTime) {
 					in.State = "running"
-					duration := time.Duration((utils.Rng.Float32()*(in.Cfg.Cooldowns.BreakCooldown.MaxHours-in.Cfg.Cooldowns.BreakCooldown.MinHours) + float32(in.Cfg.Cooldowns.BreakCooldown.MinHours)) * float32(time.Hour))
-					in.BreakUpdateTime = time.Now().Add(duration)
+					in.BreakUpdateTime = time.Now().Add(utils.RandHours(minBreakCooldown, maxBreakCooldown))
 					in.UnpauseCommands()
-					application.Get().EmitEvent("breakUpdate", in.AccountCfg.Token, in.State, in.BreakUpdateTime)
+					utils.EmitEventIfNotCLI("instanceUpdate", in.GetView())
+				} else if !in.IsPaused() {
+					in.PauseCommands(true)
+				}
+			} else if in.State == "waitingReady" {
+				if time.Now().After(in.BreakUpdateTime) {
+					in.State = "ready"
+					utils.EmitEventIfNotCLI("instanceUpdate", in.GetView())
 				}
 			}
 
 			if !in.IsPaused() && in.Cfg.State && in.AccountCfg.State {
 				commandsMap := in.Cfg.Commands.GetCommandsMap()
+				var readyCommands []string
+
 				for command := range commandsMap {
+					if shouldExecuteCommand(in, command) {
+						readyCommands = append(readyCommands, command)
+					}
+				}
+
+				for _, command := range readyCommands {
 					select {
 					case <-in.StopChan:
 						return
 					default:
-						minDelay := in.Cfg.Cooldowns.CommandInterval.MinDelay
-						maxDelay := in.Cfg.Cooldowns.CommandInterval.MaxDelay
-						<-utils.Sleep(time.Duration(rand.Intn(maxDelay-minDelay)+minDelay) * time.Millisecond)
-
-						if !shouldExecuteCommand(in, command) {
-							continue
+						if in.IsPaused() || !in.Cfg.State || !in.AccountCfg.State {
+							break
 						}
+
+						<-utils.Sleep(utils.RandSeconds(in.Cfg.Cooldowns.CommandInterval.MinSeconds, in.Cfg.Cooldowns.CommandInterval.MaxSeconds))
 
 						in.LastRan[command] = time.Now().Add(2 * time.Second)
 						var err error

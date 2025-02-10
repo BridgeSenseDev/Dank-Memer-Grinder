@@ -179,7 +179,8 @@ func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
 				utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), result.Message)
 				lastAutoBuy = time.Now()
 
-				<-utils.Sleep(time.Duration(utils.Rng.Intn(5-2)+2) * time.Second)
+				// Avoid hold tight error
+				<-utils.Sleep(utils.RandSeconds(2, 5))
 
 				if result.Success {
 					autoBuySuccess = true
@@ -197,7 +198,8 @@ func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
 				utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), "Fish shop autobuy timed out")
 				lastAutoBuy = time.Now()
 
-				<-utils.Sleep(time.Duration(utils.Rng.Intn(5-2)+2) * time.Second)
+				// Avoid hold tight error
+				<-utils.Sleep(utils.RandSeconds(2, 5))
 
 				in.UnpauseCommands()
 			}
@@ -206,14 +208,14 @@ func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
 		if strings.Contains(embed.Description, "You have no more bucket space") {
 			in.LastRan["Fish"] = time.Now()
 
-			// Send fish buckets command
-			<-utils.Sleep(2 * time.Second)
+			<-utils.Sleep(utils.RandSeconds(2, 5))
 			err := in.SendSubCommand("fish", "buckets", nil, false)
 			if err != nil {
 				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to send fish buckets command: %s", err.Error()))
 			}
 		} else if strings.Contains(message.Embeds[1].Description, "Bare Hand") {
-			<-utils.Sleep(2 * time.Second)
+			// Avoid hold tight error
+			<-utils.Sleep(utils.RandSeconds(2, 5))
 			err := in.ClickButton(message, 0, 0)
 			if err != nil {
 				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click go back button: %s", err.Error()))
@@ -237,10 +239,7 @@ func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
 
 				cooldown := time.Duration(ts-time.Now().Unix()) * time.Second
 
-				randomDelay := time.Duration(utils.Rng.Intn(in.Cfg.Cooldowns.CommandInterval.MaxDelay-in.Cfg.Cooldowns.CommandInterval.MinDelay)+
-					in.Cfg.Cooldowns.CommandInterval.MinDelay) * time.Millisecond
-
-				<-utils.Sleep(cooldown + randomDelay)
+				<-utils.Sleep(cooldown + utils.RandSeconds(in.Cfg.Commands.Fish.FishOnlyDelay.MinSeconds, in.Cfg.Commands.Fish.FishOnlyDelay.MaxSeconds))
 
 				if in.IsPaused() {
 					return

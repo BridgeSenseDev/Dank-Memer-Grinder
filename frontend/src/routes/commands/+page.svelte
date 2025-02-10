@@ -13,6 +13,7 @@
 		type CommandsConfig,
 		FishLocation
 	} from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/config";
+	import { Slider } from "$lib/components/ui/slider";
 
 	function formatString(input: string): string {
 		return input
@@ -120,6 +121,20 @@
 			}
 		}
 	}
+
+	let fishOnlyDelay = $state([
+		commands["fish"].fishOnlyDelay.minSeconds,
+		commands["fish"].fishOnlyDelay.maxSeconds
+	]);
+
+	$effect(() => {
+		if (commands.fish.fishOnly) {
+			fishOnlyDelay = [
+				commands["fish"].fishOnlyDelay.minSeconds,
+				commands["fish"].fishOnlyDelay.maxSeconds
+			];
+		}
+	});
 </script>
 
 <div
@@ -135,10 +150,6 @@
 				<Card.Header>
 					<div class="flex items-center space-x-2">
 						<Card.Title>{formatString(commandKey)}</Card.Title>
-						<!--
-							Disable toggles (other than fish) when fishOnly is active.
-							Additionally, assume the "fishOnly" toggle exists as a command.
-						-->
 						<Switch
 							id={commandKey}
 							bind:checked={commands[commandKey].state}
@@ -232,7 +243,7 @@
 											{formatString(optionKey)}
 										</Label>
 									</div>
-								{:else if typeof commands[commandKey][optionKey] === "object"}
+								{:else if commands[commandKey][optionKey] instanceof Array}
 									<div class="flex w-full flex-row items-center space-x-2">
 										<Label class="whitespace-nowrap" for={`${commandKey}_${optionKey}`}>
 											{formatString(optionKey)}
@@ -253,6 +264,20 @@
 												oninput={(e) => updateCfg(commandKey, optionKey, e)}
 											/>
 										{/if}
+									</div>
+								{:else if optionKey === "fishOnlyDelay" && commands.fish.fishOnly}
+									<div class="flex w-1/2 flex-row items-center space-x-2">
+										<Label class="whitespace-nowrap" for={`${commandKey}_${optionKey}`}>
+											{formatString(optionKey)}
+											({fishOnlyDelay[0].toFixed(1)} - {fishOnlyDelay[1].toFixed(1)} seconds)
+										</Label>
+										<Slider
+											type="multiple"
+											bind:value={fishOnlyDelay}
+											max={20}
+											min={0}
+											step={0.1}
+										/>
 									</div>
 								{/if}
 							{/if}

@@ -13,9 +13,16 @@
 		UpdateInstanceToken
 	} from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/dmgservice";
 	import { cfg, instances } from "$lib/state.svelte";
-	import { InfinityIcon, LoaderCircle, PauseIcon, TerminalIcon } from "lucide-svelte";
+	import {
+		HourglassIcon,
+		InfinityIcon,
+		LoaderCircle,
+		LoaderIcon,
+		PauseIcon,
+		Play,
+		TerminalIcon
+	} from "lucide-svelte";
 	import { Label } from "$lib/components/ui/label";
-	import { onMount } from "svelte";
 
 	interface DataTableProps<TData, TValue> {
 		columns: ColumnDef<TData, TValue>[];
@@ -32,35 +39,23 @@
 		getCoreRowModel: getCoreRowModel()
 	});
 
-	let hasChanges = $state(false);
-	function setHasChanges() {
-		hasChanges = true;
-	}
-
 	let isRestarting = $state(false);
 	async function restartAllBots() {
 		isRestarting = true;
 		await RestartInstances();
-		hasChanges = false;
 		isRestarting = false;
 	}
 
-	let timeRemaining: string[] = $state([]);
+	function formatTimeRemaining(time?: string) {
+		if (!time) {
+			return "";
+		}
 
-	function updateTimeRemaining() {
-		if (instances && instances.i) {
-			timeRemaining = instances.i.map((instance) => {
-				if (instance.breakUpdateTime) {
-					const diff = new Date(instance.breakUpdateTime).getTime() - new Date().getTime();
-					if (diff > 0) {
-						return (diff / 1000 / 60 / 60).toFixed(2);
-					} else {
-						return "0.00";
-					}
-				} else {
-					return "";
-				}
-			});
+		const diff = new Date(time).getTime() - new Date().getTime();
+		if (diff > 0) {
+			return (diff / 1000 / 60 / 60).toFixed(2);
+		} else {
+			return "0.00";
 		}
 	}
 
@@ -70,7 +65,7 @@
 				const instance = instances.i.find(
 					(instance) => instance.accountCfg.token === account.token
 				);
-				const status = instance?.state ? instance.state : "reload";
+				const status = instance?.state ? instance.state : "initial";
 				return {
 					status,
 					token: account.token,
@@ -79,14 +74,7 @@
 					state: account.state
 				};
 			});
-			updateTimeRemaining();
 		}
-	});
-
-	onMount(() => {
-		const intervalId = setInterval(updateTimeRemaining, 60 * 1000);
-
-		return () => clearInterval(intervalId);
 	});
 
 	function tokenUpdate(rowIndex: number, event: Event) {
@@ -96,7 +84,6 @@
 			const oldToken = cfg.c.accounts[rowIndex].token;
 			UpdateInstanceToken(oldToken, newToken);
 			cfg.c.accounts[rowIndex].token = newToken;
-			hasChanges = true;
 		}
 	}
 
@@ -133,10 +120,10 @@
 							{#each row.getVisibleCells() as cell (cell.id)}
 								{#if cell.column.id === "status"}
 									<Table.Cell class="w-18 p-0 text-center">
-										{#if cell.getValue() === "healthy"}
+										{#if cell.getValue() === "ready"}
 											<div class="flex flex-col items-center justify-center">
 												<Check class="text-primary h-5 w-5" />
-												<Label class="text-xs leading-4">Connected</Label>
+												<Label class="text-xs leading-4">Ready</Label>
 											</div>
 										{:else if cell.getValue() === "invalidToken"}
 											<div class="flex flex-col items-center justify-center">
@@ -148,31 +135,60 @@
 												<ExclamationTriangle class="h-5 w-5 text-yellow-500" />
 												<Label class="text-xs leading-4">Channel ID</Label>
 											</div>
-										{:else if cell.getValue() === "reload"}
+										{:else if cell.getValue() === "initial"}
 											<div class="flex flex-col items-center justify-center">
 												<LoaderCircle class="h-5 w-5 animate-spin" />
-												<Label class="text-xs leading-4">Loading</Label>
+												<Label class="text-xs leading-4">Waiting</Label>
 											</div>
-										{:else if cell.getValue() === "running" && instances.i[rowIndex].breakUpdateTime}
+										{:else if cell.getValue() === "waitingUnready"}
+											<div class="flex flex-col items-center justify-center">
+												<LoaderCircle class="h-5 w-5 animate-spin" />
+												<Label class="text-xs leading-4">Waiting</Label>
+											</div>
+										{:else if cell.getValue() === "restarting"}
+											<div class="flex flex-col items-center justify-center">
+												<LoaderIcon class="h-5 w-5 animate-spin" />
+												<Label class="text-xs leading-4">Restarting</Label>
+											</div>
+										{:else if cell.getValue() === "waitingReady" && cfg.c.accounts && instances.findInstance(cfg.c.accounts[rowIndex].token)?.breakUpdateTime}
+											<div class="flex flex-col items-center justify-center">
+												<HourglassIcon class="h-5 w-5" />
+												<Label class="text-xs leading-4">
+													Left: {formatTimeRemaining(
+														instances.findInstance(cfg.c.accounts[rowIndex].token)?.breakUpdateTime
+													) ?? "0.00"}h
+												</Label>
+											</div>
+										{:else if cell.getValue() === "running" && cfg.c.accounts && instances.findInstance(cfg.c.accounts[rowIndex].token)?.breakUpdateTime}
 											<div class="flex flex-col items-center justify-center">
 												<TerminalIcon class="text-primary h-5 w-5" />
 												<Label class="text-xs leading-4">
-													{#if cfg.c.cooldowns.breakTime.minHours === 0 && cfg.c.cooldowns.breakTime.maxHours === 0}
+													{#if cfg.c.cooldowns.breakDuration.minHours === 0 && cfg.c.cooldowns.breakDuration.maxHours === 0}
 														<div class="flex flex-row items-center">
-															For
+															Left:
 															<InfinityIcon class="ml-1 h-4 w-4" />
 														</div>
 													{:else}
-														For {timeRemaining[rowIndex]}h
+														Left: {formatTimeRemaining(
+															instances.findInstance(cfg.c.accounts[rowIndex].token)
+																?.breakUpdateTime
+														) ?? "0.00"}h
 													{/if}
 												</Label>
 											</div>
-										{:else if cell.getValue() === "sleeping" && instances.i[rowIndex].breakUpdateTime}
+										{:else if cell.getValue() === "sleeping" && cfg.c.accounts && instances.findInstance(cfg.c.accounts[rowIndex].token)?.breakUpdateTime}
 											<div class="flex flex-col items-center justify-center">
 												<PauseIcon class="h-5 w-5 text-orange-500" />
 												<Label class="text-xs leading-4">
-													For {timeRemaining[rowIndex]}h
+													For {formatTimeRemaining(
+														instances.findInstance(cfg.c.accounts[rowIndex].token)?.breakUpdateTime
+													) ?? "0.00"}h
 												</Label>
+											</div>
+										{:else if cell.getValue() === "starting"}
+											<div class="flex flex-col items-center justify-center">
+												<Play class="h-5 w-5 text-green-500" />
+												<Label class="text-xs leading-4">Starting</Label>
 											</div>
 										{/if}
 									</Table.Cell>
@@ -193,11 +209,7 @@
 									</Table.Cell>
 								{:else if cell.column.id === "channelID" && cfg.c.accounts}
 									<Table.Cell class="w-48 text-center">
-										<Input
-											type="text"
-											bind:value={cfg.c.accounts[rowIndex].channelID}
-											oninput={setHasChanges}
-										></Input>
+										<Input type="text" bind:value={cfg.c.accounts[rowIndex].channelID}></Input>
 									</Table.Cell>
 								{:else}
 									<Table.Cell class="text-center">
@@ -216,11 +228,7 @@
 		</div>
 		<AddAccounts />
 	</div>
-	<Button
-		class="sticky text-base font-semibold"
-		disabled={!hasChanges || isRestarting}
-		onclick={restartAllBots}
-	>
+	<Button class="sticky text-base font-semibold" disabled={isRestarting} onclick={restartAllBots}>
 		{#if isRestarting}
 			<LoaderCircle class="animate-spin" /> Restarting...
 		{:else}

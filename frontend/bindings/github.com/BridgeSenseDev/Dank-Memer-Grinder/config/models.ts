@@ -56,11 +56,6 @@ export interface BlackjackCommandConfig {
     "manuallyRunCommands": boolean;
 }
 
-export interface BreakTime {
-    "minHours": number;
-    "maxHours": number;
-}
-
 export interface CommandsConfig {
     "adventure": AdventureCommandConfig;
     "beg": GeneralCommandConfig;
@@ -87,6 +82,7 @@ export interface Config {
     "gui": GuiConfig;
     "readAlerts": boolean;
     "discordStatus": types$0.OnlineStatus;
+    "eventsCorrectChance": number;
     "cooldowns": Cooldowns;
     "accounts": AccountsConfig[] | null;
     "autoBuy": AutoBuyConfig;
@@ -96,10 +92,12 @@ export interface Config {
 }
 
 export interface Cooldowns {
-    "buttonClickDelay": Delays;
-    "commandInterval": Delays;
-    "breakCooldown": BreakTime;
-    "breakTime": BreakTime;
+    "buttonClickDelay": DelaySeconds;
+    "commandInterval": DelaySeconds;
+    "breakCooldown": DelayHours;
+    "breakDuration": DelayHours;
+    "startDelay": DelayMinutes;
+    "eventDelay": DelaySeconds;
 }
 
 export interface CrimeCommandConfig {
@@ -110,15 +108,26 @@ export interface CrimeCommandConfig {
     "avoid": string[] | null;
 }
 
-export interface Delays {
-    "minDelay": number;
-    "maxDelay": number;
+export interface DelayHours {
+    "minHours": number;
+    "maxHours": number;
+}
+
+export interface DelayMinutes {
+    "minMinutes": number;
+    "maxMinutes": number;
+}
+
+export interface DelaySeconds {
+    "minSeconds": number;
+    "maxSeconds": number;
 }
 
 export interface FishCommandConfig {
     "state": boolean;
     "delay": number;
     "fishOnly": boolean;
+    "fishOnlyDelay": DelaySeconds;
     "autoCompleteTasks": boolean;
     "autoCompleteTradeOffers": boolean;
     "autoEquipment": boolean;

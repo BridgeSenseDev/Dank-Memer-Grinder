@@ -67,6 +67,13 @@ A detailed breakdown of features are available in our [**<u>documentation</u>**]
 - [Commands](https://docs.dankmemer.tools/features/commands)
 - [Minigames](https://docs.dankmemer.tools/features/minigames)
 
+## Credits
+- [dgate](https://github.com/LuminalDev/dgate)
+- [disgo](https://github.com/disgoorg/disgo)
+- [catchtwo](https://github.com/kyan0045/CatchTwo)
+- [slashy](https://github.com/TahaGorme/slashy)
+
+## Star History
 <div align="center">
   <a href="https://star-history.com/#bridgesensedev/dank-memer-grinder&Date">
     <img src="https://api.star-history.com/svg?repos=BridgeSenseDev/Dank-Memer-Grinder&type=Date" 

@@ -127,7 +127,8 @@ func (in *Instance) StartAutoBuy(command string, subCommand string) <-chan AutoB
 			return in.AutoBuyResultChan
 		}
 
-		<-utils.Sleep(1 * time.Second)
+		// Wait for withdraw
+		<-utils.Sleep(utils.RandSeconds(1, 4))
 	}
 
 	err := in.SendSubCommand(command, subCommand, nil, true)
@@ -166,7 +167,7 @@ func (in *Instance) AutoBuyMessageCreate(message gateway.EventMessage) {
 	} else if embed.Title == "Your lifesaver protected you!" && in.Cfg.AutoBuy.LifeSavers.State {
 		re := regexp.MustCompile(`You have (\d+) Life Saver left`)
 		match := re.FindStringSubmatch(message.Components[0].(*types.ActionsRow).Components[0].(*types.Button).Label)
-		fmt.Println(match)
+
 		if len(match) > 1 {
 			remaining, err := strconv.Atoi(match[1])
 			if err != nil {

@@ -2,7 +2,7 @@
 	import { Trash, Reload } from "svelte-radix";
 	import * as Tooltip from "$lib/components/ui/tooltip/index.js";
 	import { Button } from "$lib/components/ui/button";
-	import { cfg } from "$lib/state.svelte";
+	import { cfg, instances } from "$lib/state.svelte";
 	import {
 		RemoveInstance,
 		RestartInstance
@@ -15,7 +15,9 @@
 	let { id }: Props = $props();
 
 	async function deleteInstance(token: string) {
-		RemoveInstance(token);
+		RemoveInstance(token, false);
+		// remove instance
+		instances.i = instances.i.filter((instance) => instance.accountCfg.token !== token);
 		if (cfg.c.accounts) {
 			cfg.c.accounts = cfg.c.accounts.filter((account) => account.token !== token);
 		}

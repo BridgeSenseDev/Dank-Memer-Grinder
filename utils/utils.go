@@ -18,6 +18,18 @@ import (
 var src = rand.NewSource(time.Now().UnixNano())
 var Rng = rand.New(src)
 
+func RandSeconds(min, max float32) time.Duration {
+	return time.Duration((min + Rng.Float32()*(max-min)) * float32(time.Second))
+}
+
+func RandMinutes(min, max float32) time.Duration {
+	return time.Duration((min + Rng.Float32()*(max-min)) * float32(time.Minute))
+}
+
+func RandHours(min, max float32) time.Duration {
+	return time.Duration((min + Rng.Float32()*(max-min)) * float32(time.Hour))
+}
+
 func Contains(slice []string, item string) bool {
 	for _, a := range slice {
 		if a == item {

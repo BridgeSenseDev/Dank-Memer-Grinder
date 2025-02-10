@@ -89,6 +89,7 @@ const (
 type FishCommandConfig struct {
 	GeneralCommandConfig
 	FishOnly                bool           `json:"fishOnly"`
+	FishOnlyDelay           DelaySeconds   `json:"fishOnlyDelay"`
 	AutoCompleteTasks       bool           `json:"autoCompleteTasks"`
 	AutoCompleteTradeOffers bool           `json:"autoCompleteTradeOffers"`
 	AutoEquipment           bool           `json:"autoEquipment"`

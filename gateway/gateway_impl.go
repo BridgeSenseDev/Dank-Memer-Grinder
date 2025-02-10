@@ -77,8 +77,6 @@ func (g *gatewayImpl) Open(ctx context.Context) error {
 }
 
 func (g *gatewayImpl) open(ctx context.Context) error {
-	utils.Log(utils.Discord, utils.Info, g.SafeGetUsername(), "Opening gateway connection")
-
 	g.connMu.Lock()
 	defer g.connMu.Unlock()
 	if g.conn != nil {
@@ -125,7 +123,6 @@ func (g *gatewayImpl) Close(ctx context.Context) {
 
 func (g *gatewayImpl) CloseWithCode(ctx context.Context, code int, message string) {
 	if g.heartbeatCancel != nil {
-		utils.Log(utils.Discord, utils.Info, g.SafeGetUsername(), "Closing heartbeat goroutines...")
 		g.heartbeatCancel()
 	}
 
@@ -226,7 +223,6 @@ func (g *gatewayImpl) heartbeat() {
 
 	heartbeatTicker := time.NewTicker(g.heartbeatInterval)
 	defer heartbeatTicker.Stop()
-	defer utils.Log(utils.Discord, utils.Info, g.SafeGetUsername(), "Closing heartbeat goroutines...")
 
 	for {
 		select {
@@ -258,7 +254,6 @@ func (g *gatewayImpl) sendHeartbeat() {
 
 func (g *gatewayImpl) identify() {
 	g.statusChan <- StatusIdentifying
-	utils.Log(utils.Discord, utils.Info, g.SafeGetUsername(), "Sending Identify command")
 
 	identify := MessageDataIdentify{
 		Capabilities: 30717,
@@ -307,7 +302,6 @@ func (g *gatewayImpl) resume() {
 }
 
 func (g *gatewayImpl) listen(conn *websocket.Conn) {
-	defer utils.Log(utils.Discord, utils.Info, g.SafeGetUsername(), "Exiting listen goroutine")
 	g.statusChan <- StatusWaitingForHello
 
 loop:
@@ -443,8 +437,6 @@ loop:
 
 func (g *gatewayImpl) parseMessage(mt int, r io.Reader) (Message, error) {
 	if mt == websocket.BinaryMessage {
-		utils.Log(utils.Discord, utils.Info, g.SafeGetUsername(), "Binary message received. decompressing")
-
 		reader, err := zlib.NewReader(r)
 		if err != nil {
 			return Message{}, fmt.Errorf("failed to decompress zlib: %w", err)

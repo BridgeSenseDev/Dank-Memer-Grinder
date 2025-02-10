@@ -8,6 +8,7 @@ import (
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -27,7 +28,7 @@ func init() {
 func (in *Instance) EventsMessageCreate(message gateway.EventMessage) {
 	embed := message.Embeds[0]
 
-	if embed.Color == 16044763 {
+	if embed.Color == 16044763 && in.Cfg.EventsCorrectChance != 0 {
 		// General random events color
 		if embed.Title == "Trivia Night" {
 			re := regexp.MustCompile(`\*\*(.*?)\*\*`)
@@ -40,7 +41,7 @@ func (in *Instance) EventsMessageCreate(message gateway.EventMessage) {
 					continue
 				}
 
-				condition := utils.Rng.Float64() > in.Cfg.Commands.Trivia.TriviaCorrectChance
+				condition := utils.Rng.Float32() > in.Cfg.EventsCorrectChance
 				if !condition {
 					answer = ans.(string)
 				} else {
@@ -66,7 +67,7 @@ func (in *Instance) EventsMessageCreate(message gateway.EventMessage) {
 			for _, line := range lines {
 				line = strings.TrimSpace(strings.TrimPrefix(line, "-"))
 				if line == answer {
-					<-utils.Sleep(time.Duration(utils.Rng.Intn(5-2)+2) * time.Second)
+					<-utils.Sleep(utils.RandSeconds(in.Cfg.Cooldowns.EventDelay.MinSeconds, in.Cfg.Cooldowns.EventDelay.MaxSeconds))
 					err := in.SendChatMessage(strings.ToLower(answer), true)
 					if err != nil {
 						utils.Log(utils.Important, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to send trivia night chat message: %s", err.Error()))
@@ -78,7 +79,7 @@ func (in *Instance) EventsMessageCreate(message gateway.EventMessage) {
 			re := regexp.MustCompile(`"([^"]+)"`)
 			match := re.FindStringSubmatch(embed.Description)
 			if len(match) > 1 {
-				<-utils.Sleep(time.Duration(utils.Rng.Intn(5-2)+2) * time.Second)
+				<-utils.Sleep(utils.RandSeconds(in.Cfg.Cooldowns.EventDelay.MinSeconds, in.Cfg.Cooldowns.EventDelay.MaxSeconds))
 				err := in.SendChatMessage(strings.ToLower(match[1]), true)
 				if err != nil {
 					utils.Log(utils.Important, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to send first to say chat message: %s", err.Error()))
@@ -93,7 +94,7 @@ func (in *Instance) EventsMessageCreate(message gateway.EventMessage) {
 					runes[i], runes[j] = runes[j], runes[i]
 				}
 
-				<-utils.Sleep(time.Duration(utils.Rng.Intn(5-2)+2) * time.Second)
+				<-utils.Sleep(utils.RandSeconds(in.Cfg.Cooldowns.EventDelay.MinSeconds, in.Cfg.Cooldowns.EventDelay.MaxSeconds))
 				err := in.SendChatMessage(strings.ToLower(string(runes)), true)
 				if err != nil {
 					utils.Log(utils.Important, utils.Error, in.SafeGetUsername(),
@@ -124,7 +125,7 @@ func (in *Instance) EventsMessageCreate(message gateway.EventMessage) {
 				}
 			}
 
-			<-utils.Sleep(time.Duration(utils.Rng.Intn(5-2)+2) * time.Second)
+			<-utils.Sleep(utils.RandSeconds(in.Cfg.Cooldowns.EventDelay.MinSeconds, in.Cfg.Cooldowns.EventDelay.MaxSeconds))
 			err := in.SendChatMessage(strings.ToLower(strings.Join(result, " ")), true)
 			if err != nil {
 				utils.Log(utils.Important, utils.Error, in.SafeGetUsername(),
@@ -170,10 +171,19 @@ func (in *Instance) EventsMessageCreate(message gateway.EventMessage) {
 				return
 			}
 
-			err := in.SendChatMessage(strings.ToLower(imageName), true)
-			if err != nil {
-				utils.Log(utils.Important, utils.Error, in.SafeGetUsername(),
-					fmt.Sprintf("Failed to send fish guesser chat message: %s", err.Error()))
+			if utils.Rng.Float32() > in.Cfg.EventsCorrectChance {
+				// Send random wrong answer
+				err := in.SendChatMessage(strings.ToLower(emojis[strconv.Itoa(utils.Rng.Intn(len(emojis)))].(string)), true)
+				if err != nil {
+					utils.Log(utils.Important, utils.Error, in.SafeGetUsername(),
+						fmt.Sprintf("Failed to send random fish guesser chat message: %s", err.Error()))
+				}
+			} else {
+				err := in.SendChatMessage(strings.ToLower(imageName), true)
+				if err != nil {
+					utils.Log(utils.Important, utils.Error, in.SafeGetUsername(),
+						fmt.Sprintf("Failed to send fish guesser chat message: %s", err.Error()))
+				}
 			}
 		} else if embed.Title == "Dice Champs" {
 			err := in.ClickButton(message, 0, 0)

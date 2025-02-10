@@ -27,16 +27,22 @@ type Client interface {
 	GetAuthorizationCode() (string, error)
 }
 
+type View struct {
+	User            *types.User           `json:"user"`
+	AccountCfg      config.AccountsConfig `json:"accountCfg"`
+	State           string                `json:"state,omitempty"`
+	BreakUpdateTime string                `json:"breakUpdateTime,omitempty"`
+}
+
 type Instance struct {
-	User              *types.User           `json:"user"`
-	Client            Client                `json:"client"`
-	ChannelID         string                `json:"channelID"`
-	GuildID           string                `json:"guildID"`
-	Cfg               config.Config         `json:"config"`
-	AccountCfg        config.AccountsConfig `json:"accountCfg"`
-	LastRan           map[string]time.Time  `json:"lastRan"`
-	StopChan          chan struct{}         `json:"stopChan"`
-	State             string                `json:"state,omitempty"`
+	User              *types.User
+	Client            Client
+	GuildID           string
+	Cfg               config.Config
+	AccountCfg        config.AccountsConfig
+	LastRan           map[string]time.Time
+	StopChan          chan struct{}
+	State             string
 	Ctx               context.Context
 	IsRestarting      bool
 	AutoBuyResultChan chan AutoBuyResult
@@ -44,6 +50,48 @@ type Instance struct {
 	commandsWg        sync.WaitGroup
 	pauseCount        int
 	pauseMutex        sync.Mutex
+	isStopping        bool
+	stopMutex         sync.Mutex
+}
+
+func NewInstance(
+	user *types.User,
+	client Client,
+	guildID string,
+	cfg config.Config,
+	accountCfg config.AccountsConfig,
+	state string,
+	breakUpdateTime time.Time,
+	ctx context.Context,
+) *Instance {
+	return &Instance{
+		User:              user,
+		Client:            client,
+		GuildID:           guildID,
+		Cfg:               cfg,
+		AccountCfg:        accountCfg,
+		LastRan:           make(map[string]time.Time),
+		StopChan:          make(chan struct{}),
+		State:             state,
+		Ctx:               ctx,
+		IsRestarting:      false,
+		AutoBuyResultChan: make(chan AutoBuyResult),
+		BreakUpdateTime:   breakUpdateTime,
+		commandsWg:        sync.WaitGroup{},
+		pauseCount:        0,
+		pauseMutex:        sync.Mutex{},
+		isStopping:        false,
+		stopMutex:         sync.Mutex{},
+	}
+}
+
+func (in *Instance) GetView() *View {
+	return &View{
+		User:            in.User,
+		AccountCfg:      in.AccountCfg,
+		State:           in.State,
+		BreakUpdateTime: in.BreakUpdateTime.Format(time.RFC3339),
+	}
 }
 
 func (in *Instance) SafeGetUsername() string {
@@ -81,11 +129,31 @@ func (in *Instance) Start() error {
 }
 
 func (in *Instance) Stop() {
+	in.stopMutex.Lock()
+	defer in.stopMutex.Unlock()
+
+	if in.isStopping {
+		utils.Log(
+			utils.Important,
+			utils.Info,
+			in.SafeGetUsername(),
+			"Stop already in progress, skipping",
+		)
+		return
+	}
+
+	in.isStopping = true
+	defer func() {
+		in.isStopping = false
+	}()
+
 	utils.Log(utils.Important, utils.Info, in.SafeGetUsername(), "Stopping instance")
 	close(in.StopChan)
 	in.commandsWg.Wait()
-	in.Client.Close()
-	in.Client = nil
+	if in.Client != nil {
+		in.Client.Close()
+		in.Client = nil
+	}
 	time.Sleep(500 * time.Millisecond)
 }
 
@@ -198,7 +266,7 @@ func (in *Instance) shouldHandleMessage(message gateway.EventMessage) bool {
 }
 
 func (in *Instance) getMessageType(message gateway.EventMessage) string {
-	if message.ChannelID == in.ChannelID {
+	if message.ChannelID == in.AccountCfg.ChannelID {
 		return "channel"
 	} else if message.GuildID == "" {
 		return "dm"

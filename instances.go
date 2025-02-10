@@ -9,41 +9,24 @@ import (
 
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/config"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/instance"
 )
 
-type InstanceView struct {
-	User            *types.User           `json:"user"`
-	ChannelID       string                `json:"channelID"`
-	GuildID         string                `json:"guildID"`
-	Cfg             config.Config         `json:"config"`
-	AccountCfg      config.AccountsConfig `json:"accountCfg"`
-	LastRan         map[string]time.Time  `json:"lastRan"`
-	Pause           bool                  `json:"pause"`
-	State           string                `json:"state,omitempty"`
-	BreakUpdateTime string                `json:"breakUpdateTime,omitempty"`
-}
-
-func (d *DmgService) StartInstance(account config.AccountsConfig) {
+func (d *DmgService) StartInstance(account config.AccountsConfig, readyState string, breakUpdateTime time.Time) {
 	d.wg.Add(1)
 	go func() {
 		defer d.wg.Done()
 		client := discord.NewClient(d.ctx, account.Token)
 
 		var readyOnce sync.Once
-		client.AddHandler(gateway.EventTypeReady, func(e gateway.EventReady) {
+		err := client.AddHandler(gateway.EventTypeReady, func(e gateway.EventReady) {
 			readyOnce.Do(func() {
 				client.ChannelID = account.ChannelID
 				guildID, err := client.GetGuildID(account.ChannelID)
 				if err != nil {
 					utils.Log(utils.Discord, utils.Error, client.SafeGetUsername(), fmt.Sprintf("Failed to fetch GuildID from channelID %v: %s", account.ChannelID, err.Error()))
-					in := &instance.Instance{
-						AccountCfg: account,
-						State:      "invalidChannelID",
-					}
-					d.instances = append(d.instances, in)
-					utils.EmitEventIfNotCLI("instancesUpdate", d.GetInstances())
+					in := instance.NewInstance(nil, nil, "", *d.cfg, account, "invalidChannelID", time.Now(), d.ctx)
+					d.UpdateInstance(in)
 					return
 				}
 				client.GuildID = guildID
@@ -77,21 +60,9 @@ func (d *DmgService) StartInstance(account config.AccountsConfig) {
 
 				client.CommandsData = &commandDataSlice
 
-				in := &instance.Instance{
-					User:       client.Gateway.User(),
-					Client:     client,
-					ChannelID:  account.ChannelID,
-					GuildID:    client.GuildID,
-					Cfg:        *d.cfg,
-					AccountCfg: account,
-					LastRan:    make(map[string]time.Time),
-					StopChan:   make(chan struct{}),
-					State:      "healthy",
-					Ctx:        d.ctx,
-				}
+				in := instance.NewInstance(client.Gateway.User(), client, client.GuildID, *d.cfg, account, readyState, breakUpdateTime, d.ctx)
 
-				d.instances = append(d.instances, in)
-				utils.EmitEventIfNotCLI("instancesUpdate", d.GetInstances())
+				d.UpdateInstance(in)
 
 				d.UpdateDiscordStatus(d.cfg.DiscordStatus)
 
@@ -102,18 +73,17 @@ func (d *DmgService) StartInstance(account config.AccountsConfig) {
 				utils.Log(utils.Important, utils.Info, in.SafeGetUsername(), fmt.Sprintf("Logged in as %s", e.User.Username))
 			})
 		})
+		if err != nil {
+			utils.Log(utils.Important, utils.Info, client.SafeGetUsername(), fmt.Sprintf("Failed to add ready handler: %s", err.Error()))
+			return
+		}
 
-		err := client.Connect()
+		err = client.Connect()
 
 		if err != nil {
 			utils.Log(utils.Important, utils.Error, "", fmt.Sprintf("Failed to connect: %v", err.Error()))
-			in := &instance.Instance{
-				AccountCfg: account,
-				State:      "invalidToken",
-			}
-
-			d.instances = append(d.instances, in)
-			utils.EmitEventIfNotCLI("instancesUpdate", d.GetInstances())
+			in := instance.NewInstance(nil, nil, "", *d.cfg, account, "invalidToken", time.Now(), d.ctx)
+			d.UpdateInstance(in)
 		}
 
 		statusChan := client.Gateway.StatusUpdates()
@@ -123,13 +93,8 @@ func (d *DmgService) StartInstance(account config.AccountsConfig) {
 			case status := <-statusChan:
 				switch status {
 				case gateway.StatusInvalidToken:
-					in := &instance.Instance{
-						AccountCfg: account,
-						State:      "invalidToken",
-					}
-
-					d.instances = append(d.instances, in)
-					utils.EmitEventIfNotCLI("instancesUpdate", d.GetInstances())
+					in := instance.NewInstance(nil, nil, "", *d.cfg, account, "invalidToken", time.Now(), d.ctx)
+					d.UpdateInstance(in)
 					break
 				default:
 				}
@@ -139,83 +104,102 @@ func (d *DmgService) StartInstance(account config.AccountsConfig) {
 			}
 		}
 	}()
-
-	time.Sleep(5 * time.Second)
 }
 
-func (d *DmgService) RemoveInstance(token string) {
-	var wg sync.WaitGroup
-	instancesToKeep := make([]*instance.Instance, 0, len(d.instances))
+func (d *DmgService) RemoveInstance(token string, restarting bool) {
+	in := d.instances[d.GetIndex(token)]
 
-	for _, in := range d.instances {
-		if in.AccountCfg.Token != token {
-			instancesToKeep = append(instancesToKeep, in)
-		} else if in.State == "healthy" || in.State == "running" || in.State == "sleeping" {
-			wg.Add(1)
-			go func(in *instance.Instance) {
-				defer wg.Done()
-				in.Stop()
-			}(in)
-		}
+	if restarting {
+		in.State = "restarting"
+		utils.EmitEventIfNotCLI("instanceUpdate", in.GetView())
 	}
 
-	wg.Wait()
-	d.instances = instancesToKeep
-	utils.EmitEventIfNotCLI("instancesUpdate", d.GetInstances())
-}
+	in.Stop()
 
-func (d *DmgService) RestartInstance(token string) {
-	d.RemoveInstance(token)
-
-	var accountToRestart config.AccountsConfig
-	for _, account := range d.cfg.Accounts {
-		if account.Token == token {
-			accountToRestart = account
-			break
-		}
-	}
-
-	if accountToRestart.Token != "" {
-		d.StartInstance(accountToRestart)
-	} else {
-		utils.Log(utils.Important, utils.Error, "", fmt.Sprintf("No account found with token %s", token))
+	if !restarting {
+		d.instances = append(
+			d.instances[:d.GetIndex(token)],
+			d.instances[d.GetIndex(token)+1:]...,
+		)
 	}
 }
 
-func (d *DmgService) processAccounts(accounts []config.AccountsConfig, action func(config.AccountsConfig)) {
-	for _, account := range accounts {
-		action(account)
+func (d *DmgService) RestartInstance(token string) *instance.View {
+	d.RemoveInstance(token, true)
+	in := d.instances[d.GetIndex(token)]
+
+	d.StartInstance(in.AccountCfg, "ready", time.Now())
+
+	return in.GetView()
+}
+
+func (d *DmgService) processAccounts(accounts []config.AccountsConfig, action func(config.AccountsConfig, bool)) {
+	for index, account := range accounts {
+		action(account, index == 0)
 	}
 }
 
 func (d *DmgService) StartInstances() {
 	d.instances = make([]*instance.Instance, 0)
-	d.processAccounts(d.cfg.Accounts, d.StartInstance)
-}
 
-func (d *DmgService) RestartInstances() {
-	d.processAccounts(d.cfg.Accounts, func(account config.AccountsConfig) {
-		d.RemoveInstance(account.Token)
-		d.StartInstance(account)
+	accounts := make([]config.AccountsConfig, len(d.cfg.Accounts))
+	copy(accounts, d.cfg.Accounts)
+
+	utils.Rng.Shuffle(len(accounts), func(i, j int) {
+		accounts[i], accounts[j] = accounts[j], accounts[i]
+	})
+
+	d.processAccounts(accounts, func(account config.AccountsConfig, firstAccount bool) {
+		if firstAccount {
+			in := instance.NewInstance(nil, nil, "", *d.cfg, account, "starting", time.Now(), d.ctx)
+			d.UpdateInstance(in)
+			d.StartInstance(account, "ready", time.Now())
+			return
+		}
+
+		waitTime := utils.RandMinutes(d.cfg.Cooldowns.StartDelay.MinMinutes, d.cfg.Cooldowns.StartDelay.MaxMinutes)
+
+		in := instance.NewInstance(nil, nil, "", *d.cfg, account, "waitingUnready", time.Now().Add(waitTime), d.ctx)
+		d.UpdateInstance(in)
+		d.StartInstance(account, "waitingReady", time.Now().Add(waitTime))
+
+		<-utils.Sleep(5 * time.Second)
 	})
 }
 
-func (d *DmgService) GetInstances() []*InstanceView {
-	instanceViews := make([]*InstanceView, 0, len(d.instances))
+func (d *DmgService) RestartInstances() {
+	accounts := make([]config.AccountsConfig, len(d.cfg.Accounts))
+	copy(accounts, d.cfg.Accounts)
 
-	for _, i := range d.instances {
-		instanceView := &InstanceView{
-			User:            i.User,
-			ChannelID:       i.ChannelID,
-			GuildID:         i.GuildID,
-			Cfg:             i.Cfg,
-			AccountCfg:      i.AccountCfg,
-			LastRan:         i.LastRan,
-			State:           i.State,
-			BreakUpdateTime: i.BreakUpdateTime.Format(time.RFC3339),
+	utils.Rng.Shuffle(len(accounts), func(i, j int) {
+		accounts[i], accounts[j] = accounts[j], accounts[i]
+	})
+
+	d.processAccounts(accounts, func(account config.AccountsConfig, firstAccount bool) {
+		d.RemoveInstance(account.Token, true)
+	})
+
+	d.StartInstances()
+}
+
+func (d *DmgService) GetIndex(token string) int {
+	for i, in := range d.instances {
+		if in.AccountCfg.Token == token {
+			return i
 		}
-		instanceViews = append(instanceViews, instanceView)
+	}
+	return -1
+}
+
+func (d *DmgService) UpdateInstance(ins *instance.Instance) {
+	utils.EmitEventIfNotCLI("instanceUpdate", ins.GetView())
+
+	for i, in := range d.instances {
+		if in.AccountCfg.Token == ins.AccountCfg.Token {
+			d.instances[i] = ins
+			return
+		}
 	}
 
-	return instanceViews
+	d.instances = append(d.instances, ins)
 }

@@ -9,14 +9,12 @@ import type {
 	Cooldowns,
 	GuiConfig
 } from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/config";
-import type { InstanceView } from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder";
 import {
 	GetConfig,
-	GetInstances,
 	UpdateConfig
 } from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/dmgservice";
 import { OnlineStatus } from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types";
-import * as time$0 from "@/bindings/time/models";
+import type { View } from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/instance";
 
 class Cfg {
 	c: Config = $state({
@@ -25,6 +23,7 @@ class Cfg {
 		gui: {} as GuiConfig,
 		readAlerts: false,
 		discordStatus: "" as OnlineStatus,
+		eventsCorrectChance: 0.65,
 		cooldowns: {} as Cooldowns,
 		accounts: [] as AccountsConfig[] | null,
 		autoBuy: {} as AutoBuyConfig,
@@ -58,36 +57,27 @@ class Cfg {
 }
 
 class Instances {
-	i = $state<InstanceView[]>([]);
+	i = $state<View[]>([]);
 
 	constructor() {
-		Events.On("instancesUpdate", (data: { data: [newInstances: InstanceView[]] }) => {
-			this.i.length = 0;
-
-			this.i.push(...data.data[0]);
-		});
-
-		Events.On(
-			"breakUpdate",
-			(data: { data: [token: string, state: string, breakTime: time$0.Time] }) => {
-				const index = this.i.findIndex((instance) => instance.accountCfg.token === data.data[0]);
-				if (index !== -1) {
-					this.i[index].state = data.data[1];
-					this.i[index].breakUpdateTime = data.data[2];
-				}
+		Events.On("instanceUpdate", (data: { data: [newInstance: View] }) => {
+			console.log(data.data);
+			const instance = this.findInstance(data.data[0].accountCfg.token);
+			if (instance) {
+				instances.i[this.findInstanceIndex(data.data[0].accountCfg.token)] = data.data[0];
+			} else {
+				this.i.push(data.data[0]);
 			}
-		);
-
-		this.fetch();
+		});
 	}
 
-	async fetch() {
-		const newInstances = await GetInstances();
-		if (newInstances !== null) {
-			this.i.length = 0;
-			this.i.push(...(newInstances as InstanceView[]));
-		}
-	}
+	findInstanceIndex = (token: string) => {
+		return this.i.findIndex((instance) => instance.accountCfg.token === token);
+	};
+
+	findInstance = (token: string) => {
+		return this.i.find((instance) => instance.accountCfg.token === token);
+	};
 }
 
 class Logs {

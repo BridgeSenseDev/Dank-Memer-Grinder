@@ -7,12 +7,16 @@ import (
 )
 
 func (c *Config) Validate() error {
+	if err := c.Gui.Validate(); err != nil {
+		return fmt.Errorf("gui: %w", err)
+	}
+
 	if !isValidOnlineStatus(c.DiscordStatus) {
 		return fmt.Errorf("invalid discordStatus: %s", c.DiscordStatus)
 	}
 
-	if err := c.Gui.Validate(); err != nil {
-		return fmt.Errorf("gui: %w", err)
+	if c.EventsCorrectChance < 0 || c.EventsCorrectChance > 1 {
+		return fmt.Errorf("eventsCorrectChance must be between 0 and 1")
 	}
 
 	if err := c.Cooldowns.Validate(); err != nil {
@@ -36,6 +40,15 @@ func (c *Config) Validate() error {
 	return nil
 }
 
+func (g *GuiConfig) Validate() error {
+	switch g.Theme {
+	case System, Dark, Light:
+		return nil
+	default:
+		return fmt.Errorf("invalid theme: %s", g.Theme)
+	}
+}
+
 func isValidOnlineStatus(status types.OnlineStatus) bool {
 	switch status {
 	case types.OnlineStatusOnline, types.OnlineStatusDND,
@@ -47,13 +60,39 @@ func isValidOnlineStatus(status types.OnlineStatus) bool {
 	}
 }
 
-func (g *GuiConfig) Validate() error {
-	switch g.Theme {
-	case System, Dark, Light:
-		return nil
-	default:
-		return fmt.Errorf("invalid theme: %s", g.Theme)
+func (d *DelaySeconds) Validate() error {
+	if d.MinSeconds < 0 || d.MaxSeconds < 0 {
+		return errors.New("delays cannot be negative")
 	}
+	if d.MinSeconds > d.MaxSeconds {
+		return errors.New("minSeconds cannot be greater than maxSeconds")
+	}
+	return nil
+}
+
+func (d *DelayMinutes) Validate() error {
+	if d.MinMinutes < 0 || d.MaxMinutes < 0 {
+		return errors.New("delays cannot be negative")
+	}
+	if d.MinMinutes > d.MaxMinutes {
+		return errors.New("minMinutes cannot be greater than maxMinutes")
+	}
+	return nil
+}
+
+func (b *DelayHours) Validate(allowZero bool) error {
+	if !allowZero {
+		if b.MinHours == 0 || b.MaxHours == 0 {
+			return errors.New("break time cannot be 0")
+		}
+	}
+	if b.MinHours < 0 || b.MaxHours < 0 {
+		return errors.New("break time cannot be negative")
+	}
+	if b.MinHours > b.MaxHours {
+		return errors.New("minHours cannot be greater than maxHours")
+	}
+	return nil
 }
 
 func (c *Cooldowns) Validate() error {
@@ -66,33 +105,14 @@ func (c *Cooldowns) Validate() error {
 	if err := c.BreakCooldown.Validate(false); err != nil {
 		return fmt.Errorf("breakCooldown: %w", err)
 	}
-	if err := c.BreakTime.Validate(true); err != nil {
-		return fmt.Errorf("breakTime: %w", err)
+	if err := c.BreakDuration.Validate(true); err != nil {
+		return fmt.Errorf("breakDuration: %w", err)
 	}
-	return nil
-}
-
-func (d *Delays) Validate() error {
-	if d.MinDelay < 0 || d.MaxDelay < 0 {
-		return errors.New("delays cannot be negative")
+	if err := c.StartDelay.Validate(); err != nil {
+		return fmt.Errorf("startDelay: %w", err)
 	}
-	if d.MinDelay > d.MaxDelay {
-		return errors.New("minDelay cannot be greater than maxDelay")
-	}
-	return nil
-}
-
-func (b *BreakTime) Validate(allowZero bool) error {
-	if !allowZero {
-		if b.MinHours == 0 || b.MaxHours == 0 {
-			return errors.New("break time cannot be 0")
-		}
-	}
-	if b.MinHours < 0 || b.MaxHours < 0 {
-		return errors.New("break time cannot be negative")
-	}
-	if b.MinHours > b.MaxHours {
-		return errors.New("minHours cannot be greater than maxHours")
+	if err := c.EventDelay.Validate(); err != nil {
+		return fmt.Errorf("eventDelay: %w", err)
 	}
 	return nil
 }

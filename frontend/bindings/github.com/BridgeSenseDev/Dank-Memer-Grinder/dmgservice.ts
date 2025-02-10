@@ -11,27 +11,29 @@ import * as config$0 from "./config/models.js";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Unused imports
 import * as types$0 from "./discord/types/models.js";
-
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Unused imports
-import * as $models from "./models.js";
+import * as instance$0 from "./instance/models.js";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore: Unused imports
+import * as time$0 from "../../../time/models.js";
 
 export function GetConfig(): Promise<config$0.Config | null> & { cancel(): void } {
     let $resultPromise = $Call.ByID(2704585121) as any;
     return $resultPromise;
 }
 
-export function GetInstances(): Promise<($models.InstanceView | null)[] | null> & { cancel(): void } {
-    let $resultPromise = $Call.ByID(1143882985) as any;
+export function GetIndex(token: string): Promise<number> & { cancel(): void } {
+    let $resultPromise = $Call.ByID(1338406745, token) as any;
     return $resultPromise;
 }
 
-export function RemoveInstance(token: string): Promise<void> & { cancel(): void } {
-    let $resultPromise = $Call.ByID(286226590, token) as any;
+export function RemoveInstance(token: string, restarting: boolean): Promise<void> & { cancel(): void } {
+    let $resultPromise = $Call.ByID(286226590, token, restarting) as any;
     return $resultPromise;
 }
 
-export function RestartInstance(token: string): Promise<void> & { cancel(): void } {
+export function RestartInstance(token: string): Promise<instance$0.View | null> & { cancel(): void } {
     let $resultPromise = $Call.ByID(1855792867, token) as any;
     return $resultPromise;
 }
@@ -41,8 +43,8 @@ export function RestartInstances(): Promise<void> & { cancel(): void } {
     return $resultPromise;
 }
 
-export function StartInstance(account: config$0.AccountsConfig): Promise<void> & { cancel(): void } {
-    let $resultPromise = $Call.ByID(1056784576, account) as any;
+export function StartInstance(account: config$0.AccountsConfig, readyState: string, breakUpdateTime: time$0.Time): Promise<void> & { cancel(): void } {
+    let $resultPromise = $Call.ByID(1056784576, account, readyState, breakUpdateTime) as any;
     return $resultPromise;
 }
 
@@ -58,6 +60,11 @@ export function UpdateConfig(newCfg: config$0.Config | null): Promise<void> & { 
 
 export function UpdateDiscordStatus(status: types$0.OnlineStatus): Promise<void> & { cancel(): void } {
     let $resultPromise = $Call.ByID(3790660754, status) as any;
+    return $resultPromise;
+}
+
+export function UpdateInstance(ins: instance$0.Instance | null): Promise<void> & { cancel(): void } {
+    let $resultPromise = $Call.ByID(2920987275, ins) as any;
     return $resultPromise;
 }
 

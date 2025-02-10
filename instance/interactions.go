@@ -2,9 +2,6 @@ package instance
 
 import (
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
-	"math/rand"
-	"time"
-
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
 )
 
@@ -14,9 +11,7 @@ func (in *Instance) SendChatMessage(content string, delay bool) error {
 	}
 
 	if delay {
-		minDelay := in.Cfg.Cooldowns.CommandInterval.MinDelay
-		maxDelay := in.Cfg.Cooldowns.CommandInterval.MaxDelay
-		<-utils.Sleep(time.Duration(rand.Intn(maxDelay-minDelay)+minDelay) * time.Millisecond)
+		<-utils.Sleep(utils.RandSeconds(in.Cfg.Cooldowns.CommandInterval.MinSeconds, in.Cfg.Cooldowns.CommandInterval.MaxSeconds))
 	}
 
 	return in.Client.SendChatMessage(content)
@@ -28,9 +23,7 @@ func (in *Instance) SendCommand(name string, options map[string]string, delay bo
 	}
 
 	if delay {
-		minDelay := in.Cfg.Cooldowns.CommandInterval.MinDelay
-		maxDelay := in.Cfg.Cooldowns.CommandInterval.MaxDelay
-		<-utils.Sleep(time.Duration(rand.Intn(maxDelay-minDelay)+minDelay) * time.Millisecond)
+		<-utils.Sleep(utils.RandSeconds(in.Cfg.Cooldowns.CommandInterval.MinSeconds, in.Cfg.Cooldowns.CommandInterval.MaxSeconds))
 	}
 
 	return in.Client.SendCommand(name, options)
@@ -42,9 +35,7 @@ func (in *Instance) SendSubCommand(name string, subCommandName string, options m
 	}
 
 	if delay {
-		minDelay := in.Cfg.Cooldowns.CommandInterval.MinDelay
-		maxDelay := in.Cfg.Cooldowns.CommandInterval.MaxDelay
-		<-utils.Sleep(time.Duration(rand.Intn(maxDelay-minDelay)+minDelay) * time.Millisecond)
+		<-utils.Sleep(utils.RandSeconds(in.Cfg.Cooldowns.CommandInterval.MinSeconds, in.Cfg.Cooldowns.CommandInterval.MaxSeconds))
 	}
 
 	return in.Client.SendSubCommand(name, subCommandName, options)
@@ -55,9 +46,7 @@ func (in *Instance) ClickButton(message gateway.EventMessage, row int, column in
 		return nil
 	}
 
-	minDelay := in.Cfg.Cooldowns.ButtonClickDelay.MinDelay
-	maxDelay := in.Cfg.Cooldowns.ButtonClickDelay.MaxDelay
-	<-utils.Sleep(time.Duration(rand.Intn(maxDelay-minDelay)+minDelay) * time.Millisecond)
+	<-utils.Sleep(utils.RandSeconds(in.Cfg.Cooldowns.ButtonClickDelay.MinSeconds, in.Cfg.Cooldowns.ButtonClickDelay.MaxSeconds))
 
 	err := in.Client.ClickButton(message, row, column)
 	if err != nil {
@@ -72,9 +61,7 @@ func (in *Instance) ClickDmButton(message gateway.EventMessage, row int, column 
 		return nil
 	}
 
-	minDelay := in.Cfg.Cooldowns.ButtonClickDelay.MinDelay
-	maxDelay := in.Cfg.Cooldowns.ButtonClickDelay.MaxDelay
-	<-utils.Sleep(time.Duration(rand.Intn(maxDelay-minDelay)+minDelay) * time.Millisecond)
+	<-utils.Sleep(utils.RandSeconds(in.Cfg.Cooldowns.ButtonClickDelay.MinSeconds, in.Cfg.Cooldowns.ButtonClickDelay.MaxSeconds))
 	return in.Client.ClickDmButton(message, row, column)
 }
 
@@ -83,9 +70,7 @@ func (in *Instance) ChooseSelectMenu(message gateway.EventMessage, row int, colu
 		return nil
 	}
 
-	minDelay := in.Cfg.Cooldowns.ButtonClickDelay.MinDelay
-	maxDelay := in.Cfg.Cooldowns.ButtonClickDelay.MaxDelay
-	<-utils.Sleep(time.Duration(rand.Intn(maxDelay-minDelay)+minDelay) * time.Millisecond)
+	<-utils.Sleep(utils.RandSeconds(in.Cfg.Cooldowns.ButtonClickDelay.MinSeconds, in.Cfg.Cooldowns.ButtonClickDelay.MaxSeconds))
 	return in.Client.ChooseSelectMenu(message, row, column, values)
 }
 
@@ -94,8 +79,6 @@ func (in *Instance) SubmitModal(modal gateway.EventModalCreate) error {
 		return nil
 	}
 
-	minDelay := in.Cfg.Cooldowns.ButtonClickDelay.MinDelay
-	maxDelay := in.Cfg.Cooldowns.ButtonClickDelay.MaxDelay
-	<-utils.Sleep(time.Duration(rand.Intn(maxDelay-minDelay)+minDelay) * time.Millisecond)
+	<-utils.Sleep(utils.RandSeconds(in.Cfg.Cooldowns.ButtonClickDelay.MinSeconds, in.Cfg.Cooldowns.ButtonClickDelay.MaxSeconds))
 	return in.Client.SubmitModal(modal)
 }
