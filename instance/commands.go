@@ -47,7 +47,10 @@ func (in *Instance) CommandsLoop() {
 			} else if in.State == "waitingReady" {
 				if time.Now().After(in.BreakUpdateTime) {
 					in.State = "ready"
+					in.UnpauseCommands()
 					utils.EmitEventIfNotCLI("instanceUpdate", in.GetView())
+				} else if !in.IsPaused() {
+					in.PauseCommands(true)
 				}
 			}
 
