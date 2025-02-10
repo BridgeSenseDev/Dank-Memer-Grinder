@@ -70,23 +70,24 @@ func (in *Instance) shopBuy(shopMsg gateway.EventMessage) {
 		}
 	} else {
 		if globalAutoBuyState.price != 0 {
-			re := regexp.MustCompile(`<:Coin:\d+>\s+([0-9,]+)`)
+			re := regexp.MustCompile(`(?:<:\w+:\d+>|\w+)\s+([0-9,]+)`)
 			matches := re.FindStringSubmatch(shopMsg.Embeds[0].Description)
 			if len(matches) < 2 {
-				utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), "Failed to find coins in shop message")
+				utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), "Failed to find price in shop message")
 				return
 			}
 
-			coins, err := strconv.Atoi(strings.ReplaceAll(matches[1], ",", ""))
+			priceStr := matches[1]
+			coins, err := strconv.Atoi(strings.ReplaceAll(priceStr, ",", ""))
 			if err != nil {
-				utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to parse coins: %s", err.Error()))
+				utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to parse price: %s", err.Error()))
 				return
 			}
 
 			if coins < globalAutoBuyState.price {
 				in.AutoBuyResultChan <- AutoBuyResult{
 					Success: false,
-					Message: "Not enough coins",
+					Message: "Not enough currency for autobuy",
 				}
 				return
 			}
@@ -115,7 +116,7 @@ func (in *Instance) StartAutoBuy(command string, subCommand string) <-chan AutoB
 	in.PauseCommands(false)
 	utils.Log(utils.Others, utils.Info, in.SafeGetUsername(), fmt.Sprintf("Auto buying %s", globalAutoBuyState.itemEmojiName))
 
-	if globalAutoBuyState.price != 0 {
+	if globalAutoBuyState.price != 0 && globalAutoBuyState.shopTypeIndex == 0 {
 		err := in.SendCommand("withdraw", map[string]string{"amount": strconv.Itoa(globalAutoBuyState.price)}, true)
 		if err != nil {
 			utils.Log(utils.Others, utils.Error, in.SafeGetUsername(),
