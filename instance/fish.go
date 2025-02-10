@@ -102,6 +102,9 @@ func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
 
 		// Check if equipment available, if not already tried to buy equipment in past 5 minutes
 		if in.Cfg.Commands.Fish.AutoEquipment && strings.Contains(embed.Fields[0].Value, "Bare Hand") && !(!autoBuySuccess && lastAutoBuy.Add(5*time.Minute).After(time.Now())) {
+			// Avoid hold tight error
+			<-utils.Sleep(utils.RandSeconds(2, 5))
+
 			err := in.ClickButton(message, 0, 0)
 			if err != nil {
 				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click fishing equipment button: %s", err.Error()))
@@ -170,7 +173,9 @@ func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
 		}
 
 		// No better equipment available, buy fishing rod
-		in.setAutoBuyState(2, 1, "fishingrodtool", 0)
+		// Make sure fish doesn't run again too soon
+		in.LastRan["Fish"] = time.Now()
+		in.setAutoBuyState(2, 1, "fishingrodtool", 20)
 		resultChan := in.StartAutoBuy("fish", "shop")
 
 		go func() {
@@ -213,6 +218,11 @@ func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
 			if err != nil {
 				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to send fish buckets command: %s", err.Error()))
 			}
+
+			// Send new fish command 50% of the time
+			if in.Cfg.Commands.Fish.FishOnly && utils.Rng.Intn(2) == 0 {
+				return
+			}
 		} else if strings.Contains(message.Embeds[1].Description, "Bare Hand") {
 			// Avoid hold tight error
 			<-utils.Sleep(utils.RandSeconds(2, 5))
@@ -220,38 +230,39 @@ func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
 			if err != nil {
 				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click go back button: %s", err.Error()))
 			}
-		} else {
-			if in.Cfg.Commands.Fish.FishOnly {
-				in.LastRan["Fish"] = time.Now().Add(time.Minute)
+			return
+		}
 
-				re := regexp.MustCompile(`<t:(\d+):R>`)
-				matches := re.FindStringSubmatch(embed.Description)
-				if len(matches) < 2 {
-					utils.Log(utils.Important, utils.Error, in.SafeGetUsername(), "Failed to find fish timestamp")
-					return
-				}
+		if in.Cfg.Commands.Fish.FishOnly {
+			in.LastRan["Fish"] = time.Now().Add(time.Minute)
 
-				ts, err := strconv.ParseInt(matches[1], 10, 64)
-				if err != nil {
-					utils.Log(utils.Important, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to parse fish timestamp: %s", err.Error()))
-					return
-				}
-
-				cooldown := time.Duration(ts-time.Now().Unix()) * time.Second
-
-				<-utils.Sleep(cooldown + utils.RandSeconds(in.Cfg.Commands.Fish.FishOnlyDelay.MinSeconds, in.Cfg.Commands.Fish.FishOnlyDelay.MaxSeconds))
-
-				if in.IsPaused() {
-					return
-				}
-
-				err = in.ClickButton(message, 0, 1)
-				if err != nil {
-					utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click fish again button: %s", err.Error()))
-				}
-			} else {
-				in.UnpauseCommands()
+			re := regexp.MustCompile(`<t:(\d+):R>`)
+			matches := re.FindStringSubmatch(embed.Description)
+			if len(matches) < 2 {
+				utils.Log(utils.Important, utils.Error, in.SafeGetUsername(), "Failed to find fish timestamp")
+				return
 			}
+
+			ts, err := strconv.ParseInt(matches[1], 10, 64)
+			if err != nil {
+				utils.Log(utils.Important, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to parse fish timestamp: %s", err.Error()))
+				return
+			}
+
+			cooldown := time.Duration(ts-time.Now().Unix()) * time.Second
+
+			<-utils.Sleep(cooldown + utils.RandSeconds(in.Cfg.Commands.Fish.FishOnlyDelay.MinSeconds, in.Cfg.Commands.Fish.FishOnlyDelay.MaxSeconds))
+
+			if in.IsPaused() {
+				return
+			}
+
+			err = in.ClickButton(message, 0, 1)
+			if err != nil {
+				utils.Log(utils.Discord, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Failed to click fish again button: %s", err.Error()))
+			}
+		} else {
+			in.UnpauseCommands()
 		}
 	} else if embed.Image != nil && strings.Contains(embed.Image.URL, "catch.webp") {
 		// Move next step in fish game
