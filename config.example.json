@@ -8,7 +8,6 @@
   "discordStatus": "online",
   "eventsCorrectChance": 0.65,
   "cooldowns": {
-    "buttonClickDelay": {
       "buttonClickDelay": {
         "minSeconds": 0.3,
         "maxSeconds": 0.5
