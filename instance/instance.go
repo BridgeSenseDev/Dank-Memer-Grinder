@@ -177,13 +177,13 @@ func (in *Instance) PauseCommands(indefinite bool) {
 		token := in.pauseCount
 
 		go func() {
-			time.Sleep(2 * time.Minute)
+			time.Sleep(20 * time.Second)
 
 			in.pauseMutex.Lock()
 			defer in.pauseMutex.Unlock()
 
 			if in.pauseCount == token {
-				utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), "Force unpaused commands after being paused for 2 minute")
+				utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), "Force unpaused commands after being paused for 20 seconds")
 				in.pauseCount = 0
 			}
 		}()
@@ -195,7 +195,7 @@ func (in *Instance) UnpauseCommands() {
 	defer in.pauseMutex.Unlock()
 
 	if in.pauseCount > 0 {
-		in.pauseCount--
+		in.pauseCount = 0
 	}
 
 	if in.pauseCount == 0 {

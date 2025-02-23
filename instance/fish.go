@@ -223,7 +223,7 @@ func (in *Instance) FishMessageUpdate(message gateway.EventMessage) {
 			if in.Cfg.Commands.Fish.FishOnly && utils.Rng.Intn(2) == 0 {
 				return
 			}
-		} else if strings.Contains(message.Embeds[1].Description, "Bare Hand") {
+		} else if strings.Contains(message.Embeds[1].Description, "Bare Hand") && in.Cfg.Commands.Fish.AutoEquipment {
 			// Avoid hold tight error
 			<-utils.Sleep(utils.RandSeconds(2, 5))
 			err := in.ClickButton(message, 0, 0)
