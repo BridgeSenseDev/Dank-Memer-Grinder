@@ -178,14 +178,14 @@
 						)}
 						seconds</Label
 					>
-					<Slider type="multiple" bind:value={buttonClickDelay} max={1} min={0.2} step={0.1} />
+					<Slider type="multiple" bind:value={buttonClickDelay} max={1} min={0} step={0.1} />
 				</div>
 				<div class="flex w-full flex-row items-center space-x-4">
 					<Label class="text-sm/5 whitespace-nowrap"
 						>Command Interval<br />{commandInterval[0].toFixed(1)} - {commandInterval[1].toFixed(1)}
 						seconds</Label
 					>
-					<Slider type="multiple" bind:value={commandInterval} max={10} min={2} step={0.1} />
+					<Slider type="multiple" bind:value={commandInterval} max={10} min={0} step={0.1} />
 				</div>
 			</Card.Content>
 		</div>
