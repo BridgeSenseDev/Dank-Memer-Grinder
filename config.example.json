@@ -9,30 +9,29 @@
   "eventsCorrectChance": 0.65,
   "cooldowns": {
     "buttonClickDelay": {
-      "buttonClickDelay": {
-        "minSeconds": 0.3,
-        "maxSeconds": 0.5
-      },
-      "commandInterval": {
-        "minSeconds": 0.2,
-        "maxSeconds": 0.4
-      },
-      "breakCooldown": {
-        "minHours": 0.2,
-        "maxHours": 1.6
-      },
-      "breakDuration": {
-        "minHours": 1,
-        "maxHours": 1.3
-      },
-      "startDelay": {
-        "minMinutes": 1,
-        "maxMinutes": 2
-      },
-      "eventDelay": {
-        "minSeconds":  3,
-        "maxSeconds": 7
-      }
+      "minSeconds": 0.3,
+      "maxSeconds": 0.5
+    },
+    "commandInterval": {
+      "minSeconds": 0.2,
+      "maxSeconds": 0.4
+    },
+    "breakCooldown": {
+      "minHours": 0.2,
+      "maxHours": 1.6
+    },
+    "breakDuration": {
+      "minHours": 1,
+      "maxHours": 1.3
+    },
+    "startDelay": {
+      "minMinutes": 1,
+      "maxMinutes": 2
+    },
+    "eventDelay": {
+      "minSeconds":  3,
+      "maxSeconds": 7
+    }
   },
   "accounts": [],
   "autoBuy": {
