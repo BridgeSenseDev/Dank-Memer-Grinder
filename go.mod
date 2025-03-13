@@ -6,7 +6,7 @@ require (
 	github.com/fasthttp/websocket v1.5.12
 	github.com/goccy/go-json v0.10.5
 	github.com/grongor/panicwatch v1.3.0
-	github.com/imdario/mergo v0.3.16
+	github.com/imdario/mergo v1.0.1
 	github.com/jeandeaual/go-locale v0.0.0-20241217141322-fcc2cadd6f08
 	github.com/sasha-s/go-csync v0.0.0-20240107134140-fcbab37b09ad
 	github.com/valyala/fasthttp v1.58.0
