@@ -11,7 +11,7 @@ require (
 	github.com/sasha-s/go-csync v0.0.0-20240107134140-fcbab37b09ad
 	github.com/valyala/fasthttp v1.59.0
 	github.com/wailsapp/wails/v3 v3.0.0-alpha.9
-	golang.org/x/image v0.23.0
+	golang.org/x/image v0.25.0
 )
 
 require (
