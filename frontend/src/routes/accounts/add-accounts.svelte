@@ -8,23 +8,39 @@
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
 	import { cfg } from "$lib/state.svelte";
 	import { Plus } from "lucide-svelte";
-	import { RestartInstance } from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/dmgservice";
+	import { StartInstance } from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/dmgservice";
 
-	let individualToken = $state("");
-	let individualChannelID = $state("");
+	let individualToken = "";
+	let individualChannelID = "";
+	let accountErrorMessage = "";
 
-	async function addAccount(token: string, channelID: string) {
-		cfg.c.accounts = [
-			...(cfg.c.accounts ?? []),
-			{
-				token: token,
-				channelID: channelID,
-				state: false
+	async function addAccount(token: string, channelID: string): Promise<boolean> {
+		const accounts = cfg.c.accounts ?? [];
+
+		if (accounts.find((acc) => acc.token === token)) {
+			accountErrorMessage = "Account with that token already exists!";
+			return false;
+		}
+
+		const accountCfg = {
+			token: token,
+			channelID: channelID,
+			state: false
+		};
+
+		cfg.c.accounts = [...accounts, accountCfg];
+
+		try {
+			await new Promise((r) => setTimeout(r, 100));
+			await StartInstance(accountCfg, "ready", new Date().toISOString());
+			accountErrorMessage = "";
+			return true;
+		} catch (err: unknown) {
+			if (err instanceof Error) {
+				accountErrorMessage = "Failed to add account: " + err.message;
 			}
-		];
-
-		await new Promise((r) => setTimeout(r, 100));
-		await RestartInstance(token);
+			return false;
+		}
 	}
 
 	async function handleFileChange(event: Event) {
@@ -93,8 +109,8 @@
 		}
 	}
 
-	let openSingleAccount = $state(false);
-	let openBulkAccounts = $state(false);
+	let openSingleAccount = false;
+	let openBulkAccounts = false;
 	let format = { value: "token id", label: "token id" };
 </script>
 
@@ -140,15 +156,22 @@
 				<Label for="channelID" class="text-right">Channel ID</Label>
 				<Input type="text" id="channelID" class="col-span-3" bind:value={individualChannelID} />
 			</div>
+			{#if accountErrorMessage}
+				<div class="text-center text-red-600">{accountErrorMessage}</div>
+			{/if}
 		</div>
 		<Dialog.Footer>
 			<Button
 				type="submit"
 				onclick={async () => {
-					await addAccount(individualToken, individualChannelID);
-					openSingleAccount = false;
-				}}>Add account</Button
+					const success = await addAccount(individualToken, individualChannelID);
+					if (success) {
+						openSingleAccount = false;
+					}
+				}}
 			>
+				Add account
+			</Button>
 		</Dialog.Footer>
 	</Dialog.Content>
 </Dialog.Root>
@@ -169,7 +192,7 @@
 					<Select.Trigger class="col-span-3">Choose account format</Select.Trigger>
 					<Select.Content>
 						<Select.Item value="token">token</Select.Item>
-						<Select.Item value={`"token"`}>"token"</Select.Item>
+						<Select.Item value="&quot;token&quot;">"token"</Select.Item>
 						<Select.Item value="token id">token id</Select.Item>
 						<Select.Item value="id token">id token</Select.Item>
 						<Select.Item value="token: id">token: id</Select.Item>

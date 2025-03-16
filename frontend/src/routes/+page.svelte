@@ -25,21 +25,21 @@
 		</Tabs.List>
 		<Tabs.Content value="important" class="h-full">
 			<div
-				class="border-input ring-ring flex h-full min-h-[60px] w-full rounded-md border bg-transparent px-3 py-2 text-sm ring-1 shadow-xs outline-hidden"
+				class="border-input ring-ring flex h-full min-h-[60px] w-full rounded-md border bg-transparent px-3 py-2 text-sm shadow-xs ring-1 outline-hidden"
 				bind:innerHTML={logs.importantLogs}
 				contenteditable="false"
 			></div>
 		</Tabs.Content>
 		<Tabs.Content value="others" class="h-full">
 			<div
-				class="border-input ring-ring flex h-full min-h-[60px] w-full rounded-md border bg-transparent px-3 py-2 text-sm ring-1 shadow-xs outline-hidden"
+				class="border-input ring-ring flex h-full min-h-[60px] w-full rounded-md border bg-transparent px-3 py-2 text-sm shadow-xs ring-1 outline-hidden"
 				bind:innerHTML={logs.othersLogs}
 				contenteditable="false"
 			></div>
 		</Tabs.Content>
 		<Tabs.Content value="discord" class="h-full">
 			<div
-				class="border-input ring-ring flex h-full min-h-[60px] w-full rounded-md border bg-transparent px-3 py-2 text-sm ring-1 shadow-xs outline-hidden"
+				class="border-input ring-ring flex h-full min-h-[60px] w-full rounded-md border bg-transparent px-3 py-2 text-sm shadow-xs ring-1 outline-hidden"
 				bind:innerHTML={logs.discordLogs}
 				contenteditable="false"
 			></div>

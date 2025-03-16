@@ -10,6 +10,7 @@
 	import { Checkbox } from "$lib/components/ui/checkbox";
 	import {
 		RestartInstances,
+		RestartInstance,
 		UpdateInstanceToken
 	} from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/dmgservice";
 	import { cfg, instances } from "$lib/state.svelte";
@@ -44,6 +45,26 @@
 		isRestarting = true;
 		await RestartInstances();
 		isRestarting = false;
+	}
+
+	let restartTimeouts = new Map();
+
+	function debouncedRestart(rowIndex: number) {
+		if (!cfg.c.accounts || rowIndex >= cfg.c.accounts.length) return;
+		instances.i[instances.findInstanceIndex(cfg.c.accounts[rowIndex].token)].state = "restarting";
+
+		if (restartTimeouts.has(rowIndex)) {
+			clearTimeout(restartTimeouts.get(rowIndex));
+		}
+
+		const timeoutId = setTimeout(async () => {
+			if (!cfg.c.accounts || rowIndex >= cfg.c.accounts.length) return;
+			const currentToken = cfg.c.accounts[rowIndex].token;
+			await RestartInstance(currentToken);
+			restartTimeouts.delete(rowIndex);
+		}, 3000);
+
+		restartTimeouts.set(rowIndex, timeoutId);
 	}
 
 	function formatTimeRemaining(time?: string) {
@@ -84,6 +105,13 @@
 			const oldToken = cfg.c.accounts[rowIndex].token;
 			UpdateInstanceToken(oldToken, newToken);
 			cfg.c.accounts[rowIndex].token = newToken;
+			debouncedRestart(rowIndex);
+		}
+	}
+
+	function channelIDUpdate(rowIndex: number) {
+		if (cfg.c.accounts) {
+			debouncedRestart(rowIndex);
 		}
 	}
 
@@ -203,13 +231,17 @@
 									<Table.Cell class="text-center">
 										<Input
 											type="text"
-											bind:value={cfg.c.accounts[rowIndex].token}
+											value={cfg.c.accounts[rowIndex].token}
 											oninput={(event) => tokenUpdate(rowIndex, event)}
 										></Input>
 									</Table.Cell>
 								{:else if cell.column.id === "channelID" && cfg.c.accounts}
 									<Table.Cell class="w-48 text-center">
-										<Input type="text" bind:value={cfg.c.accounts[rowIndex].channelID}></Input>
+										<Input
+											type="text"
+											value={cfg.c.accounts[rowIndex].channelID}
+											oninput={() => channelIDUpdate(rowIndex)}
+										></Input>
 									</Table.Cell>
 								{:else}
 									<Table.Cell class="text-center">
