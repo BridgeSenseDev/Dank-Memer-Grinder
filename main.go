@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"embed"
 	"flag"
@@ -12,11 +13,45 @@ import (
 	"log/slog"
 	_ "net/http/pprof"
 	"os"
+	"strings"
 	"sync"
 )
 
 //go:embed all:frontend/dist
 var assets embed.FS
+
+func init() {
+	redirectStderr()
+}
+
+func redirectStderr() {
+	reader, writer, err := os.Pipe()
+	if err != nil {
+		slog.Error("Failed to create pipe for stderr redirection", "error", err)
+		return
+	}
+
+	os.Stderr = writer
+
+	go func() {
+		scanner := bufio.NewScanner(reader)
+		for scanner.Scan() {
+			line := scanner.Text()
+
+			if strings.Contains(line, "Overriding existing handler for signal") ||
+				strings.Contains(line, `Failed to load module "appmenu-gtk-module"`) ||
+				strings.Contains(line, "SetProcessDpiAwarenessContext failed 0") {
+				continue
+			}
+
+			slog.Error(line)
+		}
+
+		if err := scanner.Err(); err != nil {
+			slog.Error("Error reading from stderr pipe", "error", err)
+		}
+	}()
+}
 
 type CustomHandler struct {
 	slog.Handler
