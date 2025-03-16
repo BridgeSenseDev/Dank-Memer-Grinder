@@ -13,8 +13,11 @@ import {
 	GetConfig,
 	UpdateConfig
 } from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/dmgservice";
+import { Browser } from "@wailsio/runtime";
 import { OnlineStatus } from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types";
 import type { View } from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/instance";
+
+(window as any).Browser = Browser;
 
 class Cfg {
 	c: Config = $state({
@@ -116,6 +119,11 @@ class Logs {
 		const ampm = hours >= 12 ? "PM" : "AM";
 		const formattedTime = `${hours % 12 || 12}:${minutes < 10 ? "0" : ""}${minutes}${ampm}`;
 
+		msg = msg.replace(
+			/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g,
+			`<a href="#" onclick="event.preventDefault(); if(window.Browser && window.Browser.OpenURL){ window.Browser.OpenURL('$2'); } return false;" class="underline text-blue-500">$1</a>`
+		);
+
 		logs += `<span class="text-gray-400">${formattedTime} `;
 
 		if (type === "INF") {
@@ -123,7 +131,7 @@ class Logs {
 		} else if (type === "ERR") {
 			logs += `<span class="text-red-500">ERR `;
 		}
-		logs += `<span class="text-sky-500">` + username + '<span class="text-white"> ' + msg + "<br>";
+		logs += `<span class="text-sky-500">${username}` + `<span class="text-white"> ${msg}<br>`;
 
 		return logs;
 	}

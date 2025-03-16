@@ -28,8 +28,10 @@ type DmgService struct {
 func (d *DmgService) startup() {
 	userCfg, err := utils.ReadConfig()
 	if err != nil {
-		utils.Log(utils.Important, utils.Error, "",
-			fmt.Sprintf("Failed to read config file, downloading example config: %s", err.Error()))
+		utils.Log(utils.Important, utils.Info, "",
+			fmt.Sprintf("Failed to find config file, downloading example config. Error: %s", err.Error()))
+		utils.Log(utils.Important, utils.Info, "",
+			"Welcome to DMG! If this is your first time running DMG, start by [adding your accounts](https://docs.dankmemer.tools/configuration/entering-token-and-channel-id).")
 
 		defaultCfg, dlErr := downloadDefaultConfig()
 		if dlErr != nil {
