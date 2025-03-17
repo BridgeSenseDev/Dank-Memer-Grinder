@@ -3,7 +3,6 @@
 package utils
 
 import (
-	"fmt"
 	"os"
 	"os/exec"
 	"syscall"
@@ -11,13 +10,6 @@ import (
 
 func RunUpdater(updaterTempPath string, newBinaryTempPath string) error {
 	current := os.Getenv("APPIMAGE")
-
-	if newBinaryTempPath == "" {
-		return fmt.Errorf("new binary path is not set, please run DownloadUpdate first")
-	}
-	if updaterTempPath == "" {
-		return fmt.Errorf("updater binary path is not set, please run DownloadUpdate first")
-	}
 
 	cmd := exec.Command(updaterTempPath, current, newBinaryTempPath)
 	cmd.SysProcAttr = &syscall.SysProcAttr{

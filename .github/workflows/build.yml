@@ -65,7 +65,7 @@ jobs:
         run: go install -v github.com/wailsapp/wails/v3/cmd/wails3@latest
 
       - name: Build Wails project (Windows, Linux)
-        if: matrix.os != 'macos-latest
+        if: matrix.os != 'macos-latest'
         run: wails3 task ${{ matrix.wails_os }}:package
 
       - name: Build Wails project (Darwin)
