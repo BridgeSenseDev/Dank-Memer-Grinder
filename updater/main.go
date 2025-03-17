@@ -53,7 +53,7 @@ func main() {
 	currentBinary := os.Args[1]
 	newBinary := os.Args[2]
 
-	time.Sleep(2 * time.Second)
+	time.Sleep(5 * time.Second)
 
 	if err := os.Remove(currentBinary); err != nil {
 		fmt.Printf("Failed to remove old binary: %v\n", err)

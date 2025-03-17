@@ -32,6 +32,14 @@ tasks:
         vars:
           PRODUCTION: "true"
 
+  generate:syso:
+    summary: Generates Windows `.syso` file
+    dir: build
+    cmds:
+      - wails3 generate syso -arch {{.ARCH}} -icon windows/icon.ico -manifest windows/wails.exe.manifest -info windows/info.json -out ../wails_windows_{{.ARCH}}.syso
+    vars:
+      ARCH: '{{.ARCH | default ARCH}}'
+
   run:
     cmds:
       - '{{.BIN_DIR}}\\{{.APP_NAME}}.exe'

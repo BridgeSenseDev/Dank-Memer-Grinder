@@ -64,12 +64,12 @@ jobs:
       - name: Install Wails CLI
         run: go install -v github.com/wailsapp/wails/v3/cmd/wails3@latest
 
-      - name: Build Wails project (Linux)
-        if: matrix.os == 'ubuntu-latest'
+      - name: Build Wails project (Windows, Linux)
+        if: matrix.os != 'macos-latest
         run: wails3 task ${{ matrix.wails_os }}:package
 
-      - name: Build Wails project (Windows, Darwin)
-        if: matrix.os != 'ubuntu-latest'
+      - name: Build Wails project (Darwin)
+        if: matrix.os == 'macos-latest'
         run: wails3 task ${{ matrix.wails_os }}:build
 
       - name: Handle Linux AppImage
