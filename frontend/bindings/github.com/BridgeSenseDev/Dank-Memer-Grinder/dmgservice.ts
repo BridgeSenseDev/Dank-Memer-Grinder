@@ -16,13 +16,10 @@ import * as types$0 from "./discord/types/models.js";
 import * as instance$0 from "./instance/models.js";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Unused imports
-import * as application$0 from "../../wailsapp/wails/v3/pkg/application/models.js";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore: Unused imports
 import * as time$0 from "../../../time/models.js";
 
-export function CheckForUpdates(window: application$0.WebviewWindow | null): Promise<boolean> & { cancel(): void } {
-    let $resultPromise = $Call.ByID(1803947812, window) as any;
+export function CheckForUpdates(): Promise<boolean> & { cancel(): void } {
+    let $resultPromise = $Call.ByID(1803947812) as any;
     return $resultPromise;
 }
 

@@ -27,7 +27,7 @@
 	}
 
 	async function checkForUpdates() {
-		const res = await CheckForUpdates(null);
+		const res = await CheckForUpdates();
 		if (!res) {
 			isUpToDate = true;
 

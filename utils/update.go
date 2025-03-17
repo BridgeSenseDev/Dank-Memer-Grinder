@@ -31,7 +31,7 @@ type VersionResponse struct {
 func CheckForUpdates(currentVersion string) (string, []Change) {
 	req := fasthttp.AcquireRequest()
 	defer fasthttp.ReleaseRequest(req)
-	req.SetRequestURI("http://localhost:3003/version")
+	req.SetRequestURI("https://api.dankmemer.tools/version")
 	req.Header.Add("version", currentVersion)
 
 	resp := fasthttp.AcquireResponse()

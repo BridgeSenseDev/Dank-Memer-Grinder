@@ -148,7 +148,7 @@ func main() {
 			ProgramName: "Dank Memer Grinder"},
 	})
 
-	window := app.NewWebviewWindowWithOptions(application.WebviewWindowOptions{
+	app.NewWebviewWindowWithOptions(application.WebviewWindowOptions{
 		Title:         "Dank Memer Grinder",
 		Width:         1024,
 		Height:        768,
@@ -161,7 +161,6 @@ func main() {
 	})
 
 	app.OnApplicationEvent(events.Common.ApplicationStarted, func(event *application.ApplicationEvent) {
-		dmgService.CheckForUpdates(window)
 		dmgService.startup()
 	})
 

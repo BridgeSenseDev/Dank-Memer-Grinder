@@ -28,30 +28,9 @@ tasks:
   package:
     summary: Packages a production build of the application into a `.exe` bundle
     cmds:
-      - task: create:nsis:installer
-
-  generate:syso:
-    summary: Generates Windows `.syso` file
-    dir: build
-    cmds:
-      - wails3 generate syso -arch {{.ARCH}} -icon windows/icon.ico -manifest windows/wails.exe.manifest -info windows/info.json -out ../wails_windows_{{.ARCH}}.syso
-    vars:
-      ARCH: '{{.ARCH | default ARCH}}'
-
-  create:nsis:installer:
-    summary: Creates an NSIS installer
-    dir: build/windows/nsis
-    deps:
       - task: build
         vars:
           PRODUCTION: "true"
-    cmds:
-      # Create the Microsoft WebView2 bootstrapper if it doesn't exist
-      - wails3 generate webview2bootstrapper -dir {{.ROOT_DIR}}/build/windows/nsis
-      - makensis -DARG_WAILS_{{.ARG_FLAG}}_BINARY="{{.ROOT_DIR}}\{{.BIN_DIR}}\{{.APP_NAME}}.exe" project.nsi
-    vars:
-      ARCH: '{{.ARCH | default ARCH}}'
-      ARG_FLAG: '{{if eq .ARCH "amd64"}}AMD64{{else}}ARM64{{end}}'
 
   run:
     cmds:

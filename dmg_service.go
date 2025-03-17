@@ -66,6 +66,7 @@ func (d *DmgService) startup() {
 	utils.EmitEventIfNotCLI("configUpdate", userCfg)
 	d.ctx = context.Background()
 	d.cfg = &userCfg
+	d.CheckForUpdates()
 	d.StartInstances()
 }
 
@@ -131,17 +132,12 @@ func (d *DmgService) UpdateDiscordStatus(status types.OnlineStatus) {
 	}
 }
 
-func (d *DmgService) CheckForUpdates(window *application.WebviewWindow) bool {
-	currentVersion := "v2.0.0-alpha14"
+func (d *DmgService) CheckForUpdates() bool {
+	currentVersion := "v2.0.0-alpha13"
 	newVersion, changes := utils.CheckForUpdates(currentVersion)
 
 	if newVersion != "" && newVersion != currentVersion {
-		if window != nil {
-			(*window).SetURL("/#/update")
-		} else {
-			application.Get().CurrentWindow().SetURL("/#/update")
-		}
-
+		application.Get().CurrentWindow().SetURL("/#/update")
 		application.Get().EmitEvent("updateChanges", currentVersion, newVersion, changes)
 		return true
 	}

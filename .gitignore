@@ -19,3 +19,4 @@ test
 
 build/linux/appimage
 !build/linux/appimage/build.sh
+!build/updater-windows.exe
