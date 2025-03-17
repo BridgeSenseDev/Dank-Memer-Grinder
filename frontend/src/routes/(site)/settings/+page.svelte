@@ -1,5 +1,5 @@
 <script lang="ts">
-	import * as Tabs from "$lib/components/ui/tabs/index.js";
+	import * as Tabs from "$lib/components/ui/tabs";
 	import { fade } from "svelte/transition";
 	import AutoBuy from "./auto-buy.svelte";
 	import AutoUse from "./auto-use.svelte";

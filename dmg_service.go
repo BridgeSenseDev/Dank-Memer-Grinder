@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/wailsapp/wails/v3/pkg/application"
 	"io"
 	"os"
 	"sync"
@@ -114,19 +115,58 @@ func (d *DmgService) UpdateDiscordStatus(status types.OnlineStatus) {
 			continue
 		}
 
-		d := gateway.MessageDataPresenceUpdate{
+		presenceUpdate := gateway.MessageDataPresenceUpdate{
 			Since:      new(int64),
 			Activities: []map[string]interface{}{},
 			Status:     status,
 			AFK:        false,
 		}
 
-		err := in.Client.SendMessage(3, d)
+		err := in.Client.SendMessage(3, presenceUpdate)
 		if err != nil {
 			utils.Log(utils.Others, utils.Error, in.SafeGetUsername(), fmt.Sprintf("Error setting Discord status: %s", err))
 		}
 
 		in.User.Status = status
+	}
+}
+
+func (d *DmgService) CheckForUpdates(window *application.WebviewWindow) bool {
+	currentVersion := "v2.0.0-alpha13"
+	newVersion, changes := utils.CheckForUpdates(currentVersion)
+
+	if newVersion != "" && newVersion != currentVersion {
+		if window != nil {
+			(*window).SetURL("/#/update")
+		} else {
+			application.Get().CurrentWindow().SetURL("/#/update")
+		}
+
+		application.Get().EmitEvent("updateChanges", currentVersion, newVersion, changes)
+		return true
+	}
+
+	return false
+}
+
+func (d *DmgService) Update() {
+	if application.Get().Environment().Debug {
+		application.Get().EmitEvent("updateFailed", "Debug environment detected. Update using git instead.")
+		return
+	}
+
+	err := utils.DownloadUpdate()
+	if err != nil {
+		utils.Log(utils.Important, utils.Error, "", fmt.Sprintf("Failed to download update: %s", err.Error()))
+		application.Get().EmitEvent("updateFailed", err.Error())
+		return
+	}
+
+	err = utils.RunUpdater()
+	if err != nil {
+		utils.Log(utils.Important, utils.Error, "", fmt.Sprintf("Failed to run updater: %s", err.Error()))
+		application.Get().EmitEvent("updateFailed", err.Error())
+		return
 	}
 }
 

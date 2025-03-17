@@ -4,9 +4,9 @@
 	import { Input } from "$lib/components/ui/input";
 	import * as Select from "$lib/components/ui/select";
 	import * as Dialog from "$lib/components/ui/dialog";
-	import { Button } from "$lib/components/ui/button/index.js";
-	import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
-	import { cfg } from "$lib/state.svelte";
+	import { Button } from "$lib/components/ui/button";
+	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
+	import { cfg } from "$lib/state.svelte.js";
 	import { Plus } from "lucide-svelte";
 	import { StartInstance } from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/dmgservice";
 

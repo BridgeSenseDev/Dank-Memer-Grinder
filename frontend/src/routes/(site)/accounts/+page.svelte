@@ -2,7 +2,7 @@
 	import DataTable from "./data-table.svelte";
 	import { columns } from "./columns";
 	import { fade } from "svelte/transition";
-	import { cfg, instances } from "$lib/state.svelte";
+	import { cfg, instances } from "$lib/state.svelte.js";
 
 	let accounts = $derived.by(() => {
 		const accounts = [];

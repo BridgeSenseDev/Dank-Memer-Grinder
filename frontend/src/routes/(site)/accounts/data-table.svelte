@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { type ColumnDef, getCoreRowModel } from "@tanstack/table-core";
-	import { createSvelteTable, FlexRender } from "$lib/components/ui/data-table/index.js";
+	import { createSvelteTable, FlexRender } from "$lib/components/ui/data-table";
 	import { LockClosed, ExclamationTriangle, Check } from "svelte-radix";
-	import * as Table from "$lib/components/ui/table/index.js";
+	import * as Table from "$lib/components/ui/table";
 	import { Button } from "$lib/components/ui/button";
-	import type { Account } from "@/src/routes/accounts/columns";
+	import type { Account } from "@/src/routes/(site)/accounts/columns";
 	import AddAccounts from "./add-accounts.svelte";
 	import { Input } from "$lib/components/ui/input";
 	import { Checkbox } from "$lib/components/ui/checkbox";
@@ -13,7 +13,7 @@
 		RestartInstance,
 		UpdateInstanceToken
 	} from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/dmgservice";
-	import { cfg, instances } from "$lib/state.svelte";
+	import { cfg, instances } from "$lib/state.svelte.js";
 	import {
 		HourglassIcon,
 		InfinityIcon,

@@ -168,11 +168,7 @@
 										<Label class="whitespace-nowrap" for={`${commandKey}_${optionKey}`}>
 											{formatString(optionKey)}
 										</Label>
-										<Select.Root
-											bind:value={commands[commandKey][optionKey]}
-											on:change={(e) => updateCfg(commandKey, optionKey, e)}
-											type="single"
-										>
+										<Select.Root bind:value={commands[commandKey][optionKey]} type="single">
 											<Select.Trigger class="w-[180px]"
 												>{commands[commandKey][optionKey]}</Select.Trigger
 											>
@@ -188,11 +184,7 @@
 										<Label class="whitespace-nowrap" for={`${commandKey}_${optionKey}`}>
 											{formatString(optionKey)}
 										</Label>
-										<Select.Root
-											bind:value={commands[commandKey][optionKey]}
-											on:change={(e) => updateCfg(commandKey, optionKey, e)}
-											type="multiple"
-										>
+										<Select.Root bind:value={commands[commandKey][optionKey]} type="multiple">
 											<Select.Trigger>
 												Select {formatString(optionKey)}s
 											</Select.Trigger>
@@ -214,7 +206,7 @@
 											type="text"
 											id={`${commandKey}_${optionKey}`}
 											value={commands[commandKey][optionKey]}
-											on:input={(e) => updateCfg(commandKey, optionKey, e)}
+											oninput={(e) => updateCfg(commandKey, optionKey, e)}
 										/>
 									</div>
 								{:else if typeof commands[commandKey][optionKey] === "number"}

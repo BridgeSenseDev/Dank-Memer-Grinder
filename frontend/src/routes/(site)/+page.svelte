@@ -1,7 +1,7 @@
 <script lang="ts">
-	import * as Tabs from "$lib/components/ui/tabs/index.js";
+	import * as Tabs from "$lib/components/ui/tabs";
 	import { fade } from "svelte/transition";
-	import { logs } from "$lib/state.svelte";
+	import { logs } from "$lib/state.svelte.js";
 
 	let mainCurrentTab = $state("important");
 

@@ -16,7 +16,15 @@ import * as types$0 from "./discord/types/models.js";
 import * as instance$0 from "./instance/models.js";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Unused imports
+import * as application$0 from "../../wailsapp/wails/v3/pkg/application/models.js";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore: Unused imports
 import * as time$0 from "../../../time/models.js";
+
+export function CheckForUpdates(window: application$0.WebviewWindow | null): Promise<boolean> & { cancel(): void } {
+    let $resultPromise = $Call.ByID(1803947812, window) as any;
+    return $resultPromise;
+}
 
 export function GetConfig(): Promise<config$0.Config | null> & { cancel(): void } {
     let $resultPromise = $Call.ByID(2704585121) as any;
@@ -50,6 +58,11 @@ export function StartInstance(account: config$0.AccountsConfig, readyState: stri
 
 export function StartInstances(): Promise<void> & { cancel(): void } {
     let $resultPromise = $Call.ByID(3685538249) as any;
+    return $resultPromise;
+}
+
+export function Update(): Promise<void> & { cancel(): void } {
+    let $resultPromise = $Call.ByID(749024496) as any;
     return $resultPromise;
 }
 

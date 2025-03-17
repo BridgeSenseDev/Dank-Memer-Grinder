@@ -64,7 +64,6 @@ class Instances {
 
 	constructor() {
 		Events.On("instanceUpdate", (data: { data: [newInstance: View] }) => {
-			console.log(data.data);
 			const instance = this.findInstance(data.data[0].accountCfg.token);
 			if (instance) {
 				instances.i[this.findInstanceIndex(data.data[0].accountCfg.token)] = data.data[0];
@@ -120,7 +119,7 @@ class Logs {
 		const formattedTime = `${hours % 12 || 12}:${minutes < 10 ? "0" : ""}${minutes}${ampm}`;
 
 		msg = msg.replace(
-			/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g,
+			/\[([^\]]+)]\((https?:\/\/[^)]+)\)/g,
 			`<a href="#" onclick="event.preventDefault(); if(window.Browser && window.Browser.OpenURL){ window.Browser.OpenURL('$2'); } return false;" class="underline text-blue-500">$1</a>`
 		);
 

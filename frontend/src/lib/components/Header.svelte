@@ -12,7 +12,7 @@
 	let moonClass = $state("");
 
 	let title = $derived(
-		(page.url.pathname.split("/")[1] || "logs")
+		(page.url.hash.split("#/")[1] || "logs")
 			.split(" ")
 			.map((word) => (word ? word.charAt(0).toUpperCase() + word.slice(1) : ""))
 			.join(" ")

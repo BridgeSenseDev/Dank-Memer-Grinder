@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { Trash, Reload } from "svelte-radix";
-	import * as Tooltip from "$lib/components/ui/tooltip/index.js";
+	import * as Tooltip from "$lib/components/ui/tooltip";
 	import { Button } from "$lib/components/ui/button";
-	import { cfg, instances } from "$lib/state.svelte";
+	import { cfg, instances } from "$lib/state.svelte.js";
 	import {
 		RemoveInstance,
 		RestartInstance

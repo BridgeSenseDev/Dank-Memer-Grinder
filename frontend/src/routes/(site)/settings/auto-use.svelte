@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { cfg } from "$lib/state.svelte";
-	import * as Card from "$lib/components/ui/card/index.js";
+	import { cfg } from "$lib/state.svelte.js";
+	import * as Card from "$lib/components/ui/card";
 	import { Switch } from "$lib/components/ui/switch";
-	import { Label } from "$lib/components/ui/label/index.js";
+	import { Label } from "$lib/components/ui/label";
 	import { TypedObject } from "$lib/utils.js";
 
 	function formatString(input: string): string {
