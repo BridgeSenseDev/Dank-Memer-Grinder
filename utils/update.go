@@ -8,7 +8,6 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strconv"
@@ -315,33 +314,5 @@ func DownloadUpdate() error {
 	}
 
 	EmitEventIfNotCLI("downloadProgress", 100)
-	return nil
-}
-
-func RunUpdater() error {
-	current := os.Getenv("APPIMAGE")
-	if current == "" {
-		var err error
-		current, err = os.Executable()
-		if err != nil {
-			return err
-		}
-	}
-
-	if newBinaryTempPath == "" {
-		return fmt.Errorf("new binary path is not set, please run DownloadUpdate first")
-	}
-	if updaterTempPath == "" {
-		return fmt.Errorf("updater binary path is not set, please run DownloadUpdate first")
-	}
-
-	cmd := exec.Command(updaterTempPath, current, newBinaryTempPath)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	if err := cmd.Start(); err != nil {
-		return err
-	}
-	os.Exit(0)
-
-	return nil
+	return RunUpdater(updaterTempPath, newBinaryTempPath)
 }

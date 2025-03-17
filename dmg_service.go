@@ -133,7 +133,7 @@ func (d *DmgService) UpdateDiscordStatus(status types.OnlineStatus) {
 }
 
 func (d *DmgService) CheckForUpdates() bool {
-	currentVersion := "v2.0.0-alpha13"
+	currentVersion := "v2.0.0-alpha14"
 	newVersion, changes := utils.CheckForUpdates(currentVersion)
 
 	if newVersion != "" && newVersion != currentVersion {
@@ -154,13 +154,6 @@ func (d *DmgService) Update() {
 	err := utils.DownloadUpdate()
 	if err != nil {
 		utils.Log(utils.Important, utils.Error, "", fmt.Sprintf("Failed to download update: %s", err.Error()))
-		application.Get().EmitEvent("updateFailed", err.Error())
-		return
-	}
-
-	err = utils.RunUpdater()
-	if err != nil {
-		utils.Log(utils.Important, utils.Error, "", fmt.Sprintf("Failed to run updater: %s", err.Error()))
 		application.Get().EmitEvent("updateFailed", err.Error())
 		return
 	}
