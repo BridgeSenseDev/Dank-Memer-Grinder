@@ -132,7 +132,7 @@ func (d *DmgService) UpdateDiscordStatus(status types.OnlineStatus) {
 }
 
 func (d *DmgService) CheckForUpdates(window *application.WebviewWindow) bool {
-	currentVersion := "v2.0.0-alpha13"
+	currentVersion := "v2.0.0-alpha14"
 	newVersion, changes := utils.CheckForUpdates(currentVersion)
 
 	if newVersion != "" && newVersion != currentVersion {

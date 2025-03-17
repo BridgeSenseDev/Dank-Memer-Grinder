@@ -319,9 +319,13 @@ func DownloadUpdate() error {
 }
 
 func RunUpdater() error {
-	current, err := os.Executable()
-	if err != nil {
-		return err
+	current := os.Getenv("APPIMAGE")
+	if current == "" {
+		var err error
+		current, err = os.Executable()
+		if err != nil {
+			return err
+		}
 	}
 
 	if newBinaryTempPath == "" {
