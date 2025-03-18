@@ -24,7 +24,7 @@
 	class="z-10 h-full space-y-4"
 >
 	<Tabs.Root bind:value={settingsCurrentTab} class="w-full">
-		<Tabs.List class="grid w-full grid-cols-3	">
+		<Tabs.List class="grid w-full grid-cols-3">
 			<Tabs.Trigger value="general">General</Tabs.Trigger>
 			<Tabs.Trigger value="autoBuy">Auto Buy</Tabs.Trigger>
 			<Tabs.Trigger value="autoUse">Auto Use</Tabs.Trigger>

@@ -33,15 +33,23 @@
 		if (theme === "system") {
 			isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 		}
-		sunClass = `h-[1.2rem] w-[1.2rem] transition-all ${isDark ? "rotate-90 scale-0" : "rotate-0 scale-100"}`;
-		moonClass = `absolute h-[1.2rem] w-[1.2rem] transition-all ${isDark ? "rotate-0 scale-100" : "rotate-90 scale-0"}`;
+		sunClass = `h-[1.2rem] w-[1.2rem] transition-all ${
+			isDark ? "rotate-90 scale-0" : "rotate-0 scale-100"
+		}`;
+		moonClass = `absolute h-[1.2rem] w-[1.2rem] transition-all ${
+			isDark ? "rotate-0 scale-100" : "rotate-90 scale-0"
+		}`;
 
 		const handleThemeChange = (e: MediaQueryListEvent) => {
 			if (theme === "system") {
 				isDark = e.matches;
 
-				sunClass = `h-[1.2rem] w-[1.2rem] transition-all ${isDark ? "rotate-90 scale-0" : "rotate-0 scale-100"}`;
-				moonClass = `absolute h-[1.2rem] w-[1.2rem] transition-all ${isDark ? "rotate-0 scale-100" : "rotate-90 scale-0"}`;
+				sunClass = `h-[1.2rem] w-[1.2rem] transition-all ${
+					isDark ? "rotate-90 scale-0" : "rotate-0 scale-100"
+				}`;
+				moonClass = `absolute h-[1.2rem] w-[1.2rem] transition-all ${
+					isDark ? "rotate-0 scale-100" : "rotate-90 scale-0"
+				}`;
 				document.documentElement.classList.toggle("dark", isDark);
 			}
 		};
@@ -68,7 +76,12 @@
 	}
 </script>
 
-<div class="border-border sticky top-0 z-30 flex w-full flex-row border-b backdrop-blur-sm">
+<div class="header-container border-border sticky top-0 z-30 flex w-full flex-row border-b">
+	<!-- Frosted glass backdrop elements -->
+	<div class="backdrop"></div>
+	<div class="backdrop-edge"></div>
+
+	<!-- Your original header content -->
 	<div class="border-border flex h-14 max-w-48 items-center border-r-2 border-b px-2">
 		<Select.Root type="single" disabled>
 			<Select.Trigger class="w-[180px]">config.json</Select.Trigger>
@@ -103,3 +116,93 @@
 		{/if}
 	</div>
 </div>
+
+<style>
+	.header-container {
+		--thickness: 4px;
+		position: sticky;
+		top: 0;
+		/* Fallback for unsupported browsers - reduced opacity */
+		background: hsl(0deg 0% 100% / 0.85);
+	}
+
+	/* For dark mode support */
+	:global(.dark) .header-container {
+		background: hsl(220deg 10% 10% / 0.85);
+	}
+
+	/* Support for backdrop-filter browsers */
+	@supports (backdrop-filter: blur(24px)) or (-webkit-backdrop-filter: blur(24px)) {
+		.header-container {
+			/* Significantly reduced background opacity for more transparency */
+			background: hsl(0deg 0% 100% / 0.25);
+		}
+
+		:global(.dark) .header-container {
+			background: hsl(220deg 10% 10% / 0.25);
+		}
+
+		.backdrop {
+			position: absolute;
+			inset: 0;
+			/* Increased blur amount */
+			-webkit-backdrop-filter: blur(24px);
+			backdrop-filter: blur(24px);
+			/* Reduced gradient opacity */
+			background: linear-gradient(to bottom, hsl(0deg 0% 95% / 0.5), transparent 50%);
+			pointer-events: none;
+			z-index: -1;
+		}
+
+		:global(.dark) .backdrop {
+			background: linear-gradient(to bottom, hsl(220deg 10% 10% / 0.5), transparent 50%);
+		}
+
+		.backdrop-edge {
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			height: var(--thickness);
+			background: hsl(0deg 0% 100% / 0.1);
+			/* Increased blur amount */
+			-webkit-backdrop-filter: blur(18px) brightness(0.97);
+			backdrop-filter: blur(18px) brightness(0.97);
+			transform: translateY(100%);
+			pointer-events: none;
+			z-index: -1;
+		}
+
+		:global(.dark) .backdrop-edge {
+			background: hsl(220deg 10% 10% / 0.1);
+			-webkit-backdrop-filter: blur(18px) brightness(1.03);
+			backdrop-filter: blur(18px) brightness(1.03);
+		}
+	}
+
+	/* Support for mask-image browsers */
+	@supports (mask-image: none) or (-webkit-mask-image: none) {
+		.backdrop {
+			height: 200%;
+			-webkit-mask-image: linear-gradient(to bottom, black 0% 50%, transparent 50% 100%);
+			mask-image: linear-gradient(to bottom, black 0% 50%, transparent 50% 100%);
+		}
+
+		.backdrop-edge {
+			height: 100%;
+			inset: 0;
+			-webkit-mask-image: linear-gradient(
+				to bottom,
+				black 0,
+				black var(--thickness),
+				transparent var(--thickness)
+			);
+			mask-image: linear-gradient(
+				to bottom,
+				black 0,
+				black var(--thickness),
+				transparent var(--thickness)
+			);
+		}
+	}
+</style>

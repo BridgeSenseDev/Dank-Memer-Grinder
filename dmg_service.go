@@ -79,7 +79,7 @@ func (d *DmgService) UpdateConfig(newCfg *config.Config) error {
 	if err := newCfg.Validate(); err != nil {
 		return err
 	}
-
+	application.Get().EmitEvent("log", utils.Important, utils.Info, "", "HELLOOOOO")
 	d.cfg = newCfg
 
 	configJSON, err := json.MarshalIndent(newCfg, "", "  ")
