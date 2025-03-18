@@ -2,8 +2,14 @@
 
 package utils
 
+import (
+	"os"
+	"os/exec"
+	"syscall"
+)
+
 func RunUpdater(updaterTempPath string, newBinaryTempPath string) error {
-	current, err = os.Executable()
+	current, err := os.Executable()
 	if err != nil {
 		return err
 	}
