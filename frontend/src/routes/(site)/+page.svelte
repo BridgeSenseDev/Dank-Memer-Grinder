@@ -84,6 +84,8 @@
 	}
 
 	onMount(() => {
+		window.scrollTo(0, 0);
+
 		const calculateHeight = () => {
 			if (containerRef) {
 				const rect = containerRef.getBoundingClientRect();
@@ -107,12 +109,12 @@
 	bind:this={containerRef}
 	in:fade={{ delay: 100, duration: 250 }}
 	out:fade={{ duration: 100 }}
-	class="z-10 flex flex-col"
+	class="z-10 flex flex-col overflow-hidden"
 	style="height: {containerHeight}; max-height: {containerHeight};"
 >
 	<Tabs.Root
 		bind:value={mainCurrentTab}
-		class="flex h-full w-full flex-col"
+		class="flex h-full w-full flex-col overflow-hidden"
 		onValueChange={(value) => handleTabChange(value)}
 	>
 		<div class="bg-background/95 sticky top-0 z-10 backdrop-blur-sm">
@@ -125,7 +127,7 @@
 
 		<div class="flex-1 overflow-hidden">
 			{#each ["important", "others", "discord"] as tabName (tabName)}
-				<Tabs.Content value={tabName} class="h-full">
+				<Tabs.Content value={tabName} class="h-full overflow-hidden">
 					<div
 						class="log-container-{tabName} border-ring scrollbar-thin scrollbar-track-transparent scrollbar-thumb-primary/50 relative h-full w-full overflow-y-auto scroll-auto rounded-md border-2 bg-transparent px-3 py-2 text-sm shadow-xs outline-hidden"
 						style="max-height: calc({containerHeight} - 45px);"
