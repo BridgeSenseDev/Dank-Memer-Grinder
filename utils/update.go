@@ -136,6 +136,9 @@ func extractZip(zipPath, targetDir string) error {
 
 func DownloadUpdate() error {
 	osName := runtime.GOOS
+	if osName == "darwin" {
+		osName = "macos"
+	}
 	EmitEventIfNotCLI("downloadProgress", 0)
 
 	dmgURL := fmt.Sprintf(

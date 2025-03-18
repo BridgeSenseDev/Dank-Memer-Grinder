@@ -70,7 +70,7 @@ jobs:
 
       - name: Build Wails project (Darwin)
         if: matrix.os == 'macos-latest'
-        run: wails3 task ${{ matrix.wails_os }}:build
+        run: wails3 task ${{ matrix.wails_os }}:package:universal
 
       - name: Handle Linux AppImage
         if: matrix.os == 'ubuntu-latest'
