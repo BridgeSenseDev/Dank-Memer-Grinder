@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"sync"
+	"time"
 
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/config"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
@@ -138,7 +139,8 @@ func (d *DmgService) CheckForUpdates() bool {
 
 	if newVersion != "" && newVersion != currentVersion {
 		application.Get().CurrentWindow().SetURL("/#/update")
-		application.Get().EmitEvent("updateChanges", currentVersion, newVersion, changes)
+		time.Sleep(500 * time.Millisecond)
+		utils.EmitEventIfNotCLI("updateChanges", currentVersion, newVersion, changes)
 		return true
 	}
 
@@ -147,14 +149,14 @@ func (d *DmgService) CheckForUpdates() bool {
 
 func (d *DmgService) Update() {
 	if application.Get().Environment().Debug {
-		application.Get().EmitEvent("updateFailed", "Debug environment detected. Update using git instead.")
+		utils.EmitEventIfNotCLI("updateFailed", "Debug environment detected. Update using git instead.")
 		return
 	}
 
 	err := utils.DownloadUpdate()
 	if err != nil {
 		utils.Log(utils.Important, utils.Error, "", fmt.Sprintf("Failed to download update: %s", err.Error()))
-		application.Get().EmitEvent("updateFailed", err.Error())
+		utils.EmitEventIfNotCLI("updateFailed", err.Error())
 		return
 	}
 }
