@@ -3,10 +3,10 @@ module github.com/BridgeSenseDev/Dank-Memer-Grinder
 go 1.23.4
 
 require (
+	dario.cat/mergo v1.0.1
 	github.com/fasthttp/websocket v1.5.12
 	github.com/goccy/go-json v0.10.5
 	github.com/grongor/panicwatch v1.3.0
-	github.com/imdario/mergo v0.3.16
 	github.com/jeandeaual/go-locale v0.0.0-20241217141322-fcc2cadd6f08
 	github.com/sasha-s/go-csync v0.0.0-20240107134140-fcbab37b09ad
 	github.com/valyala/fasthttp v1.59.0
@@ -15,7 +15,6 @@ require (
 )
 
 require (
-	dario.cat/mergo v1.0.1 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/ProtonMail/go-crypto v1.1.4 // indirect
 	github.com/adrg/xdg v0.5.0 // indirect
@@ -29,7 +28,7 @@ require (
 	github.com/go-errors/errors v1.5.1 // indirect
 	github.com/go-git/gcfg v1.5.1-0.20230307220236-3a3c6141e376 // indirect
 	github.com/go-git/go-billy/v5 v5.6.2 // indirect
-	github.com/go-git/go-git/v5 v5.13.1 // indirect
+	github.com/go-git/go-git/v5 v5.12.0 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
 	github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 // indirect

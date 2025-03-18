@@ -10,12 +10,12 @@ import (
 	"sync"
 	"time"
 
+	"dario.cat/mergo"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/config"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/instance"
 	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
-	"github.com/imdario/mergo"
 	"github.com/valyala/fasthttp"
 )
 
