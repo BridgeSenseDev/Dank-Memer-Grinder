@@ -57,7 +57,7 @@ type CustomHandler struct {
 	slog.Handler
 }
 
-func (h *CustomHandler) Handle(ctx context.Context, r slog.Record) error {
+func (h *CustomHandler) Handle(_ context.Context, r slog.Record) error {
 	timeStr := r.Time.Format("3:04PM")
 	level := r.Level.String()[:3]
 	msg := r.Message

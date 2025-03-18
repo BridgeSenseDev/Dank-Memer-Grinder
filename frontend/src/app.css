@@ -134,3 +134,83 @@ h3 {
 h3 {
 	@apply text-sm font-normal dark:text-white;
 }
+
+.header-container {
+	--thickness: 4px;
+}
+
+@supports (backdrop-filter: blur(24px)) or (-webkit-backdrop-filter: blur(24px)) {
+	.backdrop {
+		@apply pointer-events-none absolute inset-0 -z-10;
+		-webkit-backdrop-filter: blur(24px);
+		backdrop-filter: blur(24px);
+		background: linear-gradient(to bottom, hsl(0deg 0% 95% / 0.3), transparent 50%);
+	}
+
+	.dark .backdrop {
+		background: linear-gradient(to bottom, hsl(220deg 10% 10% / 0.3), transparent 50%);
+	}
+
+	.backdrop-edge {
+		@apply pointer-events-none absolute right-0 bottom-0 left-0 -z-10;
+		height: var(--thickness);
+		background: hsl(0deg 0% 100% / 0.1);
+		-webkit-backdrop-filter: blur(18px) brightness(0.97);
+		backdrop-filter: blur(18px) brightness(0.97);
+		transform: translateY(100%);
+	}
+
+	.dark .backdrop-edge {
+		background: hsl(220deg 10% 10% / 0.1);
+		-webkit-backdrop-filter: blur(18px) brightness(1.03);
+		backdrop-filter: blur(18px) brightness(1.03);
+	}
+}
+
+@supports (mask-image: none) or (-webkit-mask-image: none) {
+	.backdrop {
+		height: 200%;
+		-webkit-mask-image: linear-gradient(to bottom, black 0% 50%, transparent 50% 100%);
+		mask-image: linear-gradient(to bottom, black 0% 50%, transparent 50% 100%);
+	}
+
+	.backdrop-edge {
+		height: 100%;
+		inset: 0;
+		-webkit-mask-image: linear-gradient(
+			to bottom,
+			black 0,
+			black var(--thickness),
+			transparent var(--thickness)
+		);
+		mask-image: linear-gradient(
+			to bottom,
+			black 0,
+			black var(--thickness),
+			transparent var(--thickness)
+		);
+	}
+}
+
+/* Platform compatibility fixes */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+	/* WebKit specific styles (Linux/Safari) */
+	.backdrop {
+		background: linear-gradient(to bottom, hsl(0deg 0% 95% / 0.2), transparent 50%);
+	}
+
+	.dark .backdrop {
+		background: linear-gradient(to bottom, hsl(220deg 10% 10% / 0.2), transparent 50%);
+	}
+}
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+	/* Edge specific styles */
+	.backdrop {
+		background: linear-gradient(to bottom, hsl(0deg 0% 95% / 0.4), transparent 50%);
+	}
+
+	.dark .backdrop {
+		background: linear-gradient(to bottom, hsl(220deg 10% 10% / 0.4), transparent 50%);
+	}
+}

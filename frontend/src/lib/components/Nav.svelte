@@ -51,7 +51,7 @@
 	<div class="flex h-full flex-col justify-between">
 		<div class="group flex flex-col gap-4 py-2">
 			<nav class="grid gap-1 px-2">
-				{#each routes as route}
+				{#each routes as route (route.path)}
 					<a href={route.path} class="flex flex-col">
 						<Button
 							size="sm"

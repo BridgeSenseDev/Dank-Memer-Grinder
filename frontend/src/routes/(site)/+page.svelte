@@ -1,16 +1,42 @@
 <script lang="ts">
 	import * as Tabs from "$lib/components/ui/tabs";
 	import { fade } from "svelte/transition";
-	import { type LogEntry, logs } from "$lib/state.svelte.js";
+	import { logs } from "$lib/state.svelte.js";
 	import { onMount } from "svelte";
 	import LogItem from "$lib/components/LogItem.svelte";
+	import type { LogEntry } from "$lib/state.svelte";
+
+	interface TabScrollState {
+		visibleStartIndex: number;
+		visibleItemCount: number;
+		scrollTop: number;
+	}
+
+	function getLogsForTab(tabName: string): LogEntry[] {
+		switch (tabName) {
+			case "important":
+				return logs.importantLogs;
+			case "others":
+				return logs.othersLogs;
+			case "discord":
+				return logs.discordLogs;
+			default:
+				return [];
+		}
+	}
 
 	let mainCurrentTab = $state("important");
 	let containerHeight = $state("auto");
 	let containerRef: HTMLDivElement | null = null;
 
-	let visibleStartIndex = $state(0);
-	let visibleItemCount = $state(100);
+	let tabScrollStates: Record<string, TabScrollState> = $state({
+		important: { visibleStartIndex: 0, visibleItemCount: 100, scrollTop: 0 },
+		others: { visibleStartIndex: 0, visibleItemCount: 100, scrollTop: 0 },
+		discord: { visibleStartIndex: 0, visibleItemCount: 100, scrollTop: 0 }
+	});
+
+	const ITEM_HEIGHT = 24;
+	const BUFFER_ITEMS = 50;
 
 	mainCurrentTab = sessionStorage.getItem("mainCurrentTab") || "important";
 
@@ -19,29 +45,42 @@
 	});
 
 	$effect(() => {
-		scrollToBottom();
+		scrollToBottom(mainCurrentTab);
 	});
 
-	function scrollToBottom() {
+	function scrollToBottom(tabName: string) {
 		setTimeout(() => {
-			const currentContainer = document.querySelector(".log-container");
+			const currentContainer = document.querySelector(`.log-container-${tabName}`);
 			if (currentContainer) {
 				currentContainer.scrollTop = currentContainer.scrollHeight;
+				updateTabScrollState(tabName, currentContainer);
 			}
 		}, 0);
 	}
 
-	function handleScroll(e: Event, logEntries: LogEntry[]) {
-		const container = e.target as HTMLDivElement;
+	function updateTabScrollState(tabName: string, container: Element) {
 		const scrollTop = container.scrollTop;
-		const itemHeight = 24;
+		tabScrollStates[tabName].scrollTop = scrollTop;
 
-		visibleStartIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - 10);
-		visibleItemCount = Math.ceil(container.clientHeight / itemHeight) + 20;
+		const visibleStartIndex = Math.max(0, Math.floor(scrollTop / ITEM_HEIGHT) - BUFFER_ITEMS);
+		const visibleItemCount = Math.ceil(container.clientHeight / ITEM_HEIGHT) + BUFFER_ITEMS * 2;
 
-		if (visibleStartIndex + visibleItemCount > logEntries.length) {
-			visibleStartIndex = Math.max(0, logEntries.length - visibleItemCount);
-		}
+		tabScrollStates[tabName].visibleStartIndex = visibleStartIndex;
+		tabScrollStates[tabName].visibleItemCount = visibleItemCount;
+	}
+
+	function handleScroll(e: Event, tabName: string) {
+		const container = e.target as HTMLDivElement;
+		updateTabScrollState(tabName, container);
+	}
+
+	function handleTabChange(tabName: string) {
+		setTimeout(() => {
+			const container = document.querySelector(`.log-container-${tabName}`);
+			if (container) {
+				container.scrollTop = tabScrollStates[tabName].scrollTop;
+			}
+		}, 0);
 	}
 
 	onMount(() => {
@@ -56,7 +95,7 @@
 
 		calculateHeight();
 		window.addEventListener("resize", calculateHeight);
-		scrollToBottom();
+		scrollToBottom(mainCurrentTab);
 
 		return () => {
 			window.removeEventListener("resize", calculateHeight);
@@ -71,7 +110,11 @@
 	class="z-10 flex flex-col"
 	style="height: {containerHeight}; max-height: {containerHeight};"
 >
-	<Tabs.Root bind:value={mainCurrentTab} class="flex h-full w-full flex-col">
+	<Tabs.Root
+		bind:value={mainCurrentTab}
+		class="flex h-full w-full flex-col"
+		onValueChange={(value) => handleTabChange(value)}
+	>
 		<div class="bg-background/95 sticky top-0 z-10 backdrop-blur-sm">
 			<Tabs.List class="grid w-full grid-cols-3">
 				<Tabs.Trigger value="important">Important</Tabs.Trigger>
@@ -81,19 +124,22 @@
 		</div>
 
 		<div class="flex-1 overflow-hidden">
-			{#each ["important", "others", "discord"] as tabName}
+			{#each ["important", "others", "discord"] as tabName (tabName)}
 				<Tabs.Content value={tabName} class="h-full">
 					<div
-						class="log-container border-ring h-full w-full overflow-auto rounded-md border-2 bg-transparent px-3 py-2 text-sm shadow-xs outline-hidden"
+						class="log-container-{tabName} border-ring scrollbar-thin scrollbar-track-transparent scrollbar-thumb-primary/50 relative h-full w-full overflow-y-auto scroll-auto rounded-md border-2 bg-transparent px-3 py-2 text-sm shadow-xs outline-hidden"
 						style="max-height: calc({containerHeight} - 45px);"
-						onscroll={(e) => handleScroll(e, logs[`${tabName}Logs`])}
+						onscroll={(e) => handleScroll(e, tabName)}
 					>
-						{#if logs[`${tabName}Logs`].length === 0}
+						{#if getLogsForTab(tabName).length === 0}
 							<div class="text-gray-400 italic">No logs yet</div>
 						{:else}
-							<div style="height: {visibleStartIndex * 24}px"></div>
+							<div
+								class="spacer-top pointer-events-none select-none"
+								style="height: {tabScrollStates[tabName].visibleStartIndex * ITEM_HEIGHT}px;"
+							></div>
 
-							{#each logs[`${tabName}Logs`].slice(visibleStartIndex, visibleStartIndex + visibleItemCount) as log (log.id)}
+							{#each getLogsForTab(tabName).slice(tabScrollStates[tabName].visibleStartIndex, tabScrollStates[tabName].visibleStartIndex + tabScrollStates[tabName].visibleItemCount) as log (log.id)}
 								<LogItem
 									timestamp={log.timestamp}
 									type={log.type}
@@ -101,6 +147,16 @@
 									message={log.message}
 								/>
 							{/each}
+
+							<div
+								class="spacer-bottom pointer-events-none select-none"
+								style="height: {Math.max(
+									0,
+									getLogsForTab(tabName).length -
+										(tabScrollStates[tabName].visibleStartIndex +
+											tabScrollStates[tabName].visibleItemCount)
+								) * ITEM_HEIGHT}px;"
+							></div>
 						{/if}
 					</div>
 				</Tabs.Content>
@@ -108,13 +164,3 @@
 		</div>
 	</Tabs.Root>
 </div>
-
-<style>
-	:global(.h-full > [role="tabpanel"]) {
-		height: 100%;
-	}
-
-	.log-container {
-		scroll-behavior: smooth;
-	}
-</style>
