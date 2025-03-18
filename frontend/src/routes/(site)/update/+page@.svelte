@@ -134,7 +134,7 @@
 	<div class="bg-card mb-8 flex flex-1 flex-col rounded-lg border p-4 shadow-sm">
 		<span class="mb-2 text-2xl font-bold">Changelog</span>
 		<div class="flex-1 overflow-y-auto">
-			<div class="prose text-white">
+			<div class="prose text-black dark:text-white">
 				<SvelteMarkdown {source} />
 			</div>
 		</div>
