@@ -3,7 +3,7 @@ module github.com/BridgeSenseDev/Dank-Memer-Grinder
 go 1.23.4
 
 require (
-	dario.cat/mergo v1.0.1
+	dario.cat/mergo v1.0.2
 	github.com/fasthttp/websocket v1.5.12
 	github.com/goccy/go-json v0.10.5
 	github.com/grongor/panicwatch v1.3.0
