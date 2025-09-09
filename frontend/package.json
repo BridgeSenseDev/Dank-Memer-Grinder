@@ -45,7 +45,7 @@
 		"@tailwindcss/typography": "^0.5.16",
 		"@tanstack/table-core": "^8.21.2",
 		"@wailsio/runtime": "^3.0.0-alpha.66",
-		"lucide-svelte": "^0.542.0",
+		"lucide-svelte": "^0.543.0",
 		"svelte-radix": "^2.0.1"
 	}
 }
