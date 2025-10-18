@@ -27,6 +27,16 @@ type Cooldowns struct {
 	StartDelay       DelayMinutes `json:"startDelay"`
 	EventDelay       DelaySeconds `json:"eventDelay"`
 }
+type ServerEventsConfig struct {
+    State                 bool `json:"state"`
+    Delay                 int  `json:"delay"`
+    MinimumWalletBalance  int  `json:"minimumWalletBalance"`
+    AutoConfirm           bool `json:"autoConfirm"`
+    ConfirmDelay          struct {
+        MinSeconds float64 `json:"minSeconds"`
+        MaxSeconds float64 `json:"maxSeconds"`
+    } `json:"confirmDelay"`
+}
 
 type Config struct {
 	State               bool               `json:"state"`
