@@ -14,15 +14,9 @@
   ·
   <a href="https://dankmemer.tools/">Website</a>
 
-  ![GitHub License](https://img.shields.io/github/license/BridgeSenseDev/Dank-Memer-Grinder?style=for-the-badge&color=%2322c55e)
-  ![GitHub Release](https://img.shields.io/github/v/release/BridgeSenseDev/Dank-Memer-Grinder?include_prereleases&sort=semver&style=for-the-badge)
-  ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/BridgeSenseDev/Dank-Memer-Grinder/total?style=for-the-badge&color=%2322c55e)
-
-  [![Discord Server Invite](https://invidget.switchblade.xyz/KTrmQnhCHb)](https://discord.gg/KTrmQnhCHb)
+  [![Discord Server Invite](https://invidget.switchblade.xyz/qvTXA2wRfP)](https://discord.gg/qvTXA2wRfP)
   
-  <a href="https://www.buymeacoffee.com/bridgesense"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=bridgesense&button_colour=199532&font_colour=ffffff&font_family=Arial&outline_colour=ffffff&coffee_colour=FFDD00" /></a>
-</div>
-
+ 
 > 🚨 WARNING: USE AT YOUR OWN RISK. This is a self-bot and is in violation of Discord's and Dank Memer's rules and TOS. By using this software, you acknowledge that we take no responsibility for any action taken against your account, whether by Discord or Dank Memer.
 >
 > It is crucial that you take appropriate measures to avoid detection. These measures include:
@@ -33,7 +27,7 @@
 > </ol>
 
 ## Features
-A detailed breakdown of features are available in our [**<u>documentation</u>**](https://docs.dankmemer.tools/features/commands).
+A detailed breakdown of features are available in our [**<u>documentation</u>**](https://discord.gg/qvTXA2wRfP).
 
 -   [x] **Undetectable:** Mimics native api's used by official discord clients, making it impossible for discord to tell the difference.
 -   [x] **Accurate and Cheap Captcha Solver (Not public yet):** Automatically solve captchas on many accounts while being undetectable, only at $0.005 per captcha solved ($0.5 / 100 captchas).
@@ -49,34 +43,3 @@ A detailed breakdown of features are available in our [**<u>documentation</u>**]
   <img src=".github/assets/img/commands.png" width="400">
 </div>
 
-## Documentation
-
-### Installation
-- [Pre-Built binaries (Recommended)](https://docs.dankmemer.tools/installation/pre-built-binaries)
-- [Build from source](https://docs.dankmemer.tools/installation/build-from-source)
-
-### Getting Started
-- [Entering token and channel ID](https://docs.dankmemer.tools/configuration/entering-token-and-channel-id)
-- [config.json file](https://docs.dankmemer.tools/configuration/config-json)
-- [General settings](https://docs.dankmemer.tools/configuration/general-settings)
-- [Commands Settings](https://docs.dankmemer.tools/configuration/commands-settings)
-- [Auto buy settings](https://docs.dankmemer.tools/configuration/auto-buy-settings)
-- [Auto use settings](https://docs.dankmemer.tools/configuration/auto-use-settings)
-
-### Features
-- [Commands](https://docs.dankmemer.tools/features/commands)
-- [Minigames](https://docs.dankmemer.tools/features/minigames)
-
-## Credits
-- [dgate](https://github.com/LuminalDev/dgate)
-- [disgo](https://github.com/disgoorg/disgo)
-- [catchtwo](https://github.com/kyan0045/CatchTwo)
-- [slashy](https://github.com/TahaGorme/slashy)
-
-## Star History
-<div align="center">
-  <a href="https://star-history.com/#bridgesensedev/dank-memer-grinder&Date">
-    <img src="https://api.star-history.com/svg?repos=BridgeSenseDev/Dank-Memer-Grinder&type=Date" 
-         alt="Star History Chart">
-  </a>
-</div>
