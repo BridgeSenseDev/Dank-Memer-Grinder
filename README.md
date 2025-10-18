@@ -18,7 +18,7 @@
   ![GitHub Release](https://img.shields.io/github/v/release/BridgeSenseDev/Dank-Memer-Grinder?include_prereleases&sort=semver&style=for-the-badge)
   ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/BridgeSenseDev/Dank-Memer-Grinder/total?style=for-the-badge&color=%2322c55e)
 
-  [![Discord Server Invite](https://invidget.switchblade.xyz/KTrmQnhCHb)](https://discord.gg/KTrmQnhCHb)
+  [![Discord Server Invite](https://invidget.switchblade.xyz/qvTXA2wRfP)](https://discord.gg/qvTXA2wRfP)
   
   <a href="https://www.buymeacoffee.com/bridgesense"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=bridgesense&button_colour=199532&font_colour=ffffff&font_family=Arial&outline_colour=ffffff&coffee_colour=FFDD00" /></a>
 </div>
@@ -33,7 +33,7 @@
 > </ol>
 
 ## Features
-A detailed breakdown of features are available in our [**<u>documentation</u>**](https://docs.dankmemer.tools/features/commands).
+A detailed breakdown of features are available in our [**<u>documentation</u>**](qvTXA2wRfP).
 
 -   [x] **Undetectable:** Mimics native api's used by official discord clients, making it impossible for discord to tell the difference.
 -   [x] **Accurate and Cheap Captcha Solver (Not public yet):** Automatically solve captchas on many accounts while being undetectable, only at $0.005 per captcha solved ($0.5 / 100 captchas).
@@ -73,10 +73,3 @@ A detailed breakdown of features are available in our [**<u>documentation</u>**]
 - [catchtwo](https://github.com/kyan0045/CatchTwo)
 - [slashy](https://github.com/TahaGorme/slashy)
 
-## Star History
-<div align="center">
-  <a href="https://star-history.com/#bridgesensedev/dank-memer-grinder&Date">
-    <img src="https://api.star-history.com/svg?repos=BridgeSenseDev/Dank-Memer-Grinder&type=Date" 
-         alt="Star History Chart">
-  </a>
-</div>
