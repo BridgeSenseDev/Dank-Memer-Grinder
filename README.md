@@ -18,7 +18,7 @@
   ![GitHub Release](https://img.shields.io/github/v/release/BridgeSenseDev/Dank-Memer-Grinder?include_prereleases&sort=semver&style=for-the-badge)
   ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/BridgeSenseDev/Dank-Memer-Grinder/total?style=for-the-badge&color=%2322c55e)
 
-  [![Discord Server Invite](https://invidget.switchblade.xyz/KTrmQnhCHb)](https://discord.gg/KTrmQnhCHb)
+  [![Discord Server Invite](https://invidget.switchblade.xyz/qvTXA2wRfP)](https://discord.gg/qvTXA2wRfP)
   
   <a href="https://www.buymeacoffee.com/bridgesense"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=bridgesense&button_colour=199532&font_colour=ffffff&font_family=Arial&outline_colour=ffffff&coffee_colour=FFDD00" /></a>
 </div>
