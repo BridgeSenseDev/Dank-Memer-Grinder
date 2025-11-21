@@ -9,7 +9,7 @@ require (
 	github.com/grongor/panicwatch v1.3.0
 	github.com/jeandeaual/go-locale v0.0.0-20241217141322-fcc2cadd6f08
 	github.com/sasha-s/go-csync v0.0.0-20240107134140-fcbab37b09ad
-	github.com/valyala/fasthttp v1.65.0
+	github.com/valyala/fasthttp v1.68.0
 	github.com/wailsapp/wails/v3 v3.0.0-alpha.9
 	golang.org/x/image v0.30.0
 )
