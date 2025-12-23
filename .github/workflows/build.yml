@@ -91,21 +91,21 @@ jobs:
 
       - name: Upload Linux binaries to GitHub release
         if: matrix.os == 'ubuntu-latest'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: DMG-linux
           path: './bin/dmg-x86_64.AppImage'
 
       - name: Upload Windows binaries to GitHub release
         if: matrix.os == 'windows-latest'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: DMG-windows
           path: './bin/dmg.exe'
 
       - name: Upload Darwin binaries to GitHub release
         if: matrix.os == 'macos-latest'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: DMG-macos
           path: './bin/dmg'
