@@ -44,8 +44,8 @@ class Cfg {
 			});
 		});
 
-		Events.On("configUpdate", (data: { data: [newCfg: Config] }) => {
-			this.c = data.data[0];
+		Events.On("configUpdate", (event) => {
+			this.c = event.data;
 		});
 
 		this.fetch();
@@ -63,12 +63,12 @@ class Instances {
 	i = $state<View[]>([]);
 
 	constructor() {
-		Events.On("instanceUpdate", (data: { data: [newInstance: View] }) => {
-			const instance = this.findInstance(data.data[0].accountCfg.token);
+		Events.On("instanceUpdate", (event) => {
+			const instance = this.findInstance(event.data.accountCfg.token);
 			if (instance) {
-				instances.i[this.findInstanceIndex(data.data[0].accountCfg.token)] = data.data[0];
+				instances.i[this.findInstanceIndex(event.data.accountCfg.token)] = event.data;
 			} else {
-				this.i.push(data.data[0]);
+				this.i.push(event.data);
 			}
 		});
 	}
@@ -98,29 +98,23 @@ class Logs {
 	nextId = 0;
 
 	constructor() {
-		Events.On(
-			"log",
-			(data: { data: [level: string, logType: string, username: string, msg: string] }) => {
-				const level = data.data[0];
-				const logType = data.data[1];
-				const username = data.data[2];
-				const msg = data.data[3];
+		Events.On("log", (event) => {
+			const data = event.data;
 
-				const logEntry = this.createLogEntry(level, logType, username, msg);
+			const logEntry = this.createLogEntry(data.level, data.type, data.username, data.message);
 
-				switch (level) {
-					case "important":
-						this.addLogEntry(this.importantLogs, logEntry);
-						break;
-					case "others":
-						this.addLogEntry(this.othersLogs, logEntry);
-						break;
-					case "discord":
-						this.addLogEntry(this.discordLogs, logEntry);
-						break;
-				}
+			switch (data.level) {
+				case "important":
+					this.addLogEntry(this.importantLogs, logEntry);
+					break;
+				case "others":
+					this.addLogEntry(this.othersLogs, logEntry);
+					break;
+				case "discord":
+					this.addLogEntry(this.discordLogs, logEntry);
+					break;
 			}
-		);
+		});
 	}
 
 	private createLogEntry(level: string, type: string, username: string, msg: string): LogEntry {

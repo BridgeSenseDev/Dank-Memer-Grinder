@@ -1,6 +1,7 @@
 import { sveltekit } from "@sveltejs/kit/vite";
 import { defineConfig, searchForWorkspaceRoot } from "vite";
 import tailwindcss from "@tailwindcss/vite";
+import wails from "@wailsio/runtime/plugins/vite";
 import path from "path";
 
 export default defineConfig({
@@ -19,5 +20,5 @@ export default defineConfig({
 			"@": path.resolve(__dirname, "./")
 		}
 	},
-	plugins: [sveltekit(), tailwindcss()]
+	plugins: [sveltekit(), tailwindcss(), wails("./bindings")]
 });

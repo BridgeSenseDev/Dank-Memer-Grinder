@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
-@plugin 'tailwind-scrollbar';
+@plugin "tailwind-scrollbar";
 
 @variant dark (&:where(.dark, .dark *));
 

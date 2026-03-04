@@ -6,21 +6,27 @@ import (
 	"embed"
 	"flag"
 	"fmt"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
-	"github.com/grongor/panicwatch"
-	"github.com/wailsapp/wails/v3/pkg/application"
-	"github.com/wailsapp/wails/v3/pkg/events"
 	"log/slog"
 	_ "net/http/pprof"
 	"os"
 	"strings"
 	"sync"
+
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/config"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/instance"
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
+	"github.com/grongor/panicwatch"
+	"github.com/wailsapp/wails/v3/pkg/application"
+	"github.com/wailsapp/wails/v3/pkg/events"
 )
 
 //go:embed all:frontend/dist
 var assets embed.FS
 
 func init() {
+	application.RegisterEvent[config.Config]("configUpdate")
+	application.RegisterEvent[instance.View]("instanceUpdate")
+	application.RegisterEvent[utils.LogEvent]("log")
 	redirectStderr()
 }
 
@@ -148,7 +154,7 @@ func main() {
 			ProgramName: "Dank Memer Grinder"},
 	})
 
-	window := app.NewWebviewWindowWithOptions(application.WebviewWindowOptions{
+	window := app.Window.NewWithOptions(application.WebviewWindowOptions{
 		Title:         "Dank Memer Grinder",
 		Width:         1024,
 		Height:        768,
@@ -160,7 +166,7 @@ func main() {
 		Frameless:     false,
 	})
 
-	app.OnApplicationEvent(events.Common.ApplicationStarted, func(event *application.ApplicationEvent) {
+	app.Event.OnApplicationEvent(events.Common.ApplicationStarted, func(event *application.ApplicationEvent) {
 		window.SetURL("/#/")
 		dmgService.startup()
 	})

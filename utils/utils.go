@@ -3,16 +3,16 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/config"
-	"github.com/valyala/fasthttp"
-	"github.com/wailsapp/wails/v3/pkg/application"
-	"log/slog"
 	"math/rand"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/BridgeSenseDev/Dank-Memer-Grinder/config"
+	"github.com/valyala/fasthttp"
+	"github.com/wailsapp/wails/v3/pkg/application"
 )
 
 var src = rand.NewSource(time.Now().UnixNano())
@@ -162,33 +162,6 @@ func MakeAPIRequest(url string, headers map[string]string) (*ApiResponse, error)
 	return &apiResponse, nil
 }
 
-type LogLevel string
-
-const (
-	Important LogLevel = "important"
-	Others    LogLevel = "others"
-	Discord   LogLevel = "discord"
-)
-
-type LogType string
-
-const (
-	Info  LogType = "INF"
-	Error LogType = "ERR"
-)
-
-func Log(level LogLevel, logType LogType, username string, msg string) {
-	EmitEventIfNotCLI(
-		"log", level, logType, username, msg)
-
-	switch logType {
-	case Info:
-		slog.Info(fmt.Sprintf("%s %s %s", level, username, msg))
-	case Error:
-		slog.Error(fmt.Sprintf("%s %s %s", level, username, msg))
-	}
-}
-
 func GetConfigPath() string {
 	if appImagePath := os.Getenv("APPIMAGE"); appImagePath != "" {
 		return filepath.Join(filepath.Dir(appImagePath), "config.json")
@@ -230,6 +203,6 @@ func SetCliMode(checker func() bool) {
 
 func EmitEventIfNotCLI(eventName string, args ...interface{}) {
 	if !isCliMode() {
-		application.Get().EmitEvent(eventName, args...)
+		application.Get().Event.Emit(eventName, args...)
 	}
 }

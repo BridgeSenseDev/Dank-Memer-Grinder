@@ -1,10 +1,6 @@
 <script lang="ts">
 	import { Button } from "$lib/components/ui/button";
-	import LogsIcon from "svelte-radix/ActivityLog.svelte";
-	import SettingsIcon from "svelte-radix/Gear.svelte";
-	import CommandsIcon from "svelte-radix/Slash.svelte";
-	import AccountsIcon from "svelte-radix/Person.svelte";
-	import { DiscordLogo, GithubLogo, Globe } from "svelte-radix";
+	import { ActivityLog, Slash, Person, Gear, DiscordLogo, GithubLogo, Globe } from "svelte-radix";
 	import { page } from "$app/state";
 	import { Browser } from "@wailsio/runtime";
 	import { cfg } from "$lib/state.svelte";
@@ -13,10 +9,10 @@
 	import { onMount } from "svelte";
 
 	const routes = [
-		{ path: "/#/", label: "Logs", icon: LogsIcon },
-		{ path: "/#/settings", label: "Settings", icon: SettingsIcon },
-		{ path: "/#/accounts", label: "Accounts", icon: AccountsIcon },
-		{ path: "/#/commands", label: "Commands", icon: CommandsIcon }
+		{ path: "/#/", label: "Logs", icon: ActivityLog },
+		{ path: "/#/settings", label: "Settings", icon: Gear },
+		{ path: "/#/accounts", label: "Accounts", icon: Person },
+		{ path: "/#/commands", label: "Commands", icon: Slash }
 	];
 
 	let selectedRoute = $derived(page.url.hash.split("#/")[1]);

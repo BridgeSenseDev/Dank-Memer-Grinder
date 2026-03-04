@@ -137,7 +137,7 @@ func (d *DmgService) CheckForUpdates() bool {
 	newVersion, changes := utils.CheckForUpdates(currentVersion)
 
 	if newVersion != "" && newVersion != currentVersion {
-		application.Get().CurrentWindow().SetURL("/#/update")
+		application.Get().Window.Current().SetURL("/#/update")
 		time.Sleep(500 * time.Millisecond)
 		utils.EmitEventIfNotCLI("updateChanges", currentVersion, newVersion, changes)
 		return true
@@ -147,7 +147,7 @@ func (d *DmgService) CheckForUpdates() bool {
 }
 
 func (d *DmgService) Update() {
-	if application.Get().Environment().Debug {
+	if application.Get().Env.Info().Debug {
 		utils.EmitEventIfNotCLI("updateFailed", "Debug environment detected. Update using git instead.")
 		return
 	}

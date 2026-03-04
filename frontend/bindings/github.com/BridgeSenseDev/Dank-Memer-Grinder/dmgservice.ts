@@ -3,7 +3,7 @@
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Unused imports
-import {Call as $Call} from "@wailsio/runtime";
+import { Call as $Call, CancellablePromise as $CancellablePromise } from "@wailsio/runtime";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Unused imports
@@ -18,67 +18,54 @@ import * as instance$0 from "./instance/models.js";
 // @ts-ignore: Unused imports
 import * as time$0 from "../../../time/models.js";
 
-export function CheckForUpdates(): Promise<boolean> & { cancel(): void } {
-    let $resultPromise = $Call.ByID(1803947812) as any;
-    return $resultPromise;
+export function CheckForUpdates(): $CancellablePromise<boolean> {
+    return $Call.ByID(1803947812);
 }
 
-export function GetConfig(): Promise<config$0.Config | null> & { cancel(): void } {
-    let $resultPromise = $Call.ByID(2704585121) as any;
-    return $resultPromise;
+export function GetConfig(): $CancellablePromise<config$0.Config | null> {
+    return $Call.ByID(2704585121);
 }
 
-export function GetIndex(token: string): Promise<number> & { cancel(): void } {
-    let $resultPromise = $Call.ByID(1338406745, token) as any;
-    return $resultPromise;
+export function GetIndex(token: string): $CancellablePromise<number> {
+    return $Call.ByID(1338406745, token);
 }
 
-export function RemoveInstance(token: string, restarting: boolean): Promise<void> & { cancel(): void } {
-    let $resultPromise = $Call.ByID(286226590, token, restarting) as any;
-    return $resultPromise;
+export function RemoveInstance(token: string, restarting: boolean): $CancellablePromise<void> {
+    return $Call.ByID(286226590, token, restarting);
 }
 
-export function RestartInstance(token: string): Promise<instance$0.View | null> & { cancel(): void } {
-    let $resultPromise = $Call.ByID(1855792867, token) as any;
-    return $resultPromise;
+export function RestartInstance(token: string): $CancellablePromise<instance$0.View | null> {
+    return $Call.ByID(1855792867, token);
 }
 
-export function RestartInstances(): Promise<void> & { cancel(): void } {
-    let $resultPromise = $Call.ByID(2976101552) as any;
-    return $resultPromise;
+export function RestartInstances(): $CancellablePromise<void> {
+    return $Call.ByID(2976101552);
 }
 
-export function StartInstance(account: config$0.AccountsConfig, readyState: string, breakUpdateTime: time$0.Time): Promise<void> & { cancel(): void } {
-    let $resultPromise = $Call.ByID(1056784576, account, readyState, breakUpdateTime) as any;
-    return $resultPromise;
+export function StartInstance(account: config$0.AccountsConfig, readyState: string, breakUpdateTime: time$0.Time): $CancellablePromise<void> {
+    return $Call.ByID(1056784576, account, readyState, breakUpdateTime);
 }
 
-export function StartInstances(): Promise<void> & { cancel(): void } {
-    let $resultPromise = $Call.ByID(3685538249) as any;
-    return $resultPromise;
+export function StartInstances(): $CancellablePromise<void> {
+    return $Call.ByID(3685538249);
 }
 
-export function Update(): Promise<void> & { cancel(): void } {
-    let $resultPromise = $Call.ByID(749024496) as any;
-    return $resultPromise;
+export function Update(): $CancellablePromise<void> {
+    return $Call.ByID(749024496);
 }
 
-export function UpdateConfig(newCfg: config$0.Config | null): Promise<void> & { cancel(): void } {
-    let $resultPromise = $Call.ByID(2546091902, newCfg) as any;
-    return $resultPromise;
+export function UpdateConfig(newCfg: config$0.Config | null): $CancellablePromise<void> {
+    return $Call.ByID(2546091902, newCfg);
 }
 
-export function UpdateDiscordStatus(status: types$0.OnlineStatus): Promise<void> & { cancel(): void } {
-    let $resultPromise = $Call.ByID(3790660754, status) as any;
-    return $resultPromise;
+export function UpdateDiscordStatus(status: types$0.OnlineStatus): $CancellablePromise<void> {
+    return $Call.ByID(3790660754, status);
 }
 
-export function UpdateInstance(ins: instance$0.Instance | null): Promise<void> & { cancel(): void } {
-    let $resultPromise = $Call.ByID(2920987275, ins) as any;
-    return $resultPromise;
+export function UpdateInstance(ins: instance$0.Instance | null): $CancellablePromise<void> {
+    return $Call.ByID(2920987275, ins);
 }
 
-export function UpdateInstanceToken(oldToken: string, newToken: string): Promise<void> & { cancel(): void } {
-    let $resultPromise = $Call.ByID(125248392, oldToken, newToken) as any;
-    return $resultPromise;
+export function UpdateInstanceToken(oldToken: string, newToken: string): $CancellablePromise<void> {
+    return $Call.ByID(125248392, oldToken, newToken);
 }
