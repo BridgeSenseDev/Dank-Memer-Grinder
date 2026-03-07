@@ -12,7 +12,7 @@
 		RestartInstances,
 		RestartInstance,
 		UpdateInstanceToken
-	} from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/dmgservice";
+	} from "@/bindings/github.com/autocord-org/dmg/dmgservice";
 	import { cfg, instances } from "$lib/state.svelte.js";
 	import {
 		HourglassIcon,

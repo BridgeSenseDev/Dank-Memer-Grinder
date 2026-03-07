@@ -2,14 +2,14 @@ package main
 
 import (
 	"fmt"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
+	"github.com/autocord-org/dmg/gateway"
+	"github.com/autocord-org/dmg/utils"
 	"sync"
 	"time"
 
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/config"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/instance"
+	"github.com/autocord-org/dmg/config"
+	"github.com/autocord-org/dmg/discord"
+	"github.com/autocord-org/dmg/instance"
 )
 
 func (d *DmgService) StartInstance(account config.AccountsConfig, readyState string, breakUpdateTime time.Time) {

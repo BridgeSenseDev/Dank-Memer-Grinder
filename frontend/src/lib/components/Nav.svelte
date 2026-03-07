@@ -4,7 +4,7 @@
 	import { page } from "$app/state";
 	import { Browser } from "@wailsio/runtime";
 	import { cfg } from "$lib/state.svelte";
-	import { CheckForUpdates } from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/dmgservice";
+	import { CheckForUpdates } from "@/bindings/github.com/autocord-org/dmg/dmgservice";
 	import Check from "lucide-svelte/icons/check";
 	import { onMount } from "svelte";
 
@@ -81,7 +81,7 @@
 				</button>
 				<button
 					class="cursor-pointer"
-					onclick={() => Browser.OpenURL("https://github.com/BridgeSenseDev/Dank-Memer-Grinder")}
+					onclick={() => Browser.OpenURL("https://github.com/autocord-org/dmg")}
 				>
 					<GithubLogo class="hover:text-primary/50 h-6 w-6" />
 				</button>

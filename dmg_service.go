@@ -11,11 +11,11 @@ import (
 	"time"
 
 	"dario.cat/mergo"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/config"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/instance"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
+	"github.com/autocord-org/dmg/config"
+	"github.com/autocord-org/dmg/discord/types"
+	"github.com/autocord-org/dmg/gateway"
+	"github.com/autocord-org/dmg/instance"
+	"github.com/autocord-org/dmg/utils"
 	"github.com/valyala/fasthttp"
 )
 
@@ -168,7 +168,7 @@ func downloadDefaultConfig() (config.Config, error) {
 	req := fasthttp.AcquireRequest()
 	defer fasthttp.ReleaseRequest(req)
 
-	req.SetRequestURI("https://raw.githubusercontent.com/BridgeSenseDev/Dank-Memer-Grinder/refs/heads/main/config.example.json")
+	req.SetRequestURI("https://raw.githubusercontent.com/autocord-org/dmg/refs/heads/main/config.example.json")
 	resp := fasthttp.AcquireResponse()
 	defer fasthttp.ReleaseResponse(resp)
 

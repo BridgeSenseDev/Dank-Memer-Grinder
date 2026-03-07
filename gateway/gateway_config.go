@@ -2,7 +2,7 @@ package gateway
 
 import (
 	"fmt"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
+	"github.com/autocord-org/dmg/utils"
 	"github.com/fasthttp/websocket"
 )
 

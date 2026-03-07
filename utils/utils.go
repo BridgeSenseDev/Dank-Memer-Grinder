@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/config"
+	"github.com/autocord-org/dmg/config"
 	"github.com/valyala/fasthttp"
 	"github.com/wailsapp/wails/v3/pkg/application"
 )

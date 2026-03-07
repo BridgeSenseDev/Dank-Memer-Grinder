@@ -5,7 +5,7 @@
 	import { cfg } from "$lib/state.svelte";
 	import * as Select from "$lib/components/ui/select";
 	import { Moon, Sun } from "svelte-radix";
-	import { Theme } from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/config";
+	import { Theme } from "@/bindings/github.com/autocord-org/dmg/config";
 
 	let theme = $state<Theme>();
 	let sunClass = $state("");

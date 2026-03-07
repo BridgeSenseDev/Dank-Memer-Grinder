@@ -6,7 +6,7 @@
 	import {
 		RemoveInstance,
 		RestartInstance
-	} from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/dmgservice";
+	} from "@/bindings/github.com/autocord-org/dmg/dmgservice";
 
 	interface Props {
 		id: string;

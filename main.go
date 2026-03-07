@@ -12,9 +12,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/config"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/instance"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
+	"github.com/autocord-org/dmg/config"
+	"github.com/autocord-org/dmg/instance"
+	"github.com/autocord-org/dmg/utils"
 	"github.com/grongor/panicwatch"
 	"github.com/wailsapp/wails/v3/pkg/application"
 	"github.com/wailsapp/wails/v3/pkg/events"

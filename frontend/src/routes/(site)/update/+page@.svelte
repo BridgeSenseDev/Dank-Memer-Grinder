@@ -4,10 +4,10 @@
 	import { Button } from "$lib/components/ui/button";
 	import { Progress } from "$lib/components/ui/progress";
 	import SvelteMarkdown from "svelte-marked";
-	import { Theme } from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/config";
+	import { Theme } from "@/bindings/github.com/autocord-org/dmg/config";
 	import { cfg } from "$lib/state.svelte";
 	import { Events } from "@wailsio/runtime";
-	import { Update } from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/dmgservice";
+	import { Update } from "@/bindings/github.com/autocord-org/dmg/dmgservice";
 
 	let theme = $state<Theme>();
 	let isDownloading = $state(false);

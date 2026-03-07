@@ -82,8 +82,8 @@ To check that Bun was installed successfully, open a new terminal window and run
 1. Begin by cloning the DMG repository and changing into the directory:
 
 ```bash
-git clone https://github.com/BridgeSenseDev/Dank-Memer-Grinder.git
-cd Dank-Memer-Grinder
+git clone https://github.com/autocord-org/dmg.git
+cd dmg
 ```
 
 2. Install go dependencies:
@@ -123,7 +123,7 @@ wails3 task linux:build
 wails3 task darwin:build
 ```
 
-After completing, the binary will be located in `Dank-Memer-Grinder/bin` .
+After completing, the binary will be located in `dmg/bin` .
 
 ## Dev
 

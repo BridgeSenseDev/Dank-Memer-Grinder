@@ -3,7 +3,7 @@ package discord
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
+	"github.com/autocord-org/dmg/utils"
 	"strings"
 	"time"
 

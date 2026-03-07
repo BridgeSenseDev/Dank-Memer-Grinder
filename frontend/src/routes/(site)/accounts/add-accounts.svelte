@@ -8,7 +8,7 @@
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 	import { cfg } from "$lib/state.svelte.js";
 	import { Plus } from "lucide-svelte";
-	import { StartInstance } from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/dmgservice";
+	import { StartInstance } from "@/bindings/github.com/autocord-org/dmg/dmgservice";
 
 	let individualToken = "";
 	let individualChannelID = "";

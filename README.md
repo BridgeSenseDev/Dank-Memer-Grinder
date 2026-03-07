@@ -14,9 +14,9 @@
   ·
   <a href="https://dankmemer.tools/">Website</a>
 
-  ![GitHub License](https://img.shields.io/github/license/BridgeSenseDev/Dank-Memer-Grinder?style=for-the-badge&color=%2322c55e)
-  ![GitHub Release](https://img.shields.io/github/v/release/BridgeSenseDev/Dank-Memer-Grinder?include_prereleases&sort=semver&style=for-the-badge)
-  ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/BridgeSenseDev/Dank-Memer-Grinder/total?style=for-the-badge&color=%2322c55e)
+  ![GitHub License](https://img.shields.io/github/license/autocord-org/dmg?style=for-the-badge&color=%2322c55e)
+  ![GitHub Release](https://img.shields.io/github/v/release/autocord-org/dmg?include_prereleases&sort=semver&style=for-the-badge)
+  ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/autocord-org/dmg/total?style=for-the-badge&color=%2322c55e)
 
   [![Discord Server Invite](https://invidget.switchblade.xyz/KTrmQnhCHb)](https://discord.gg/KTrmQnhCHb)
   
@@ -75,8 +75,8 @@ A detailed breakdown of features are available in our [**<u>documentation</u>**]
 
 ## Star History
 <div align="center">
-  <a href="https://star-history.com/#bridgesensedev/dank-memer-grinder&Date">
-    <img src="https://api.star-history.com/svg?repos=BridgeSenseDev/Dank-Memer-Grinder&type=Date" 
+  <a href="https://star-history.com/#bridgesensedev/dmg&Date">
+    <img src="https://api.star-history.com/svg?repos=autocord-org/dmg&type=Date" 
          alt="Star History Chart">
   </a>
 </div>

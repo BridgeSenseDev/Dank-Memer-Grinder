@@ -3,7 +3,7 @@ package config
 import (
 	"errors"
 	"fmt"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
+	"github.com/autocord-org/dmg/discord/types"
 )
 
 func (c *Config) Validate() error {

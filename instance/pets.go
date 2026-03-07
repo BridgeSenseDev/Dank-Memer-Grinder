@@ -2,9 +2,9 @@ package instance
 
 import (
 	"fmt"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
+	"github.com/autocord-org/dmg/discord/types"
+	"github.com/autocord-org/dmg/gateway"
+	"github.com/autocord-org/dmg/utils"
 	"regexp"
 	"strconv"
 	"strings"

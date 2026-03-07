@@ -6,7 +6,7 @@
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
 	import { Switch } from "$lib/components/ui/switch";
-	import { UpdateDiscordStatus } from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/dmgservice";
+	import { UpdateDiscordStatus } from "@/bindings/github.com/autocord-org/dmg/dmgservice";
 
 	let discordStatus = $state({
 		value: cfg.c.discordStatus

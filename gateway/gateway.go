@@ -2,7 +2,7 @@ package gateway
 
 import (
 	"context"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
+	"github.com/autocord-org/dmg/discord/types"
 	"time"
 )
 

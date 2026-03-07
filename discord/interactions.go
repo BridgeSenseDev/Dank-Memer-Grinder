@@ -3,14 +3,14 @@ package discord
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
+	"github.com/autocord-org/dmg/gateway"
+	"github.com/autocord-org/dmg/utils"
 	"math/big"
 	"net/url"
 	"strings"
 	"time"
 
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
+	"github.com/autocord-org/dmg/discord/types"
 )
 
 func (client *Client) safeGetSessionID() (string, error) {

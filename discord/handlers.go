@@ -2,7 +2,7 @@ package discord
 
 import (
 	"errors"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
+	"github.com/autocord-org/dmg/gateway"
 	"sync"
 )
 

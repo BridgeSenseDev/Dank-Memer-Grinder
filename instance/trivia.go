@@ -4,12 +4,12 @@ import (
 	_ "embed"
 	"encoding/json"
 	"fmt"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
+	"github.com/autocord-org/dmg/gateway"
 	"regexp"
 	"strings"
 
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
+	"github.com/autocord-org/dmg/discord/types"
+	"github.com/autocord-org/dmg/utils"
 )
 
 //go:embed trivia.json

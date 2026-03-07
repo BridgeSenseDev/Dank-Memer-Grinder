@@ -8,14 +8,14 @@ import type {
 	Config,
 	Cooldowns,
 	GuiConfig
-} from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/config";
+} from "@/bindings/github.com/autocord-org/dmg/config";
 import {
 	GetConfig,
 	UpdateConfig
-} from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/dmgservice";
+} from "@/bindings/github.com/autocord-org/dmg/dmgservice";
 import { Browser } from "@wailsio/runtime";
-import { OnlineStatus } from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/discord/types";
-import type { View } from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/instance";
+import { OnlineStatus } from "@/bindings/github.com/autocord-org/dmg/discord/types";
+import type { View } from "@/bindings/github.com/autocord-org/dmg/instance";
 
 (window as any).Browser = Browser;
 

@@ -142,7 +142,7 @@ func DownloadUpdate() error {
 	EmitEventIfNotCLI("downloadProgress", 0)
 
 	dmgURL := fmt.Sprintf(
-		"https://nightly.link/BridgeSenseDev/Dank-Memer-Grinder/workflows/build/main/DMG-%s.zip",
+		"https://nightly.link/autocord-org/dmg/workflows/build/main/DMG-%s.zip",
 		osName,
 	)
 
@@ -151,7 +151,7 @@ func DownloadUpdate() error {
 		updaterSuffix = "windows.exe"
 	}
 	updaterURL := fmt.Sprintf(
-		"https://github.com/BridgeSenseDev/Dank-Memer-Grinder/raw/refs/heads/main/build/updater-%s",
+		"https://github.com/autocord-org/dmg/raw/refs/heads/main/build/updater-%s",
 		updaterSuffix,
 	)
 

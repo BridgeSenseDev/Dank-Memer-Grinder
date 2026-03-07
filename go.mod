@@ -1,4 +1,4 @@
-module github.com/BridgeSenseDev/Dank-Memer-Grinder
+module github.com/autocord-org/dmg
 
 go 1.26
 

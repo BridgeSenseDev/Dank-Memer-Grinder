@@ -1,8 +1,8 @@
 package instance
 
 import (
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/gateway"
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
+	"github.com/autocord-org/dmg/gateway"
+	"github.com/autocord-org/dmg/utils"
 )
 
 func (in *Instance) SendChatMessage(content string, delay bool) error {

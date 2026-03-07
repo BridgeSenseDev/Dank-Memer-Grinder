@@ -12,7 +12,7 @@
 		AdventureOption,
 		type CommandsConfig,
 		FishLocation
-	} from "@/bindings/github.com/BridgeSenseDev/Dank-Memer-Grinder/config";
+	} from "@/bindings/github.com/autocord-org/dmg/config";
 	import { Slider } from "$lib/components/ui/slider";
 
 	function formatString(input: string): string {

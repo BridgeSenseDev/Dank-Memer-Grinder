@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/BridgeSenseDev/Dank-Memer-Grinder/utils"
+	"github.com/autocord-org/dmg/utils"
 )
 
 func (in *Instance) CommandsLoop() {

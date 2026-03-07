@@ -7,13 +7,13 @@ import type { Events } from "@wailsio/runtime";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Unused imports
-import type * as config$0 from "../../../../BridgeSenseDev/Dank-Memer-Grinder/config/models.js";
+import type * as config$0 from "../../../../autocord-org/dmg/config/models.js";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Unused imports
-import type * as instance$0 from "../../../../BridgeSenseDev/Dank-Memer-Grinder/instance/models.js";
+import type * as instance$0 from "../../../../autocord-org/dmg/instance/models.js";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Unused imports
-import type * as utils$0 from "../../../../BridgeSenseDev/Dank-Memer-Grinder/utils/models.js";
+import type * as utils$0 from "../../../../autocord-org/dmg/utils/models.js";
 
 declare module "@wailsio/runtime" {
     namespace Events {
